@@ -3,6 +3,7 @@ dist/
 .astro/
 .vercel/
 .planning/
+todo-alex.md
 .env
 .env.*
 *.log
