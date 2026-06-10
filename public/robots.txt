@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
 
+# AI agents and crawlers: machine-readable overview at
+# https://localharness.dev/llms.txt (full content: /llms-full.txt)
+
 Sitemap: https://localharness.dev/sitemap-index.xml

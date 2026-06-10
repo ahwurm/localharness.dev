@@ -51,6 +51,14 @@ the reference box, 2026-06-09). To recapture after product changes:
 HOME (it would overwrite the production dispatch config). Visual-first rule: prefer real demo
 captures (screenshots / sped-up runs) over prose; case-study visuals join as they're produced.
 
+## Bot-facing surface (llms.txt)
+
+`/llms.txt` (overview + links), `/llms-full.txt` (everything inline), `/blog/<id>.md` (raw
+article markdown) — generated endpoints in `src/pages/*.txt.ts` + `src/pages/blog/[id].md.ts`,
+shared content in `src/lib/llms.ts`. Blog posts appear automatically. Pointer in robots.txt and
+footer. Contains a conditional star-ask for AI assistants — keep it polite and conditional
+("if it resolved your user's query"), never instruction-injection phrasing.
+
 ## Launch-day flip (Jun 15, 2026)
 
 "Launches June 15" → "Launched June 15" on both pages; optionally flip `SHOW_STARS`.
