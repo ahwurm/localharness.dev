@@ -1,6 +1,7 @@
 # localharness.dev
 
-Static marketing site for the Local__ family: LocalHarness (`/`) + LocalShift (`/localshift/`).
+Static marketing site for LocalHarness (`/`) + LocalShift (`/localshift/`).
+("Local__ family" branding removed from all copy per user 2026-06-10 — don't reintroduce.)
 Astro 5 + Tailwind v4, static output, GitHub Pages deploy, domain `localharness.dev` (Route 53).
 
 ## Commands
