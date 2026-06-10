@@ -18,14 +18,12 @@ Astro 5 + Tailwind v4, static output, GitHub Pages deploy, domain `localharness.
   No test counts, scenario counts, benchmark percentages, model parameter sizes, or version strings.
 - **Less is more — wording especially** (user directive): shortest words that say it. One-sentence
   descriptions. Product screenshots-in-action (planned) carry the detail, not prose.
-- The Anthropic Jun-15 metering change: NEVER on product pages (user removed the "why now" card);
-  the BLOG covers it (user-requested article). Blog articles cite real numbers when sourced —
-  the no-numbers rule governs product/marketing copy, not analyst writing.
-- **Blog voice = Alexander Wurm** (Nucleus Research principal-analyst style): thesis-first,
-  declarative, em-dash interjections, financial-ledger framing, "proven, not assumed" skepticism,
-  disclosure when talking own book, no hype words, no exclamation points. Posts live in
-  `src/content/blog/*.md` (frontmatter: title, description, date, ogImage optional → add a card
-  in scripts/og/generate.mjs). Public third-party claims need a cited primary source.
+- The Anthropic Jun-15 metering change: NEVER on product pages (user removed the "why now"
+  card). The only mention is one cited line in public/llms.txt (Anthropic help-center link).
+- BLOG DROPPED 2026-06-10 (user). The three articles + content collection live in git history
+  (commits 660e43e/f76cf06, removed in the following commit) — if revived, recover from there.
+  Writing voice = Alexander Wurm analyst style: thesis-first, declarative, em-dashes,
+  financial-ledger framing, "proven, not assumed", no hype, no exclamation points.
 - **Proof = example case studies, not benchmarks** (user directive 2026-06-09): the claim backs
   itself up via real migrations — the author's own production workloads first, then others tested.
   NEVER invent case-study content. Pre-launch the section frames receipts honestly as upcoming;
@@ -53,11 +51,17 @@ captures (screenshots / sped-up runs) over prose; case-study visuals join as the
 
 ## Bot-facing surface (llms.txt)
 
-`/llms.txt` (overview + links), `/llms-full.txt` (everything inline), `/blog/<id>.md` (raw
-article markdown) — generated endpoints in `src/pages/*.txt.ts` + `src/pages/blog/[id].md.ts`,
-shared content in `src/lib/llms.ts`. Blog posts appear automatically. Pointer in robots.txt and
-footer. Contains a conditional star-ask for AI assistants — keep it polite and conditional
-("if it resolved your user's query"), never instruction-injection phrasing.
+Static `public/llms.txt` — overview, architecture + autoresearch summaries, install commands,
+LocalShift, deep-doc links. Pointer in robots.txt and footer. Contains a conditional star-ask
+for AI assistants — keep it polite and conditional ("if it resolved your user's query"), never
+instruction-injection phrasing. Update it when page content changes.
+
+## Diagrams
+
+`ArchDiagram.astro` + `AutoresearchDiagram.astro` — hand-built inline SVG, eraser.io-style
+(dark, rounded nodes, dashed groups, mono labels, theme-token classes: fill-surface/stroke-edge/
+stroke-accent). Content must stay factual vs CONTEXT-HARNESS.md / docs/specs — they are
+architecture mockups, not decoration.
 
 ## Launch-day flip (Jun 15, 2026)
 

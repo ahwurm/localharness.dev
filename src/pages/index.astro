@@ -4,6 +4,9 @@ import Button from '../components/Button.astro';
 import Card from '../components/Card.astro';
 import CodeBlock from '../components/CodeBlock.astro';
 import Demo from '../components/Demo.astro';
+import ArchDiagram from '../components/ArchDiagram.astro';
+import AutoresearchDiagram from '../components/AutoresearchDiagram.astro';
+import Terminal from '../components/Terminal.astro';
 
 const install = 'git clone https://github.com/ahwurm/localharness && cd localharness && uv sync';
 
@@ -91,6 +94,56 @@ const features = [
           ))
         }
       </ul>
+    </div>
+  </section>
+
+  <!-- Architecture -->
+  <section id="architecture" class="border-t border-edge bg-surface/50">
+    <div class="container-site py-24">
+      <h2 class="text-3xl font-semibold tracking-tight">Architecture</h2>
+      <p class="mt-3 max-w-2xl text-dim">
+        A thin orchestrator routes. Divisions isolate. Everything leaves a trace.
+      </p>
+      <div class="mt-10 grid items-center gap-10 lg:grid-cols-[3fr_2fr] lg:gap-14">
+        <ArchDiagram />
+        <ul class="divide-y divide-edge">
+          <li class="py-3.5">
+            <span class="font-medium">Thin orchestrator</span>
+            <p class="mt-1 text-sm text-dim">Routes, indexes, escalates. Agents do the work with fresh context.</p>
+          </li>
+          <li class="py-3.5">
+            <span class="font-medium">Event bus spine</span>
+            <p class="mt-1 text-sm text-dim">Every action and observation is a typed event — persisted append-only.</p>
+          </li>
+          <li class="py-3.5">
+            <span class="font-medium">One guarded loop</span>
+            <p class="mt-1 text-sm text-dim">ReAct with stuck detection, budgets, and compaction sized to the model.</p>
+          </li>
+          <li class="py-3.5">
+            <span class="font-medium">Any endpoint</span>
+            <p class="mt-1 text-sm text-dim">Provider auto-detected. Native tool calls where supported, XML where not.</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Autoresearch -->
+  <section id="autoresearch" class="container-site py-24">
+    <h2 class="text-3xl font-semibold tracking-tight">Autoresearch</h2>
+    <p class="mt-3 max-w-2xl text-dim">
+      The harness improves itself — under a gate. Changes ship only if the bench says so.
+    </p>
+    <div class="mt-10 grid items-center gap-10 lg:grid-cols-[3fr_2fr] lg:gap-14">
+      <AutoresearchDiagram />
+      <Terminal
+        lines={[
+          { cmd: 'uv run localharness autoresearch run', comment: 'one iteration' },
+          { cmd: 'uv run localharness autoresearch review', comment: 'inspect' },
+          { cmd: 'uv run localharness autoresearch adopt', comment: 'promote' },
+          { cmd: 'uv run localharness components list', comment: 'registry' },
+        ]}
+      />
     </div>
   </section>
 

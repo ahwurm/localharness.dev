@@ -1,0 +1,49 @@
+---
+// Autoresearch loop mockup — propose → bench → gate → adopt, archive loop, sealed holdout
+---
+
+<svg
+  viewBox="0 0 560 240"
+  role="img"
+  aria-label="Autoresearch loop: propose one mutation, run the train bench, pass the promotion gate, adopt — candidates cycle through a mutation archive; a sealed holdout is only run as a final check"
+  class="w-full max-w-xl"
+>
+  <defs>
+    <marker id="arr2" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0.5 L7,4 L0,7.5" class="fill-none stroke-dim" stroke-width="1.2"></path>
+    </marker>
+  </defs>
+
+  <!-- archive loop (above pipeline) -->
+  <path d="M489,66 L489,30 L75,30 L75,60" class="fill-none stroke-dim" stroke-width="1.2" stroke-dasharray="3 4" marker-end="url(#arr2)"></path>
+  <text x="282" y="22" text-anchor="middle" class="fill-dim font-mono text-[11px]">mutation archive — pareto sampling</text>
+
+  <!-- pipeline -->
+  <rect x="20" y="66" width="110" height="56" rx="10" class="fill-surface stroke-edge" stroke-width="1.5"></rect>
+  <text x="75" y="90" text-anchor="middle" class="fill-ink font-mono text-[13px] font-medium">propose</text>
+  <text x="75" y="108" text-anchor="middle" class="fill-dim text-[10px]">one mutation</text>
+
+  <line x1="130" y1="94" x2="156" y2="94" class="stroke-dim" stroke-width="1.2" marker-end="url(#arr2)"></line>
+
+  <rect x="158" y="66" width="110" height="56" rx="10" class="fill-surface stroke-edge" stroke-width="1.5"></rect>
+  <text x="213" y="90" text-anchor="middle" class="fill-ink font-mono text-[13px] font-medium">bench</text>
+  <text x="213" y="108" text-anchor="middle" class="fill-dim text-[10px]">train scenarios</text>
+
+  <line x1="268" y1="94" x2="294" y2="94" class="stroke-dim" stroke-width="1.2" marker-end="url(#arr2)"></line>
+
+  <rect x="296" y="66" width="110" height="56" rx="10" class="fill-surface stroke-accent" stroke-width="1.5"></rect>
+  <text x="351" y="90" text-anchor="middle" class="fill-accent font-mono text-[13px] font-medium">gate</text>
+  <text x="351" y="108" text-anchor="middle" class="fill-dim text-[10px]">stats vs baseline</text>
+
+  <line x1="406" y1="94" x2="432" y2="94" class="stroke-dim" stroke-width="1.2" marker-end="url(#arr2)"></line>
+
+  <rect x="434" y="66" width="110" height="56" rx="10" class="fill-surface stroke-edge" stroke-width="1.5"></rect>
+  <text x="489" y="90" text-anchor="middle" class="fill-ink font-mono text-[13px] font-medium">adopt</text>
+  <text x="489" y="108" text-anchor="middle" class="fill-dim text-[10px]">promote to config</text>
+
+  <!-- sealed holdout -->
+  <line x1="351" y1="122" x2="351" y2="166" class="stroke-dim" stroke-width="1.2" stroke-dasharray="3 4" marker-end="url(#arr2)"></line>
+  <rect x="231" y="170" width="240" height="46" rx="10" class="fill-none stroke-edge" stroke-width="1.3" stroke-dasharray="6 5"></rect>
+  <text x="351" y="190" text-anchor="middle" class="fill-ink font-mono text-[12px]">sealed holdout</text>
+  <text x="351" y="207" text-anchor="middle" class="fill-dim text-[10px]">never run while proposing — final check only</text>
+</svg>

@@ -17,8 +17,6 @@ const browser = await launch();
 const pages = [
   ['/', 'index'],
   ['/localshift/', 'localshift'],
-  ['/blog/', 'blog'],
-  ['/blog/flat-rate-automation-ends-june-15/', 'blog-post'],
   ['/404.html', '404'],
 ];
 const viewports = [
