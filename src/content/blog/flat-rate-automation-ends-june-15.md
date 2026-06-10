@@ -1,7 +1,7 @@
 ---
 title: "Flat-rate automation ends June 15"
 description: "Anthropic is splitting headless usage from subscriptions. The right response is a workload audit, not a bigger budget."
-date: 2026-06-10
+date: 2026-06-10T15:00:00Z
 ogImage: /og/blog-flat-rate.png
 ---
 
