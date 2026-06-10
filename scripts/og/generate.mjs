@@ -16,6 +16,11 @@ const cards = [
     brand: ['local', 'shift'],
     tagline: 'Same workflow. Same output. Much lower cost.',
   },
+  {
+    name: 'blog-flat-rate',
+    brand: ['local', 'harness'],
+    tagline: 'Flat-rate automation ends June 15.',
+  },
 ];
 
 const html = (c) => `<!doctype html>

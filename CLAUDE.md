@@ -18,7 +18,14 @@ Astro 5 + Tailwind v4, static output, GitHub Pages deploy, domain `localharness.
   No test counts, scenario counts, benchmark percentages, model parameter sizes, or version strings.
 - **Less is more — wording especially** (user directive): shortest words that say it. One-sentence
   descriptions. Product screenshots-in-action (planned) carry the detail, not prose.
-- Do NOT mention the Anthropic Jun-15 metering change anywhere (user removed the "why now" card).
+- The Anthropic Jun-15 metering change: NEVER on product pages (user removed the "why now" card);
+  the BLOG covers it (user-requested article). Blog articles cite real numbers when sourced —
+  the no-numbers rule governs product/marketing copy, not analyst writing.
+- **Blog voice = Alexander Wurm** (Nucleus Research principal-analyst style): thesis-first,
+  declarative, em-dash interjections, financial-ledger framing, "proven, not assumed" skepticism,
+  disclosure when talking own book, no hype words, no exclamation points. Posts live in
+  `src/content/blog/*.md` (frontmatter: title, description, date, ogImage optional → add a card
+  in scripts/og/generate.mjs). Public third-party claims need a cited primary source.
 - **Proof = example case studies, not benchmarks** (user directive 2026-06-09): the claim backs
   itself up via real migrations — the author's own production workloads first, then others tested.
   NEVER invent case-study content. Pre-launch the section frames receipts honestly as upcoming;
