@@ -4,22 +4,14 @@ import fs from 'node:fs';
 interface Props {
   class?: string;
 }
-const { class: className = 'h-6' } = Astro.props;
+const { class: className = '' } = Astro.props;
 
-const pub = (f: string) => new URL(`../../public/${f}`, import.meta.url);
-const logo = fs.existsSync(pub('logo.svg'))
-  ? '/logo.svg'
-  : fs.existsSync(pub('logo.png'))
-    ? '/logo.png'
-    : null;
+const hasMark = fs.existsSync(new URL('../../public/logo-mark.png', import.meta.url));
 ---
 
-{
-  logo ? (
-    <img src={logo} alt="LocalHarness" class={className} />
-  ) : (
-    <span class="font-mono font-semibold tracking-tight">
-      local<span class="text-accent">_</span>harness
-    </span>
-  )
-}
+<span class:list={['inline-flex items-center gap-2.5', className]}>
+  {hasMark && <img src="/logo-mark.png" alt="" class="size-7 rounded-md" width="320" height="320" />}
+  <span class="font-mono font-semibold tracking-tight">
+    local<span class="text-accent">_</span>harness
+  </span>
+</span>

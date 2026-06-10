@@ -16,6 +16,9 @@ Astro 5 + Tailwind v4, static output, GitHub Pages deploy, domain `localharness.
 - **Messaging is dead simple (user directive 2026-06-09): NO numbers/stats in copy.**
   Core message everywhere: *same workflow & output · longer time · much lower cost (free for local)*.
   No test counts, scenario counts, benchmark percentages, model parameter sizes, or version strings.
+- **Less is more — wording especially** (user directive): shortest words that say it. One-sentence
+  descriptions. Product screenshots-in-action (planned) carry the detail, not prose.
+- Do NOT mention the Anthropic Jun-15 metering change anywhere (user removed the "why now" card).
 - **Proof = example case studies, not benchmarks** (user directive 2026-06-09): the claim backs
   itself up via real migrations — the author's own production workloads first, then others tested.
   NEVER invent case-study content. Pre-launch the section frames receipts honestly as upcoming;
@@ -27,11 +30,15 @@ Astro 5 + Tailwind v4, static output, GitHub Pages deploy, domain `localharness.
 - Star-count badge stays behind `SHOW_STARS = false` until repos have stars.
 - Dark theme only; one accent (terminal green); animations limited to hover transitions + one CSS fade-in.
 
-## Asset contract (drop-in, then rebuild + `npm run og` + push)
+## Brand assets
 
-- `public/logo.svg` (or `logo.png` ≥360px wide) — Wordmark.astro auto-detects at build time, falls back to text wordmark
-- `public/favicon.svg` — replaces placeholder
-- `public/apple-touch-icon.png` — optional, 180×180
+Originals live in `brand/` (sloth logomark + icon + light-bg wordmark — designed for light
+backgrounds, so the site puts the mark on white rounded tiles). Generated web assets in `public/`:
+`logo-mark.png` (nav chip + OG cards), `favicon.png`, `apple-touch-icon.png` — regenerate from
+`brand/localharness-logomark.png` with the PIL tile script (trim 4% border first: export has edge
+artifacts; corners have semi-transparent haze, invisible on white). After regenerating:
+`npm run og` + rebuild + push. Wordmark.astro renders chip + `local_harness` text; text-only if
+logo-mark.png is missing.
 
 ## Launch-day flip (Jun 15, 2026)
 
