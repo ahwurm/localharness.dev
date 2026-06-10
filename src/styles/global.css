@@ -1,0 +1,62 @@
+@import "tailwindcss";
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/geist-mono";
+
+@theme {
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --color-bg: oklch(17% 0.012 265);
+  --color-surface: oklch(20.5% 0.014 265);
+  --color-edge: oklch(29% 0.016 265);
+  --color-ink: oklch(94% 0.005 265);
+  --color-dim: oklch(70% 0.012 265);
+  --color-accent: oklch(80% 0.17 152);
+  --color-accent-ink: oklch(22% 0.06 152);
+  --color-amber: oklch(82% 0.15 85);
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    @apply bg-bg text-ink antialiased;
+  }
+
+  body {
+    @apply font-sans text-[17px] leading-relaxed;
+  }
+
+  ::selection {
+    @apply bg-accent text-accent-ink;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+}
+
+@utility container-site {
+  @apply mx-auto max-w-[1200px] px-6;
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rise-in {
+  @media (prefers-reduced-motion: no-preference) {
+    animation: rise-in 0.5s ease-out both;
+  }
+}

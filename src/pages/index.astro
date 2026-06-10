@@ -1,0 +1,176 @@
+---
+import Base from '../layouts/Base.astro';
+import Button from '../components/Button.astro';
+import Card from '../components/Card.astro';
+import CodeBlock from '../components/CodeBlock.astro';
+import Terminal from '../components/Terminal.astro';
+
+const install = `git clone https://github.com/ahwurm/localharness.git
+cd localharness
+uv sync
+uv run localharness init`;
+
+const agentYaml = `# ~/.localharness/agents/morning-briefing.yaml
+name: morning-briefing
+division: financial
+role: >
+  Generate the daily morning market report
+  and deliver it as structured markdown.
+
+tools:
+  inherit: [global, division]
+  deny: ["bash(sudo:*)"]
+
+permissions:
+  mode: auto
+  budget:
+    max_actions: 100
+    max_duration_minutes: 30
+
+schedule:
+  cron: "30 5 * * 1-5"
+  timezone: America/New_York
+  task: "Generate and deliver the morning report."`;
+
+const features = [
+  {
+    kicker: 'yaml',
+    title: 'YAML-defined agents',
+    desc: 'Add an agent, a division, or a tool policy without writing Python. System prompt, tools, permissions, memory — all declarative.',
+    wide: true,
+  },
+  {
+    kicker: 'auto',
+    title: 'Any local endpoint',
+    desc: "Auto-detects vLLM, Ollama, LM Studio, and llama.cpp. Native function calling where the model supports it, XML fallback where it doesn't.",
+    wide: true,
+  },
+  {
+    kicker: 'bus',
+    title: 'Event-bus core',
+    desc: 'Components communicate over a typed event stream, persisted append-only per agent.',
+    wide: false,
+  },
+  {
+    kicker: 'deny',
+    title: 'Deny-first permissions',
+    desc: 'Policies inherit down the hierarchy and can only narrow.',
+    wide: false,
+  },
+  {
+    kicker: 'mem',
+    title: 'Isolated memory',
+    desc: 'SQLite-backed memory, scoped per agent.',
+    wide: false,
+  },
+  {
+    kicker: 'bench',
+    title: 'Benchmarked, not vibes',
+    desc: 'A scenario corpus measures harness changes against your own model. An autoresearch loop proposes, gates, and promotes them.',
+    wide: false,
+  },
+];
+---
+
+<Base
+  title="LocalHarness — AI agents on your own hardware"
+  description="Open-source, model-agnostic agent harness for local LLMs. Same workflow, same output — longer runtime, much lower cost."
+>
+  <!-- Hero -->
+  <section class="container-site rise-in flex flex-col items-center pb-20 pt-24 text-center sm:pt-32">
+    <div class="flex flex-wrap items-center justify-center gap-2 font-mono text-xs text-dim">
+      <span class="rounded-full border border-edge px-2.5 py-1">MIT</span>
+      <span class="rounded-full border border-edge px-2.5 py-1">Open source</span>
+      <span class="rounded-full border border-edge px-2.5 py-1">Local-first</span>
+    </div>
+    <h1 class="mt-6 max-w-3xl text-balance text-[clamp(2.25rem,5vw,3.5rem)] font-semibold leading-[1.1] tracking-tight">
+      AI agents on your <span class="whitespace-nowrap text-accent">own hardware</span>.
+    </h1>
+    <p class="mt-5 max-w-2xl text-dim">
+      LocalHarness is an open-source agent harness for local LLMs. Define agents in YAML — prompts,
+      tools, permissions, memory — and run them as a coordinated org against any OpenAI-compatible
+      endpoint.
+    </p>
+    <CodeBlock code={install} label="install" class="mt-8 w-full max-w-xl text-left" />
+    <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+      <Button href="https://github.com/ahwurm/localharness" external>Star on GitHub ↗</Button>
+      <Button href="#get-started" variant="outline">Get started</Button>
+    </div>
+  </section>
+
+  <!-- Tradeoff band -->
+  <section class="border-y border-edge bg-surface/50" aria-label="The tradeoff">
+    <div class="container-site grid gap-10 py-16 sm:grid-cols-3 sm:gap-6">
+      <div>
+        <p class="font-mono text-xs text-accent">output</p>
+        <h2 class="mt-2 text-xl font-semibold tracking-tight">Same workflow, same output</h2>
+        <p class="mt-2 text-sm text-dim">The agents, tools, and scheduled jobs you already run — unchanged.</p>
+      </div>
+      <div>
+        <p class="font-mono text-xs text-accent">time</p>
+        <h2 class="mt-2 text-xl font-semibold tracking-tight">It takes longer</h2>
+        <p class="mt-2 text-sm text-dim">Local models are slower than frontier APIs. That's the tradeoff, stated plainly.</p>
+      </div>
+      <div>
+        <p class="font-mono text-xs text-accent">cost</p>
+        <h2 class="mt-2 text-xl font-semibold tracking-tight">Much lower cost</h2>
+        <p class="mt-2 text-sm text-dim">Free for local — your hardware, no API meter, no per-token bill.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features" class="container-site py-24">
+    <h2 class="text-3xl font-semibold tracking-tight">What's in the harness</h2>
+    <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        features.map((f) => (
+          <Card class:list={[f.wide && 'sm:col-span-2 lg:p-7']}>
+            <p class="font-mono text-xs text-accent">{f.kicker}</p>
+            <h3 class="mt-2 font-medium">{f.title}</h3>
+            <p class="mt-2 text-sm text-dim">{f.desc}</p>
+          </Card>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Showcase -->
+  <section id="get-started" class="border-t border-edge bg-surface/50">
+    <div class="container-site py-24">
+      <h2 class="text-3xl font-semibold tracking-tight">Declarative by default</h2>
+      <p class="mt-3 max-w-2xl text-dim">
+        <code class="font-mono text-sm text-ink">init</code> detects your endpoint, probes
+        tool-calling capability, and writes the config. An agent is a YAML file.
+      </p>
+      <div class="mt-10 grid items-start gap-6 lg:grid-cols-2">
+        <Terminal
+          lines={[
+            { cmd: 'uv run localharness init', comment: 'detect endpoint + model, write config' },
+            { cmd: 'uv run localharness doctor', comment: 'diagnose config/endpoint issues' },
+            { cmd: 'uv run localharness validate', comment: 'validate agent/org YAML' },
+            { cmd: 'uv run localharness start', comment: 'interactive session' },
+          ]}
+        />
+        <CodeBlock code={agentYaml} label="agent definition" />
+      </div>
+    </div>
+  </section>
+
+  <!-- LocalShift cross-promo -->
+  <section class="container-site py-24">
+    <Card class="border-l-2 border-l-accent p-8 sm:p-10">
+      <p class="font-mono text-xs text-dim">Part of the Local__ family</p>
+      <h2 class="mt-3 text-2xl font-semibold tracking-tight">
+        local<span class="text-accent">_</span>shift
+      </h2>
+      <p class="mt-3 max-w-2xl text-dim">
+        Migrate proven frontier-AI workloads to local LLMs. Same workflow, same output — proven per
+        workload, not assumed. Launches June 15, 2026.
+      </p>
+      <div class="mt-6">
+        <Button href="/localshift/" variant="outline">How it works</Button>
+      </div>
+    </Card>
+  </section>
+</Base>

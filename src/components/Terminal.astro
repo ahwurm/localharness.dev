@@ -1,0 +1,32 @@
+---
+interface Line {
+  cmd: string;
+  comment?: string;
+}
+interface Props {
+  lines: Line[];
+  class?: string;
+}
+const { lines, class: className = '' } = Astro.props;
+const copyPayload = lines.map((l) => l.cmd).join('\n');
+---
+
+<div class:list={['overflow-hidden rounded-xl border border-edge bg-surface', className]}>
+  <div class="flex items-center gap-1.5 border-b border-edge px-4 py-2.5">
+    <span class="size-2.5 rounded-full bg-edge"></span>
+    <span class="size-2.5 rounded-full bg-edge"></span>
+    <span class="size-2.5 rounded-full bg-edge"></span>
+  </div>
+  <div class="relative">
+    <pre class="overflow-x-auto p-4 font-mono text-sm leading-7"><code>{lines.map((l) => (
+      <span class="block whitespace-pre"><span class="select-none text-dim">$ </span><span class="text-ink">{l.cmd}</span>{l.comment && <span class="text-dim">{'  # ' + l.comment}</span>}</span>
+    ))}</code></pre>
+    <button
+      type="button"
+      data-copy={copyPayload}
+      aria-label="Copy commands to clipboard"
+      class="absolute right-2.5 top-2.5 rounded-md border border-edge bg-bg/70 px-2 py-1 font-mono text-xs text-dim transition-colors duration-150 hover:text-ink"
+      >copy</button
+    >
+  </div>
+</div>

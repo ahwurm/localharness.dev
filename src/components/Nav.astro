@@ -1,0 +1,22 @@
+---
+import Wordmark from './Wordmark.astro';
+---
+
+<header class="sticky top-0 z-50 border-b border-edge bg-bg/80 backdrop-blur">
+  <nav class="container-site flex h-14 items-center justify-between" aria-label="Main">
+    <a href="/" class="flex items-center gap-2 text-ink hover:text-accent transition-colors duration-150">
+      <Wordmark />
+    </a>
+    <div class="flex items-center gap-5 text-sm text-dim sm:gap-7">
+      <a href="/#features" class="hidden hover:text-ink transition-colors duration-150 sm:inline">Features</a>
+      <a href="/#get-started" class="hidden hover:text-ink transition-colors duration-150 sm:inline">Get started</a>
+      <a href="/localshift/" class="hover:text-ink transition-colors duration-150">LocalShift</a>
+      <a
+        href="https://github.com/ahwurm/localharness"
+        class="hover:text-ink transition-colors duration-150"
+        target="_blank"
+        rel="noopener">GitHub&nbsp;↗</a
+      >
+    </div>
+  </nav>
+</header>

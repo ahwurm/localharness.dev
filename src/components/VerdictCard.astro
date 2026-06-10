@@ -1,0 +1,24 @@
+---
+interface Props {
+  name: string;
+  tone: 'green' | 'amber' | 'neutral';
+  desc: string;
+}
+const { name, tone, desc } = Astro.props;
+
+const toneStyles = {
+  green: 'text-accent border-accent/40',
+  amber: 'text-amber border-amber/40',
+  neutral: 'text-ink border-edge',
+};
+---
+
+<div class="rounded-xl border border-edge bg-surface p-6">
+  <span
+    class:list={[
+      'inline-block rounded-md border px-2 py-0.5 font-mono text-sm',
+      toneStyles[tone],
+    ]}>{name}</span
+  >
+  <p class="mt-3 text-sm text-dim">{desc}</p>
+</div>

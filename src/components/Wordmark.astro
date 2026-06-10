@@ -1,0 +1,25 @@
+---
+import fs from 'node:fs';
+
+interface Props {
+  class?: string;
+}
+const { class: className = 'h-6' } = Astro.props;
+
+const pub = (f: string) => new URL(`../../public/${f}`, import.meta.url);
+const logo = fs.existsSync(pub('logo.svg'))
+  ? '/logo.svg'
+  : fs.existsSync(pub('logo.png'))
+    ? '/logo.png'
+    : null;
+---
+
+{
+  logo ? (
+    <img src={logo} alt="LocalHarness" class={className} />
+  ) : (
+    <span class="font-mono font-semibold tracking-tight">
+      local<span class="text-accent">_</span>harness
+    </span>
+  )
+}

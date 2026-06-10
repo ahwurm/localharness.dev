@@ -1,0 +1,172 @@
+---
+import Base from '../../layouts/Base.astro';
+import Button from '../../components/Button.astro';
+import Card from '../../components/Card.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import PipelineStep from '../../components/PipelineStep.astro';
+import VerdictCard from '../../components/VerdictCard.astro';
+
+const install = `/plugin marketplace add ahwurm/localshift
+/plugin install localshift@localshift`;
+
+const steps = [
+  {
+    title: 'Explore the workflow',
+    skill: '/localshift:explore',
+    output: 'WORKLOAD.md',
+    desc: 'Goal, dataflow, tools, context footprint.',
+  },
+  {
+    title: 'Design the eval',
+    skill: '/localshift:design-eval',
+    output: 'EVAL.md',
+    desc: 'Quality dimensions, measurement apparatus, the good-enough bar, a feasibility verdict.',
+  },
+  {
+    title: 'Build the framework',
+    skill: '/localshift:build',
+    output: 'task.yaml + checks.yaml + judge.md',
+    desc: 'The task, its hard checks, and the judging rubric.',
+  },
+  {
+    title: 'Replicate locally',
+    skill: '/localshift:replicate',
+    output: 'runs + traces + artifacts',
+    desc: 'The claude-free runner executes the workload on your local endpoint.',
+  },
+  {
+    title: 'Evaluate 1v1',
+    skill: '/localshift:evaluate',
+    output: 'EVAL-REPORT.md',
+    desc: 'Blind local-vs-frontier judging ends in a verdict.',
+  },
+];
+---
+
+<Base
+  title="LocalShift — migrate frontier-AI workloads to local LLMs"
+  description="A Claude Code plugin that replicates headless AI jobs on local models, judges them blind against frontier, and cuts over what passes."
+  ogImage="/og/localshift.png"
+>
+  <!-- Hero -->
+  <section class="container-site rise-in flex flex-col items-center pb-20 pt-24 text-center sm:pt-32">
+    <div class="flex flex-wrap items-center justify-center gap-2 font-mono text-xs text-dim">
+      <span class="rounded-full border border-edge px-2.5 py-1">Claude Code plugin</span>
+      <span class="rounded-full border border-edge px-2.5 py-1">MIT</span>
+      <span class="rounded-full border border-edge px-2.5 py-1">Launches June 15, 2026</span>
+    </div>
+    <h1 class="mt-6 max-w-3xl text-balance text-[clamp(2.25rem,5vw,3.5rem)] font-semibold leading-[1.1] tracking-tight">
+      Same workflow. Same output. <span class="whitespace-nowrap text-accent">Much lower cost.</span>
+    </h1>
+    <p class="mt-5 max-w-2xl text-dim">
+      Point Claude Code at a headless AI workload — a cron job, a skill, a bare prompt — and migrate
+      it to a local LLM. Longer runtime, free execution: your hardware, no API meter.
+    </p>
+    <p class="mt-4 max-w-2xl text-ink">
+      The bar is not frontier parity. It's <em>good enough, and works</em> — proven, not assumed.
+    </p>
+    <CodeBlock code={install} label="in Claude Code" class="mt-8 w-full max-w-xl text-left" />
+    <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+      <Button href="https://github.com/ahwurm/localshift" external>View on GitHub ↗</Button>
+      <Button href="#pipeline" variant="outline">How it works</Button>
+    </div>
+  </section>
+
+  <!-- Why now -->
+  <section class="container-site pb-24">
+    <Card class="border-l-2 border-l-amber p-8 sm:p-10">
+      <p class="font-mono text-xs text-amber">why now</p>
+      <p class="mt-3 max-w-3xl text-dim">
+        On June 15, 2026, headless <code class="font-mono text-sm text-ink">claude -p</code> calls
+        start drawing from a metered credit pool — interactive Claude Code stays on your plan.
+        LocalShift finds which of those headless jobs a local model handles well enough, proves it,
+        and moves them. Migrated jobs run claude-free in cron.
+      </p>
+    </Card>
+  </section>
+
+  <!-- Pipeline -->
+  <section id="pipeline" class="border-y border-edge bg-surface/50">
+    <div class="container-site py-24">
+      <h2 class="text-3xl font-semibold tracking-tight">Five stages, every one with receipts</h2>
+      <p class="mt-3 max-w-2xl text-dim">
+        Claude Code does the exploring, eval design, and judging — interactive. The migrated job
+        runs claude-free on the LocalHarness runtime.
+      </p>
+      <ol class="mt-12 max-w-2xl">
+        {
+          steps.map((s, i) => (
+            <PipelineStep
+              num={i + 1}
+              title={s.title}
+              skill={s.skill}
+              output={s.output}
+              desc={s.desc}
+              last={i === steps.length - 1}
+            />
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- Verdicts -->
+  <section class="container-site py-24">
+    <h2 class="text-3xl font-semibold tracking-tight">Honest verdicts are the product</h2>
+    <p class="mt-3 max-w-2xl text-dim">
+      Workloads that don't fit local hardware — context window, memory, missing tools — or miss the
+      quality bar get <span class="font-mono text-sm text-ink">keep-frontier</span>, with receipts.
+    </p>
+    <div class="mt-10 grid gap-4 sm:grid-cols-3">
+      <VerdictCard
+        name="migrate"
+        tone="green"
+        desc="Passes every hard check and every judged dimension. Cut over."
+      />
+      <VerdictCard
+        name="conditional"
+        tone="amber"
+        desc="Specific, fixable gaps. Migrate after the fix list."
+      />
+      <VerdictCard
+        name="keep-frontier"
+        tone="neutral"
+        desc="A constraint local can't meet right now, stated plainly. A first-class outcome, not a failure."
+      />
+    </div>
+  </section>
+
+  <!-- Case studies -->
+  <section class="border-t border-edge bg-surface/50">
+    <div class="container-site py-24">
+      <h2 class="text-3xl font-semibold tracking-tight">Can it back that up?</h2>
+      <p class="mt-3 max-w-2xl text-dim">
+        Every migration produces receipts — the workload profile, the derived eval, the run traces,
+        and a blind 1v1 judgment. Case studies start with our own production workloads and grow as
+        more are tested. First reports publish at launch.
+      </p>
+      <div class="mt-6">
+        <Button href="https://github.com/ahwurm/localshift" variant="outline" external>
+          Watch on GitHub ↗
+        </Button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Runs on LocalHarness -->
+  <section class="container-site py-24">
+    <Card class="border-l-2 border-l-accent p-8 sm:p-10">
+      <p class="font-mono text-xs text-dim">Part of the Local__ family</p>
+      <h2 class="mt-3 text-2xl font-semibold tracking-tight">
+        Runs on local<span class="text-accent">_</span>harness
+      </h2>
+      <p class="mt-3 max-w-2xl text-dim">
+        The migrated job executes claude-free on the LocalHarness runtime against any
+        OpenAI-compatible endpoint — vLLM, Ollama, llama.cpp.
+      </p>
+      <div class="mt-6">
+        <Button href="/" variant="outline">About LocalHarness</Button>
+      </div>
+    </Card>
+  </section>
+</Base>
