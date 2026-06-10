@@ -1,10 +1,9 @@
 import { chromium } from 'playwright';
-import { mkdirSync, readFileSync } from 'node:fs';
+import { mkdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 const root = resolve(import.meta.dirname, '../..');
 const font = (pkg, file) => `file://${root}/node_modules/@fontsource-variable/${pkg}/files/${file}`;
-const markUri = `data:image/png;base64,${readFileSync(`${root}/public/logo-mark.png`).toString('base64')}`;
 
 const cards = [
   {
@@ -40,14 +39,12 @@ const html = (c) => `<!doctype html>
     font-family: 'Geist', sans-serif;
     position: relative; overflow: hidden;
   }
-  .mark { position: absolute; top: 88px; right: 96px; width: 148px; height: 148px; border-radius: 28px; }
   .brand { font-family: 'Geist Mono', monospace; font-weight: 600; font-size: 104px; letter-spacing: -0.03em; color: #eeeff2; }
   .brand .u { color: #5ee9a4; }
   .tagline { margin-top: 26px; font-size: 40px; font-weight: 500; color: #c7cad2; letter-spacing: -0.01em; }
   .domain { position: absolute; bottom: 56px; left: 96px; font-family: 'Geist Mono', monospace; font-size: 26px; color: #5ee9a4; }
 </style></head>
 <body>
-  <img class="mark" src="${markUri}" />
   <div class="brand">${c.brand[0]}<span class="u">_</span>${c.brand[1]}</div>
   <div class="tagline">${c.tagline}</div>
   <div class="domain">localharness.dev</div>
@@ -67,9 +64,7 @@ const browser = await launch();
 const page = await browser.newPage({ viewport: { width: 1200, height: 630 } });
 for (const c of cards) {
   await page.setContent(html(c), { waitUntil: 'networkidle' });
-  await page.waitForFunction(
-    () => [...document.images].every((i) => i.complete && i.naturalWidth > 0) && document.fonts.status === 'loaded'
-  );
+  await page.waitForFunction(() => document.fonts.status === 'loaded');
   await page.screenshot({ path: `${root}/public/og/${c.name}.png` });
   console.log(`og: ${c.name}.png`);
 }

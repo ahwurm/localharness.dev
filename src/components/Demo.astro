@@ -1,0 +1,78 @@
+---
+// Real output: captured from `localharness init` against the live vLLM endpoint
+// on the reference box (2026-06-09). Path shown as the default-HOME location.
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+
+const cmd = 'localharness init';
+const out = [
+  { t: 'Probing for local LLM...', c: 'dim', d: 350 },
+  { t: '  ✓ vllm found at http://localhost:8000/v1', c: 'ok', d: 700 },
+  { t: '  Model: qwen3.6-27b (auto-selected)', c: 'ink', d: 250 },
+  { t: '  ⚠ Tool calling: XML fallback (less reliable than native)', c: 'warn', d: 250 },
+  { t: '', c: 'dim', d: 150 },
+  { t: '✓ LocalHarness configured at ~/.localharness/config.yaml.', c: 'ok', d: 300 },
+  { t: "  Run 'localharness start' to begin.", c: 'dim', d: 150 },
+];
+---
+
+<div
+  class:list={['overflow-hidden rounded-xl border border-edge bg-surface text-left', className]}
+  aria-label="localharness init detecting a local model server"
+>
+  <div class="flex items-center gap-1.5 border-b border-edge px-4 py-2.5">
+    <span class="size-2.5 rounded-full bg-edge"></span>
+    <span class="size-2.5 rounded-full bg-edge"></span>
+    <span class="size-2.5 rounded-full bg-edge"></span>
+  </div>
+  <pre
+    id="demo"
+    data-cmd={cmd}
+    data-out={JSON.stringify(out)}
+    class="min-h-56 overflow-x-auto p-4 font-mono text-sm leading-7 sm:min-h-60"><code><span class="select-none text-dim">$ </span><span id="demo-cmd" class="text-ink"></span><span id="demo-caret" class="text-accent">▍</span><span id="demo-out" class="block"></span></code></pre>
+</div>
+
+<script>
+  const pre = document.getElementById('demo')!;
+  const cmdEl = document.getElementById('demo-cmd')!;
+  const outEl = document.getElementById('demo-out')!;
+  const caret = document.getElementById('demo-caret')!;
+  const cmd = pre.dataset.cmd!;
+  const out: { t: string; c: string; d: number }[] = JSON.parse(pre.dataset.out!);
+  const colors: Record<string, string> = {
+    ok: 'text-accent',
+    warn: 'text-amber',
+    dim: 'text-dim',
+    ink: 'text-ink',
+  };
+
+  const renderLine = (l: { t: string; c: string }) => {
+    const div = document.createElement('div');
+    div.className = colors[l.c] + ' whitespace-pre';
+    div.textContent = l.t || ' ';
+    outEl.appendChild(div);
+  };
+
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    cmdEl.textContent = cmd;
+    caret.remove();
+    out.forEach(renderLine);
+  } else {
+    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+    (async () => {
+      await sleep(500);
+      for (const ch of cmd) {
+        cmdEl.textContent += ch;
+        await sleep(34);
+      }
+      await sleep(280);
+      caret.remove();
+      for (const l of out) {
+        await sleep(l.d);
+        renderLine(l);
+      }
+    })();
+  }
+</script>

@@ -28,6 +28,7 @@ for (const [w, h, vp] of viewports) {
   const page = await browser.newPage({ viewport: { width: w, height: h } });
   for (const [path, name] of pages) {
     await page.goto(base + path, { waitUntil: 'networkidle' });
+    await page.waitForTimeout(5500); // let the hero demo animation finish
     await page.screenshot({ path: `${outDir}/${name}-${vp}.png`, fullPage: true });
   }
   await page.close();

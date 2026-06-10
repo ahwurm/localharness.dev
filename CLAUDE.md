@@ -30,15 +30,19 @@ Astro 5 + Tailwind v4, static output, GitHub Pages deploy, domain `localharness.
 - Star-count badge stays behind `SHOW_STARS = false` until repos have stars.
 - Dark theme only; one accent (terminal green); animations limited to hover transitions + one CSS fade-in.
 
-## Brand assets
+## Brand
 
-Originals live in `brand/` (sloth logomark + icon + light-bg wordmark — designed for light
-backgrounds, so the site puts the mark on white rounded tiles). Generated web assets in `public/`:
-`logo-mark.png` (nav chip + OG cards), `favicon.png`, `apple-touch-icon.png` — regenerate from
-`brand/localharness-logomark.png` with the PIL tile script (trim 4% border first: export has edge
-artifacts; corners have semi-transparent haze, invisible on white). After regenerating:
-`npm run og` + rebuild + push. Wordmark.astro renders chip + `local_harness` text; text-only if
-logo-mark.png is missing.
+NO logo (user removed the sloth mark 2026-06-09 — "completely worthless"). Brand = the mono text
+wordmark `local_harness` (green underscore) + minimal dark/green-underscore favicon.svg.
+Originals backed up untracked at `.planning/brand-backup/` if ever revisited.
+
+## Hero demo
+
+`src/components/Demo.astro` plays REAL captured output of `localharness init` (vLLM detection on
+the reference box, 2026-06-09). To recapture after product changes:
+`cd ~/localharness && HOME=/tmp/lh-demo uv run localharness init` — NEVER run init with the real
+HOME (it would overwrite the production dispatch config). Visual-first rule: prefer real demo
+captures (screenshots / sped-up runs) over prose; case-study visuals join as they're produced.
 
 ## Launch-day flip (Jun 15, 2026)
 

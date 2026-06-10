@@ -1,17 +1,3 @@
----
-import fs from 'node:fs';
-
-interface Props {
-  class?: string;
-}
-const { class: className = '' } = Astro.props;
-
-const hasMark = fs.existsSync(new URL('../../public/logo-mark.png', import.meta.url));
----
-
-<span class:list={['inline-flex items-center gap-2.5', className]}>
-  {hasMark && <img src="/logo-mark.png" alt="" class="size-7 rounded-md" width="320" height="320" />}
-  <span class="font-mono font-semibold tracking-tight">
-    local<span class="text-accent">_</span>harness
-  </span>
+<span class="font-mono font-semibold tracking-tight">
+  local<span class="text-accent">_</span>harness
 </span>
