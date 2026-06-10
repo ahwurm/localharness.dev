@@ -13,11 +13,15 @@ Astro 5 + Tailwind v4, static output, GitHub Pages deploy, domain `localharness.
 ## Hard rules
 
 - **NEVER commit `.planning/`** — untracked GSD state. Pre-push gate: `git check-ignore -q .planning/`.
+- **Messaging is dead simple (user directive 2026-06-09): NO numbers/stats in copy.**
+  Core message everywhere: *same workflow & output · longer time · much lower cost (free for local)*.
+  No test counts, scenario counts, benchmark percentages, model parameter sizes, or version strings.
+- **Proof = example case studies, not benchmarks** (user directive 2026-06-09): the claim backs
+  itself up via real migrations — the author's own production workloads first, then others tested.
+  NEVER invent case-study content. Pre-launch the section frames receipts honestly as upcoming;
+  real case studies slot into `src/pages/case-studies/` as they're produced.
 - **No placeholder/sample data.** Every on-page claim must trace to a real fact in
-  `~/localharness`, `~/localshift`, or their GitHub READMEs. Verify counts at publish time:
-  - train scenarios: `ls ~/localharness/bench/scenarios/train/*.yaml | wc -l`
-  - tests: `cd ~/localharness && uv run pytest --collect-only -q tests/ | tail -1`
-- No LocalHarness version string on the site (pyproject 0.1.0 vs v1.1 tag unresolved).
+  `~/localharness`, `~/localshift`, or their GitHub READMEs.
 - No fabricated terminal output; commands only, with comment annotations.
 - No `npm install` / `pip install` copy — not published to registries. Install = clone + `uv sync`.
 - Star-count badge stays behind `SHOW_STARS = false` until repos have stars.
