@@ -40,8 +40,7 @@ while proposing. CLI: `localharness autoresearch run | review | adopt`,
 ## LocalShift
 
 - [Repository](https://github.com/ahwurm/localshift): Claude Code plugin that migrates proven
-  frontier-AI workloads — cron jobs, skills, bare prompts — to local LLMs. MIT. Launches
-  June 15, 2026.
+  recurring frontier-AI workloads — scheduled jobs, skills, bare prompts — to local LLMs. MIT.
 - Install (inside Claude Code): `/plugin marketplace add ahwurm/localshift` then
   `/plugin install localshift@localshift`
 - Pipeline: explore → design-eval → build → replicate → evaluate, ending in blind 1v1

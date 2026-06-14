@@ -3,7 +3,6 @@ import Base from '../layouts/Base.astro';
 import Button from '../components/Button.astro';
 import Card from '../components/Card.astro';
 import CodeBlock from '../components/CodeBlock.astro';
-import Demo from '../components/Demo.astro';
 import ArchDiagram from '../components/ArchDiagram.astro';
 import AutoresearchDiagram from '../components/AutoresearchDiagram.astro';
 import Terminal from '../components/Terminal.astro';
@@ -23,9 +22,13 @@ const install = 'git clone https://github.com/ahwurm/localharness && cd localhar
       AI agents on your <span class="whitespace-nowrap text-accent">own hardware</span>.
     </h1>
     <p class="mt-4 max-w-2xl text-dim">
-      Open-source agent harness for local LLMs. One command finds your model server:
+      Open-source agent harness for local LLMs.
     </p>
-    <Demo class="mt-8 w-full max-w-2xl" />
+    <img
+      src="/demos/localharness-banner.png"
+      alt="localharness startup banner — the local_harness wordmark, version, detected model, and prompt"
+      class="mt-8 w-full max-w-2xl"
+    />
     <CodeBlock code={install} label="install" class="mt-4 w-full max-w-2xl text-left [&_pre]:text-[13px]" />
     <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
       <Button href="https://github.com/ahwurm/localharness" external>View on GitHub ↗</Button>
@@ -108,8 +111,7 @@ const install = 'git clone https://github.com/ahwurm/localharness && cd localhar
         local<span class="text-accent">_</span>shift
       </h2>
       <p class="mt-3 max-w-2xl text-dim">
-        Migrate frontier-AI workloads to local LLMs — proven per workload, not assumed. Launches
-        June 15, 2026.
+        Migrate frontier-AI workloads to local LLMs — proven per workload, not assumed.
       </p>
       <div class="mt-6">
         <Button href="/localshift/" variant="outline">How it works</Button>

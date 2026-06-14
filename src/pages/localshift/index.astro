@@ -52,14 +52,13 @@ const steps = [
   <section class="container-site rise-in flex flex-col items-center pb-20 pt-24 text-center sm:pt-32">
     <div class="flex flex-wrap items-center justify-center gap-2 font-mono text-xs text-dim">
       <span class="rounded-full border border-edge px-2.5 py-1">Claude Code plugin</span>
-      <span class="rounded-full border border-edge px-2.5 py-1">Launches June 15, 2026</span>
     </div>
     <h1 class="mt-6 max-w-3xl text-balance text-[clamp(2.25rem,5vw,3.5rem)] font-semibold leading-[1.1] tracking-tight">
       Same workflow. Same output. <span class="whitespace-nowrap text-accent">Much lower cost.</span>
     </h1>
     <p class="mt-5 max-w-2xl text-dim">
-      Point Claude Code at a headless AI workload — a cron job, a skill, a prompt — and migrate it
-      to a local LLM.
+      Point Claude Code at a recurring headless workload — a scheduled job, a skill, a prompt. It
+      comes back a local replica that runs for free on your hardware — with the receipts to trust it.
     </p>
     <CodeBlock code={install} label="in Claude Code" class="mt-8 w-full max-w-xl text-left" />
     <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
@@ -73,7 +72,8 @@ const steps = [
     <div class="container-site py-24">
       <h2 class="text-3xl font-semibold tracking-tight">How it works</h2>
       <p class="mt-3 max-w-2xl text-dim">
-        Claude Code explores, designs the eval, and judges. The migrated job runs claude-free.
+        Claude Code explores, designs the eval, and judges each seat 1v1. Then you cut over — the
+        frontier calls deleted, not proxied — and the migrated job runs claude-free.
       </p>
       <ol class="mt-12 max-w-2xl">
         {
@@ -92,12 +92,12 @@ const steps = [
     </div>
   </section>
 
-  <!-- Verdicts -->
+  <!-- Honest verdicts -->
   <section class="container-site py-24">
     <h2 class="text-3xl font-semibold tracking-tight">Honest verdicts are the product</h2>
     <p class="mt-3 max-w-2xl text-dim">
-      The bar is not frontier parity. It's <em class="text-ink">good enough, and works</em> —
-      proven, not assumed.
+      The bar is not frontier parity — it's <em class="text-ink">good enough, and works</em>,
+      proven not assumed. Every seat earns one of three verdicts:
     </p>
     <div class="mt-10 grid gap-4 sm:grid-cols-3">
       <VerdictCard
@@ -118,18 +118,29 @@ const steps = [
     </div>
   </section>
 
-  <!-- Case studies -->
-  <section class="border-t border-edge bg-surface/50">
-    <div class="container-site py-24">
-      <h2 class="text-3xl font-semibold tracking-tight">Can it back that up?</h2>
-      <p class="mt-3 max-w-2xl text-dim">
-        Every migration ships receipts — the eval, the traces, the blind 1v1 verdict. Case studies
-        start with our own production workloads. First reports at launch.
-      </p>
-      <div class="mt-6">
-        <Button href="https://github.com/ahwurm/localshift" variant="outline" external>
-          Watch on GitHub ↗
-        </Button>
+  <!-- Two modes -->
+  <section class="container-site py-24">
+    <h2 class="text-3xl font-semibold tracking-tight">Two ways to shift</h2>
+    <p class="mt-3 max-w-2xl text-dim">
+      Same eval underneath — your call on how fast the frontier calls go away.
+    </p>
+    <div class="mt-10 grid gap-4 sm:grid-cols-2">
+      <div class="rounded-lg border border-edge bg-surface/50 p-8">
+        <div class="font-mono text-xs uppercase tracking-wide text-accent">fast</div>
+        <h3 class="mt-2 text-xl font-semibold tracking-tight">Cut over now, optimize after</h3>
+        <p class="mt-3 text-sm text-dim">
+          Move the whole workload local in one pass. Honest-fail seams catch what breaks, and the
+          optimize-on-receipts loop closes the gap to frontier on your schedule. Least effort
+          upfront, free from day one.
+        </p>
+      </div>
+      <div class="rounded-lg border border-edge bg-surface/50 p-8">
+        <div class="font-mono text-xs uppercase tracking-wide text-accent">slow</div>
+        <h3 class="mt-2 text-xl font-semibold tracking-tight">Migrate seat by seat</h3>
+        <p class="mt-3 text-sm text-dim">
+          Judge each component blind 1v1 and flip only what passes — the rest stays frontier until
+          it's ready. Higher day-one fidelity, more deliberate.
+        </p>
       </div>
     </div>
   </section>

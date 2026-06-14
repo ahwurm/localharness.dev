@@ -64,6 +64,7 @@ instruction-injection phrasing. Update it when page content changes.
 stroke-accent). Content must stay factual vs CONTEXT-HARNESS.md / docs/specs — they are
 architecture mockups, not decoration.
 
-## Launch-day flip (Jun 15, 2026)
+## Launch-day flip
 
-"Launches June 15" → "Launched June 15" on both pages; optionally flip `SHOW_STARS`.
+Dated launch language ("Launches June 15, 2026") removed from both pages + llms.txt per user
+directive 2026-06-14 — do NOT reintroduce a launch date. On launch, optionally flip `SHOW_STARS`.
