@@ -23,6 +23,7 @@ Do the same briefly for LocalShift at `~/localshift`. Return a tight, path-cited
 Compare the digest to what the site currently claims:
 - `public/llms.txt` — the CLI list, architecture summary, feature claims.
 - `src/pages/index.astro` and `src/pages/localshift/index.astro` — feature / architecture copy.
+- `src/pages/devnotes.astro` — the changelog. Recently shipped commits not yet listed here are the main gap to close.
 - Any answer or roadmap pages under `src/pages/`.
 
 List every drift: stale claims, missing capabilities, or commands present in code but absent from
@@ -37,6 +38,7 @@ Show the drift list and the exact edits you intend to make. Apply them only once
 - Analyst voice: thesis-first, declarative, em-dashes, no hype, no exclamation points.
 - Keep `llms.txt` consistent with the pages.
 - Roadmap / not-yet-shipped items must be framed honestly as in-progress, never as features.
+- For `devnotes.astro`: add an entry per newly shipped fix/feature not already listed — a tag (Added/Fixed), a short title, a date (e.g. "Jun 17"), and a one-sentence body. Newest first; no version strings or numbers; each must trace to a real commit.
 
 ## 4. Verify and report
 
