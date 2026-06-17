@@ -37,13 +37,6 @@ while proposing. CLI: `localharness autoresearch run | review | adopt`,
   [model-selection notes](https://github.com/ahwurm/localharness/blob/main/CONTEXT-MODEL.md),
   [component specs](https://github.com/ahwurm/localharness/tree/main/docs/specs)
 
-### Interoperability
-
-LocalHarness runs as a local, open-model agent runner. Where other harnesses assume a frontier
-cloud model, it targets any OpenAI-compatible local endpoint — which makes it a natural local-model
-runner under agent orchestrators. Integration with Databricks' open-source Omnigent meta-harness,
-as its local and open-model runner, is in progress.
-
 ## LocalShift
 
 - [Repository](https://github.com/ahwurm/localshift): Claude Code plugin that migrates proven
