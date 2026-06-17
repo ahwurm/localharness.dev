@@ -13,7 +13,7 @@ much lower cost — your hardware, no API meter.
 - Install: `git clone https://github.com/ahwurm/localharness && cd localharness && uv sync`
 - First run: `uv run localharness init` — probes vLLM :8000, Ollama :11434, LM Studio :1234,
   llama.cpp :8080; writes `~/.localharness/config.yaml`
-- CLI: init · start · doctor · validate · agent · bench · autoresearch · components · experiment
+- CLI: init · start · doctor · validate · propose · agent · bench · autoresearch · components · experiment
 
 ### Architecture
 
@@ -36,6 +36,13 @@ while proposing. CLI: `localharness autoresearch run | review | adopt`,
 - Deep docs: [architecture notes](https://github.com/ahwurm/localharness/blob/main/CONTEXT-HARNESS.md),
   [model-selection notes](https://github.com/ahwurm/localharness/blob/main/CONTEXT-MODEL.md),
   [component specs](https://github.com/ahwurm/localharness/tree/main/docs/specs)
+
+### Interoperability
+
+LocalHarness runs as a local, open-model agent runner. Where other harnesses assume a frontier
+cloud model, it targets any OpenAI-compatible local endpoint — which makes it a natural local-model
+runner under agent orchestrators. Integration with Databricks' open-source Omnigent meta-harness,
+as its local and open-model runner, is in progress.
 
 ## LocalShift
 

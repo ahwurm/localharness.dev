@@ -9,12 +9,36 @@ import Terminal from '../components/Terminal.astro';
 
 const install = 'git clone https://github.com/ahwurm/localharness && cd localharness && uv sync';
 
-
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'LocalHarness',
+    description:
+      'Open-source, model-agnostic hierarchical agent harness for local LLMs. Define agents in YAML and run them against any OpenAI-compatible endpoint.',
+    applicationCategory: 'DeveloperApplication',
+    operatingSystem: 'Linux, macOS',
+    url: 'https://localharness.dev',
+    codeRepository: 'https://github.com/ahwurm/localharness',
+    license: 'https://opensource.org/licenses/MIT',
+    programmingLanguage: 'Python',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    author: { '@type': 'Organization', name: 'LocalHarness', url: 'https://localharness.dev' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'LocalHarness',
+    url: 'https://localharness.dev',
+    sameAs: ['https://github.com/ahwurm/localharness'],
+  },
+];
 ---
 
 <Base
   title="LocalHarness — AI agents on your own hardware"
   description="Open-source agent harness for local LLMs. Same workflow, same output — longer time, much lower cost."
+  jsonLd={jsonLd}
 >
   <!-- Hero -->
   <section class="container-site rise-in flex flex-col items-center pb-20 pt-20 text-center sm:pt-28">

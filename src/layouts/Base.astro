@@ -7,8 +7,9 @@ interface Props {
   title: string;
   description: string;
   ogImage?: string;
+  jsonLd?: object | object[];
 }
-const { title, description, ogImage = '/og/localharness.png' } = Astro.props;
+const { title, description, ogImage = '/og/localharness.png', jsonLd } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImageAbs = new URL(ogImage, Astro.site);
@@ -38,6 +39,7 @@ const ogImageAbs = new URL(ogImage, Astro.site);
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageAbs} />
+    {jsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />}
   </head>
   <body class="flex min-h-screen flex-col">
     <a
