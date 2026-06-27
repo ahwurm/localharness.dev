@@ -1,8 +1,8 @@
 # LocalHarness
 
-> Open-source, model-agnostic hierarchical agent harness for local LLMs. Define agents in
-> YAML — prompts, tools, permissions, memory — and run them as a coordinated org against any
-> OpenAI-compatible endpoint (vLLM, Ollama, LM Studio, llama.cpp). MIT. Python >=3.12 + uv.
+> Open-source, model-agnostic agent harness for local LLMs. Define agents in YAML —
+> prompts, tools, permissions, memory — and run them against any OpenAI-compatible endpoint
+> (vLLM, Ollama, LM Studio, llama.cpp). MIT. Python >=3.12 + uv.
 
 The tradeoff, stated plainly: same workflow and output as frontier automation; longer runtime;
 much lower cost — your hardware, no API meter.
@@ -17,13 +17,28 @@ much lower cost — your hardware, no API meter.
 
 ### Architecture
 
-Thin orchestrator (route · index · escalate) → divisions of YAML-defined agents, each with
-isolated context and SQLite memory → a typed event bus that memory, audit, and channel adapters
+Thin orchestrator (route · index · escalate) → YAML-defined subagents, each with its own
+fresh context and isolated SQLite memory → a typed event bus that memory and channel adapters
 subscribe to, persisted as an append-only JSONL trace → a ReAct agent loop with stuck detection,
 action/duration budgets, and context compaction → built-in tools (read, write, edit, glob, grep,
 bash, agent delegation, web search/fetch) under deny-first permissions → provider auto-detection
 against any OpenAI-compatible endpoint, with an XML fallback for models without native function
 calling.
+
+### Subagents and verification
+
+A parent delegates to specialist subagents, each sandboxed to its own toolset and a fresh
+context window: explore (read-only), web-researcher, data-analyst, frontend-designer, and a
+cruncher that reads documents larger than the context window losslessly — every section read,
+every figure traceable to its source. Web research can run a blind search-verifier that
+re-fetches each claimed source and writes a verdict ledger. Define your own subagents in YAML.
+
+### Security
+
+Untrusted web or tool content is never resolved inside an agent that can mutate the host
+(bash, write, edit); the separation is enforced where tools are resolved and fails closed.
+OS-level sandboxing of host tools is on the roadmap — until then, run the harness as a
+non-privileged user. See SECURITY.md.
 
 ### Autoresearch
 
@@ -33,8 +48,8 @@ statistical promotion gate against baseline before adoption; a sealed holdout se
 while proposing. CLI: `localharness autoresearch run | review | adopt`,
 `localharness components list | get | set`, `localharness bench train | holdout`.
 
-- Deep docs: [architecture notes](https://github.com/ahwurm/localharness/blob/main/CONTEXT-HARNESS.md),
-  [model-selection notes](https://github.com/ahwurm/localharness/blob/main/CONTEXT-MODEL.md),
+- Deep docs: [README](https://github.com/ahwurm/localharness/blob/main/README.md),
+  [security model](https://github.com/ahwurm/localharness/blob/main/SECURITY.md),
   [component specs](https://github.com/ahwurm/localharness/tree/main/docs/specs)
 
 ## LocalShift

@@ -1,11 +1,11 @@
 ---
-// Architecture mockup — verified against CONTEXT-HARNESS.md / docs/specs
+// Architecture mockup — verified against docs/specs
 ---
 
 <svg
   viewBox="0 0 560 632"
   role="img"
-  aria-label="LocalHarness architecture: orchestrator delegating to divisions of agents, a typed event bus, the ReAct agent loop, tools under deny-first permissions, and provider auto-detection over local endpoints"
+  aria-label="LocalHarness architecture: orchestrator delegating to subagents, a typed event bus, the ReAct agent loop, tools under deny-first permissions, and provider auto-detection over local endpoints"
   class="w-full max-w-xl"
 >
   <defs>
@@ -21,9 +21,9 @@
 
   <line x1="280" y1="68" x2="280" y2="92" class="stroke-dim" stroke-width="1.2" marker-end="url(#arr)"></line>
 
-  <!-- divisions -->
+  <!-- subagents -->
   <rect x="60" y="98" width="210" height="118" rx="12" class="fill-none stroke-edge" stroke-width="1.3" stroke-dasharray="6 5"></rect>
-  <text x="76" y="120" class="fill-dim font-mono text-[11px]">division</text>
+  <text x="76" y="120" class="fill-dim font-mono text-[11px]">subagents</text>
   <rect x="76" y="134" width="84" height="56" rx="8" class="fill-surface stroke-edge" stroke-width="1.3"></rect>
   <text x="118" y="158" text-anchor="middle" class="fill-ink font-mono text-[13px]">agent</text>
   <text x="118" y="176" text-anchor="middle" class="fill-dim text-[10px]">yaml</text>
@@ -32,7 +32,7 @@
   <text x="214" y="176" text-anchor="middle" class="fill-dim text-[10px]">yaml</text>
 
   <rect x="290" y="98" width="210" height="118" rx="12" class="fill-none stroke-edge" stroke-width="1.3" stroke-dasharray="6 5"></rect>
-  <text x="306" y="120" class="fill-dim font-mono text-[11px]">division</text>
+  <text x="306" y="120" class="fill-dim font-mono text-[11px]">subagents</text>
   <rect x="306" y="134" width="84" height="56" rx="8" class="fill-surface stroke-edge" stroke-width="1.3"></rect>
   <text x="348" y="158" text-anchor="middle" class="fill-ink font-mono text-[13px]">agent</text>
   <text x="348" y="176" text-anchor="middle" class="fill-dim text-[10px]">yaml</text>
@@ -45,7 +45,7 @@
   <!-- event bus -->
   <rect x="60" y="262" width="440" height="36" rx="9" class="fill-surface stroke-accent" stroke-width="1.5"></rect>
   <text x="280" y="285" text-anchor="middle" class="fill-accent font-mono text-[13px]">typed event bus</text>
-  <text x="280" y="318" text-anchor="middle" class="fill-dim text-[10px]">memory · audit · channels subscribe — append-only JSONL trace</text>
+  <text x="280" y="318" text-anchor="middle" class="fill-dim text-[10px]">memory · channels subscribe — append-only JSONL trace</text>
 
   <line x1="280" y1="326" x2="280" y2="344" class="stroke-dim" stroke-width="1.2" marker-end="url(#arr)"></line>
 
