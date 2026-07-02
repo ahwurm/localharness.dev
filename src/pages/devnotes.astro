@@ -2,97 +2,142 @@
 import Base from '../layouts/Base.astro';
 import Eyebrow from '../components/Eyebrow.astro';
 
-// Real shipped changes, newest first. No version strings / numbers (site rule).
-// Each entry traces to a commit or CHANGELOG entry in github.com/ahwurm/localharness.
-const notes = [
+// Real shipped changes grouped by release, newest first. Versions on this page are
+// a user directive (2026-07-02); entry bodies stay number-free. Each entry traces
+// to a commit or CHANGELOG entry in github.com/ahwurm/localharness.
+const releases = [
   {
-    tag: 'Added',
-    title: 'Number provenance for big-document answers',
-    date: 'Jun 26',
-    body: 'When a document bigger than the context window is combined in stages, every figure in the final answer is checked back against the verbatim section notes. Anything untraceable is surfaced as a warning — never silently rewritten.',
+    v: 'v0.5.2',
+    date: 'Jul 2, 2026',
+    entries: [
+      {
+        tag: 'Added',
+        title: 'Serial-by-default inference gate',
+        body: 'Overlapping local runs used to stack prefills toward one shared GPU — the freeze-the-box failure mode. Inference toward a local endpoint is now serialized by default, in-process and across processes. Decode is engine-serialized anyway, so serial costs roughly nothing in wall-clock.',
+      },
+      {
+        tag: 'Added',
+        title: 'A download cap on web_fetch',
+        body: 'Fetches stream to a hard body cap instead of buffering unbounded responses — one pathological URL can no longer eat the box. When the cap engages it is surfaced in the retained page, never silent.',
+      },
+      {
+        tag: 'Changed',
+        title: 'Cruncher chunks sized at the measured knee',
+        body: 'Over-window chunks got bigger, to where recall peaks before lost-in-the-middle sets in: better recall and fewer leaves to reduce, at neutral wall-clock. A recall-and-cost win, not a speedup — scope stated honestly.',
+      },
+    ],
   },
   {
-    tag: 'Added',
-    title: 'Security model in plain English',
-    date: 'Jun 26',
-    body: 'The threat model now lives in SECURITY.md: trust boundaries, the structural injection defense, and — plainly — what is not built yet.',
+    v: 'v0.5.1',
+    date: 'Jun 26, 2026',
+    entries: [
+      {
+        tag: 'Added',
+        title: 'Number provenance for big-document answers',
+        body: 'When a document bigger than the context window is combined in stages, every figure in the final answer is checked back against the verbatim section notes. Anything untraceable is surfaced as a warning — never silently rewritten.',
+      },
+      {
+        tag: 'Added',
+        title: 'Security model in plain English',
+        body: 'The threat model now lives in SECURITY.md: trust boundaries, the structural injection defense, and — plainly — what is not built yet.',
+      },
+    ],
   },
   {
-    tag: 'Added',
-    title: 'Lossless reading past the context window',
-    date: 'Jun 25',
-    body: 'A cruncher subagent splits oversize documents structure-aware and reads every section — nothing truncated. Content handles move results between agents without re-inlining the bytes, and untrusted-ingested content can never co-reside with host-mutating tools.',
+    v: 'v0.5.0',
+    date: 'Jun 25, 2026',
+    entries: [
+      {
+        tag: 'Added',
+        title: 'Lossless reading past the context window',
+        body: 'A cruncher subagent splits oversize documents structure-aware and reads every section — nothing truncated. Content handles move results between agents without re-inlining the bytes.',
+      },
+      {
+        tag: 'Added',
+        title: 'The capability floor',
+        body: 'Untrusted-ingested web or tool content can never co-reside with host-mutating tools in the same agent — defense-in-depth above model refusal.',
+      },
+    ],
   },
   {
-    tag: 'Fixed',
-    title: 'Hermetic test suite',
-    date: 'Jun 17',
-    body: 'The test suite now runs without a configured home directory — a clean checkout is green from the first command.',
-  },
-  {
-    tag: 'Added',
-    title: 'Start opens to the default agent',
-    date: 'Jun 14',
-    body: 'The start command drops you straight into the default agent. The subagent picker moved behind a flag, so the common path is one step shorter.',
-  },
-  {
-    tag: 'Added',
-    title: 'Web search in the box',
-    date: 'Jun 12',
-    body: 'Web search ships as a core dependency now — no extra install to give an agent the web.',
-  },
-  {
-    tag: 'Fixed',
-    title: 'Markdown in the terminal',
-    date: 'Jun 11',
-    body: 'Agent responses render as Markdown in the terminal instead of raw text.',
-  },
-  {
-    tag: 'Fixed',
-    title: 'Steadier context counting',
-    date: 'Jun 11',
-    body: 'The context counter handles literal special-token text instead of failing the turn.',
+    v: 'earlier',
+    date: 'Jun 2026',
+    entries: [
+      {
+        tag: 'Fixed',
+        title: 'Hermetic test suite',
+        body: 'The test suite runs without a configured home directory — a clean checkout is green from the first command.',
+      },
+      {
+        tag: 'Added',
+        title: 'Start opens to the default agent',
+        body: 'The start command drops you straight into the default agent; the subagent picker moved behind a flag.',
+      },
+      {
+        tag: 'Added',
+        title: 'Web search in the box',
+        body: 'Web search ships as a core dependency — no extra install to give an agent the web.',
+      },
+      {
+        tag: 'Fixed',
+        title: 'Markdown in the terminal',
+        body: 'Agent responses render as Markdown instead of raw text.',
+      },
+      {
+        tag: 'Fixed',
+        title: 'Steadier context counting',
+        body: 'The context counter handles literal special-token text instead of failing the turn.',
+      },
+    ],
   },
 ];
+
+const tagStyle = (tag: string) =>
+  tag === 'Added'
+    ? 'border-accent/30 bg-accent/10 text-accent'
+    : 'border-amber/30 bg-amber/10 text-amber';
 ---
 
 <Base
   title="Devnotes — LocalHarness"
-  description="What's new in LocalHarness — recent fixes and added features."
+  description="What's new in LocalHarness — releases, fixes, and added features."
 >
-  <section class="container-site max-w-2xl py-20 sm:py-28">
+  <section class="container-site max-w-2xl py-16 sm:py-24">
     <Eyebrow label="devnotes" />
     <h1 class="mt-3 text-[clamp(1.9rem,4vw,2.75rem)] font-semibold leading-[1.1] tracking-[-0.02em]">
       What's new.
     </h1>
-    <p class="mt-4 text-dim">Recent fixes and features, newest first. The full history lives on GitHub.</p>
+    <p class="mt-4 text-dim">Release by release, newest first. The full history lives on GitHub.</p>
 
-    <div class="mt-10">
+    <div class="mt-12 flex flex-col gap-12">
       {
-        notes.map((n, i) => (
-          <details class="group border-t border-edge last:border-b" open={i === 0}>
-            <summary class="flex cursor-pointer list-none items-center gap-3 py-4 [&::-webkit-details-marker]:hidden">
-              <span
-                class:list={[
-                  'shrink-0 border px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-wide',
-                  n.tag === 'Added'
-                    ? 'border-accent/30 bg-accent/10 text-accent'
-                    : 'border-amber/30 bg-amber/10 text-amber',
-                ]}
-              >
-                {n.tag}
+        releases.map((r) => (
+          <section aria-label={r.v}>
+            <header class="flex items-baseline gap-3 border-b border-edge pb-3">
+              <span class="border border-accent/40 bg-accent/10 px-2 py-0.5 font-mono text-sm text-accent">
+                {r.v}
               </span>
-              <span class="font-medium text-ink">{n.title}</span>
-              <span class="ml-auto shrink-0 font-mono text-xs text-dim">{n.date}</span>
-              <span
-                class="shrink-0 text-dim transition-transform duration-200 group-open:rotate-90"
-                aria-hidden="true"
-              >
-                ›
-              </span>
-            </summary>
-            <p class="pb-4 text-sm leading-relaxed text-dim">{n.body}</p>
-          </details>
+              <span class="font-mono text-xs text-dim">{r.date}</span>
+            </header>
+            <div class="divide-y divide-edge/60">
+              {r.entries.map((n) => (
+                <article class="py-4">
+                  <div class="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                    <span
+                      class:list={[
+                        'shrink-0 border px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-wide',
+                        tagStyle(n.tag),
+                      ]}
+                    >
+                      {n.tag}
+                    </span>
+                    <h2 class="text-base font-medium text-ink">{n.title}</h2>
+                  </div>
+                  <p class="mt-2 text-sm leading-relaxed text-dim">{n.body}</p>
+                </article>
+              ))}
+            </div>
+          </section>
         ))
       }
     </div>
@@ -101,7 +146,7 @@ const notes = [
       href="https://github.com/ahwurm/localharness/commits/main"
       target="_blank"
       rel="noopener"
-      class="mt-10 inline-block font-mono text-sm text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent"
+      class="mt-12 inline-block font-mono text-sm text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent"
       >full history on github ↗</a
     >
   </section>
