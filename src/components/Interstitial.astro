@@ -1,0 +1,18 @@
+---
+// Thin narrative beat between demos — the dissolved tradeoff band (2026-07-02
+// triptych): one icon + one sentence, placed where each claim is earned.
+import Icon, { type IconName } from './Icon.astro';
+interface Props {
+  icon: IconName;
+  lead: string;
+  rest: string;
+}
+const { icon, lead, rest } = Astro.props;
+---
+
+<section class="border-y border-edge/70 bg-surface/40" data-reveal>
+  <div class="container-site flex items-center gap-3 py-6">
+    <Icon name={icon} class="size-5 shrink-0" />
+    <p class="text-sm text-dim"><span class="font-semibold text-ink">{lead}</span> {rest}</p>
+  </div>
+</section>

@@ -4,7 +4,11 @@ import Button from '../components/Button.astro';
 import Card from '../components/Card.astro';
 import CodeBlock from '../components/CodeBlock.astro';
 import Eyebrow from '../components/Eyebrow.astro';
-import DemoSession from '../components/DemoSession.astro';
+import DemoPane from '../components/DemoPane.astro';
+import TraceFlow from '../components/TraceFlow.astro';
+import Interstitial from '../components/Interstitial.astro';
+import { d1Lines, d3Lines, eventTotal } from '../data/demo-session';
+import { d2Lines, overwindowTailMeter } from '../data/demo-overwindow';
 import Chip from '../components/Chip.astro';
 import Icon from '../components/Icon.astro';
 import GetInvolved from '../components/GetInvolved.astro';
@@ -20,6 +24,7 @@ uv run localharness start`;
 import bannerRaw from '../data/banner.txt?raw';
 const rows = bannerRaw.split('\n');
 const banner = [...rows.slice(0, 6), '', ...rows.slice(6)].join('\n');
+const d3Events = d3Lines.flatMap((l) => l.ev ?? []);
 
 const jsonLd = [
   {
@@ -83,62 +88,148 @@ const jsonLd = [
     </div>
   </section>
 
-  <!-- Watch it work -->
+  <!-- Watch it work: three demos, real sessions -->
   <section id="demo-section" class="border-t border-edge/70" data-reveal>
     <div class="container-site py-16 sm:py-20">
       <Eyebrow label="watch it work" />
       <h2 class="mt-3 text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
-        A real session, replayed.
+        Watch it work.
       </h2>
-      <div class="mt-8">
-        <DemoSession />
+      <p class="mt-3 text-dim">Real sessions, replayed — from cold start to a verified answer.</p>
+      <div data-demo-pips class="mt-4 flex flex-wrap gap-x-8 gap-y-2 font-mono text-xs">
+        <a href="#demo-startup" class="text-accent/80 transition-colors hover:text-accent">_zero to agent</a>
+        <a href="#demo-overwindow" class="text-accent/80 transition-colors hover:text-accent">_bigger than the window</a>
+        <a href="#demo-research" class="text-accent/80 transition-colors hover:text-accent">_delegation, quarantined</a>
       </div>
-      <p class="mt-4 font-mono text-xs text-dim">
-        <span class="text-accent/80">fig. 01</span> — captured 2026-07-02, vLLM · qwen3.6-27b.
-        Replayed from its own bus trace.
-        <span class="mt-1 block"
-          ><span class="text-ink">Untrusted web content never shares an agent with bash or write.</span>
-          <a
-            href="https://github.com/ahwurm/localharness/blob/main/SECURITY.md"
-            target="_blank"
-            rel="noopener"
-            class="text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent"
-            >SECURITY.md →</a
-          ></span
-        >
+
+      <!-- Demo 1: zero to agent -->
+      <div id="demo-startup" class="mt-12 gap-10 xl:grid xl:grid-cols-[3fr_2fr]">
+        <div class="xl:order-2">
+          <Eyebrow label="zero to agent" />
+          <h3 class="mt-3 text-xl font-semibold tracking-tight">Point it at the endpoint you already run.</h3>
+          <ol class="mt-5 space-y-4">
+            <li>
+              <span class="font-mono text-[13px] text-accent">01 · probes for what's running</span>
+              <p class="mt-1 text-sm text-dim">Checks localhost for a live model server: vLLM, Ollama, LM Studio, llama.cpp.</p>
+            </li>
+            <li>
+              <span class="font-mono text-[13px] text-accent">02 · confirms it can act</span>
+              <p class="mt-1 text-sm text-dim">Verifies the model can trigger a command, not just chat, before any agent runs.</p>
+            </li>
+            <li>
+              <span class="font-mono text-[13px] text-accent">03 · sets the limit itself</span>
+              <p class="mt-1 text-sm text-dim">Reads how much text the model can hold straight off the server. Nothing to hand-write.</p>
+            </li>
+          </ol>
+        </div>
+        <div class="mt-6 min-w-0 xl:order-1 xl:mt-0">
+          <DemoPane key="d1" title="~/localharness — real session · qwen3.6-27b on vLLM" lines={d1Lines} />
+          <p class="mt-3 font-mono text-xs text-dim">
+            <span class="text-accent/80">fig. 01</span> — captured 2026-07-02, vLLM · qwen3.6-27b. Same
+            session continues in fig. 03.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Interstitial icon="server" lead="No API key, no signup" rest="— the model you're already running." />
+
+  <!-- Demo 2: bigger than the window -->
+  <section id="demo-overwindow" data-reveal>
+    <div class="container-site gap-10 py-16 sm:py-20 xl:grid xl:grid-cols-[3fr_2fr]">
+      <div class="xl:order-2">
+        <Eyebrow label="bigger than the window" />
+        <h3 class="mt-3 text-xl font-semibold tracking-tight">It reads what can't fit.</h3>
+        <ol class="mt-5 space-y-4">
+          <li>
+            <span class="font-mono text-[13px] text-accent">01 · the whole novel, one handle</span>
+            <p class="mt-1 text-sm text-dim">A context window is how much text the model can hold at once. This book is half again bigger.</p>
+          </li>
+          <li>
+            <span class="font-mono text-[13px] text-accent">02 · every section actually read</span>
+            <p class="mt-1 text-sm text-dim">The harness cuts the book into sections and reads each one in a fresh window — that's the cascade.</p>
+          </li>
+          <li>
+            <span class="font-mono text-[13px] text-accent">03 · one grounded answer</span>
+            <p class="mt-1 text-sm text-dim">The section extracts combine into one reply that quotes the text exactly.</p>
+          </li>
+        </ol>
+        <p class="mt-5 font-mono text-xs">
+          <a href="/architecture/#over-window" class="text-accent/80 transition-colors hover:text-accent">the full mechanism ↗</a>
+        </p>
+      </div>
+      <div class="mt-6 min-w-0 xl:order-1 xl:mt-0">
+        <DemoPane
+          key="d2"
+          title="~/localharness — real session · A Tale of Two Cities"
+          lines={d2Lines}
+          tailMeter={overwindowTailMeter}
+        />
+        <p class="mt-3 font-mono text-xs text-dim">
+          <span class="text-accent/80">fig. 02</span> — captured 2026-07-02, its own session: the full
+          text of A Tale of Two Cities (Project Gutenberg #98), 757,604 characters through a
+          126,976-token window — 48 sections, every one read. Answer verified against the text.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <Interstitial icon="clock" lead="It takes longer" rest="— local models are slower. That's the tradeoff." />
+
+  <!-- Demo 3: delegation, quarantined (the fig. 01 session, continued) -->
+  <section id="demo-research" data-reveal>
+    <div class="container-site py-16 sm:py-20">
+      <Eyebrow label="delegation, quarantined" />
+      <h3 class="mt-3 text-xl font-semibold tracking-tight">Subagents, fenced by construction.</h3>
+      <p class="measure mt-3 text-sm text-dim">
+        Continuing the same captured session as fig. 01: one prompt, and the agent hands research to a
+        web-quarantined child. Subagents get fresh windows and only the tools their job needs — the
+        web-researcher can touch only the web, a verifier re-pulls its sources blind, and every web
+        result arrives stamped <span class="text-ink">UNTRUSTED</span>, with no path to
+        <code class="font-mono text-ink">bash</code> or <code class="font-mono text-ink">write</code>.
+        Fails closed —
+        <a
+          href="https://github.com/ahwurm/localharness/blob/main/SECURITY.md"
+          target="_blank"
+          rel="noopener"
+          class="text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent"
+          >SECURITY.md</a
+        >.
+      </p>
+      <div data-demo-scope id="demo-research-scope" class="mt-8 grid gap-6 xl:grid-cols-[1.2fr_1fr]">
+        <DemoPane
+          key="d3"
+          title="~/localharness — the fig. 01 session, continued"
+          lines={d3Lines}
+          tailMeter="░░░░░░░░░░ 3%"
+          eventTotal={eventTotal}
+          boxClass="xl:h-0 xl:min-h-full"
+          bodyClass="h-[420px] xl:h-auto xl:min-h-0 xl:flex-1"
+        />
+        <div class="flex min-w-0 flex-col gap-4">
+          <div class="border border-edge bg-surface/60 p-4">
+            <TraceFlow />
+          </div>
+          <div data-node="bus" class="flex min-h-0 flex-1 flex-col overflow-hidden border border-edge bg-surface/60">
+            <div class="flex items-center justify-between border-b border-edge/70 px-4 py-2 font-mono text-xs text-dim">
+              <span>bus-events.jsonl — append-only</span>
+              <span><span data-ev-count>{eventTotal}</span> events</span>
+            </div>
+            <ol data-ticker class="h-[132px] overflow-y-auto px-4 py-2 font-mono text-[11px] leading-[1.9] text-dim [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {d3Events.map((e, i) => <li data-ev={i}>{e}</li>)}
+            </ol>
+          </div>
+        </div>
+      </div>
+      <p class="mt-3 font-mono text-xs text-dim">
+        <span class="text-accent/80">fig. 03</span> — the fig. 01 session, continued (pacing
+        compressed, text verbatim). Replayed from its own bus trace.
       </p>
     </div>
   </section>
 
-  <!-- Tradeoff band -->
-  <section class="border-y border-edge/70 bg-surface/40" aria-label="The tradeoff" data-reveal>
-    <div class="container-site grid gap-8 py-12 sm:grid-cols-3 sm:gap-6">
-      <div>
-        <div class="flex items-center justify-between">
-          <Icon name="repeat" class="size-5" />
-          <span class="font-mono text-xs text-accent/50">01</span>
-        </div>
-        <h2 class="mt-3 text-lg font-semibold tracking-tight">Same workflow, same output</h2>
-        <p class="mt-1.5 text-sm text-dim">The jobs you already run — unchanged.</p>
-      </div>
-      <div>
-        <div class="flex items-center justify-between">
-          <Icon name="clock" class="size-5" />
-          <span class="font-mono text-xs text-accent/50">02</span>
-        </div>
-        <h2 class="mt-3 text-lg font-semibold tracking-tight">It takes longer</h2>
-        <p class="mt-1.5 text-sm text-dim">Local models are slower. That's the tradeoff.</p>
-      </div>
-      <div>
-        <div class="flex items-center justify-between">
-          <Icon name="meter-off" class="size-5" />
-          <span class="font-mono text-xs text-accent/50">03</span>
-        </div>
-        <h2 class="mt-3 text-lg font-semibold tracking-tight">Much lower cost</h2>
-        <p class="mt-1.5 text-sm text-dim">Your hardware. No API meter, no telemetry.</p>
-      </div>
-    </div>
-  </section>
+  <Interstitial icon="repeat" lead="Same workflow, same output" rest="— much lower cost. No meter, no telemetry." />
 
   <!-- Built in -->
   <section id="agents" data-reveal>
@@ -147,15 +238,7 @@ const jsonLd = [
       <h2 class="mt-3 text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
         Built in.
       </h2>
-      <div class="mt-8 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <Card class="p-4">
-          <Chip icon="agent" label="default" class="border-0 bg-transparent px-0 py-0" />
-          <p class="mt-1.5 text-sm text-dim">What start gives you — three lines of YAML.</p>
-        </Card>
-        <Card class="p-4">
-          <Chip icon="search" label="web-researcher" class="border-0 bg-transparent px-0 py-0" />
-          <p class="mt-1.5 text-sm text-dim">Quarantined web tools; spawns its own fact-checker.</p>
-        </Card>
+      <div class="mt-8 grid gap-3 sm:grid-cols-2">
         <Card class="p-4">
           <Chip icon="doc" label="explore" class="border-0 bg-transparent px-0 py-0" />
           <p class="mt-1.5 text-sm text-dim">Read-only codebase scout.</p>

@@ -1,0 +1,344 @@
+---
+// Reusable replay terminal — the multi-instance successor to DemoSession
+// (2026-07-02 triptych; adversarially reviewed 2 rounds). Pattern cloned from
+// ReplayTerminal.astro: data-attr roots + per-root JSON island + init guard —
+// NO singleton ids (Astro dedups identical component scripts; getElementById
+// binds one pane and leaves the rest dead).
+//
+// Sync scope: the script drives [data-dl]/[data-typed]/[data-tail] inside the
+// pane, and [data-node]/[data-edge]/[data-ev]/[data-ev-count]/[data-ticker]
+// inside pane.closest('[data-demo-scope]') — so demo 3's plate + ticker (slot
+// content in the section grid) light exactly as before. Panes without those
+// elements (demos 1/2) degrade gracefully: only `body` is required.
+//
+// Replay arming: IntersectionObserver on the pane itself + 300ms dwell (smooth
+// hash-scroll transit doesn't fire panes you sail past) + queue-never-skip
+// mutex (a deferred pane re-queues; `played` is only set by a real play()) +
+// pip intent (clicking a [data-demo-pips] anchor plays the target immediately
+// and defers others for 1.5s).
+//
+// Static/no-JS/reduced-motion: full transcript rendered, body+ticker anchored
+// to the tail (the answer) BEFORE the reduced-motion return — that ordering is
+// the shipped social-capture fix; keep it.
+import type { DemoLine } from '../data/demo-session';
+
+interface Props {
+  /** unique per page, e.g. "d1" — used only for label wiring, not selection */
+  key: string;
+  title: string;
+  lines: DemoLine[];
+  /** real captured meter for the idle tail box; null = no meter chip (D1: none captured) */
+  tailMeter?: string | null;
+  /** full-turn bus-event count for the ticker bump (D3 only) */
+  eventTotal?: number;
+  /** outer box classes: D1/D2 pass the sticky contract; D3 passes the grid trick */
+  boxClass?: string;
+  /** body height classes */
+  bodyClass?: string;
+}
+const {
+  key,
+  title,
+  lines,
+  tailMeter = null,
+  eventTotal,
+  boxClass = 'xl:sticky xl:top-20 xl:max-h-[min(72vh,560px)]',
+  bodyClass = 'max-h-[420px] xl:max-h-none xl:flex-1 xl:min-h-0',
+} = Astro.props;
+
+const program = lines.map((l, i) => ({
+  i,
+  kind: l.kind,
+  d: l.d ?? 350,
+  node: l.node ?? null,
+  edge: l.edge ?? null,
+  ev: (l.ev ?? []).length,
+  text: l.kind === 'prompt' ? l.text : null,
+}));
+---
+
+<div
+  data-demo-pane
+  class:list={['flex min-w-0 flex-col overflow-hidden border border-edge bg-surface', boxClass]}
+>
+  <div class="flex items-center justify-between border-b border-edge/70 px-4 py-2">
+    <span class="truncate font-mono text-xs text-dim">{title}</span>
+    <button
+      type="button"
+      data-replay
+      class="hidden border border-edge px-2 py-0.5 font-mono text-[11px] text-dim transition-colors duration-200 hover:border-accent/40 hover:text-ink"
+      >replay</button
+    >
+  </div>
+  <div
+    data-body
+    class:list={[
+      'dp-fade overflow-y-auto p-4 pb-10 font-mono text-[13px] leading-[1.75] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
+      bodyClass,
+    ]}
+  >
+    {
+      lines.map((l, i) => {
+        if (l.kind === 'cmd')
+          return (
+            <div data-dl={i}>
+              <span class="select-none text-accent/80">$ </span>
+              <span class="text-ink">{l.text}</span>
+            </div>
+          );
+        if (l.kind === 'prompt')
+          return (
+            <div data-dl={i} class="my-2 rounded-md border border-dim/40 px-3 py-1.5">
+              <span class="select-none text-accent">&gt; </span>
+              <span class="text-ink" data-typed>
+                {l.text}
+              </span>
+            </div>
+          );
+        if (l.kind === 'tool')
+          return (
+            <div data-dl={i} class="pl-2 text-ink/85">
+              <span class="text-accent/80">◆ </span>
+              {l.text.replace(/^◆ /, '')}
+            </div>
+          );
+        if (l.kind === 'ok')
+          return (
+            <div data-dl={i} class="pl-2 text-dim">
+              <span class="text-accent/70">✓ </span>
+              {l.text.replace(/^✓ /, '')}
+            </div>
+          );
+        if (l.kind === 'answer')
+          return (
+            <fieldset data-dl={i} class="my-2 whitespace-pre-line rounded-md border border-dim/40 px-3 pb-2.5 pt-1.5">
+              <legend class="mx-auto px-2 font-semibold text-accent">default</legend>
+              <span class="text-ink">{l.text}</span>
+            </fieldset>
+          );
+        if (l.kind === 'art')
+          return (
+            <pre data-dl={i} class="ascii-art my-1 overflow-hidden text-[7px] leading-[1.15] text-accent">{l.text}</pre>
+          );
+        if (l.kind === 'meta')
+          return (
+            <div data-dl={i} class="whitespace-pre text-dim">
+              {l.text}
+            </div>
+          );
+        return (
+          <div data-dl={i} class="text-dim">
+            {l.text}
+          </div>
+        );
+      })
+    }
+    <div data-tail class="relative my-2 rounded-md border border-dim/40 px-3 py-1.5">
+      <span
+        ><span class="select-none text-accent">&gt; </span><span
+          class="inline-block h-[1em] w-[0.6em] translate-y-[2px] bg-accent/80 motion-safe:[animation:blink_1.2s_steps(1)_infinite]"
+          aria-hidden="true"></span></span
+      >
+      {
+        tailMeter && (
+          <span class="absolute -bottom-[0.6em] right-4 bg-surface px-1 text-[11px] leading-none text-dim">{tailMeter}</span>
+        )
+      }
+    </div>
+  </div>
+  <script type="application/json" data-dp-program set:html={JSON.stringify({ program, total: eventTotal ?? null, key })} />
+</div>
+
+<script>
+  (() => {
+    const w = window as unknown as { __dpIntent?: string | null; __dpLastStart?: number };
+    // pip intent: clicking a demo pip plays its target immediately, defers others briefly
+    document.querySelectorAll<HTMLAnchorElement>('[data-demo-pips] a[href^="#"]').forEach((a) => {
+      if ((a as HTMLElement).dataset.dpWired) return;
+      (a as HTMLElement).dataset.dpWired = '1';
+      a.addEventListener('click', () => {
+        w.__dpIntent = a.getAttribute('href')!.slice(1);
+        setTimeout(() => (w.__dpIntent = null), 1500);
+      });
+    });
+
+    document.querySelectorAll<HTMLElement>('[data-demo-pane]').forEach((pane) => {
+      if (pane.dataset.dpInit) return;
+      pane.dataset.dpInit = '1';
+      const programEl = pane.querySelector<HTMLElement>('[data-dp-program]');
+      const body = pane.querySelector<HTMLElement>('[data-body]');
+      if (!programEl || !body) return;
+
+      const scope = (pane.closest('[data-demo-scope]') as HTMLElement) ?? pane;
+      const ticker = scope.querySelector<HTMLElement>('[data-ticker]');
+
+      // static rest state = the tail (the answer) — BEFORE the reduced-motion return
+      body.scrollTop = body.scrollHeight;
+      if (ticker) ticker.scrollTop = ticker.scrollHeight;
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      const { program, total } = JSON.parse(programEl.textContent || '{}') as {
+        program: { i: number; kind: string; d: number; node: string | null; edge: number | null; ev: number; text: string | null }[];
+        total: number | null;
+      };
+      if (!program?.length) return;
+      const lineEls = [...pane.querySelectorAll<HTMLElement>('[data-dl]')];
+      const evEls = [...scope.querySelectorAll<HTMLElement>('[data-ev]')];
+      const typedEl = pane.querySelector<HTMLElement>('[data-typed]');
+      const tailEl = pane.querySelector<HTMLElement>('[data-tail]');
+      const countEl = scope.querySelector<HTMLElement>('[data-ev-count]');
+      const btn = pane.querySelector<HTMLElement>('[data-replay]');
+
+      let timers: number[] = [];
+      let played = false;
+      const at = (t: number, fn: () => void) => timers.push(window.setTimeout(fn, t));
+      const setLive = (name: string | null) => {
+        scope.querySelectorAll('[data-node].is-live').forEach((n) => n.classList.remove('is-live'));
+        if (name) scope.querySelectorAll(`[data-node="${name}"]`).forEach((n) => n.classList.add('is-live'));
+      };
+
+      const play = () => {
+        played = true;
+        w.__dpLastStart = Date.now();
+        timers.forEach(clearTimeout);
+        timers = [];
+        pane.classList.add('demo-live');
+        scope.classList.add('demo-live');
+        lineEls.forEach((el) => el.classList.add('demo-hidden'));
+        evEls.forEach((el) => el.classList.add('demo-hidden'));
+        scope.querySelectorAll('[data-edge]').forEach((el) => el.classList.remove('edge-in'));
+        tailEl?.classList.add('demo-hidden');
+        if (typedEl) typedEl.textContent = '';
+        if (countEl) countEl.textContent = '0';
+        setLive(null);
+        body.scrollTop = 0;
+        if (ticker) ticker.scrollTop = 0;
+
+        let t = 400;
+        let evCursor = 0;
+        for (const step of program) {
+          t += step.d;
+          const reveal = t;
+          if (step.kind === 'prompt' && step.text && typedEl) {
+            at(reveal, () => {
+              lineEls[step.i].classList.remove('demo-hidden');
+              body.scrollTop = body.scrollHeight;
+            });
+            const chars = step.text.split('');
+            chars.forEach((c, ci) =>
+              at(reveal + 220 + ci * 13, () => {
+                typedEl.textContent += c;
+              })
+            );
+            t = reveal + 220 + chars.length * 13 + 180;
+          } else {
+            at(reveal, () => {
+              lineEls[step.i].classList.remove('demo-hidden');
+              body.scrollTop = body.scrollHeight;
+            });
+          }
+          if (step.node) at(t, () => setLive(step.node));
+          if (step.edge !== null)
+            at(t, () => scope.querySelectorAll(`[data-edge="${step.edge}"]`).forEach((el) => el.classList.add('edge-in')));
+          for (let k = 0; k < step.ev; k++) {
+            const idx = evCursor++;
+            at(t + k * 110, () => {
+              if (evEls[idx]) evEls[idx].classList.remove('demo-hidden');
+              if (countEl) countEl.textContent = String(idx + 1);
+              if (ticker) ticker.scrollTop = ticker.scrollHeight;
+            });
+          }
+        }
+        at(t + 700, () => {
+          tailEl?.classList.remove('demo-hidden');
+          body.scrollTop = body.scrollHeight;
+          setLive(null);
+          if (countEl && total) countEl.textContent = String(total);
+        });
+      };
+
+      // queue-never-skip: only a real play() marks played; deferred fires re-queue
+      const tryPlay = () => {
+        if (played) return;
+        const intent = w.__dpIntent;
+        if (intent && !document.getElementById(intent)?.contains(pane)) {
+          window.setTimeout(tryPlay, 400);
+          return;
+        }
+        const last = w.__dpLastStart ?? 0;
+        if (Date.now() - last < 2000 && !intent) {
+          window.setTimeout(tryPlay, 600);
+          return;
+        }
+        play();
+        io.disconnect();
+      };
+
+      const io = new IntersectionObserver(
+        (entries) => {
+          if (!entries.some((e) => e.isIntersecting) || played) return;
+          // 300ms dwell: sailing past during a smooth hash-scroll doesn't count
+          window.setTimeout(() => {
+            if (played) return;
+            const r = pane.getBoundingClientRect();
+            const still = r.bottom > 0 && r.top < window.innerHeight;
+            if (still) tryPlay();
+          }, 300);
+        },
+        { threshold: 0.3 }
+      );
+
+      btn?.classList.remove('hidden');
+      btn?.addEventListener('click', play);
+      io.observe(pane);
+    });
+  })();
+</script>
+
+<style is:global>
+  [data-demo-scope] .demo-hidden,
+  [data-demo-pane] .demo-hidden {
+    display: none;
+  }
+  /* bottom edge-fade: scroll affordance for the hidden scrollbar; the body's
+     pb-10 keeps the last line clear of the fade at full scroll */
+  .dp-fade {
+    mask-image: linear-gradient(to bottom, black calc(100% - 1.75rem), transparent);
+  }
+  /* live-node styling covers both representations: HTML chips/boxes + SVG plate nodes */
+  [data-demo-scope] [data-node] {
+    transition:
+      border-color 0.45s var(--ease-reveal),
+      color 0.45s var(--ease-reveal);
+  }
+  [data-demo-scope] [data-node].is-live {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+  [data-demo-scope] [data-node] rect,
+  [data-demo-scope] [data-node] text {
+    transition:
+      stroke 0.45s var(--ease-reveal),
+      fill 0.45s var(--ease-reveal);
+  }
+  [data-demo-scope] [data-node].is-live rect {
+    stroke: var(--color-accent);
+  }
+  [data-demo-scope] [data-node].is-live text {
+    fill: var(--color-accent);
+  }
+  /* flow plates: fully visible statically; during a replay they ghost, then land per step */
+  @media (prefers-reduced-motion: no-preference) {
+    [data-demo-scope].demo-live [data-edge] {
+      opacity: 0.12;
+      transform: translateX(-4px);
+      transition:
+        opacity 0.45s var(--ease-reveal),
+        transform 0.45s var(--ease-reveal);
+    }
+    [data-demo-scope].demo-live [data-edge].edge-in {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>

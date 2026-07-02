@@ -1,4 +1,8 @@
 // REAL captured session — no fabricated terminal output (site rule).
+// Presented on the homepage in TWO ACTS of the SAME session (pacing only, no
+// text changes): `d1Lines` (init → ready) is demo 1 "_zero to agent";
+// `d3Lines` (prompt → answer) is demo 3 "_delegation, quarantined", and its
+// on-page caption says it continues demo 1's session.
 //
 // Provenance: captured 2026-07-02 17:35Z on the DGX Spark reference box.
 //   - repo: github.com/ahwurm/localharness @ main (78564b9, v0.5.1), fresh worktree
@@ -83,7 +87,7 @@ export const flow: FlowHop[] = [
   { from: 'agent', to: 'you', kind: 'ret', depth: 0, text: 'Qwen 3.6 27B' },
 ];
 
-export const lines: DemoLine[] = [
+export const d1Lines: DemoLine[] = [
   { kind: 'cmd', text: 'localharness init', d: 300 },
   { kind: 'out', text: 'Probing for local LLM...', d: 500 },
   { kind: 'ok', text: '✓ vllm found at http://localhost:8000/v1', d: 550 },
@@ -91,13 +95,16 @@ export const lines: DemoLine[] = [
   { kind: 'ok', text: '✓ Tool calling: native', d: 260 },
   { kind: 'ok', text: '✓ Context budget: 126,976 tokens (served window 131,072 − 4,096 output reservation)', d: 260 },
   { kind: 'ok', text: '✓ LocalHarness configured at ~/.localharness/config.yaml.', d: 420 },
-  { kind: 'cmd', text: 'localharness start', d: 900, node: 'agent' },
+  { kind: 'cmd', text: 'localharness start', d: 900 },
   { kind: 'out', text: 'No agents configured. Creating default agent...', d: 300 },
   // the full startup banner, exactly as the real REPL dumps it
   { kind: 'art', text: bannerRaw, d: 350 },
   { kind: 'meta', text: 'v0.5.1    qwen3.6-27b    ~/localharness', d: 250 },
   { kind: 'out', text: 'Describe a task, or /help for commands.', d: 200 },
   { kind: 'meta', text: '(0.2s startup) -- 1 agent', d: 200 },
+];
+
+export const d3Lines: DemoLine[] = [
   {
     kind: 'prompt',
     text: promptText,
