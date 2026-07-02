@@ -143,12 +143,12 @@ const jsonLd = [
         <h3 class="mt-3 text-xl font-semibold tracking-tight">It reads what can't fit.</h3>
         <ol class="mt-5 space-y-4">
           <li>
-            <span class="font-mono text-[13px] text-accent">01 · the whole novel, one handle</span>
-            <p class="mt-1 text-sm text-dim">A context window is how much text the model can hold at once. This book is half again bigger.</p>
+            <span class="font-mono text-[13px] text-accent">01 · the whole epic, one handle</span>
+            <p class="mt-1 text-sm text-dim">A context window is how much text the model can hold at once. This epic is a third again bigger.</p>
           </li>
           <li>
             <span class="font-mono text-[13px] text-accent">02 · every section actually read</span>
-            <p class="mt-1 text-sm text-dim">The harness cuts the book into sections and reads each one in a fresh window — that's the cascade.</p>
+            <p class="mt-1 text-sm text-dim">The harness cuts the text into sections and reads each one in a fresh window — that's the cascade.</p>
           </li>
           <li>
             <span class="font-mono text-[13px] text-accent">03 · one grounded answer</span>
@@ -162,14 +162,15 @@ const jsonLd = [
       <div class="mt-6 min-w-0 xl:order-1 xl:mt-0">
         <DemoPane
           key="d2"
-          title="~/localharness — real session · A Tale of Two Cities"
+          title="~/localharness — real session · Homer’s Odyssey"
           lines={d2Lines}
           tailMeter={overwindowTailMeter}
         />
         <p class="mt-3 font-mono text-xs text-dim">
           <span class="text-accent/80">fig. 02</span> — captured 2026-07-02, its own session: the full
-          text of A Tale of Two Cities (Project Gutenberg #98), 757,604 characters through a
-          126,976-token window — 48 sections, every one read. Answer verified against the text.
+          text of Homer’s Odyssey (Project Gutenberg #1727, Butler translation), 678,822
+          characters through a 126,976-token window, read section by section in fresh windows.
+          Answer verified against the text.
         </p>
       </div>
     </div>
