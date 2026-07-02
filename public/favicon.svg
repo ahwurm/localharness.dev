@@ -1,13 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- L_ — the hero banner's opening glyphs: chunky block L + the brand's green
+       underscore-cursor, with the banner's thin ANSI-shadow echo. -->
   <rect width="64" height="64" rx="14" fill="#15161b"/>
   <rect width="63" height="63" x="0.5" y="0.5" rx="13.5" fill="none" stroke="#3a3d47"/>
-  <g fill="#5ee9a4">
-    <!-- L -->
-    <rect x="14" y="16" width="6" height="32"/>
-    <rect x="14" y="42" width="15" height="6"/>
-    <!-- H -->
-    <rect x="36" y="16" width="6" height="32"/>
-    <rect x="44" y="16" width="6" height="32"/>
-    <rect x="36" y="29" width="14" height="6"/>
-  </g>
+  <path d="M14,12 h10 v26 h14 v10 H14 z M40,41 h12 v7 h-12 z"
+        transform="translate(4,4)" fill="none" stroke="#5ee9a4" stroke-width="2" opacity="0.45"/>
+  <path d="M14,12 h10 v26 h14 v10 H14 z M40,41 h12 v7 h-12 z" fill="#5ee9a4"/>
 </svg>
