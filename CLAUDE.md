@@ -1,5 +1,9 @@
 # localharness.dev
 
+**Refinement handoff / living PRD: `.planning/SITE-PRD.md`** (untracked) — read it first when
+picking up site work: Alex's standing taste directives, current state, critic-pass process,
+and the open-refinements backlog.
+
 Static marketing site for LocalHarness (`/`) + LocalShift (`/localshift/`).
 ("Local__ family" branding removed from all copy per user 2026-06-10 — don't reintroduce.)
 Astro 5 + Tailwind v4, static output, GitHub Pages deploy, domain `localharness.dev` (Route 53).
