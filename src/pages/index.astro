@@ -60,7 +60,7 @@ const jsonLd = [
       <h1 class="sr-only">LocalHarness — AI agents on your own hardware</h1>
       <pre
         aria-hidden="true"
-        class="ascii-art focus-in overflow-x-hidden text-left text-[length:clamp(0.42rem,1.9vw,1.05rem)] leading-none text-accent">{banner}</pre>
+        class="ascii-art focus-in overflow-hidden text-left text-[length:clamp(0.42rem,1.9vw,1.05rem)] leading-none text-accent">{banner}</pre>
       <p class="focus-in mt-6 font-mono text-sm text-dim [--fi-delay:120ms]">
         Describe a task, or <span class="text-accent">/help</span> for commands.
       </p>
@@ -87,11 +87,7 @@ const jsonLd = [
       <h2 class="mt-3 text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
         A real session, replayed.
       </h2>
-      <p class="measure mt-3 text-dim">
-        The agent hands a task to a read-only subagent while the bus records every step — the
-        parts you usually take on faith, on screen.
-      </p>
-      <div class="mt-10">
+      <div class="mt-8">
         <DemoSession />
       </div>
       <p class="mt-4 font-mono text-xs text-dim">
@@ -129,10 +125,7 @@ const jsonLd = [
       <h2 class="mt-3 text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
         The whole agent is a file you can read.
       </h2>
-      <p class="measure mt-3 text-dim">
-        Prompts, tools, permissions, memory — YAML, not Python. Deny-first by construction: an
-        agent can narrow its policy, never broaden it.
-      </p>
+      <p class="measure mt-3 text-dim">Prompts, tools, permissions, memory — YAML, not Python.</p>
       <div class="mt-10 max-w-3xl">
         <AgentYamlTabs />
       </div>
@@ -152,8 +145,7 @@ const jsonLd = [
             Documents bigger than the context window
           </h3>
           <p class="mt-2 text-sm text-dim">
-            Split structure-aware, every section actually read — and every number in the answer
-            traces back to its source. Untraceable figures become warnings, never silent rewrites.
+            Every section actually read. Every number traces back to its source.
           </p>
           <FigureFrame num="02" caption="the over-window read path" class="mt-5">
             <OverWindowDiagram />
@@ -162,9 +154,9 @@ const jsonLd = [
         <div id="security">
           <h3 class="text-lg font-semibold tracking-tight">Prompt injection, structurally</h3>
           <p class="mt-2 text-sm text-dim">
-            Untrusted web content never shares an agent with <code class="font-mono text-ink">bash</code>,
-            <code class="font-mono text-ink">write</code>, or <code class="font-mono text-ink">edit</code> —
-            enforced where tools resolve, failing closed. Plainly documented in
+            Untrusted content never shares an agent with <code class="font-mono text-ink">bash</code>,
+            <code class="font-mono text-ink">write</code>, or <code class="font-mono text-ink">edit</code>.
+            Fails closed —
             <a
               href="https://github.com/ahwurm/localharness/blob/main/SECURITY.md"
               target="_blank"
@@ -189,8 +181,7 @@ const jsonLd = [
         The harness improves itself — under a gate.
       </h2>
       <p class="measure mt-3 text-dim">
-        One mutation at a time, benched against baseline, adopted only if the stats say so — a
-        sealed holdout never runs while proposing.
+        One mutation at a time, adopted only if the stats say so.
       </p>
       <FigureFrame num="04" caption="propose → bench → gate → adopt" class="mt-8 max-w-3xl">
         <AutoresearchDiagram />
@@ -244,8 +235,7 @@ const jsonLd = [
           local<span class="text-accent">_</span>shift
         </h2>
         <p class="measure mt-3 text-dim">
-          Running frontier workloads on a meter? Migrate them — replicated locally, judged blind
-          against frontier, cut over only if they pass.
+          Migrate metered frontier workloads — proven per workload, not assumed.
         </p>
         <div class="mt-6">
           <Button href="/localshift/" variant="outline">how it works</Button>

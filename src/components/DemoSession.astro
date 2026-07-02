@@ -31,7 +31,7 @@ const program = lines.map((l, i) => ({
     </div>
     <div
       data-body
-      class="h-[420px] overflow-y-auto p-4 font-mono text-[13px] leading-[1.75] [scrollbar-width:thin] lg:h-auto lg:min-h-[420px] lg:flex-1"
+      class="h-[420px] overflow-y-auto p-4 font-mono text-[13px] leading-[1.75] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:h-auto lg:min-h-[420px] lg:flex-1"
     >
       {
         lines.map((l, i) => {
@@ -98,7 +98,7 @@ const program = lines.map((l, i) => ({
 
   <!-- diagram + event bus -->
   <div class="flex min-w-0 flex-col gap-4">
-    <div class="overflow-x-auto border border-edge bg-surface/60 p-4 [scrollbar-width:thin]">
+    <div class="overflow-x-auto border border-edge bg-surface/60 p-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       <LiveDiagram />
     </div>
     <div class="flex min-h-0 flex-1 flex-col overflow-hidden border border-edge bg-surface/60">
@@ -106,7 +106,7 @@ const program = lines.map((l, i) => ({
         <span>bus-events.jsonl — append-only</span>
         <span><span data-ev-count>{eventTotal}</span> events</span>
       </div>
-      <ol data-ticker class="h-[132px] overflow-y-auto px-4 py-2 font-mono text-[11px] leading-[1.9] text-dim [scrollbar-width:thin]">
+      <ol data-ticker class="h-[132px] overflow-y-auto px-4 py-2 font-mono text-[11px] leading-[1.9] text-dim [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {allEvents.map((e, i) => <li data-ev={i}>{e}</li>)}
       </ol>
     </div>

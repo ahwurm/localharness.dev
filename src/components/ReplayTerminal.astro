@@ -27,7 +27,7 @@ const program = lines.map((l, i) => ({ i, kind: l.kind, d: l.d ?? 300, text: l.k
       >replay</button
     >
   </div>
-  <div data-rt-body class="max-h-[420px] overflow-y-auto p-4 font-mono text-[13px] leading-[1.75] [scrollbar-width:thin]">
+  <div data-rt-body class="max-h-[420px] overflow-y-auto p-4 font-mono text-[13px] leading-[1.75] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
     {
       lines.map((l, i) => {
         if (l.kind === 'cmd')

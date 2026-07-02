@@ -5,7 +5,7 @@ interface Props {
   class?: string;
   bodyClass?: string;
 }
-const { num, caption, class: className = '', bodyClass = 'overflow-x-auto p-5 sm:p-8 [scrollbar-width:thin]' } = Astro.props;
+const { num, caption, class: className = '', bodyClass = 'overflow-x-auto p-5 sm:p-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden' } = Astro.props;
 ---
 
 <figure class:list={['border border-edge bg-surface/60', className]}>
