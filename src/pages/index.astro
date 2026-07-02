@@ -241,13 +241,37 @@ const jsonLd = [
       <h2 class="mt-3 text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
         Built in.
       </h2>
-      <div class="mt-8 grid gap-3 sm:grid-cols-2">
+      <div class="mt-8 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <Card class="p-4">
+          <Chip icon="agent" label="default" class="border-0 bg-transparent px-0 py-0" />
+          <p class="mt-1.5 text-sm text-dim">What start gives you — three lines of YAML.</p>
+        </Card>
         <Card class="p-4">
           <Chip icon="doc" label="explore" class="border-0 bg-transparent px-0 py-0" />
           <p class="mt-1.5 text-sm text-dim">Read-only codebase scout.</p>
         </Card>
         <Card class="p-4">
-          <Chip icon="studio" label="yours" class="border-0 bg-transparent px-0 py-0" />
+          <Chip icon="search" label="web-researcher" class="border-0 bg-transparent px-0 py-0" />
+          <p class="mt-1.5 text-sm text-dim">Quarantined web tools; spawns its own fact-checker.</p>
+        </Card>
+        <Card class="p-4">
+          <Chip icon="shield" label="search-verifier" class="border-0 bg-transparent px-0 py-0" />
+          <p class="mt-1.5 text-sm text-dim">Blind fact-checker — re-pulls sources, returns a verdict.</p>
+        </Card>
+        <Card class="p-4">
+          <Chip icon="box" label="cruncher" class="border-0 bg-transparent px-0 py-0" />
+          <p class="mt-1.5 text-sm text-dim">Reads documents bigger than the window — fig. 02's engine.</p>
+        </Card>
+        <Card class="p-4">
+          <Chip icon="gauge" label="data-analyst" class="border-0 bg-transparent px-0 py-0" />
+          <p class="mt-1.5 text-sm text-dim">Computes answers over local files — python, pandas.</p>
+        </Card>
+        <Card class="p-4">
+          <Chip icon="studio" label="frontend-designer" class="border-0 bg-transparent px-0 py-0" />
+          <p class="mt-1.5 text-sm text-dim">Builds a page, screenshots it, iterates.</p>
+        </Card>
+        <Card class="p-4">
+          <Chip icon="prompt" label="yours" class="border-0 bg-transparent px-0 py-0" />
           <p class="mt-1.5 text-sm text-dim">One command scaffolds it.</p>
         </Card>
       </div>
