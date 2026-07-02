@@ -146,6 +146,14 @@
   }
 }
 
+/* ASCII banner art: box-drawing + full-block glyphs need a single font that owns
+   them all — mixed fallback widths shear the art. System monos cover the set. */
+.ascii-art {
+  font-family: ui-monospace, Menlo, Consolas, "DejaVu Sans Mono", "Noto Sans Mono", monospace;
+  font-variant-ligatures: none;
+  letter-spacing: 0;
+}
+
 @keyframes blink {
   0%,
   100% {
