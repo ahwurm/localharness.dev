@@ -107,10 +107,10 @@ const program = lines.map((l, i) => ({
 
   <!-- diagram + event bus -->
   <div class="flex min-w-0 flex-col gap-4">
-    <div class="overflow-x-auto border border-edge bg-surface/60 p-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    <div class="border border-edge bg-surface/60 p-4">
       <TraceFlow />
     </div>
-    <div class="flex min-h-0 flex-1 flex-col overflow-hidden border border-edge bg-surface/60">
+    <div data-node="bus" class="flex min-h-0 flex-1 flex-col overflow-hidden border border-edge bg-surface/60">
       <div class="flex items-center justify-between border-b border-edge/70 px-4 py-2 font-mono text-xs text-dim">
         <span>bus-events.jsonl — append-only</span>
         <span><span data-ev-count>{eventTotal}</span> events</span>
@@ -129,6 +129,11 @@ const program = lines.map((l, i) => ({
     const root = document.getElementById('demo');
     const programEl = document.getElementById('demo-program');
     if (!root || !programEl) return;
+    // static state rests at the tail (the answer), like a finished terminal; play() rescrolls
+    for (const sel of ['[data-body]', '[data-ticker]']) {
+      const el = root.querySelector<HTMLElement>(sel);
+      if (el) el.scrollTop = el.scrollHeight;
+    }
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return; // static final state stays
 
     const { program, total } = JSON.parse(programEl.textContent || '{}') as {
@@ -239,22 +244,19 @@ const program = lines.map((l, i) => ({
   #demo .demo-hidden {
     display: none;
   }
-  #demo [data-node] rect,
-  #demo [data-node] text {
+  #demo [data-node] {
     transition:
-      stroke 0.45s var(--ease-reveal),
-      fill 0.45s var(--ease-reveal);
+      border-color 0.45s var(--ease-reveal),
+      color 0.45s var(--ease-reveal);
   }
-  #demo [data-node].is-live rect {
-    stroke: var(--color-accent);
+  #demo [data-node].is-live {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
   }
-  #demo [data-node].is-live text {
-    fill: var(--color-accent);
-  }
-  /* trace arrows: fully visible statically; during a replay they slide in per step */
+  /* flow plates: fully visible statically; during a replay they ghost, then land per step */
   @media (prefers-reduced-motion: no-preference) {
     #demo.demo-live [data-edge] {
-      opacity: 0;
+      opacity: 0.12;
       transform: translateX(-4px);
       transition:
         opacity 0.45s var(--ease-reveal),
