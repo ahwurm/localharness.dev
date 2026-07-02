@@ -10,6 +10,7 @@ import AgentYamlTabs from '../components/AgentYamlTabs.astro';
 import OverWindowDiagram from '../components/OverWindowDiagram.astro';
 import SecurityDiagram from '../components/SecurityDiagram.astro';
 import AutoresearchDiagram from '../components/AutoresearchDiagram.astro';
+import Chip from '../components/Chip.astro';
 
 const install = `git clone https://github.com/ahwurm/localharness
 cd localharness && uv sync
@@ -64,16 +65,21 @@ const jsonLd = [
       <p class="focus-in mt-6 font-mono text-sm text-dim [--fi-delay:120ms]">
         Describe a task, or <span class="text-accent">/help</span> for commands.
       </p>
-      <p class="focus-in mt-5 max-w-xl text-dim [--fi-delay:240ms]">
-        The open-source agent layer on top of vLLM, Ollama, LM Studio, or llama.cpp — not another
-        inference engine.
+      <p class="focus-in mt-5 font-mono text-sm text-dim [--fi-delay:240ms]">
+        the agent layer for the endpoint you already run — not another inference engine
       </p>
+      <div class="focus-in mt-4 flex max-w-[300px] flex-wrap items-center justify-center gap-2 [--fi-delay:320ms] sm:max-w-none">
+        <Chip icon="server" label="vLLM" />
+        <Chip icon="llama" label="Ollama" />
+        <Chip icon="studio" label="LM Studio" />
+        <Chip icon="cpp" label="llama.cpp" />
+      </div>
       <CodeBlock
         code={install}
         label="install"
-        class="focus-in mt-8 w-full max-w-xl text-left [--fi-delay:360ms] [&_pre]:text-[13px]"
+        class="focus-in mt-8 w-full max-w-xl text-left [--fi-delay:420ms] [&_pre]:text-[13px]"
       />
-      <div class="focus-in mt-6 flex flex-wrap items-center justify-center gap-3 [--fi-delay:480ms]">
+      <div class="focus-in mt-6 flex flex-wrap items-center justify-center gap-3 [--fi-delay:540ms]">
         <Button href="https://github.com/ahwurm/localharness" external>view on github</Button>
         <Button href="#demo-section" variant="outline">watch it work</Button>
       </div>
@@ -91,8 +97,8 @@ const jsonLd = [
         <DemoSession />
       </div>
       <p class="mt-4 font-mono text-xs text-dim">
-        <span class="text-accent/80">fig. 01</span> — captured 2026-07-02 on the reference box, vLLM
-        serving qwen3.6-27b. Replayed from its own bus trace; paths shortened for display.
+        <span class="text-accent/80">fig. 01</span> — captured 2026-07-02, vLLM · qwen3.6-27b.
+        Replayed from its own bus trace.
       </p>
     </div>
   </section>
@@ -139,19 +145,19 @@ const jsonLd = [
       <h2 class="mt-3 text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
         Built for the hard parts.
       </h2>
-      <div class="mt-10 grid gap-10 lg:grid-cols-2">
-        <div id="over-window">
+      <div class="mt-10 grid gap-10 xl:grid-cols-2">
+        <div id="over-window" class="flex min-w-0 flex-col">
           <h3 class="text-lg font-semibold tracking-tight">
             Documents bigger than the context window
           </h3>
           <p class="mt-2 text-sm text-dim">
             Every section actually read. Every number traces back to its source.
           </p>
-          <FigureFrame num="02" caption="the over-window read path" class="mt-5">
+          <FigureFrame num="02" caption="the over-window read path" class="mt-5 xl:mt-auto">
             <OverWindowDiagram />
           </FigureFrame>
         </div>
-        <div id="security">
+        <div id="security" class="flex min-w-0 flex-col">
           <h3 class="text-lg font-semibold tracking-tight">Prompt injection, structurally</h3>
           <p class="mt-2 text-sm text-dim">
             Untrusted content never shares an agent with <code class="font-mono text-ink">bash</code>,
@@ -165,7 +171,7 @@ const jsonLd = [
               >SECURITY.md</a
             >.
           </p>
-          <FigureFrame num="03" caption="the capability floor" class="mt-5">
+          <FigureFrame num="03" caption="the capability floor" class="mt-5 xl:mt-auto">
             <SecurityDiagram />
           </FigureFrame>
         </div>
@@ -198,28 +204,23 @@ const jsonLd = [
       </h2>
       <div class="mt-8 grid gap-3 sm:grid-cols-2">
         <Card class="p-4">
-          <h3 class="font-mono text-sm text-ink">not an inference engine</h3>
+          <Chip icon="box" label="not an inference engine" class="border-0 bg-transparent px-0 py-0" />
+          <p class="mt-1.5 text-sm text-dim">Bring your own — LocalHarness is the layer above.</p>
+        </Card>
+        <Card class="p-4">
+          <Chip icon="cloud-off" label="not a cloud service" class="border-0 bg-transparent px-0 py-0" />
+          <p class="mt-1.5 text-sm text-dim">Zero telemetry, zero external calls. MIT, yours.</p>
+        </Card>
+        <Card class="p-4">
+          <Chip icon="shield" label="not sandboxed yet" class="border-0 bg-transparent px-0 py-0" />
           <p class="mt-1.5 text-sm text-dim">
-            Bring your own: vLLM, Ollama, LM Studio, llama.cpp. LocalHarness is the layer above.
+            Deny-first permissions today; OS sandbox on the roadmap — SECURITY.md says so.
           </p>
         </Card>
         <Card class="p-4">
-          <h3 class="font-mono text-sm text-ink">not a cloud service</h3>
+          <Chip icon="gauge" label="not 1.0" class="border-0 bg-transparent px-0 py-0" />
           <p class="mt-1.5 text-sm text-dim">
-            Zero telemetry, zero external calls. MIT-licensed, on your box, yours.
-          </p>
-        </Card>
-        <Card class="p-4">
-          <h3 class="font-mono text-sm text-ink">not sandboxed yet</h3>
-          <p class="mt-1.5 text-sm text-dim">
-            Deny-first tool permissions today; OS-level sandboxing is on the roadmap — SECURITY.md
-            says so plainly.
-          </p>
-        </Card>
-        <Card class="p-4">
-          <h3 class="font-mono text-sm text-ink">not 1.0</h3>
-          <p class="mt-1.5 text-sm text-dim">
-            Early, and honest about it — see
+            Early, honest about it — see
             <a href="/devnotes/" class="text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent">devnotes</a>.
           </p>
         </Card>
