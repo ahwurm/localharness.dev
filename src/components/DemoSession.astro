@@ -3,7 +3,7 @@
 // replayed in a terminal while the architecture diagram + event bus tick in sync.
 // Server renders the complete final state — without JS (or with reduced motion)
 // everything is simply visible. The script only hides-then-replays.
-import LiveDiagram from './LiveDiagram.astro';
+import TraceFlow from './TraceFlow.astro';
 import { lines, eventTotal } from '../data/demo-session';
 
 const allEvents = lines.flatMap((l) => l.ev ?? []);
@@ -12,6 +12,7 @@ const program = lines.map((l, i) => ({
   kind: l.kind,
   d: l.d ?? 350,
   node: l.node ?? null,
+  edge: l.edge ?? null,
   ev: (l.ev ?? []).length,
   text: l.kind === 'prompt' ? l.text : null,
 }));
@@ -99,7 +100,7 @@ const program = lines.map((l, i) => ({
   <!-- diagram + event bus -->
   <div class="flex min-w-0 flex-col gap-4">
     <div class="overflow-x-auto border border-edge bg-surface/60 p-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-      <LiveDiagram />
+      <TraceFlow />
     </div>
     <div class="flex min-h-0 flex-1 flex-col overflow-hidden border border-edge bg-surface/60">
       <div class="flex items-center justify-between border-b border-edge/70 px-4 py-2 font-mono text-xs text-dim">
@@ -123,7 +124,15 @@ const program = lines.map((l, i) => ({
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return; // static final state stays
 
     const { program, total } = JSON.parse(programEl.textContent || '{}') as {
-      program: { i: number; kind: string; d: number; node: string | null; ev: number; text: string | null }[];
+      program: {
+        i: number;
+        kind: string;
+        d: number;
+        node: string | null;
+        edge: number | null;
+        ev: number;
+        text: string | null;
+      }[];
       total: number;
     };
     if (!program?.length) return;
@@ -148,8 +157,10 @@ const program = lines.map((l, i) => ({
     const play = () => {
       timers.forEach(clearTimeout);
       timers = [];
+      root.classList.add('demo-live');
       lineEls.forEach((el) => el.classList.add('demo-hidden'));
       evEls.forEach((el) => el.classList.add('demo-hidden'));
+      root.querySelectorAll('[data-edge]').forEach((el) => el.classList.remove('edge-in'));
       tailEl.classList.add('demo-hidden');
       typedEl.textContent = '';
       countEl.textContent = '0';
@@ -180,6 +191,10 @@ const program = lines.map((l, i) => ({
           });
         }
         if (step.node) at(t, () => setLive(step.node));
+        if (step.edge !== null)
+          at(t, () =>
+            root.querySelectorAll(`[data-edge="${step.edge}"]`).forEach((el) => el.classList.add('edge-in'))
+          );
         for (let k = 0; k < step.ev; k++) {
           const idx = evCursor++;
           at(t + k * 110, () => {
@@ -227,5 +242,19 @@ const program = lines.map((l, i) => ({
   }
   #demo [data-node].is-live text {
     fill: var(--color-accent);
+  }
+  /* trace arrows: fully visible statically; during a replay they slide in per step */
+  @media (prefers-reduced-motion: no-preference) {
+    #demo.demo-live [data-edge] {
+      opacity: 0;
+      transform: translateX(-4px);
+      transition:
+        opacity 0.45s var(--ease-reveal),
+        transform 0.45s var(--ease-reveal);
+    }
+    #demo.demo-live [data-edge].edge-in {
+      opacity: 1;
+      transform: none;
+    }
   }
 </style>

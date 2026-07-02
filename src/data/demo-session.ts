@@ -20,6 +20,8 @@ export type DemoLine = {
   node?: string;
   /** real bus events (seq · type · detail) revealed with this line */
   ev?: string[];
+  /** TraceFlow arrow (data-edge index) revealed with this line */
+  edge?: number;
 };
 
 export const promptText =
@@ -41,6 +43,7 @@ export const lines: DemoLine[] = [
     text: promptText,
     d: 700,
     node: 'agent',
+    edge: 0,
     ev: ['00 · UserMessage', '01 · TurnStarted', '02 · Heartbeat — ctx 2.0%'],
   },
   {
@@ -48,9 +51,10 @@ export const lines: DemoLine[] = [
     text: '◆ agent explore',
     d: 1400,
     node: 'explore',
+    edge: 1,
     ev: ['03 · Action — llm_response', '04 · Action — tool_call agent', '05 · TurnStarted', '06 · Heartbeat — ctx 0.6%'],
   },
-  { kind: 'tool', text: '◆ grep deny.first|deny_first|denyFirst', d: 900, node: 'tools', ev: ['08 · Action — tool_call grep'] },
+  { kind: 'tool', text: '◆ grep deny.first|deny_first|denyFirst', d: 900, node: 'tools', edge: 2, ev: ['08 · Action — tool_call grep'] },
   { kind: 'ok', text: '✓ grep (1 lines)', d: 240, ev: ['09 · Observation — grep'] },
   { kind: 'tool', text: '◆ grep tool.permission|tool_permission|toolPermission', d: 420, ev: ['10 · Action — tool_call grep'] },
   { kind: 'ok', text: '✓ grep (1 lines)', d: 240, ev: ['11 · Observation — grep'] },
@@ -61,14 +65,15 @@ export const lines: DemoLine[] = [
   { kind: 'tool', text: '◆ grep ~/localharness/docs/specs/04-tool-system.md', d: 420, ev: ['18 · Action — tool_call grep'] },
   { kind: 'ok', text: '✓ grep (3 lines)', d: 240, ev: ['19 · Observation — grep', '20 · Heartbeat — ctx 4.5%'] },
   { kind: 'tool', text: '◆ grep .', d: 420, ev: ['22 · Action — tool_call grep'] },
-  { kind: 'ok', text: '✓ grep (2 lines)', d: 240, ev: ['23 · Observation — grep', '24 · Heartbeat — ctx 8.4%'] },
-  { kind: 'tool', text: '◆ read ~/localharness/src/localharness/agent/permissions.py', d: 500, ev: ['26 · Action — tool_call read'] },
-  { kind: 'ok', text: '✓ read (8 lines)', d: 240, ev: ['27 · Observation — read', '28 · Heartbeat — ctx 9.0%'] },
+  { kind: 'ok', text: '✓ grep (2 lines)', d: 240, edge: 3, ev: ['23 · Observation — grep', '24 · Heartbeat — ctx 8.4%'] },
+  { kind: 'tool', text: '◆ read ~/localharness/src/localharness/agent/permissions.py', d: 500, edge: 4, ev: ['26 · Action — tool_call read'] },
+  { kind: 'ok', text: '✓ read (8 lines)', d: 240, edge: 5, ev: ['27 · Observation — read', '28 · Heartbeat — ctx 9.0%'] },
   {
     kind: 'ok',
     text: '✓ agent (1 lines)',
     d: 900,
     node: 'agent',
+    edge: 6,
     ev: ['30 · TaskComplete', '31 · TurnCompleted', '32 · Observation — agent'],
   },
   {
@@ -76,6 +81,7 @@ export const lines: DemoLine[] = [
     text: 'src/localharness/agent/permissions.py',
     d: 800,
     node: 'bus',
+    edge: 7,
     ev: ['33 · Heartbeat — ctx 2.5%', '34 · Action — llm_response', '35 · TaskComplete'],
   },
 ];

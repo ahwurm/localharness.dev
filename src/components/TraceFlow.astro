@@ -1,0 +1,97 @@
+---
+// Message-flow trace of the REAL replayed session (eraser-style lanes + arrows).
+// Actors and every arrow correspond 1:1 to the captured run in demo-session.ts:
+// task → delegation → grep ×6 → read → findings → answer, all landing on the bus.
+// data-node chips + data-edge arrows are driven by DemoSession's replay script;
+// without JS (or reduced motion) the complete flow renders statically.
+---
+
+<svg
+  viewBox="0 0 520 402"
+  role="img"
+  aria-label="Message flow of the replayed session: you send a task to the default agent; it delegates to the read-only explore subagent; explore runs grep six times and one read against the tools layer and returns one line of findings; the default agent answers. Every hop is appended to the bus-events trace."
+  class="w-full min-w-[440px]"
+>
+  <defs>
+    <marker id="tf-a" viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M0,0.5 L7,4 L0,7.5" class="fill-none stroke-accent" stroke-width="1.4"></path>
+    </marker>
+    <marker id="tf-d" viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M0,0.5 L7,4 L0,7.5" class="fill-none stroke-dim" stroke-width="1.3"></path>
+    </marker>
+  </defs>
+
+  <!-- lane chips -->
+  <g data-node="you">
+    <rect x="16" y="8" width="92" height="30" class="fill-surface stroke-edge" stroke-width="1.4"></rect>
+    <path d="M28,18 l5,5 l-5,5 M36,28 h7" class="fill-none stroke-accent" stroke-width="1.6" stroke-linecap="round"></path>
+    <text x="72" y="27" text-anchor="middle" class="fill-ink font-mono text-[11px]">you</text>
+  </g>
+  <g data-node="agent">
+    <rect x="144" y="8" width="92" height="30" class="fill-surface stroke-edge" stroke-width="1.4"></rect>
+    <rect x="154" y="16" width="14" height="14" class="fill-none stroke-accent" stroke-width="1.5"></rect>
+    <circle cx="161" cy="23" r="2.2" class="fill-accent"></circle>
+    <text x="198" y="27" text-anchor="middle" class="fill-ink font-mono text-[11px]">default</text>
+  </g>
+  <g data-node="explore">
+    <rect x="272" y="8" width="92" height="30" class="fill-surface stroke-edge" stroke-width="1.4"></rect>
+    <circle cx="288" cy="21" r="5.5" class="fill-none stroke-accent" stroke-width="1.5"></circle>
+    <path d="M292.5,25.5 l5,5" class="stroke-accent" stroke-width="1.6" stroke-linecap="round"></path>
+    <text x="326" y="27" text-anchor="middle" class="fill-ink font-mono text-[11px]">explore</text>
+  </g>
+  <g data-node="tools">
+    <rect x="400" y="8" width="104" height="30" class="fill-surface stroke-edge" stroke-width="1.4"></rect>
+    <path d="M412,29 l9,-9 M418,15 l5,5 M410,23 l5,5" class="fill-none stroke-accent" stroke-width="1.5" stroke-linecap="round"></path>
+    <text x="458" y="27" text-anchor="middle" class="fill-ink font-mono text-[11px]">tools</text>
+  </g>
+
+  <!-- lifelines -->
+  <line x1="62" y1="44" x2="62" y2="342" class="stroke-edge" stroke-width="1" stroke-dasharray="2 5"></line>
+  <line x1="190" y1="44" x2="190" y2="342" class="stroke-edge" stroke-width="1" stroke-dasharray="2 5"></line>
+  <line x1="318" y1="44" x2="318" y2="342" class="stroke-edge" stroke-width="1" stroke-dasharray="2 5"></line>
+  <line x1="446" y1="44" x2="446" y2="342" class="stroke-edge" stroke-width="1" stroke-dasharray="2 5"></line>
+
+  <!-- messages (real sequence) -->
+  <g data-edge="0">
+    <text x="126" y="66" text-anchor="middle" class="fill-dim font-mono text-[9.5px]">task</text>
+    <line x1="66" y1="74" x2="182" y2="74" pathLength="1" class="tf-line stroke-accent" stroke-width="1.4" marker-end="url(#tf-a)"></line>
+  </g>
+  <g data-edge="1">
+    <text x="254" y="98" text-anchor="middle" class="fill-dim font-mono text-[9.5px]">agent · explore</text>
+    <line x1="194" y1="106" x2="310" y2="106" pathLength="1" class="tf-line stroke-accent" stroke-width="1.4" marker-end="url(#tf-a)"></line>
+  </g>
+  <g data-edge="2">
+    <text x="382" y="132" text-anchor="middle" class="fill-dim font-mono text-[9.5px]">grep ×6</text>
+    <line x1="322" y1="140" x2="438" y2="140" pathLength="1" class="tf-line stroke-accent" stroke-width="1.4" marker-end="url(#tf-a)"></line>
+  </g>
+  <g data-edge="3">
+    <text x="382" y="163" text-anchor="middle" class="fill-dim font-mono text-[9.5px]">matches</text>
+    <line x1="438" y1="171" x2="322" y2="171" pathLength="1" class="tf-line stroke-dim" stroke-width="1.2" stroke-dasharray="4 4" marker-end="url(#tf-d)"></line>
+  </g>
+  <g data-edge="4">
+    <text x="382" y="197" text-anchor="middle" class="fill-dim font-mono text-[9.5px]">read permissions.py</text>
+    <line x1="322" y1="205" x2="438" y2="205" pathLength="1" class="tf-line stroke-accent" stroke-width="1.4" marker-end="url(#tf-a)"></line>
+  </g>
+  <g data-edge="5">
+    <text x="382" y="228" text-anchor="middle" class="fill-dim font-mono text-[9.5px]">8 lines</text>
+    <line x1="438" y1="236" x2="322" y2="236" pathLength="1" class="tf-line stroke-dim" stroke-width="1.2" stroke-dasharray="4 4" marker-end="url(#tf-d)"></line>
+  </g>
+  <g data-edge="6">
+    <text x="254" y="266" text-anchor="middle" class="fill-dim font-mono text-[9.5px]">findings — 1 line</text>
+    <line x1="310" y1="274" x2="198" y2="274" pathLength="1" class="tf-line stroke-dim" stroke-width="1.2" stroke-dasharray="4 4" marker-end="url(#tf-d)"></line>
+  </g>
+  <g data-edge="7">
+    <text x="126" y="300" text-anchor="middle" class="fill-dim font-mono text-[9.5px]">answer</text>
+    <line x1="182" y1="308" x2="70" y2="308" pathLength="1" class="tf-line stroke-accent" stroke-width="1.4" marker-end="url(#tf-a)"></line>
+  </g>
+
+  <!-- bus taps + bar -->
+  <line x1="62" y1="342" x2="62" y2="356" class="stroke-dim" stroke-width="1" stroke-dasharray="1.5 3"></line>
+  <line x1="190" y1="342" x2="190" y2="356" class="stroke-dim" stroke-width="1" stroke-dasharray="1.5 3"></line>
+  <line x1="318" y1="342" x2="318" y2="356" class="stroke-dim" stroke-width="1" stroke-dasharray="1.5 3"></line>
+  <line x1="446" y1="342" x2="446" y2="356" class="stroke-dim" stroke-width="1" stroke-dasharray="1.5 3"></line>
+  <g data-node="bus">
+    <rect x="16" y="356" width="488" height="30" class="fill-surface stroke-edge" stroke-width="1.4"></rect>
+    <text x="260" y="375" text-anchor="middle" class="fill-dim font-mono text-[10px]">every hop → bus-events.jsonl — append-only</text>
+  </g>
+</svg>
