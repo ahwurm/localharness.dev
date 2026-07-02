@@ -7,9 +7,9 @@
 ---
 
 <svg
-  viewBox="0 0 520 402"
+  viewBox="0 0 520 420"
   role="img"
-  aria-label="Message flow of the replayed session: you send a task to the default agent; it delegates to the read-only explore subagent; explore runs grep six times and one read against the tools layer and returns one line of findings; the default agent answers. Every hop is appended to the bus-events trace."
+  aria-label="Message flow of the replayed session: you send a task to the main agent; it delegates to the read-only explore subagent; explore runs grep six times and one read against the tools layer and returns one line of findings; the default agent answers. Every hop is appended to the bus-events trace."
   class="w-full"
 >
   <defs>
@@ -31,7 +31,7 @@
     <rect x="144" y="8" width="92" height="30" class="fill-surface stroke-edge" stroke-width="1.4"></rect>
     <rect x="154" y="16" width="14" height="14" class="fill-none stroke-accent" stroke-width="1.5"></rect>
     <circle cx="161" cy="23" r="2.2" class="fill-accent"></circle>
-    <text x="198" y="27" text-anchor="middle" class="fill-ink font-mono text-[11px]">default</text>
+    <text x="198" y="27" text-anchor="middle" class="fill-ink font-mono text-[11px]">main agent</text>
   </g>
   <g data-node="explore">
     <rect x="272" y="8" width="92" height="30" class="fill-surface stroke-edge" stroke-width="1.4"></rect>
@@ -53,34 +53,50 @@
 
   <!-- messages (real sequence) -->
   <g data-edge="0">
+    <circle cx="78" cy="74" r="7" class="fill-accent"></circle>
+    <text x="78" y="77" text-anchor="middle" class="fill-accent-ink font-mono text-[9px] font-semibold">1</text>
     <text x="126" y="66" text-anchor="middle" class="fill-dim font-mono text-[9.5px]">task</text>
     <line x1="66" y1="74" x2="182" y2="74" pathLength="1" class="tf-line stroke-accent" stroke-width="1.4" marker-end="url(#tf-a)"></line>
   </g>
   <g data-edge="1">
+    <circle cx="206" cy="106" r="7" class="fill-accent"></circle>
+    <text x="206" y="109" text-anchor="middle" class="fill-accent-ink font-mono text-[9px] font-semibold">2</text>
     <text x="254" y="98" text-anchor="middle" class="fill-dim font-mono text-[9.5px]">agent · explore</text>
     <line x1="194" y1="106" x2="310" y2="106" pathLength="1" class="tf-line stroke-accent" stroke-width="1.4" marker-end="url(#tf-a)"></line>
   </g>
   <g data-edge="2">
+    <circle cx="334" cy="140" r="7" class="fill-accent"></circle>
+    <text x="334" y="143" text-anchor="middle" class="fill-accent-ink font-mono text-[9px] font-semibold">3</text>
     <text x="382" y="132" text-anchor="middle" class="fill-dim font-mono text-[9.5px]">grep ×6</text>
     <line x1="322" y1="140" x2="438" y2="140" pathLength="1" class="tf-line stroke-accent" stroke-width="1.4" marker-end="url(#tf-a)"></line>
   </g>
   <g data-edge="3">
+    <circle cx="426" cy="171" r="7" class="fill-accent"></circle>
+    <text x="426" y="174" text-anchor="middle" class="fill-accent-ink font-mono text-[9px] font-semibold">4</text>
     <text x="382" y="163" text-anchor="middle" class="fill-dim font-mono text-[9.5px]">matches</text>
     <line x1="438" y1="171" x2="322" y2="171" pathLength="1" class="tf-line stroke-dim" stroke-width="1.2" stroke-dasharray="4 4" marker-end="url(#tf-d)"></line>
   </g>
   <g data-edge="4">
+    <circle cx="334" cy="205" r="7" class="fill-accent"></circle>
+    <text x="334" y="208" text-anchor="middle" class="fill-accent-ink font-mono text-[9px] font-semibold">5</text>
     <text x="382" y="197" text-anchor="middle" class="fill-dim font-mono text-[9.5px]">read permissions.py</text>
     <line x1="322" y1="205" x2="438" y2="205" pathLength="1" class="tf-line stroke-accent" stroke-width="1.4" marker-end="url(#tf-a)"></line>
   </g>
   <g data-edge="5">
+    <circle cx="426" cy="236" r="7" class="fill-accent"></circle>
+    <text x="426" y="239" text-anchor="middle" class="fill-accent-ink font-mono text-[9px] font-semibold">6</text>
     <text x="382" y="228" text-anchor="middle" class="fill-dim font-mono text-[9.5px]">8 lines</text>
     <line x1="438" y1="236" x2="322" y2="236" pathLength="1" class="tf-line stroke-dim" stroke-width="1.2" stroke-dasharray="4 4" marker-end="url(#tf-d)"></line>
   </g>
   <g data-edge="6">
+    <circle cx="298" cy="274" r="7" class="fill-accent"></circle>
+    <text x="298" y="277" text-anchor="middle" class="fill-accent-ink font-mono text-[9px] font-semibold">7</text>
     <text x="254" y="266" text-anchor="middle" class="fill-dim font-mono text-[9.5px]">findings — 1 line</text>
     <line x1="310" y1="274" x2="198" y2="274" pathLength="1" class="tf-line stroke-dim" stroke-width="1.2" stroke-dasharray="4 4" marker-end="url(#tf-d)"></line>
   </g>
   <g data-edge="7">
+    <circle cx="170" cy="308" r="7" class="fill-accent"></circle>
+    <text x="170" y="311" text-anchor="middle" class="fill-accent-ink font-mono text-[9px] font-semibold">8</text>
     <text x="126" y="300" text-anchor="middle" class="fill-dim font-mono text-[9.5px]">answer</text>
     <line x1="182" y1="308" x2="70" y2="308" pathLength="1" class="tf-line stroke-accent" stroke-width="1.4" marker-end="url(#tf-a)"></line>
   </g>
@@ -94,4 +110,7 @@
     <rect x="16" y="356" width="488" height="30" class="fill-surface stroke-edge" stroke-width="1.4"></rect>
     <text x="260" y="375" text-anchor="middle" class="fill-dim font-mono text-[10px]">every hop → bus-events.jsonl — append-only</text>
   </g>
+  <text x="16" y="412" class="fill-dim font-mono text-[9px]">solid → call</text>
+  <text x="96" y="412" class="fill-dim font-mono text-[9px]">dashed → return</text>
+  <text x="504" y="412" text-anchor="end" class="fill-dim font-mono text-[9px]">① … ⑧ — message order</text>
 </svg>

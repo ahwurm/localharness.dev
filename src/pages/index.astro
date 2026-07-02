@@ -11,6 +11,7 @@ import OverWindowDiagram from '../components/OverWindowDiagram.astro';
 import SecurityDiagram from '../components/SecurityDiagram.astro';
 import AutoresearchDiagram from '../components/AutoresearchDiagram.astro';
 import Chip from '../components/Chip.astro';
+import Icon from '../components/Icon.astro';
 
 const install = `git clone https://github.com/ahwurm/localharness
 cd localharness && uv sync
@@ -107,18 +108,27 @@ const jsonLd = [
   <section class="border-y border-edge/70 bg-surface/40" aria-label="The tradeoff" data-reveal>
     <div class="container-site grid gap-8 py-12 sm:grid-cols-3 sm:gap-6">
       <div>
-        <p class="font-mono text-xs text-accent/80">01</p>
-        <h2 class="mt-2 text-lg font-semibold tracking-tight">Same workflow, same output</h2>
+        <div class="flex items-center justify-between">
+          <Icon name="repeat" class="size-5" />
+          <span class="font-mono text-xs text-accent/50">01</span>
+        </div>
+        <h2 class="mt-3 text-lg font-semibold tracking-tight">Same workflow, same output</h2>
         <p class="mt-1.5 text-sm text-dim">The jobs you already run — unchanged.</p>
       </div>
       <div>
-        <p class="font-mono text-xs text-accent/80">02</p>
-        <h2 class="mt-2 text-lg font-semibold tracking-tight">It takes longer</h2>
+        <div class="flex items-center justify-between">
+          <Icon name="clock" class="size-5" />
+          <span class="font-mono text-xs text-accent/50">02</span>
+        </div>
+        <h2 class="mt-3 text-lg font-semibold tracking-tight">It takes longer</h2>
         <p class="mt-1.5 text-sm text-dim">Local models are slower. That's the tradeoff.</p>
       </div>
       <div>
-        <p class="font-mono text-xs text-accent/80">03</p>
-        <h2 class="mt-2 text-lg font-semibold tracking-tight">Much lower cost</h2>
+        <div class="flex items-center justify-between">
+          <Icon name="meter-off" class="size-5" />
+          <span class="font-mono text-xs text-accent/50">03</span>
+        </div>
+        <h2 class="mt-3 text-lg font-semibold tracking-tight">Much lower cost</h2>
         <p class="mt-1.5 text-sm text-dim">Your hardware. No API meter.</p>
       </div>
     </div>
@@ -126,13 +136,15 @@ const jsonLd = [
 
   <!-- Agents are YAML -->
   <section id="yaml" data-reveal>
-    <div class="container-site py-16 sm:py-20">
-      <Eyebrow label="configuration" />
-      <h2 class="mt-3 text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
-        The whole agent is a file you can read.
-      </h2>
-      <p class="measure mt-3 text-dim">Prompts, tools, permissions, memory — YAML, not Python.</p>
-      <div class="mt-10 max-w-3xl">
+    <div class="container-site grid gap-10 py-16 sm:py-20 xl:grid-cols-[2fr_3fr] xl:items-center">
+      <div>
+        <Eyebrow label="configuration" />
+        <h2 class="mt-3 text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
+          The whole agent is a file you can read.
+        </h2>
+        <p class="measure mt-3 text-dim">Prompts, tools, permissions, memory — YAML, not Python.</p>
+      </div>
+      <div class="min-w-0">
         <AgentYamlTabs />
       </div>
     </div>
@@ -181,17 +193,19 @@ const jsonLd = [
 
   <!-- Autoresearch -->
   <section id="autoresearch" class="border-t border-edge/70" data-reveal>
-    <div class="container-site py-16 sm:py-20">
-      <Eyebrow label="autoresearch" />
-      <h2 class="mt-3 text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
-        The harness improves itself — under a gate.
-      </h2>
-      <p class="measure mt-3 text-dim">
-        One mutation at a time, adopted only if the stats say so.
-      </p>
-      <FigureFrame num="04" caption="propose → bench → gate → adopt" class="mt-8 max-w-3xl">
+    <div class="container-site grid gap-10 py-16 sm:py-20 xl:grid-cols-[3fr_2fr] xl:items-center">
+      <FigureFrame num="04" caption="propose → bench → gate → adopt" class="order-2 min-w-0 xl:order-1">
         <AutoresearchDiagram />
       </FigureFrame>
+      <div class="order-1 xl:order-2">
+        <Eyebrow label="autoresearch" />
+        <h2 class="mt-3 text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
+          The harness improves itself — under a gate.
+        </h2>
+        <p class="measure mt-3 text-dim">
+          One mutation at a time, adopted only if the stats say so.
+        </p>
+      </div>
     </div>
   </section>
 
@@ -242,6 +256,48 @@ const jsonLd = [
           <Button href="/localshift/" variant="outline">how it works</Button>
         </div>
       </Card>
+    </div>
+  </section>
+
+  <!-- Get involved -->
+  <section id="get-involved" class="border-t border-edge/70" data-reveal>
+    <div class="container-site py-16 sm:py-20">
+      <Eyebrow label="get involved" />
+      <h2 class="mt-3 text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
+        Kick the tires.
+      </h2>
+      <div class="mt-8 grid gap-3 sm:grid-cols-3">
+        <a
+          href="https://github.com/ahwurm/localharness/issues"
+          target="_blank"
+          rel="noopener"
+          class="group border border-edge bg-surface/60 p-5 transition-colors duration-200 hover:border-accent/40"
+        >
+          <Chip icon="issue" label="issues" class="border-0 bg-transparent px-0 py-0" />
+          <p class="mt-1.5 text-sm text-dim">Bugs and feature requests — welcome.</p>
+          <span class="mt-3 inline-block font-mono text-xs text-accent/80 transition-colors group-hover:text-accent">github ↗</span>
+        </a>
+        <a
+          href="https://github.com/ahwurm/localharness/tree/main/docs"
+          target="_blank"
+          rel="noopener"
+          class="group border border-edge bg-surface/60 p-5 transition-colors duration-200 hover:border-accent/40"
+        >
+          <Chip icon="book" label="docs" class="border-0 bg-transparent px-0 py-0" />
+          <p class="mt-1.5 text-sm text-dim">Component specs + reference architectures.</p>
+          <span class="mt-3 inline-block font-mono text-xs text-accent/80 transition-colors group-hover:text-accent">docs ↗</span>
+        </a>
+        <a
+          href="https://github.com/ahwurm/localharness/blob/main/SECURITY.md"
+          target="_blank"
+          rel="noopener"
+          class="group border border-edge bg-surface/60 p-5 transition-colors duration-200 hover:border-accent/40"
+        >
+          <Chip icon="shield" label="security" class="border-0 bg-transparent px-0 py-0" />
+          <p class="mt-1.5 text-sm text-dim">The threat model, in plain English.</p>
+          <span class="mt-3 inline-block font-mono text-xs text-accent/80 transition-colors group-hover:text-accent">SECURITY.md ↗</span>
+        </a>
+      </div>
     </div>
   </section>
 </Base>

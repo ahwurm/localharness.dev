@@ -1,0 +1,62 @@
+---
+// The six-stage pipeline as a numbered message flow (plate style) — one node per
+// shipped skill, skill names verbatim, receipts bar underneath. Factual vs
+// skills/*/SKILL.md on origin/main.
+---
+
+<svg
+  viewBox="0 0 560 208"
+  role="img"
+  aria-label="The LocalShift pipeline as a numbered flow: explore the workload, design the eval, build the framework, replicate locally, evaluate one-versus-one, cut over — every run appending receipts to the ledger"
+  class="w-full"
+>
+  <defs>
+    <marker id="sf-a" viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0.5 L7,4 L0,7.5" class="fill-none stroke-dim" stroke-width="1.3"></path>
+    </marker>
+  </defs>
+
+  {
+    [
+      { x: 6, n: '1', name: 'explore', sub: 'the workload', skill: ':explore' },
+      { x: 99, n: '2', name: 'design', sub: 'the eval', skill: ':design-eval' },
+      { x: 192, n: '3', name: 'build', sub: 'task + checks', skill: ':build' },
+      { x: 285, n: '4', name: 'replicate', sub: 'runs local', skill: ':replicate' },
+      { x: 378, n: '5', name: 'evaluate', sub: 'blind 1v1', skill: ':evaluate' },
+      { x: 471, n: '6', name: 'cut over', sub: 'no fallback', skill: ':shift' },
+    ].map((s, i) => (
+      <>
+        <g>
+          <rect x={s.x} y="30" width="83" height="56" class="fill-surface stroke-edge" stroke-width="1.4" />
+          <circle cx={s.x + 12} cy="30" r="8" class="fill-accent" />
+          <text x={s.x + 12} y="33.5" text-anchor="middle" class="fill-accent-ink font-mono text-[10px] font-semibold">
+            {s.n}
+          </text>
+          <text x={s.x + 41.5} y="52" text-anchor="middle" class="fill-ink font-mono text-[11px]">
+            {s.name}
+          </text>
+          <text x={s.x + 41.5} y="66" text-anchor="middle" class="fill-dim text-[8.5px]">
+            {s.sub}
+          </text>
+          <text x={s.x + 41.5} y="79" text-anchor="middle" class="fill-accent/80 font-mono text-[7.5px]">
+            {s.skill}
+          </text>
+        </g>
+        {i < 5 && <line x1={s.x + 83} y1="58" x2={s.x + 92} y2="58" class="stroke-dim" stroke-width="1.2" marker-end="url(#sf-a)" />}
+      </>
+    ))
+  }
+
+  <!-- interactive vs claude-free split -->
+  <path d="M6,102 h363" class="stroke-accent/40" stroke-width="1"></path>
+  <text x="8" y="116" class="fill-dim font-mono text-[8.5px]">claude code drives 1–3 + judging</text>
+  <path d="M285,124 h269" class="stroke-accent/40" stroke-width="1"></path>
+  <text x="552" y="138" text-anchor="end" class="fill-dim font-mono text-[8.5px]">4 + the migrated job run claude-free in cron</text>
+
+  <!-- receipts bar -->
+  <line x1="47" y1="86" x2="47" y2="164" class="stroke-dim" stroke-width="1" stroke-dasharray="1.5 3"></line>
+  <line x1="326" y1="86" x2="326" y2="164" class="stroke-dim" stroke-width="1" stroke-dasharray="1.5 3"></line>
+  <line x1="512" y1="86" x2="512" y2="164" class="stroke-dim" stroke-width="1" stroke-dasharray="1.5 3"></line>
+  <rect x="6" y="164" width="548" height="30" class="fill-surface stroke-edge" stroke-width="1.4"></rect>
+  <text x="280" y="183" text-anchor="middle" class="fill-dim font-mono text-[10px]">every run → runs/ledger.jsonl — the receipts /localshift:savings reads</text>
+</svg>

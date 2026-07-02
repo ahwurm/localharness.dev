@@ -73,6 +73,13 @@ const program = lines.map((l, i) => ({
                 <span class="text-ink">{l.text}</span>
               </div>
             );
+          if (l.kind === 'art')
+            return (
+              <pre
+                data-dl={i}
+                class="ascii-art my-1 overflow-hidden text-[7px] leading-[1.15] text-accent"
+              >{l.text}</pre>
+            );
           if (l.kind === 'meta')
             return (
               <div data-dl={i} class="whitespace-pre text-dim">

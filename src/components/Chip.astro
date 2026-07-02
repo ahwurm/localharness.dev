@@ -1,9 +1,9 @@
 ---
 // Eraser-style widget chip: tiny stroke glyph + mono label, square, hairline.
-// Glyphs are generic geometry (not third-party brand marks).
+import Icon, { type IconName } from './Icon.astro';
 interface Props {
   label: string;
-  icon: 'server' | 'llama' | 'studio' | 'cpp' | 'shield' | 'doc' | 'gauge' | 'box' | 'cloud-off' | 'globe' | 'search';
+  icon: IconName;
   class?: string;
 }
 const { label, icon, class: className = '' } = Astro.props;
@@ -15,78 +15,6 @@ const { label, icon, class: className = '' } = Astro.props;
     className,
   ]}
 >
-  <svg viewBox="0 0 16 16" class="size-4 shrink-0" aria-hidden="true">
-    {icon === 'server' && (
-      <g class="fill-none stroke-accent" stroke-width="1.3">
-        <rect x="2.5" y="2.5" width="11" height="4.5"></rect>
-        <rect x="2.5" y="9" width="11" height="4.5"></rect>
-        <circle cx="5" cy="4.75" r="0.6" class="fill-accent"></circle>
-        <circle cx="5" cy="11.25" r="0.6" class="fill-accent"></circle>
-      </g>
-    )}
-    {icon === 'llama' && (
-      <path
-        d="M5,13.5 v-4 q0,-3 2.5,-3 h2 q2,0 2,-2 v-1.5 M11.5,13.5 v-3 M7,13.5 v-2"
-        class="fill-none stroke-accent"
-        stroke-width="1.3"
-        stroke-linecap="round"></path>
-    )}
-    {icon === 'studio' && (
-      <g class="fill-none stroke-accent" stroke-width="1.3">
-        <rect x="2.5" y="3" width="11" height="8"></rect>
-        <path d="M6,13.5 h4" stroke-linecap="round"></path>
-        <path d="M5.5,7 l2,2 M7.5,7 l-2,2" stroke-linecap="round"></path>
-      </g>
-    )}
-    {icon === 'cpp' && (
-      <g class="fill-none stroke-accent" stroke-width="1.3">
-        <rect x="4.5" y="4.5" width="7" height="7"></rect>
-        <path d="M6.5,2.5 v2 M9.5,2.5 v2 M6.5,11.5 v2 M9.5,11.5 v2 M2.5,6.5 h2 M2.5,9.5 h2 M11.5,6.5 h2 M11.5,9.5 h2"></path>
-      </g>
-    )}
-    {icon === 'shield' && (
-      <path
-        d="M8,2.5 l4.5,1.8 v3.5 q0,3.5 -4.5,5.7 q-4.5,-2.2 -4.5,-5.7 v-3.5 z M6,8 l1.5,1.5 L10.5,6.5"
-        class="fill-none stroke-accent"
-        stroke-width="1.3"
-        stroke-linejoin="round"></path>
-    )}
-    {icon === 'doc' && (
-      <g class="fill-none stroke-accent" stroke-width="1.3">
-        <path d="M4,2.5 h5.5 l2.5,2.5 v8.5 h-8 z"></path>
-        <path d="M6,7 h4 M6,9.5 h4 M6,12 h2.5"></path>
-      </g>
-    )}
-    {icon === 'gauge' && (
-      <g class="fill-none stroke-accent" stroke-width="1.3">
-        <path d="M2.5,11.5 a5.5,5.5 0 1 1 11,0"></path>
-        <path d="M8,11.5 L11,7" stroke-linecap="round"></path>
-      </g>
-    )}
-    {icon === 'box' && (
-      <g class="fill-none stroke-accent" stroke-width="1.3">
-        <rect x="3" y="3" width="10" height="10"></rect>
-        <circle cx="8" cy="8" r="1.4" class="fill-accent stroke-none"></circle>
-      </g>
-    )}
-    {icon === 'cloud-off' && (
-      <g class="fill-none stroke-accent" stroke-width="1.3">
-        <path d="M4.5,11.5 h7 a2.5,2.5 0 0 0 0,-5 a3.5,3.5 0 0 0 -6.8,-0.8 a2.8,2.8 0 0 0 -0.2,5.8"></path>
-        <path d="M3,13.5 L13,3" stroke-linecap="round"></path>
-      </g>
-    )}
-    {icon === 'globe' && (
-      <g class="fill-none stroke-accent" stroke-width="1.3">
-        <circle cx="8" cy="8" r="5.5"></circle>
-        <path d="M2.5,8 h11 M8,2.5 q3,2.75 0,11 M8,2.5 q-3,2.75 0,11"></path>
-      </g>
-    )}
-    {icon === 'search' && (
-      <g class="fill-none stroke-accent" stroke-width="1.3">
-        <circle cx="7" cy="7" r="4"></circle>
-        <path d="M10,10 l3.5,3.5" stroke-linecap="round"></path>
-      </g>
-    )}
-  </svg>
+  <Icon name={icon} />
   {label}
 </span>

@@ -7,12 +7,13 @@
 //   - bus events: verbatim from ~/.localharness/agents/default/bus-events.jsonl
 // Cosmetic normalizations only (each noted inline): capture-sandbox paths
 // (/tmp/lh-demo2, /tmp/lh-main) rendered as `~`/`~/localharness`; REPL box-drawing
-// chrome, the non-TTY warning, spinner frames, and the ASCII banner rows are not
-// re-rendered here; the star-ask footer line of `init` is trimmed. Raw captures:
-// .planning/captures/ (untracked).
+// chrome, the non-TTY warning and spinner frames are not re-rendered here; the
+// star-ask footer line of `init` is trimmed. Raw captures: .planning/captures/
+// (untracked).
+import bannerRaw from './banner.txt?raw';
 
 export type DemoLine = {
-  kind: 'cmd' | 'out' | 'prompt' | 'tool' | 'ok' | 'answer' | 'meta';
+  kind: 'cmd' | 'out' | 'prompt' | 'tool' | 'ok' | 'answer' | 'meta' | 'art';
   text: string;
   /** ms pause before this line appears (replay pacing; real run took ~35s) */
   d?: number;
@@ -36,8 +37,11 @@ export const lines: DemoLine[] = [
   { kind: 'ok', text: '✓ Context budget: 126,976 tokens (served window 131,072 − 4,096 output reservation)', d: 260 },
   { kind: 'ok', text: '✓ LocalHarness configured at ~/.localharness/config.yaml.', d: 420 },
   { kind: 'cmd', text: 'localharness start', d: 900, node: 'agent' },
-  { kind: 'meta', text: 'v0.5.1    qwen3.6-27b    ~/localharness', d: 600 },
-  { kind: 'out', text: 'Describe a task, or /help for commands.', d: 300 },
+  // the full startup banner, exactly as the real REPL dumps it
+  { kind: 'art', text: bannerRaw, d: 350 },
+  { kind: 'meta', text: 'v0.5.1    qwen3.6-27b    ~/localharness', d: 250 },
+  { kind: 'out', text: 'Describe a task, or /help for commands.', d: 200 },
+  { kind: 'meta', text: '(0.2s startup) -- 1 agent', d: 200 },
   {
     kind: 'prompt',
     text: promptText,

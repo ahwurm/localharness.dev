@@ -73,12 +73,16 @@ instruction-injection phrasing. Update it when page content changes.
 
 ## Diagrams
 
-`LiveDiagram.astro` (architecture, with `data-node` hooks for the DemoSession sync),
+`TraceFlow.astro` (sequence lanes + numbered message arrows, `data-node`/`data-edge` hooks for
+the DemoSession sync), `ShiftFlow.astro` (localshift pipeline as numbered flow),
 `OverWindowDiagram.astro`, `SecurityDiagram.astro`, `AutoresearchDiagram.astro` — hand-built
-inline SVG (dark, SQUARE nodes, dashed groups, mono labels, theme-token classes:
-fill-surface/stroke-edge/stroke-accent). Content must stay factual vs the localharness repo
-(subagent names come from `src/localharness/agent/subagent.py`; over-window/security content
-from CHANGELOG + SECURITY.md) — they are architecture mockups, not decoration.
+inline SVG (dark, SQUARE nodes, dashed groups, mono labels, numbered accent badges for message
+order, theme-token classes: fill-surface/stroke-edge/stroke-accent). Icon vocabulary lives in
+`Icon.astro` (generic stroke glyphs, never third-party brand marks) used via `Chip.astro`.
+Diagrams SHRINK WHOLE (`w-full`, no min-width) — never min-w + hidden-scrollbar clipping.
+Content must stay factual vs the localharness repo (subagent names come from
+`src/localharness/agent/subagent.py`; over-window/security content from CHANGELOG +
+SECURITY.md) — they are architecture mockups, not decoration.
 
 ## Launch-day flip
 
