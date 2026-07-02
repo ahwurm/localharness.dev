@@ -1,8 +1,9 @@
 ---
-// Agents-are-YAML, felt: three REAL configs, tabbable. No fabricated content —
-// `default.yaml` is what `localharness start` generates, `hn-monitor.yaml` is the
-// shipped example (abridged; full file at examples/agents/hn-monitor.yaml), and
-// the third tab is a real `agent create --dry-run` invocation + its verbatim output.
+// The out-of-the-box story, felt: three REAL artifacts, tabbable. No fabricated
+// content — `default.yaml` is what `localharness start` generates; `web-researcher`
+// is verbatim-abridged from src/localharness/agent/subagent.py @ main (built-ins
+// ship as code — YOUR agents are the YAML); the third tab is a real
+// `agent create --dry-run` invocation + its verbatim output.
 const tabs = [
   {
     id: 'default',
@@ -11,10 +12,10 @@ const tabs = [
     lang: 'yaml',
   },
   {
-    id: 'hn-monitor',
-    file: 'examples/agents/hn-monitor.yaml — abridged',
-    note: 'Least privilege by construction: a summarizer has no business running a shell.',
-    lang: 'yaml',
+    id: 'web-researcher',
+    file: 'src/localharness/agent/subagent.py — built in (abridged)',
+    note: 'In the box: quarantined to web tools, and it spawns its own blind fact-checker. explore ships alongside.',
+    lang: 'py',
   },
   {
     id: 'yours',
@@ -49,33 +50,25 @@ const tabs = [
 
   <div data-yt-panel="default" id="yt-panel-default" role="tabpanel" aria-labelledby="yt-tab-default">
     <div class="border-b border-edge/60 px-4 py-1.5 font-mono text-[11px] text-dim">~/.localharness/agents/default.yaml</div>
-    <pre class="overflow-x-auto p-4 font-mono text-[13px] leading-relaxed text-ink"><code><span class="text-dim">model:</span> inherit
+    <pre class="overflow-x-auto whitespace-pre-wrap [overflow-wrap:anywhere] p-4 font-mono text-[13px] leading-relaxed text-ink sm:whitespace-pre"><code><span class="text-dim">model:</span> inherit
 <span class="text-dim">name:</span> default
 <span class="text-dim">role:</span> General-purpose assistant</code></pre>
   </div>
 
-  <div data-yt-panel="hn-monitor" id="yt-panel-hn-monitor" role="tabpanel" aria-labelledby="yt-tab-hn-monitor" hidden>
-    <div class="border-b border-edge/60 px-4 py-1.5 font-mono text-[11px] text-dim">examples/agents/hn-monitor.yaml — abridged</div>
-    <pre class="overflow-x-auto p-4 font-mono text-[13px] leading-relaxed text-ink"><code><span class="text-dim">name:</span> hn-monitor
-<span class="text-dim">role:</span> >-
-  Monitors Hacker News activity and produces a concise digest. […]
-<span class="text-dim">model:</span> inherit
-<span class="text-dim">temperature:</span> 0.3
-<span class="text-dim">tools:</span>
-  <span class="text-dim">inherit:</span> [global]
-  <span class="text-amber">deny: [bash]</span>          <span class="text-dim"># least privilege by construction</span>
-<span class="text-dim">permissions:</span>
-  <span class="text-dim">mode:</span> auto
-  <span class="text-dim">deny_patterns:</span>
-    - "write(*/.env)"
-    - "write(*.secret)"
-    - "write(*/MEMORY.md)"
-<span class="text-dim">capabilities:</span> [hacker-news, summarization, monitoring]</code></pre>
+  <div data-yt-panel="web-researcher" id="yt-panel-web-researcher" role="tabpanel" aria-labelledby="yt-tab-web-researcher" hidden>
+    <div class="border-b border-edge/60 px-4 py-1.5 font-mono text-[11px] text-dim">src/localharness/agent/subagent.py — built in (abridged)</div>
+    <pre class="overflow-x-auto whitespace-pre-wrap [overflow-wrap:anywhere] p-4 font-mono text-[13px] leading-relaxed text-ink sm:whitespace-pre"><code><span class="text-dim"># Web-research child: searches + reads pages in ITS OWN context, …</span>
+<span class="text-dim"># … raw pages never enter the parent's context window.</span>
+WEB_TOOLS: list[str] = [<span class="text-accent/90">"web_search"</span>, <span class="text-accent/90">"web_fetch"</span>, <span class="text-accent/90">"web_page_query"</span>]
+WEB_MAX_ACTIONS = 28
+
+<span class="text-dim"># …so it can nest a grandchild (e.g. web-researcher -> search-verifier…)</span>
+NON_LEAF_AGENTS: dict[str, list[str]] = &lbrace;<span class="text-accent/90">"web-researcher"</span>: [<span class="text-accent/90">"search-verifier"</span>]&rbrace;</code></pre>
   </div>
 
   <div data-yt-panel="yours" id="yt-panel-yours" role="tabpanel" aria-labelledby="yt-tab-yours" hidden>
     <div class="border-b border-edge/60 px-4 py-1.5 font-mono text-[11px] text-dim">your terminal</div>
-    <pre class="overflow-x-auto p-4 font-mono text-[13px] leading-relaxed text-ink"><code><span class="text-accent/80">$</span> localharness agent create repo-auditor \
+    <pre class="overflow-x-auto whitespace-pre-wrap [overflow-wrap:anywhere] p-4 font-mono text-[13px] leading-relaxed text-ink sm:whitespace-pre"><code><span class="text-accent/80">$</span> localharness agent create repo-auditor \
     --role "Audits a repository and reports findings" --global --dry-run
 <span class="text-dim">name:</span> repo-auditor
 <span class="text-dim">role:</span> Audits a repository and reports findings

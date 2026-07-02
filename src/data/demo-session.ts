@@ -9,11 +9,14 @@
 //     flow-plate payloads quote event content (briefs, verdicts) verbatim, clipped
 //   - the run really answered "Qwen 3.6 27B" — the model that ran it (seq 101)
 // Cosmetic normalizations only (each noted inline): capture-sandbox paths
-// (/tmp/lh-demo3, /tmp/lh-main) rendered as `~`/`~/localharness`; REPL box-drawing
-// chrome, the non-TTY warning and spinner frames are not re-rendered; 80-col
-// wrapped lines re-joined (the demo terminal wraps at its own width); the
-// star-ask footer line of `init` is trimmed. Raw captures: .planning/captures/
-// (init-web.txt, start-web.txt, bus-events-web.jsonl, untracked).
+// (/tmp/lh-demo3, /tmp/lh-main) rendered as `~`/`~/localharness`; the REPL's
+// Rich panels (prompt echo box, `default` answer panel with label-in-border,
+// input box with the context meter on its bottom border) are re-rendered as
+// CSS boxes matching the real rendering — box-drawing glyphs themselves, the
+// non-TTY warning and spinner frames are not reproduced glyph-for-glyph;
+// 80-col wrapped lines re-joined (the demo terminal wraps at its own width);
+// the star-ask footer line of `init` is trimmed. Raw captures:
+// .planning/captures/ (init-web.txt, start-web.txt, bus-events-web.jsonl, untracked).
 import bannerRaw from './banner.txt?raw';
 
 export type DemoLine = {

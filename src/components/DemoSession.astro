@@ -21,7 +21,8 @@ const program = lines.map((l, i) => ({
 <div id="demo" class="grid gap-6 xl:grid-cols-[1.2fr_1fr]">
   <!-- terminal: xl:h-0 + min-h-full = row height comes from the diagram column,
        so the box never expands with content — it scrolls inside, like a real window -->
-  <div class="flex min-w-0 flex-col overflow-hidden border border-edge bg-surface/80 xl:h-0 xl:min-h-full">
+  <!-- solid bg (not /80): the REPL meter chip sits ON a box border and must bg-match -->
+  <div class="flex min-w-0 flex-col overflow-hidden border border-edge bg-surface xl:h-0 xl:min-h-full">
     <div class="flex items-center justify-between border-b border-edge/70 px-4 py-2">
       <span class="truncate font-mono text-xs text-dim">~/localharness — real session · qwen3.6-27b on vLLM</span>
       <button
@@ -46,7 +47,7 @@ const program = lines.map((l, i) => ({
             );
           if (l.kind === 'prompt')
             return (
-              <div data-dl={i} class="mt-2">
+              <div data-dl={i} class="my-2 rounded-md border border-dim/40 px-3 py-1.5">
                 <span class="select-none text-accent">&gt; </span>
                 <span class="text-ink" data-typed>
                   {l.text}
@@ -69,10 +70,10 @@ const program = lines.map((l, i) => ({
             );
           if (l.kind === 'answer')
             return (
-              <div data-dl={i} class="my-2 border border-edge/80 px-3 py-2">
-                <span class="block font-mono text-[10px] tracking-wide text-dim">default</span>
+              <fieldset data-dl={i} class="my-2 rounded-md border border-dim/40 px-3 pb-2.5 pt-1.5">
+                <legend class="mx-auto px-2 font-semibold text-accent">default</legend>
                 <span class="text-ink">{l.text}</span>
-              </div>
+              </fieldset>
             );
           if (l.kind === 'art')
             return (
@@ -94,13 +95,13 @@ const program = lines.map((l, i) => ({
           );
         })
       }
-      <div data-tail class="mt-2 flex items-baseline justify-between">
+      <div data-tail class="relative my-2 rounded-md border border-dim/40 px-3 py-1.5">
         <span
           ><span class="select-none text-accent">&gt; </span><span
             class="inline-block h-[1em] w-[0.6em] translate-y-[2px] bg-accent/80 motion-safe:[animation:blink_1.2s_steps(1)_infinite]"
             aria-hidden="true"></span></span
         >
-        <span class="text-[11px] text-dim">░░░░░░░░░░ 2%</span>
+        <span class="absolute -bottom-[0.6em] right-4 bg-surface px-1 text-[11px] leading-none text-dim">░░░░░░░░░░ 3%</span>
       </div>
     </div>
   </div>
