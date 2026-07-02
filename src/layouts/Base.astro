@@ -41,6 +41,22 @@ const ogImageAbs = new URL(ogImage, Astro.site);
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageAbs} />
     {jsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />}
+    {
+      /* sections that moved to /architecture/ (2026-07-02 IA split) keep their old
+         `/#id` links working — ids are verbatim, so the redirect is identity.
+         In <head> on `/` only: fires pre-paint, no flash. Fragments never reach a
+         static server, so client-side is the only mechanism; accepted no-JS
+         tradeoff (anchors were hours old, zero inbound links — see SITE-PRD). */
+      Astro.url.pathname === '/' && (
+        <script is:inline>
+          (function () {
+            var h = location.hash;
+            if (['#yaml', '#hard-parts', '#over-window', '#security', '#autoresearch', '#scope'].indexOf(h) > -1)
+              location.replace('/architecture/' + h);
+          })();
+        </script>
+      )
+    }
   </head>
   <body class="flex min-h-screen flex-col">
     <a

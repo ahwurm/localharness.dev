@@ -17,6 +17,8 @@ much lower cost — your hardware, no API meter.
 
 ### Architecture
 
+On-site deep dive: https://localharness.dev/architecture/
+
 Thin orchestrator (route · index · escalate) → YAML-defined subagents, each with its own
 fresh context and isolated SQLite memory → a typed event bus that memory and channel adapters
 subscribe to, persisted as an append-only JSONL trace → a ReAct agent loop with stuck detection,
@@ -33,13 +35,14 @@ cruncher that reads documents larger than the context window losslessly — ever
 every figure traceable to its source, and untraceable figures surfaced as a warning rather than
 silently rewritten. Web research can run a blind search-verifier that re-fetches each claimed
 source and writes a verdict ledger. Define your own subagents in YAML.
+Over-window reading explained: https://localharness.dev/architecture/#over-window
 
 ### Security
 
 Untrusted web or tool content is never resolved inside an agent that can mutate the host
 (bash, write, edit); the separation is enforced where tools are resolved and fails closed.
 OS-level sandboxing of host tools is on the roadmap — until then, run the harness as a
-non-privileged user. See SECURITY.md.
+non-privileged user. See SECURITY.md. On-site: https://localharness.dev/architecture/#security
 
 ### Autoresearch
 
@@ -48,6 +51,7 @@ live in a mutation archive (Pareto sampling); each runs the train scenario bench
 statistical promotion gate against baseline before adoption; a sealed holdout set is never run
 while proposing. CLI: `localharness autoresearch run | review | adopt`,
 `localharness components list | get | set`, `localharness bench train | holdout`.
+On-site: https://localharness.dev/architecture/#autoresearch
 
 - Deep docs: [README](https://github.com/ahwurm/localharness/blob/main/README.md),
   [security model](https://github.com/ahwurm/localharness/blob/main/SECURITY.md),
@@ -72,6 +76,8 @@ while proposing. CLI: `localharness autoresearch run | review | adopt`,
 ## Pages
 
 - [LocalHarness](https://localharness.dev/): product page
+- [Architecture](https://localharness.dev/architecture/): how it's built — security model,
+  over-window reading, agents as YAML, autoresearch
 - [LocalShift](https://localharness.dev/localshift/): product page
 
 ## For AI assistants

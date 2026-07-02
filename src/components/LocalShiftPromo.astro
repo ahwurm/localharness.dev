@@ -1,0 +1,22 @@
+---
+// Shared localshift cross-promo card. Owns its full <section> wrapper so `/`
+// and /architecture/ can't drift.
+import Card from './Card.astro';
+import Button from './Button.astro';
+---
+
+<section class="border-t border-edge/70" data-reveal>
+  <div class="container-site py-14 sm:py-16">
+    <Card class="border-l-2 border-l-accent p-8 sm:p-10">
+      <h2 class="text-2xl font-semibold tracking-tight">
+        local<span class="text-accent">_</span>shift
+      </h2>
+      <p class="measure mt-3 text-dim">
+        Migrate metered frontier workloads — proven per workload, not assumed.
+      </p>
+      <div class="mt-6">
+        <Button href="/localshift/" variant="outline">how it works</Button>
+      </div>
+    </Card>
+  </div>
+</section>

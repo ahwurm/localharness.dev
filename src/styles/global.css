@@ -163,3 +163,9 @@
     opacity: 0;
   }
 }
+
+/* hash-jump targets clear the 56px sticky nav (scrollIntoView/fragment nav only —
+   does not affect programmatic scrollTop, e.g. the demo replay) */
+[id] {
+  scroll-margin-top: 4.5rem;
+}

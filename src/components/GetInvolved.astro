@@ -1,0 +1,48 @@
+---
+// Shared closing section: issues / docs / security cards. Owns its full
+// <section> wrapper (border-t + data-reveal + container) so `/` and
+// /architecture/ can't drift. One instance per page (id="get-involved").
+import Chip from './Chip.astro';
+import Eyebrow from './Eyebrow.astro';
+---
+
+<section id="get-involved" class="border-t border-edge/70" data-reveal>
+  <div class="container-site py-16 sm:py-20">
+    <Eyebrow label="get involved" />
+    <h2 class="mt-3 text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
+      Become a contributor.
+    </h2>
+    <div class="mt-8 grid gap-3 sm:grid-cols-3">
+      <a
+        href="https://github.com/ahwurm/localharness/issues"
+        target="_blank"
+        rel="noopener"
+        class="group border border-edge bg-surface/60 p-5 transition-colors duration-200 hover:border-accent/40"
+      >
+        <Chip icon="issue" label="issues" class="border-0 bg-transparent px-0 py-0" />
+        <p class="mt-1.5 text-sm text-dim">Bugs and feature requests — welcome.</p>
+        <span class="mt-3 inline-block font-mono text-xs text-accent/80 transition-colors group-hover:text-accent">github ↗</span>
+      </a>
+      <a
+        href="https://github.com/ahwurm/localharness/tree/main/docs"
+        target="_blank"
+        rel="noopener"
+        class="group border border-edge bg-surface/60 p-5 transition-colors duration-200 hover:border-accent/40"
+      >
+        <Chip icon="book" label="docs" class="border-0 bg-transparent px-0 py-0" />
+        <p class="mt-1.5 text-sm text-dim">Component specs + reference architectures.</p>
+        <span class="mt-3 inline-block font-mono text-xs text-accent/80 transition-colors group-hover:text-accent">docs ↗</span>
+      </a>
+      <a
+        href="https://github.com/ahwurm/localharness/blob/main/SECURITY.md"
+        target="_blank"
+        rel="noopener"
+        class="group border border-edge bg-surface/60 p-5 transition-colors duration-200 hover:border-accent/40"
+      >
+        <Chip icon="shield" label="security" class="border-0 bg-transparent px-0 py-0" />
+        <p class="mt-1.5 text-sm text-dim">The threat model, in plain English.</p>
+        <span class="mt-3 inline-block font-mono text-xs text-accent/80 transition-colors group-hover:text-accent">SECURITY.md ↗</span>
+      </a>
+    </div>
+  </div>
+</section>

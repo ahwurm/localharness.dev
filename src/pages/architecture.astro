@@ -1,0 +1,159 @@
+---
+// The technical depth page (2026-07-02 IA split, adversarially reviewed 3 rounds):
+// sections moved content-verbatim from `/` — ids kept verbatim so /#security etc.
+// redirect by identity (script in Base.astro). Section order is decision-relevance
+// first: security/over-window → configuration → autoresearch → scope, then the
+// clone path at peak conviction, contributor cards, localshift promo last.
+// border-t on every section except the first (borders were adjacency-coupled on `/`).
+import Base from '../layouts/Base.astro';
+import Button from '../components/Button.astro';
+import Card from '../components/Card.astro';
+import CodeBlock from '../components/CodeBlock.astro';
+import Eyebrow from '../components/Eyebrow.astro';
+import FigureFrame from '../components/FigureFrame.astro';
+import AgentYamlTabs from '../components/AgentYamlTabs.astro';
+import OverWindowDiagram from '../components/OverWindowDiagram.astro';
+import SecurityDiagram from '../components/SecurityDiagram.astro';
+import AutoresearchDiagram from '../components/AutoresearchDiagram.astro';
+import Chip from '../components/Chip.astro';
+import LocalShiftPromo from '../components/LocalShiftPromo.astro';
+import GetInvolved from '../components/GetInvolved.astro';
+
+const install = `git clone https://github.com/ahwurm/localharness
+cd localharness && uv sync
+uv run localharness init
+uv run localharness start`;
+---
+
+<Base
+  title="LocalHarness — architecture"
+  description="How LocalHarness is built: structural prompt-injection defense, reading past the context window, agents as YAML, and the autoresearch loop."
+>
+  <h1 class="sr-only">LocalHarness — architecture</h1>
+
+  <!-- The hard parts: structural security + over-window reading -->
+  <section id="hard-parts" data-reveal>
+    <div class="container-site py-16 sm:py-20">
+      <Eyebrow label="the hard parts" />
+      <h2 class="mt-3 text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
+        Built for the hard parts of local.
+      </h2>
+      <div class="mt-10 grid gap-10 xl:grid-cols-2">
+        <div id="security" class="flex min-w-0 flex-col">
+          <h3 class="text-lg font-semibold tracking-tight">Prompt injection, structurally</h3>
+          <p class="mt-2 text-sm text-dim">
+            Untrusted content never shares an agent with <code class="font-mono text-ink">bash</code>,
+            <code class="font-mono text-ink">write</code>, or <code class="font-mono text-ink">edit</code>.
+            Fails closed —
+            <a
+              href="https://github.com/ahwurm/localharness/blob/main/SECURITY.md"
+              target="_blank"
+              rel="noopener"
+              class="text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent"
+              >SECURITY.md</a
+            >.
+          </p>
+          <FigureFrame num="01" caption="untrusted content, quarantined" class="mt-5 xl:mt-auto">
+            <SecurityDiagram />
+          </FigureFrame>
+        </div>
+        <div id="over-window" class="flex min-w-0 flex-col">
+          <h3 class="text-lg font-semibold tracking-tight">
+            Documents bigger than the context window
+          </h3>
+          <p class="mt-2 text-sm text-dim">
+            Every section actually read. Every number traces back to its source.
+          </p>
+          <FigureFrame num="02" caption="the over-window read path" class="mt-5 xl:mt-auto">
+            <OverWindowDiagram />
+          </FigureFrame>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Agents are YAML -->
+  <section id="yaml" class="border-t border-edge/70" data-reveal>
+    <div class="container-site grid gap-10 py-16 sm:py-20 xl:grid-cols-[2fr_3fr] xl:items-center">
+      <div>
+        <Eyebrow label="configuration" />
+        <h2 class="mt-3 text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
+          The whole agent is a file you can read.
+        </h2>
+        <p class="measure mt-3 text-dim">Prompts, tools, permissions, memory — YAML, not Python.</p>
+      </div>
+      <div class="min-w-0">
+        <AgentYamlTabs />
+      </div>
+    </div>
+  </section>
+
+  <!-- Autoresearch -->
+  <section id="autoresearch" class="border-t border-edge/70" data-reveal>
+    <div class="container-site grid gap-10 py-16 sm:py-20 xl:grid-cols-[3fr_2fr] xl:items-center">
+      <FigureFrame num="03" caption="propose → bench → gate → adopt" class="order-2 min-w-0 xl:order-1">
+        <AutoresearchDiagram />
+      </FigureFrame>
+      <div class="order-1 xl:order-2">
+        <Eyebrow label="autoresearch" />
+        <h2 class="mt-3 text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
+          The harness improves itself — under a gate.
+        </h2>
+        <p class="measure mt-3 text-dim">
+          One mutation at a time, adopted only if the stats say so.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- What it isn't -->
+  <section id="scope" class="border-t border-edge/70" data-reveal>
+    <div class="container-site py-16 sm:py-20">
+      <Eyebrow label="scope" />
+      <h2 class="mt-3 text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
+        What it isn't.
+      </h2>
+      <div class="mt-8 grid gap-3 sm:grid-cols-2">
+        <Card class="p-4">
+          <Chip icon="box" label="not an inference engine" class="border-0 bg-transparent px-0 py-0" />
+          <p class="mt-1.5 text-sm text-dim">Bring your own — LocalHarness is the layer above.</p>
+        </Card>
+        <Card class="p-4">
+          <Chip icon="cloud-off" label="not a cloud service" class="border-0 bg-transparent px-0 py-0" />
+          <p class="mt-1.5 text-sm text-dim">Zero telemetry, zero external calls. MIT, yours.</p>
+        </Card>
+        <Card class="p-4">
+          <Chip icon="shield" label="not sandboxed yet" class="border-0 bg-transparent px-0 py-0" />
+          <p class="mt-1.5 text-sm text-dim">
+            Deny-first permissions today; OS sandbox on the roadmap — see SECURITY.md.
+          </p>
+        </Card>
+        <Card class="p-4">
+          <Chip icon="gauge" label="not 1.0" class="border-0 bg-transparent px-0 py-0" />
+          <p class="mt-1.5 text-sm text-dim">
+            Early, honest about it — see
+            <a href="/devnotes/" class="text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent">devnotes</a>.
+          </p>
+        </Card>
+      </div>
+    </div>
+  </section>
+
+  <!-- Run it -->
+  <section class="border-t border-edge/70" data-reveal>
+    <div class="container-site flex flex-col items-center py-16 text-center sm:py-20">
+      <Eyebrow label="run it" />
+      <h2 class="mt-3 text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
+        Zero to agent in four lines.
+      </h2>
+      <CodeBlock code={install} label="install" class="mt-8 w-full max-w-xl text-left [&_pre]:text-[13px]" />
+      <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+        <Button href="https://github.com/ahwurm/localharness" external>view on github</Button>
+        <Button href="/#demo-section" variant="outline">watch it work</Button>
+      </div>
+    </div>
+  </section>
+
+  <GetInvolved />
+  <LocalShiftPromo />
+</Base>
