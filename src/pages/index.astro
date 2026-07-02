@@ -104,7 +104,14 @@ const jsonLd = [
 
       <!-- Demo 1: zero to agent -->
       <div id="demo-startup" class="mt-12 gap-10 xl:grid xl:grid-cols-[3fr_2fr]">
-        <div class="xl:order-2">
+        <div class="min-w-0">
+          <DemoPane key="d1" title="~/localharness — real session · qwen3.6-27b on vLLM" lines={d1Lines} />
+          <p class="mt-3 font-mono text-xs text-dim">
+            <span class="text-accent/80">fig. 01</span> — captured 2026-07-02, vLLM · qwen3.6-27b. Same
+            session continues in fig. 03.
+          </p>
+        </div>
+        <div class="mt-6 xl:mt-0">
           <Eyebrow label="zero to agent" />
           <h3 class="mt-3 text-xl font-semibold tracking-tight">Point it at the endpoint you already run.</h3>
           <ol class="mt-5 space-y-4">
@@ -122,13 +129,6 @@ const jsonLd = [
             </li>
           </ol>
         </div>
-        <div class="mt-6 min-w-0 xl:order-1 xl:mt-0">
-          <DemoPane key="d1" title="~/localharness — real session · qwen3.6-27b on vLLM" lines={d1Lines} />
-          <p class="mt-3 font-mono text-xs text-dim">
-            <span class="text-accent/80">fig. 01</span> — captured 2026-07-02, vLLM · qwen3.6-27b. Same
-            session continues in fig. 03.
-          </p>
-        </div>
       </div>
     </div>
   </section>
@@ -138,7 +138,21 @@ const jsonLd = [
   <!-- Demo 2: bigger than the window -->
   <section id="demo-overwindow" data-reveal>
     <div class="container-site gap-10 py-16 sm:py-20 xl:grid xl:grid-cols-[3fr_2fr]">
-      <div class="xl:order-2">
+      <div class="min-w-0">
+        <DemoPane
+          key="d2"
+          title="~/localharness — real session · Homer’s Odyssey"
+          lines={d2Lines}
+          tailMeter={overwindowTailMeter}
+        />
+        <p class="mt-3 font-mono text-xs text-dim">
+          <span class="text-accent/80">fig. 02</span> — captured 2026-07-02, its own session: the full
+          text of Homer’s Odyssey (Project Gutenberg #1727, Butler translation), 678,822
+          characters through a 126,976-token window, read section by section in fresh windows.
+          Answer verified against the text.
+        </p>
+      </div>
+      <div class="mt-6 xl:mt-0">
         <Eyebrow label="bigger than the window" />
         <h3 class="mt-3 text-xl font-semibold tracking-tight">It reads what can't fit.</h3>
         <ol class="mt-5 space-y-4">
@@ -157,20 +171,6 @@ const jsonLd = [
         </ol>
         <p class="mt-5 font-mono text-xs">
           <a href="/architecture/#over-window" class="text-accent/80 transition-colors hover:text-accent">the full mechanism ↗</a>
-        </p>
-      </div>
-      <div class="mt-6 min-w-0 xl:order-1 xl:mt-0">
-        <DemoPane
-          key="d2"
-          title="~/localharness — real session · Homer’s Odyssey"
-          lines={d2Lines}
-          tailMeter={overwindowTailMeter}
-        />
-        <p class="mt-3 font-mono text-xs text-dim">
-          <span class="text-accent/80">fig. 02</span> — captured 2026-07-02, its own session: the full
-          text of Homer’s Odyssey (Project Gutenberg #1727, Butler translation), 678,822
-          characters through a 126,976-token window, read section by section in fresh windows.
-          Answer verified against the text.
         </p>
       </div>
     </div>
