@@ -1,13 +1,26 @@
 ---
 // Structural injection defense — factual vs SECURITY.md: untrusted-ingesting agents
 // never co-reside with host-mutating tools; enforced at tool resolution; fails closed.
+// Plate SVG at sm+, FlowLedger below sm (same content — fig 01's dual pattern).
+import FlowLedger from './FlowLedger.astro';
 ---
+
+<FlowLedger
+  class="sm:hidden"
+  rows={[
+    { n: 1, title: 'untrusted content', text: 'the web, fetched pages', tone: 'amber' },
+    { n: 2, title: 'web-researcher', text: 'quarantine — web tools only, no bash · write · edit' },
+    { n: 3, title: 'your agent', text: 'structured summary in — host tools stay clean' },
+    { kind: 'blocked', title: 'bash · write · edit', text: 'host-mutating tools — no path from untrusted content' },
+    { kind: 'note', text: 'refused where tools are resolved — fails closed, not left to the model' },
+  ]}
+/>
 
 <svg
   viewBox="0 0 560 190"
   role="img"
   aria-label="Structural prompt-injection defense: untrusted web content flows only into a quarantined web-researcher with web tools; a structured summary crosses to your agent; the path from untrusted content to host-mutating tools like bash, write, and edit is refused at tool resolution and fails closed"
-  class="w-full"
+  class="hidden w-full sm:block"
 >
   <defs>
     <marker id="arr-sec" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">

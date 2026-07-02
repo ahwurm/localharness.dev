@@ -1,12 +1,26 @@
 ---
 // Autoresearch loop mockup — propose → bench → gate → adopt, archive loop, sealed holdout
+// Plate SVG at sm+, FlowLedger below sm (same content — fig 01's dual pattern).
+import FlowLedger from './FlowLedger.astro';
 ---
+
+<FlowLedger
+  class="sm:hidden"
+  rows={[
+    { n: 1, title: 'propose', text: 'one mutation' },
+    { n: 2, title: 'bench', text: 'train scenarios' },
+    { n: 3, title: 'gate', text: 'stats vs baseline', tone: 'accent' },
+    { n: 4, title: 'adopt', text: 'promote to config' },
+    { kind: 'loop', title: 'mutation archive', text: 'pareto sampling → next propose' },
+    { kind: 'loop', n: '⊘', title: 'sealed holdout', text: 'never run while proposing — final check only' },
+  ]}
+/>
 
 <svg
   viewBox="0 0 560 240"
   role="img"
   aria-label="Autoresearch loop: propose one mutation, run the train bench, pass the promotion gate, adopt — candidates cycle through a mutation archive; a sealed holdout is only run as a final check"
-  class="w-full max-w-xl"
+  class="hidden w-full max-w-xl sm:block"
 >
   <defs>
     <marker id="arr2" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">

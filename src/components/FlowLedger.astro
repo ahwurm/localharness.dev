@@ -1,0 +1,72 @@
+---
+// Mobile-legible re-expression of a plate-SVG figure (same content, zero new
+// claims) — the pattern fig 01 set: plate at sm+, ledger below sm. Each diagram
+// keeps its SVG as the source of truth and passes the same text here.
+// Row kinds: step (numbered plate) · loop (dashed, cycles/asides) · blocked
+// (amber ✗, refused paths) · note (footer line).
+export type LedgerRow = {
+  kind?: 'step' | 'loop' | 'blocked' | 'note';
+  n?: string | number;
+  title?: string;
+  text?: string;
+  /** accent mono tag, right-aligned (e.g. a :skill name) */
+  tag?: string;
+  /** step accent override: the warning input / the payoff */
+  tone?: 'amber' | 'accent';
+};
+interface Props {
+  rows: LedgerRow[];
+  class?: string;
+}
+const { rows, class: className = '' } = Astro.props;
+---
+
+<ol class:list={['space-y-1', className]}>
+  {
+    rows.map((r) => {
+      const kind = r.kind ?? 'step';
+      if (kind === 'note')
+        return (
+          <li class="pt-1 font-mono text-[10px] leading-relaxed text-dim">
+            {r.text}
+          </li>
+        );
+      const badge =
+        kind === 'blocked' ? (
+          <span class="flex size-[18px] shrink-0 items-center justify-center border border-amber/60 font-mono text-[9.5px] font-semibold text-amber">✕</span>
+        ) : kind === 'loop' ? (
+          <span class="flex size-[18px] shrink-0 items-center justify-center border border-accent/50 font-mono text-[9.5px] font-semibold text-accent">{r.n ?? '↺'}</span>
+        ) : (
+          <span class="flex size-[18px] shrink-0 items-center justify-center bg-accent font-mono text-[9.5px] font-semibold text-accent-ink">{r.n}</span>
+        );
+      return (
+        <li class="flex min-w-0 items-center gap-2">
+          {badge}
+          <div
+            class:list={[
+              'flex min-w-0 flex-1 items-baseline gap-2 border px-2 py-[5px]',
+              kind === 'blocked'
+                ? 'border-dashed border-amber/40 bg-surface/40'
+                : kind === 'loop'
+                  ? 'border-dashed border-edge/80 bg-surface/40'
+                  : 'border-edge bg-surface/70',
+            ]}
+          >
+            {r.title && (
+              <span
+                class:list={[
+                  'shrink-0 font-mono text-[11px]',
+                  r.tone === 'amber' ? 'text-amber' : r.tone === 'accent' ? 'text-accent' : 'text-ink',
+                ]}
+              >
+                {r.title}
+              </span>
+            )}
+            {r.text && <span class="min-w-0 flex-1 truncate font-mono text-[10px] text-dim" title={r.text}>{r.text}</span>}
+            {r.tag && <span class="shrink-0 font-mono text-[9.5px] text-accent/80">{r.tag}</span>}
+          </div>
+        </li>
+      );
+    })
+  }
+</ol>

@@ -2,13 +2,29 @@
 // The six-stage pipeline as a numbered message flow (plate style) — one node per
 // shipped skill, skill names verbatim, receipts bar underneath. Factual vs
 // skills/*/SKILL.md on origin/main.
+// Plate SVG at sm+, FlowLedger below sm (same content — fig 01's dual pattern).
+import FlowLedger from './FlowLedger.astro';
 ---
+
+<FlowLedger
+  class="sm:hidden"
+  rows={[
+    { n: 1, title: 'explore', text: 'the workload', tag: ':explore' },
+    { n: 2, title: 'design', text: 'the eval', tag: ':design-eval' },
+    { n: 3, title: 'build', text: 'task + checks', tag: ':build' },
+    { n: 4, title: 'replicate', text: 'runs local', tag: ':replicate' },
+    { n: 5, title: 'evaluate', text: 'blind 1v1', tag: ':evaluate' },
+    { n: 6, title: 'cut over', text: 'no fallback', tag: ':shift' },
+    { kind: 'note', text: 'claude code drives 1–3 + judging · 4 + the migrated job run claude-free in cron' },
+    { kind: 'note', text: 'every run → runs/ledger.jsonl — the receipts /localshift:savings reads' },
+  ]}
+/>
 
 <svg
   viewBox="0 0 560 208"
   role="img"
   aria-label="The LocalShift pipeline as a numbered flow: explore the workload, design the eval, build the framework, replicate locally, evaluate one-versus-one, cut over — every run appending receipts to the ledger"
-  class="w-full"
+  class="hidden w-full sm:block"
 >
   <defs>
     <marker id="sf-a" viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -47,16 +63,19 @@
     ))
   }
 
+  <!-- receipts-bar taps, segmented around the annotation text bands -->
+  <line x1="47" y1="86" x2="47" y2="105" class="stroke-dim" stroke-width="1" stroke-dasharray="1.5 3"></line>
+  <line x1="47" y1="121" x2="47" y2="164" class="stroke-dim" stroke-width="1" stroke-dasharray="1.5 3"></line>
+  <line x1="326" y1="86" x2="326" y2="127" class="stroke-dim" stroke-width="1" stroke-dasharray="1.5 3"></line>
+  <line x1="326" y1="143" x2="326" y2="164" class="stroke-dim" stroke-width="1" stroke-dasharray="1.5 3"></line>
+  <line x1="512" y1="86" x2="512" y2="127" class="stroke-dim" stroke-width="1" stroke-dasharray="1.5 3"></line>
+  <line x1="512" y1="143" x2="512" y2="164" class="stroke-dim" stroke-width="1" stroke-dasharray="1.5 3"></line>
+
   <!-- interactive vs claude-free split -->
   <path d="M6,102 h363" class="stroke-accent/40" stroke-width="1"></path>
   <text x="8" y="116" class="fill-dim font-mono text-[8.5px]">claude code drives 1–3 + judging</text>
   <path d="M285,124 h269" class="stroke-accent/40" stroke-width="1"></path>
   <text x="552" y="138" text-anchor="end" class="fill-dim font-mono text-[8.5px]">4 + the migrated job run claude-free in cron</text>
-
-  <!-- receipts bar -->
-  <line x1="47" y1="86" x2="47" y2="164" class="stroke-dim" stroke-width="1" stroke-dasharray="1.5 3"></line>
-  <line x1="326" y1="86" x2="326" y2="164" class="stroke-dim" stroke-width="1" stroke-dasharray="1.5 3"></line>
-  <line x1="512" y1="86" x2="512" y2="164" class="stroke-dim" stroke-width="1" stroke-dasharray="1.5 3"></line>
   <rect x="6" y="164" width="548" height="30" class="fill-surface stroke-edge" stroke-width="1.4"></rect>
   <text x="280" y="183" text-anchor="middle" class="fill-dim font-mono text-[10px]">every run → runs/ledger.jsonl — the receipts /localshift:savings reads</text>
 </svg>
