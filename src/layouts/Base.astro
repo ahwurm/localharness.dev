@@ -44,7 +44,7 @@ const ogImageAbs = new URL(ogImage, Astro.site);
   <body class="flex min-h-screen flex-col">
     <a
       href="#main"
-      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded focus:bg-surface focus:px-3 focus:py-2"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:border focus:border-edge focus:bg-surface focus:px-3 focus:py-2"
       >Skip to content</a
     >
     <Nav />
@@ -52,5 +52,25 @@ const ogImageAbs = new URL(ogImage, Astro.site);
       <slot />
     </main>
     <Footer />
+    <script is:inline>
+      // Scroll reveal — additive only: without JS or with reduced motion, nothing is ever hidden.
+      (() => {
+        if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        if (!('IntersectionObserver' in window)) return;
+        const io = new IntersectionObserver(
+          (entries) =>
+            entries.forEach((e) => {
+              if (!e.isIntersecting) return;
+              e.target.classList.add('reveal-in');
+              io.unobserve(e.target);
+            }),
+          { threshold: 0.12, rootMargin: '0px 0px -8% 0px' }
+        );
+        document.querySelectorAll('[data-reveal]').forEach((el) => {
+          el.classList.add('reveal-init');
+          requestAnimationFrame(() => io.observe(el));
+        });
+      })();
+    </script>
   </body>
 </html>

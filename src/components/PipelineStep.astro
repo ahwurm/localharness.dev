@@ -11,16 +11,16 @@ const { num, title, skill, output, desc, last = false } = Astro.props;
 ---
 
 <li class="relative flex gap-5 pb-10" class:list={[{ 'pb-0': last }]}>
-  {!last && <span class="absolute left-[15px] top-9 h-[calc(100%-2.25rem)] w-px bg-edge" aria-hidden="true" />}
+  {!last && <span class="absolute left-[15px] top-10 h-[calc(100%-2.5rem)] w-px bg-edge" aria-hidden="true" />}
   <span
-    class="flex size-8 shrink-0 items-center justify-center rounded-full border border-edge bg-surface font-mono text-sm text-accent"
+    class="flex size-8 shrink-0 items-center justify-center border border-edge bg-surface font-mono text-sm text-accent"
     >{num}</span
   >
   <div class="min-w-0">
     <h3 class="font-medium text-ink">{title}</h3>
     <p class="mt-1 text-sm text-dim">{desc}</p>
     <p class="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-xs">
-      <span class="rounded bg-bg px-1.5 py-0.5 text-accent">{skill}</span>
+      <span class="border border-edge/70 bg-bg px-1.5 py-0.5 text-accent">{skill}</span>
       <span class="text-dim">→ {output}</span>
     </p>
   </div>

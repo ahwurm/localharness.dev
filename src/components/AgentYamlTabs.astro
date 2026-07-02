@@ -1,0 +1,116 @@
+---
+// Agents-are-YAML, felt: three REAL configs, tabbable. No fabricated content —
+// `default.yaml` is what `localharness start` generates, `hn-monitor.yaml` is the
+// shipped example (abridged; full file at examples/agents/hn-monitor.yaml), and
+// the third tab is a real `agent create --dry-run` invocation + its verbatim output.
+const tabs = [
+  {
+    id: 'default',
+    file: '~/.localharness/agents/default.yaml',
+    note: 'What start gives you — a working agent is three lines.',
+    lang: 'yaml',
+  },
+  {
+    id: 'hn-monitor',
+    file: 'examples/agents/hn-monitor.yaml — abridged',
+    note: 'Least privilege by construction: a summarizer has no business running a shell.',
+    lang: 'yaml',
+  },
+  {
+    id: 'yours',
+    file: 'your terminal',
+    note: 'One command scaffolds the next one.',
+    lang: 'sh',
+  },
+];
+---
+
+<div id="yaml-tabs" class="overflow-hidden border border-edge bg-surface/80">
+  <div class="flex flex-wrap items-center gap-1 border-b border-edge/70 px-2 py-1.5" role="tablist" aria-label="Agent YAML examples">
+    {
+      tabs.map((t, i) => (
+        <button
+          type="button"
+          role="tab"
+          id={`yt-tab-${t.id}`}
+          aria-controls={`yt-panel-${t.id}`}
+          aria-selected={i === 0 ? 'true' : 'false'}
+          data-yt-tab={t.id}
+          class:list={[
+            'border px-3 py-1.5 font-mono text-xs transition-colors duration-200',
+            i === 0 ? 'border-accent/50 bg-accent/10 text-accent' : 'border-transparent text-dim hover:text-ink',
+          ]}
+        >
+          {t.id}
+        </button>
+      ))
+    }
+  </div>
+
+  <div data-yt-panel="default" id="yt-panel-default" role="tabpanel" aria-labelledby="yt-tab-default">
+    <div class="border-b border-edge/60 px-4 py-1.5 font-mono text-[11px] text-dim">~/.localharness/agents/default.yaml</div>
+    <pre class="overflow-x-auto p-4 font-mono text-[13px] leading-relaxed text-ink"><code><span class="text-dim">model:</span> inherit
+<span class="text-dim">name:</span> default
+<span class="text-dim">role:</span> General-purpose assistant</code></pre>
+  </div>
+
+  <div data-yt-panel="hn-monitor" id="yt-panel-hn-monitor" role="tabpanel" aria-labelledby="yt-tab-hn-monitor" hidden>
+    <div class="border-b border-edge/60 px-4 py-1.5 font-mono text-[11px] text-dim">examples/agents/hn-monitor.yaml — abridged</div>
+    <pre class="overflow-x-auto p-4 font-mono text-[13px] leading-relaxed text-ink"><code><span class="text-dim">name:</span> hn-monitor
+<span class="text-dim">role:</span> >-
+  Monitors Hacker News activity and produces a concise digest. […]
+<span class="text-dim">model:</span> inherit
+<span class="text-dim">temperature:</span> 0.3
+<span class="text-dim">tools:</span>
+  <span class="text-dim">inherit:</span> [global]
+  <span class="text-amber">deny: [bash]</span>          <span class="text-dim"># least privilege by construction</span>
+<span class="text-dim">permissions:</span>
+  <span class="text-dim">mode:</span> auto
+  <span class="text-dim">deny_patterns:</span>
+    - "write(*/.env)"
+    - "write(*.secret)"
+    - "write(*/MEMORY.md)"
+<span class="text-dim">capabilities:</span> [hacker-news, summarization, monitoring]</code></pre>
+  </div>
+
+  <div data-yt-panel="yours" id="yt-panel-yours" role="tabpanel" aria-labelledby="yt-tab-yours" hidden>
+    <div class="border-b border-edge/60 px-4 py-1.5 font-mono text-[11px] text-dim">your terminal</div>
+    <pre class="overflow-x-auto p-4 font-mono text-[13px] leading-relaxed text-ink"><code><span class="text-accent/80">$</span> localharness agent create repo-auditor \
+    --role "Audits a repository and reports findings" --global --dry-run
+<span class="text-dim">name:</span> repo-auditor
+<span class="text-dim">role:</span> Audits a repository and reports findings
+<span class="text-dim">model:</span> inherit</code></pre>
+  </div>
+
+  <div class="border-t border-edge/70 px-4 py-2.5 font-mono text-xs text-dim">
+    {
+      tabs.map((t, i) => (
+        <span data-yt-note={t.id} hidden={i !== 0}>
+          {t.note}
+        </span>
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  (() => {
+    const root = document.getElementById('yaml-tabs');
+    if (!root) return;
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[data-yt-tab]')];
+    const activate = (id: string) => {
+      tabs.forEach((b) => {
+        const on = b.dataset.ytTab === id;
+        b.setAttribute('aria-selected', String(on));
+        b.classList.toggle('border-accent/50', on);
+        b.classList.toggle('bg-accent/10', on);
+        b.classList.toggle('text-accent', on);
+        b.classList.toggle('border-transparent', !on);
+        b.classList.toggle('text-dim', !on);
+      });
+      root.querySelectorAll<HTMLElement>('[data-yt-panel]').forEach((p) => (p.hidden = p.dataset.ytPanel !== id));
+      root.querySelectorAll<HTMLElement>('[data-yt-note]').forEach((n) => (n.hidden = n.dataset.ytNote !== id));
+    };
+    tabs.forEach((b) => b.addEventListener('click', () => activate(b.dataset.ytTab!)));
+  })();
+</script>

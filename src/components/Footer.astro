@@ -2,16 +2,27 @@
 import Wordmark from './Wordmark.astro';
 ---
 
-<footer class="border-t border-edge">
-  <div class="container-site flex flex-col gap-6 py-12 sm:flex-row sm:items-center sm:justify-between">
-    <div class="flex flex-col gap-2">
+<footer class="border-t border-edge/70">
+  <div
+    class="container-site flex flex-col gap-4 py-10 text-sm text-dim sm:flex-row sm:items-center sm:justify-between"
+  >
+    <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
       <Wordmark />
-      <p class="text-sm text-dim">MIT License · No analytics. No cookies.</p>
+      <span class="font-mono text-xs">MIT · No analytics. No cookies.</span>
     </div>
-    <div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-dim">
-      <a href="https://github.com/ahwurm/localharness" class="hover:text-ink transition-colors duration-150" target="_blank" rel="noopener">LocalHarness on GitHub</a>
-      <a href="https://github.com/ahwurm/localshift" class="hover:text-ink transition-colors duration-150" target="_blank" rel="noopener">LocalShift on GitHub</a>
-      <a href="/localshift/" class="hover:text-ink transition-colors duration-150">LocalShift</a>
+    <div class="flex flex-wrap items-center gap-x-5 gap-y-2 font-mono text-xs">
+      <a
+        href="https://github.com/ahwurm/localharness"
+        class="transition-colors duration-200 hover:text-ink"
+        target="_blank"
+        rel="noopener">localharness ↗</a
+      >
+      <a
+        href="https://github.com/ahwurm/localshift"
+        class="transition-colors duration-200 hover:text-ink"
+        target="_blank"
+        rel="noopener">localshift ↗</a
+      >
       <span>© 2026</span>
     </div>
   </div>

@@ -7,6 +7,10 @@ import Base from '../layouts/Base.astro';
     <p class="font-mono text-sm text-accent">404</p>
     <h1 class="mt-3 text-3xl font-semibold tracking-tight">Page not found</h1>
     <p class="mt-3 text-dim">Nothing lives at this path.</p>
-    <a href="/" class="mt-6 font-mono text-sm text-accent hover:underline">cd ~/</a>
+    <a
+      href="/"
+      class="mt-8 border border-edge px-5 py-2.5 font-mono text-sm text-dim transition-colors duration-200 hover:border-accent/40 hover:text-ink"
+      ><span class="text-accent">$</span> cd ~/</a
+    >
   </section>
 </Base>

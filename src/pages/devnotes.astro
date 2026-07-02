@@ -1,9 +1,28 @@
 ---
 import Base from '../layouts/Base.astro';
+import Eyebrow from '../components/Eyebrow.astro';
 
 // Real shipped changes, newest first. No version strings / numbers (site rule).
-// Each entry traces to a commit in github.com/ahwurm/localharness.
+// Each entry traces to a commit or CHANGELOG entry in github.com/ahwurm/localharness.
 const notes = [
+  {
+    tag: 'Added',
+    title: 'Number provenance for big-document answers',
+    date: 'Jun 26',
+    body: 'When a document bigger than the context window is combined in stages, every figure in the final answer is checked back against the verbatim section notes. Anything untraceable is surfaced as a warning — never silently rewritten.',
+  },
+  {
+    tag: 'Added',
+    title: 'Security model in plain English',
+    date: 'Jun 26',
+    body: 'The threat model now lives in SECURITY.md: trust boundaries, the structural injection defense, and — plainly — what is not built yet.',
+  },
+  {
+    tag: 'Added',
+    title: 'Lossless reading past the context window',
+    date: 'Jun 25',
+    body: 'A cruncher subagent splits oversize documents structure-aware and reads every section — nothing truncated. Content handles move results between agents without re-inlining the bytes, and untrusted-ingested content can never co-reside with host-mutating tools.',
+  },
   {
     tag: 'Fixed',
     title: 'Hermetic test suite',
@@ -42,13 +61,11 @@ const notes = [
   description="What's new in LocalHarness — recent fixes and added features."
 >
   <section class="container-site max-w-2xl py-20 sm:py-28">
-    <p class="text-sm uppercase tracking-widest text-accent">Devnotes</p>
-    <h1 class="mt-3 text-[clamp(1.9rem,4vw,2.75rem)] font-semibold leading-[1.1] tracking-tight">
+    <Eyebrow label="devnotes" />
+    <h1 class="mt-3 text-[clamp(1.9rem,4vw,2.75rem)] font-semibold leading-[1.1] tracking-[-0.02em]">
       What's new.
     </h1>
-    <p class="mt-4 text-dim">
-      Recent fixes and features, newest first. The full history lives on GitHub.
-    </p>
+    <p class="mt-4 text-dim">Recent fixes and features, newest first. The full history lives on GitHub.</p>
 
     <div class="mt-10">
       {
@@ -57,16 +74,18 @@ const notes = [
             <summary class="flex cursor-pointer list-none items-center gap-3 py-4 [&::-webkit-details-marker]:hidden">
               <span
                 class:list={[
-                  'shrink-0 rounded px-1.5 py-0.5 text-[11px] font-medium uppercase tracking-wide',
-                  n.tag === 'Added' ? 'bg-accent/10 text-accent' : 'bg-amber/10 text-amber',
+                  'shrink-0 border px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-wide',
+                  n.tag === 'Added'
+                    ? 'border-accent/30 bg-accent/10 text-accent'
+                    : 'border-amber/30 bg-amber/10 text-amber',
                 ]}
               >
                 {n.tag}
               </span>
               <span class="font-medium text-ink">{n.title}</span>
-              <span class="ml-auto shrink-0 text-sm text-dim">{n.date}</span>
+              <span class="ml-auto shrink-0 font-mono text-xs text-dim">{n.date}</span>
               <span
-                class="shrink-0 text-dim transition-transform duration-150 group-open:rotate-90"
+                class="shrink-0 text-dim transition-transform duration-200 group-open:rotate-90"
                 aria-hidden="true"
               >
                 ›
@@ -82,8 +101,8 @@ const notes = [
       href="https://github.com/ahwurm/localharness/commits/main"
       target="_blank"
       rel="noopener"
-      class="mt-10 inline-block text-sm text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent"
-      >Full history on GitHub ↗</a
+      class="mt-10 inline-block font-mono text-sm text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent"
+      >full history on github ↗</a
     >
   </section>
 </Base>

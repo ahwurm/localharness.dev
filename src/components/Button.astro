@@ -8,10 +8,10 @@ interface Props {
 const { href, variant = 'primary', external = false, class: className = '' } = Astro.props;
 
 const base =
-  'inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-medium transition-colors duration-150';
+  'group inline-flex min-h-11 items-center gap-2 border px-5 py-2.5 font-mono text-sm transition-colors duration-200';
 const styles = {
-  primary: 'bg-accent text-accent-ink hover:bg-accent/85',
-  outline: 'border border-edge text-ink hover:border-dim',
+  primary: 'border-accent/50 bg-accent/10 text-accent hover:border-accent hover:bg-accent/15',
+  outline: 'border-edge text-dim hover:border-accent/40 hover:text-ink',
 };
 ---
 
@@ -21,5 +21,9 @@ const styles = {
   target={external ? '_blank' : undefined}
   rel={external ? 'noopener' : undefined}
 >
+  <span
+    class="text-accent transition-transform duration-200 ease-reveal group-hover:translate-x-1"
+    aria-hidden="true">&gt;</span
+  >
   <slot />
 </a>

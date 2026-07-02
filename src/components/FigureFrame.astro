@@ -1,0 +1,18 @@
+---
+interface Props {
+  num: string;
+  caption: string;
+  class?: string;
+  bodyClass?: string;
+}
+const { num, caption, class: className = '', bodyClass = 'overflow-x-auto p-5 sm:p-8 [scrollbar-width:thin]' } = Astro.props;
+---
+
+<figure class:list={['border border-edge bg-surface/60', className]}>
+  <div class={bodyClass}>
+    <slot />
+  </div>
+  <figcaption class="border-t border-edge/70 px-5 py-2.5 font-mono text-xs text-dim">
+    <span class="text-accent/80">fig. {num}</span> — {caption}
+  </figcaption>
+</figure>

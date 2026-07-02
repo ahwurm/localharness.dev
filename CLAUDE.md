@@ -34,7 +34,15 @@ Astro 5 + Tailwind v4, static output, GitHub Pages deploy, domain `localharness.
 - No fabricated terminal output; commands only, with comment annotations.
 - No `npm install` / `pip install` copy — not published to registries. Install = clone + `uv sync`.
 - Star-count badge stays behind `SHOW_STARS = false` until repos have stars.
-- Dark theme only; one accent (terminal green); animations limited to hover transitions + one CSS fade-in.
+- Dark theme only; one accent (terminal green, used via alpha steps — `accent/10`…`accent/80` — not flat).
+- Motion system (2026-07-02 pi-uplevel redesign, supersedes the old hover-only rule): `focus-in`
+  hero entrance, `[data-reveal]` scroll reveals, and the DemoSession replay — ONE easing
+  (`--ease-reveal`), everything gated behind `prefers-reduced-motion`, and no-JS/reduced-motion
+  must always render the complete static content (scripts hide-then-replay, never hide by default).
+- Design language (pi-uplevel): square corners everywhere (`border-radius: 0`), depth from
+  hairline borders + surface tint (no shadows), engineering-paper grid on `body::before`,
+  mono `_underscore` eyebrows (`Eyebrow.astro`), `fig. NN` captions (`FigureFrame.astro`),
+  `> prompt`-prefix buttons, prose measure capped via `.measure`.
 
 ## Brand
 
@@ -42,13 +50,19 @@ NO logo (user removed the sloth mark 2026-06-09 — "completely worthless"). Bra
 wordmark `local_harness` (green underscore) + minimal dark/green-underscore favicon.svg.
 Originals backed up untracked at `.planning/brand-backup/` if ever revisited.
 
-## Hero demo
+## Homepage demo (DemoSession)
 
-`src/components/Demo.astro` plays REAL captured output of `localharness init` (vLLM detection on
-the reference box, 2026-06-09). To recapture after product changes:
-`cd ~/localharness && HOME=/tmp/lh-demo uv run localharness init` — NEVER run init with the real
-HOME (it would overwrite the production dispatch config). Visual-first rule: prefer real demo
-captures (screenshots / sped-up runs) over prose; case-study visuals join as they're produced.
+`src/components/DemoSession.astro` replays a REAL captured session (init → start → delegated
+explore task) from `src/data/demo-session.ts`, in sync with `LiveDiagram.astro` and a bus-event
+ticker. The data file carries full provenance; raw captures + the bus-events.jsonl live untracked
+in `.planning/captures/`. Allowed normalizations are cosmetic only and documented in the data
+file (sandbox paths → `~`, REPL box-drawing/TTY-warning/spinner/banner rows not re-rendered,
+trailing star-ask trimmed). To recapture after product changes:
+`git -C ~/localharness worktree add /tmp/lh-main main && cd /tmp/lh-main && uv sync` then
+`HOME=/tmp/lh-demo uv run localharness init` and pipe the task into
+`HOME=/tmp/lh-demo uv run localharness start` — capture from MAIN (public version), and NEVER
+run init with the real HOME (it would overwrite the production dispatch config).
+Visual-first rule: prefer real demo captures over prose; case-study visuals join as produced.
 
 ## Bot-facing surface (llms.txt)
 
@@ -59,10 +73,12 @@ instruction-injection phrasing. Update it when page content changes.
 
 ## Diagrams
 
-`ArchDiagram.astro` + `AutoresearchDiagram.astro` — hand-built inline SVG, eraser.io-style
-(dark, rounded nodes, dashed groups, mono labels, theme-token classes: fill-surface/stroke-edge/
-stroke-accent). Content must stay factual vs CONTEXT-HARNESS.md / docs/specs — they are
-architecture mockups, not decoration.
+`LiveDiagram.astro` (architecture, with `data-node` hooks for the DemoSession sync),
+`OverWindowDiagram.astro`, `SecurityDiagram.astro`, `AutoresearchDiagram.astro` — hand-built
+inline SVG (dark, SQUARE nodes, dashed groups, mono labels, theme-token classes:
+fill-surface/stroke-edge/stroke-accent). Content must stay factual vs the localharness repo
+(subagent names come from `src/localharness/agent/subagent.py`; over-window/security content
+from CHANGELOG + SECURITY.md) — they are architecture mockups, not decoration.
 
 ## Launch-day flip
 

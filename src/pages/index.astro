@@ -3,11 +3,19 @@ import Base from '../layouts/Base.astro';
 import Button from '../components/Button.astro';
 import Card from '../components/Card.astro';
 import CodeBlock from '../components/CodeBlock.astro';
-import ArchDiagram from '../components/ArchDiagram.astro';
+import Eyebrow from '../components/Eyebrow.astro';
+import FigureFrame from '../components/FigureFrame.astro';
+import DemoSession from '../components/DemoSession.astro';
+import AgentYamlTabs from '../components/AgentYamlTabs.astro';
+import OverWindowDiagram from '../components/OverWindowDiagram.astro';
+import SecurityDiagram from '../components/SecurityDiagram.astro';
 import AutoresearchDiagram from '../components/AutoresearchDiagram.astro';
 import Terminal from '../components/Terminal.astro';
 
-const install = 'git clone https://github.com/ahwurm/localharness && cd localharness && uv sync';
+const install = `git clone https://github.com/ahwurm/localharness
+cd localharness && uv sync
+uv run localharness init
+uv run localharness start`;
 
 const jsonLd = [
   {
@@ -37,122 +45,223 @@ const jsonLd = [
 
 <Base
   title="LocalHarness — AI agents on your own hardware"
-  description="Open-source agent harness for local LLMs — the agent layer on top of vLLM, Ollama, or llama.cpp, not an inference engine. Same workflow, same output, much lower cost."
+  description="Open-source agent harness for local LLMs — the agent layer on top of vLLM, Ollama, LM Studio, or llama.cpp, not an inference engine. Same workflow, same output, much lower cost."
   jsonLd={jsonLd}
 >
   <!-- Hero -->
-  <section class="container-site rise-in flex flex-col items-center pb-20 pt-20 text-center sm:pt-28">
-    <h1 class="max-w-3xl text-balance text-[clamp(2.25rem,5vw,3.5rem)] font-semibold leading-[1.1] tracking-tight">
-      AI agents on your <span class="whitespace-nowrap text-accent">own hardware</span>.
-    </h1>
-    <p class="mt-4 max-w-2xl text-dim">
-      Open-source agent harness for local LLMs — the agent layer on top of vLLM, Ollama, or llama.cpp.
-    </p>
-    <img
-      src="/demos/localharness-banner.png"
-      alt="localharness startup banner — the local_harness wordmark, version, detected model, and prompt"
-      class="mt-8 w-full max-w-2xl"
-    />
-    <CodeBlock code={install} label="install" class="mt-4 w-full max-w-2xl text-left [&_pre]:text-[13px]" />
-    <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
-      <Button href="https://github.com/ahwurm/localharness" external>View on GitHub ↗</Button>
-      <Button href="#architecture" variant="outline">How it works</Button>
+  <section class="glow">
+    <div class="container-site flex flex-col items-center pb-16 pt-20 text-center sm:pt-28">
+      <h1
+        class="focus-in max-w-3xl text-[clamp(2.5rem,5.5vw,3.75rem)] font-semibold leading-[1.05] tracking-[-0.03em]"
+      >
+        AI agents on your <span class="whitespace-nowrap text-accent">own hardware</span>.
+      </h1>
+      <p class="focus-in mt-5 max-w-xl text-dim [--fi-delay:120ms]">
+        The open-source agent layer on top of vLLM, Ollama, LM Studio, or llama.cpp — not another
+        inference engine.
+      </p>
+      <CodeBlock
+        code={install}
+        label="install"
+        class="focus-in mt-9 w-full max-w-xl text-left [--fi-delay:240ms] [&_pre]:text-[13px]"
+      />
+      <div class="focus-in mt-6 flex flex-wrap items-center justify-center gap-3 [--fi-delay:360ms]">
+        <Button href="https://github.com/ahwurm/localharness" external>view on github</Button>
+        <Button href="#demo-section" variant="outline">watch it work</Button>
+      </div>
+      <p class="focus-in mt-8 font-mono text-xs tracking-[0.06em] text-dim [--fi-delay:480ms]">
+        no metering · your data stays put · always on · familiar
+      </p>
+    </div>
+  </section>
+
+  <!-- Watch it work -->
+  <section id="demo-section" class="border-t border-edge/70" data-reveal>
+    <div class="container-site py-24">
+      <Eyebrow label="watch it work" />
+      <h2 class="mt-3 text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
+        A real session, replayed.
+      </h2>
+      <p class="measure mt-3 text-dim">
+        Delegation, isolation, the trace — the parts you usually take on faith, on screen. The
+        agent hands the task to a read-only subagent; the bus records every step.
+      </p>
+      <div class="mt-10">
+        <DemoSession />
+      </div>
+      <p class="mt-4 font-mono text-xs text-dim">
+        <span class="text-accent/80">fig. 01</span> — captured 2026-07-02 on the reference box, vLLM
+        serving qwen3.6-27b. Replayed from its own bus trace; paths shortened for display.
+      </p>
     </div>
   </section>
 
   <!-- Tradeoff band -->
-  <section class="border-y border-edge bg-surface/50" aria-label="The tradeoff">
+  <section class="border-y border-edge/70 bg-surface/40" aria-label="The tradeoff" data-reveal>
     <div class="container-site grid gap-10 py-16 sm:grid-cols-3 sm:gap-6">
       <div>
-        <h2 class="text-xl font-semibold tracking-tight">Same workflow, same output</h2>
-        <p class="mt-2 text-sm text-dim">The jobs you already run — unchanged.</p>
+        <p class="font-mono text-xs text-accent/80">01</p>
+        <h2 class="mt-2 text-lg font-semibold tracking-tight">Same workflow, same output</h2>
+        <p class="mt-1.5 text-sm text-dim">The jobs you already run — unchanged.</p>
       </div>
       <div>
-        <h2 class="text-xl font-semibold tracking-tight">It takes longer</h2>
-        <p class="mt-2 text-sm text-dim">Local models are slower. That's the tradeoff.</p>
+        <p class="font-mono text-xs text-accent/80">02</p>
+        <h2 class="mt-2 text-lg font-semibold tracking-tight">It takes longer</h2>
+        <p class="mt-1.5 text-sm text-dim">Local models are slower. That's the tradeoff.</p>
       </div>
       <div>
-        <h2 class="text-xl font-semibold tracking-tight">Much lower cost</h2>
-        <p class="mt-2 text-sm text-dim">Your hardware. No API meter.</p>
+        <p class="font-mono text-xs text-accent/80">03</p>
+        <h2 class="mt-2 text-lg font-semibold tracking-tight">Much lower cost</h2>
+        <p class="mt-1.5 text-sm text-dim">Your hardware. No API meter.</p>
       </div>
     </div>
   </section>
 
-  <!-- Architecture -->
-  <section id="architecture" class="border-t border-edge bg-surface/50">
+  <!-- Agents are YAML -->
+  <section id="yaml" data-reveal>
     <div class="container-site py-24">
-      <h2 class="text-3xl font-semibold tracking-tight">Architecture</h2>
-      <p class="mt-3 max-w-2xl text-dim">
-        A thin orchestrator routes. Subagents isolate. Everything leaves a trace.
+      <Eyebrow label="configuration" />
+      <h2 class="mt-3 text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
+        The whole agent is a file you can read.
+      </h2>
+      <p class="measure mt-3 text-dim">
+        Prompts, tools, permissions, memory — YAML, not Python. Deny-first by construction: an
+        agent can narrow its policy, never broaden it.
       </p>
-      <div class="mt-10 grid items-center gap-10 lg:grid-cols-[3fr_2fr] lg:gap-14">
-        <ArchDiagram />
-        <ul class="divide-y divide-edge">
-          <li class="py-3.5">
-            <span class="font-medium">Thin orchestrator</span>
-            <p class="mt-1 text-sm text-dim">Routes, indexes, escalates. Agents do the work with fresh context.</p>
-          </li>
-          <li class="py-3.5">
-            <span class="font-medium">Event bus spine</span>
-            <p class="mt-1 text-sm text-dim">Every action and observation is a typed event — persisted append-only.</p>
-          </li>
-          <li class="py-3.5">
-            <span class="font-medium">One guarded loop</span>
-            <p class="mt-1 text-sm text-dim">ReAct with stuck detection, budgets, and compaction sized to the model.</p>
-          </li>
-          <li class="py-3.5">
-            <span class="font-medium">Any endpoint</span>
-            <p class="mt-1 text-sm text-dim">Provider auto-detected. Native tool calls where supported, XML where not.</p>
-          </li>
-        </ul>
+      <div class="mt-10 max-w-3xl">
+        <AgentYamlTabs />
       </div>
     </div>
   </section>
 
-  <!-- Demo -->
-  <section id="demo" class="container-site py-24">
-    <h2 class="text-3xl font-semibold tracking-tight">See it work</h2>
-    <p class="mt-3 max-w-2xl text-dim">
-      Point it at the model you're already running, and ask. It detects your endpoint, creates an agent, and works the task with live tool calls.
-    </p>
-    <img
-      src="/demos/localharness-demo.gif"
-      alt="localharness in action — detecting the local model, creating a default agent, then running a web-research task with live tool calls"
-      class="mt-8 w-full max-w-3xl rounded-lg border border-edge"
-    />
+  <!-- Over-window reading -->
+  <section id="over-window" class="border-t border-edge/70" data-reveal>
+    <div class="container-site py-24">
+      <Eyebrow label="over-window" />
+      <h2 class="mt-3 max-w-2xl text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
+        Reads documents bigger than the context window. Losslessly.
+      </h2>
+      <p class="measure mt-3 text-dim">
+        Long filings, contracts, reports: split structure-aware, every section actually read —
+        nothing sampled, nothing truncated. Every number in the answer traces back to the section
+        it came from.
+      </p>
+      <FigureFrame num="02" caption="the over-window read path" class="mt-10 max-w-3xl">
+        <OverWindowDiagram />
+      </FigureFrame>
+    </div>
+  </section>
+
+  <!-- Structural security -->
+  <section id="security" class="border-t border-edge/70" data-reveal>
+    <div class="container-site py-24">
+      <Eyebrow label="security" />
+      <h2 class="mt-3 max-w-2xl text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
+        Prompt injection, answered structurally.
+      </h2>
+      <p class="measure mt-3 text-dim">
+        Untrusted web content never shares an agent with <code class="font-mono text-[0.9em] text-ink">bash</code>,
+        <code class="font-mono text-[0.9em] text-ink">write</code>, or <code class="font-mono text-[0.9em] text-ink">edit</code>.
+        The boundary is the agent topology — enforced where tools resolve, failing closed. Not left
+        to the model to refuse.
+      </p>
+      <FigureFrame num="03" caption="the capability floor" class="mt-10 max-w-3xl">
+        <SecurityDiagram />
+      </FigureFrame>
+      <p class="mt-4 text-sm text-dim">
+        The full threat model is written down plainly in
+        <a
+          href="https://github.com/ahwurm/localharness/blob/main/SECURITY.md"
+          target="_blank"
+          rel="noopener"
+          class="text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent"
+          >SECURITY.md</a
+        >.
+      </p>
+    </div>
   </section>
 
   <!-- Autoresearch -->
-  <section id="autoresearch" class="container-site py-24">
-    <h2 class="text-3xl font-semibold tracking-tight">Autoresearch</h2>
-    <p class="mt-3 max-w-2xl text-dim">
-      The harness improves itself — under a gate. Changes ship only if the bench says so.
-    </p>
-    <div class="mt-10 grid items-center gap-10 lg:grid-cols-[3fr_2fr] lg:gap-14">
-      <AutoresearchDiagram />
-      <Terminal
-        lines={[
-          { cmd: 'uv run localharness autoresearch run', comment: 'one iteration' },
-          { cmd: 'uv run localharness autoresearch review', comment: 'inspect' },
-          { cmd: 'uv run localharness autoresearch adopt', comment: 'promote' },
-          { cmd: 'uv run localharness components list', comment: 'registry' },
-        ]}
-      />
+  <section id="autoresearch" class="border-t border-edge/70" data-reveal>
+    <div class="container-site py-24">
+      <Eyebrow label="autoresearch" />
+      <h2 class="mt-3 text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
+        The harness improves itself — under a gate.
+      </h2>
+      <p class="measure mt-3 text-dim">
+        One mutation at a time, benched against baseline, adopted only if the stats say so. A
+        sealed holdout never runs while proposing.
+      </p>
+      <div class="mt-10 grid items-start gap-6 lg:grid-cols-[3fr_2fr]">
+        <FigureFrame num="04" caption="propose → bench → gate → adopt">
+          <AutoresearchDiagram />
+        </FigureFrame>
+        <Terminal
+          title="~/localharness"
+          lines={[
+            { cmd: 'uv run localharness autoresearch run', comment: 'one iteration' },
+            { cmd: 'uv run localharness autoresearch review', comment: 'inspect' },
+            { cmd: 'uv run localharness autoresearch adopt', comment: 'promote' },
+            { cmd: 'uv run localharness components list', comment: 'registry' },
+          ]}
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- What it isn't -->
+  <section id="scope" class="border-t border-edge/70" data-reveal>
+    <div class="container-site py-24">
+      <Eyebrow label="scope" />
+      <h2 class="mt-3 text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
+        What it isn't.
+      </h2>
+      <div class="mt-10 grid gap-4 sm:grid-cols-2">
+        <Card>
+          <h3 class="font-mono text-sm text-ink">not an inference engine</h3>
+          <p class="mt-2 text-sm text-dim">
+            Bring your own: vLLM, Ollama, LM Studio, llama.cpp. LocalHarness is the layer above.
+          </p>
+        </Card>
+        <Card>
+          <h3 class="font-mono text-sm text-ink">not a cloud service</h3>
+          <p class="mt-2 text-sm text-dim">
+            Zero telemetry, zero external calls. MIT-licensed, on your box, yours.
+          </p>
+        </Card>
+        <Card>
+          <h3 class="font-mono text-sm text-ink">not sandboxed yet</h3>
+          <p class="mt-2 text-sm text-dim">
+            Deny-first tool permissions today; OS-level sandboxing is on the roadmap — SECURITY.md
+            says so plainly.
+          </p>
+        </Card>
+        <Card>
+          <h3 class="font-mono text-sm text-ink">not 1.0</h3>
+          <p class="mt-2 text-sm text-dim">
+            Early, and honest about it. The changelog records what actually shipped — see
+            <a href="/devnotes/" class="text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent">devnotes</a>.
+          </p>
+        </Card>
+      </div>
     </div>
   </section>
 
   <!-- LocalShift cross-promo -->
-  <section class="container-site pb-24">
-    <Card class="border-l-2 border-l-accent p-8 sm:p-10">
-      <h2 class="text-2xl font-semibold tracking-tight">
-        local<span class="text-accent">_</span>shift
-      </h2>
-      <p class="mt-3 max-w-2xl text-dim">
-        Migrate frontier-AI workloads to local LLMs — proven per workload, not assumed.
-      </p>
-      <div class="mt-6">
-        <Button href="/localshift/" variant="outline">How it works</Button>
-      </div>
-    </Card>
+  <section class="border-t border-edge/70" data-reveal>
+    <div class="container-site py-20">
+      <Card class="border-l-2 border-l-accent p-8 sm:p-10">
+        <h2 class="text-2xl font-semibold tracking-tight">
+          local<span class="text-accent">_</span>shift
+        </h2>
+        <p class="measure mt-3 text-dim">
+          Running frontier workloads on a meter? Migrate them — replicated locally, judged blind
+          against frontier, cut over only if they pass.
+        </p>
+        <div class="mt-6">
+          <Button href="/localshift/" variant="outline">how it works</Button>
+        </div>
+      </Card>
+    </div>
   </section>
 </Base>

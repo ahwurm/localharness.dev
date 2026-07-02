@@ -1,21 +1,43 @@
 ---
 import Wordmark from './Wordmark.astro';
+
+const path = Astro.url.pathname;
+const links = [
+  { href: '/localshift/', label: 'localshift' },
+  { href: '/devnotes/', label: 'devnotes' },
+];
+const isActive = (href: string) => path === href || path === href.replace(/\/$/, '');
 ---
 
-<header class="sticky top-0 z-50 border-b border-edge bg-bg/80 backdrop-blur">
+<header class="sticky top-0 z-50 border-b border-edge/70 bg-bg/80 backdrop-blur">
   <nav class="container-site flex h-14 items-center justify-between" aria-label="Main">
-    <a href="/" class="text-[15px] text-ink hover:text-accent transition-colors duration-150 sm:text-base">
+    <a
+      href="/"
+      class="text-[15px] text-ink transition-colors duration-200 hover:text-accent sm:text-base"
+    >
       <Wordmark />
     </a>
-    <div class="flex items-center gap-4 text-sm text-dim sm:gap-7">
-      <a href="/" class="hidden hover:text-ink transition-colors duration-150 sm:inline">LocalHarness</a>
-      <a href="/localshift/" class="hover:text-ink transition-colors duration-150">LocalShift</a>
-      <a href="/devnotes/" class="hover:text-ink transition-colors duration-150">Devnotes</a>
+    <div class="flex items-center gap-4 font-mono text-xs text-dim sm:gap-8 sm:text-[13px]">
+      {
+        links.map((l) => (
+          <a
+            href={l.href}
+            aria-current={isActive(l.href) ? 'page' : undefined}
+            class:list={[
+              'transition-colors duration-200 hover:text-ink',
+              isActive(l.href) &&
+                'text-ink underline decoration-accent/70 decoration-2 underline-offset-8',
+            ]}
+          >
+            {l.label}
+          </a>
+        ))
+      }
       <a
         href="https://github.com/ahwurm/localharness"
-        class="hover:text-ink transition-colors duration-150"
+        class="transition-colors duration-200 hover:text-ink"
         target="_blank"
-        rel="noopener">GitHub&nbsp;↗</a
+        rel="noopener">github&nbsp;↗</a
       >
     </div>
   </nav>

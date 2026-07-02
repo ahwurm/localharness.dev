@@ -30,8 +30,9 @@ calling.
 A parent delegates to specialist subagents, each sandboxed to its own toolset and a fresh
 context window: explore (read-only), web-researcher, data-analyst, frontend-designer, and a
 cruncher that reads documents larger than the context window losslessly — every section read,
-every figure traceable to its source. Web research can run a blind search-verifier that
-re-fetches each claimed source and writes a verdict ledger. Define your own subagents in YAML.
+every figure traceable to its source, and untraceable figures surfaced as a warning rather than
+silently rewritten. Web research can run a blind search-verifier that re-fetches each claimed
+source and writes a verdict ledger. Define your own subagents in YAML.
 
 ### Security
 
@@ -58,9 +59,11 @@ while proposing. CLI: `localharness autoresearch run | review | adopt`,
   recurring frontier-AI workloads — scheduled jobs, skills, bare prompts — to local LLMs. MIT.
 - Install (inside Claude Code): `/plugin marketplace add ahwurm/localshift` then
   `/plugin install localshift@localshift`
-- Pipeline: explore → design-eval → build → replicate → evaluate, ending in blind 1v1
-  local-vs-frontier judging
+- Pipeline: explore → design-eval → build → replicate → evaluate → shift (fast or slow
+  cutover) — evaluation is blind 1v1 local-vs-frontier judging; an anytime savings skill
+  reads receipts from the run ledger
 - Verdicts: migrate / conditional / keep-frontier — keep-frontier is a first-class honest outcome
+- Not a router: the cutover is no-fallback — frontier calls are deleted, not proxied
 - Migrated jobs run claude-free on the LocalHarness runtime in cron
 - Relevant context: from June 15, 2026, headless `claude -p` / Agent SDK usage draws from a
   metered monthly credit pool while interactive Claude Code stays on-plan — see

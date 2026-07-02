@@ -8,12 +8,16 @@
 
   --color-bg: oklch(17% 0.012 265);
   --color-surface: oklch(20.5% 0.014 265);
+  --color-surface-2: oklch(23% 0.015 265);
   --color-edge: oklch(29% 0.016 265);
   --color-ink: oklch(94% 0.005 265);
   --color-dim: oklch(70% 0.012 265);
   --color-accent: oklch(80% 0.17 152);
   --color-accent-ink: oklch(22% 0.06 152);
   --color-amber: oklch(82% 0.15 85);
+
+  /* one easing everywhere — motion feels authored, not defaulted */
+  --ease-reveal: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @layer base {
@@ -26,11 +30,55 @@
   }
 
   body {
-    @apply font-sans text-[17px] leading-relaxed;
+    @apply font-sans text-[1.0625rem] leading-[1.6];
+  }
+
+  /* engineering-paper grid — barely there (depth from tint, never shadow) */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+      linear-gradient(to right, --alpha(var(--color-accent) / 2.5%) 1px, transparent 1px),
+      linear-gradient(to bottom, --alpha(var(--color-accent) / 2.5%) 1px, transparent 1px),
+      linear-gradient(to right, --alpha(var(--color-ink) / 1.5%) 1px, transparent 1px),
+      linear-gradient(to bottom, --alpha(var(--color-ink) / 1.5%) 1px, transparent 1px);
+    background-size:
+      96px 96px,
+      96px 96px,
+      24px 24px,
+      24px 24px;
+  }
+
+  /* soft vignette so the grid recedes at the edges */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(120% 90% at 50% 12%, transparent 55%, oklch(0% 0 0 / 22%) 100%);
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
   }
 
   ::selection {
     @apply bg-accent text-accent-ink;
+  }
+
+  :focus-visible {
+    outline: 2px solid --alpha(var(--color-accent) / 70%);
+    outline-offset: 2px;
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -41,70 +89,69 @@
 }
 
 @utility container-site {
-  @apply mx-auto max-w-[1200px] px-6;
+  @apply mx-auto w-full max-w-[1200px] px-6;
 }
 
-.prose-article {
-  & > p {
-    margin-block: 1.1rem;
-    color: --alpha(var(--color-ink) / 88%);
-  }
-  & h2 {
-    margin-top: 2.5rem;
-    margin-bottom: 0.75rem;
-    font-size: 1.5rem;
-    font-weight: 600;
-    letter-spacing: -0.015em;
-  }
-  & a {
-    color: var(--color-accent);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    text-decoration-color: --alpha(var(--color-accent) / 40%);
-  }
-  & a:hover {
-    text-decoration-color: var(--color-accent);
-  }
-  & ul {
-    margin-block: 1.1rem;
-    padding-left: 1.25rem;
-    list-style: disc;
-    color: --alpha(var(--color-ink) / 88%);
-  }
-  & li {
-    margin-block: 0.45rem;
-    padding-left: 0.25rem;
-  }
-  & li::marker {
-    color: var(--color-dim);
-  }
-  & code {
-    font-family: var(--font-mono);
-    font-size: 0.85em;
-    background: var(--color-surface);
-    border: 1px solid var(--color-edge);
-    border-radius: 0.3rem;
-    padding: 0.1rem 0.35rem;
-  }
-  & strong {
-    color: var(--color-ink);
-    font-weight: 600;
-  }
+/* prose measure — text never sprawls; whitespace does the work */
+@utility measure {
+  max-width: 38rem;
 }
 
-@keyframes rise-in {
+/* section eyebrow: the wordmark's green underscore, extended into a system */
+.eyebrow {
+  @apply font-mono text-[0.8125rem] tracking-[0.08em] text-dim;
+}
+.eyebrow::before {
+  content: "_";
+  color: var(--color-accent);
+}
+
+/* hero atmosphere — one soft field of the accent, nothing else */
+.glow {
+  background: radial-gradient(56rem 22rem at 50% -6rem, --alpha(var(--color-accent) / 7%), transparent 70%);
+}
+
+/* entrance: rack focus (blur pull), staggered via --fi-delay */
+@keyframes focus-in {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    filter: blur(8px);
+    transform: translateY(6px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    filter: blur(0);
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .focus-in {
+    animation: focus-in 0.7s var(--ease-reveal) both;
+    animation-delay: var(--fi-delay, 0ms);
   }
 }
 
-.rise-in {
-  @media (prefers-reduced-motion: no-preference) {
-    animation: rise-in 0.5s ease-out both;
+/* scroll reveal — classes applied only by JS, so no-JS/reduced-motion always shows content */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal-init {
+    opacity: 0;
+    transform: translateY(12px);
+    transition:
+      opacity 0.7s var(--ease-reveal),
+      transform 0.7s var(--ease-reveal);
+  }
+  .reveal-in {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
   }
 }
