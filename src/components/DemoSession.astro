@@ -244,6 +244,7 @@ const program = lines.map((l, i) => ({
   #demo .demo-hidden {
     display: none;
   }
+  /* live-node styling covers both representations: HTML chips/boxes + SVG plate nodes */
   #demo [data-node] {
     transition:
       border-color 0.45s var(--ease-reveal),
@@ -252,6 +253,18 @@ const program = lines.map((l, i) => ({
   #demo [data-node].is-live {
     border-color: var(--color-accent);
     color: var(--color-accent);
+  }
+  #demo [data-node] rect,
+  #demo [data-node] text {
+    transition:
+      stroke 0.45s var(--ease-reveal),
+      fill 0.45s var(--ease-reveal);
+  }
+  #demo [data-node].is-live rect {
+    stroke: var(--color-accent);
+  }
+  #demo [data-node].is-live text {
+    fill: var(--color-accent);
   }
   /* flow plates: fully visible statically; during a replay they ghost, then land per step */
   @media (prefers-reduced-motion: no-preference) {
