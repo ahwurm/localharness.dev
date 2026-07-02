@@ -4,7 +4,6 @@ import Wordmark from './Wordmark.astro';
 const path = Astro.url.pathname;
 const links = [
   { href: '/architecture/', label: 'architecture' },
-  { href: '/localshift/', label: 'localshift' },
   { href: '/devnotes/', label: 'devnotes' },
 ];
 const isActive = (href: string) => path === href || path === href.replace(/\/$/, '');
@@ -26,7 +25,6 @@ const isActive = (href: string) => path === href || path === href.replace(/\/$/,
             aria-current={isActive(l.href) ? 'page' : undefined}
             class:list={[
               'transition-colors duration-200 hover:text-ink',
-              (l.href === '/localshift/' || l.href === '/devnotes/') && 'max-[419px]:hidden',
               isActive(l.href) &&
                 'text-ink underline decoration-accent/70 decoration-2 underline-offset-8',
             ]}

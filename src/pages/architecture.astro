@@ -3,7 +3,8 @@
 // sections moved content-verbatim from `/` — ids kept verbatim so /#security etc.
 // redirect by identity (script in Base.astro). Section order is decision-relevance
 // first: security/over-window → configuration → autoresearch → scope, then the
-// clone path at peak conviction, contributor cards, localshift promo last.
+// clone path at peak conviction, contributor cards. (localshift promo removed
+// 2026-07-02 night — Alex: keep localshift out of the localharness narrative.)
 // border-t on every section except the first (borders were adjacency-coupled on `/`).
 import Base from '../layouts/Base.astro';
 import Button from '../components/Button.astro';
@@ -16,7 +17,6 @@ import OverWindowDiagram from '../components/OverWindowDiagram.astro';
 import SecurityDiagram from '../components/SecurityDiagram.astro';
 import AutoresearchDiagram from '../components/AutoresearchDiagram.astro';
 import Chip from '../components/Chip.astro';
-import LocalShiftPromo from '../components/LocalShiftPromo.astro';
 import GetInvolved from '../components/GetInvolved.astro';
 
 const install = `git clone https://github.com/ahwurm/localharness
@@ -155,5 +155,4 @@ uv run localharness start`;
   </section>
 
   <GetInvolved />
-  <LocalShiftPromo />
 </Base>
