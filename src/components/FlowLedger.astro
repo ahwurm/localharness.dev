@@ -1,72 +1,101 @@
 ---
-// Mobile-legible re-expression of a plate-SVG figure (same content, zero new
-// claims) — the pattern fig 01 set: plate at sm+, ledger below sm. Each diagram
-// keeps its SVG as the source of truth and passes the same text here.
-// Row kinds: step (numbered plate) · loop (dashed, cycles/asides) · blocked
-// (amber ✗, refused paths) · note (footer line).
+// Mobile flow representation of a plate-SVG figure — n8n / flow-builder style,
+// NOT a list (Alex 2026-07-02: "the 1234 read too much like a list"): node cards
+// hang off a continuous left rail; sequence badges sit ON the wire; loop/blocked
+// rows branch off with dashed stubs; icons make the cards read as nodes.
+// Same content as each figure's SVG, zero new claims.
+// Row kinds: step (solid node) · loop (dashed branch) · blocked (amber ✕ branch)
+// · note (footer line, off the rail).
+import Icon, { type IconName } from './Icon.astro';
 export type LedgerRow = {
   kind?: 'step' | 'loop' | 'blocked' | 'note';
   n?: string | number;
+  icon?: IconName;
+  /** small dim lead-in (e.g. `you ▸ agent` on trace rows) */
+  header?: string;
   title?: string;
   text?: string;
   /** accent mono tag, right-aligned (e.g. a :skill name) */
   tag?: string;
   /** step accent override: the warning input / the payoff */
   tone?: 'amber' | 'accent';
+  /** branch indent (stub grows; rail stays put) */
+  depth?: number;
+  /** replay sync index (demo only) — rendered as data-edge */
+  edge?: number;
 };
 interface Props {
   rows: LedgerRow[];
   class?: string;
 }
 const { rows, class: className = '' } = Astro.props;
+const flowRows = rows.filter((r) => (r.kind ?? 'step') !== 'note');
+const notes = rows.filter((r) => (r.kind ?? 'step') === 'note');
+const lastFlow = flowRows[flowRows.length - 1];
 ---
 
-<ol class:list={['space-y-1', className]}>
-  {
-    rows.map((r) => {
-      const kind = r.kind ?? 'step';
-      if (kind === 'note')
+<div class:list={[className]}>
+  <ol>
+    {
+      flowRows.map((r, i) => {
+        const kind = r.kind ?? 'step';
+        const branch = kind !== 'step';
         return (
-          <li class="pt-1 font-mono text-[10px] leading-relaxed text-dim">
-            {r.text}
+          <li class="flex items-stretch" data-edge={r.edge}>
+            <!-- rail cell: continuous wire, badge on it -->
+            <div class="relative flex w-6 shrink-0 items-center justify-center self-stretch">
+              {i > 0 && <span class="absolute left-1/2 top-0 h-1/2 w-px -translate-x-1/2 bg-accent/40" aria-hidden="true" />}
+              {r !== lastFlow && <span class="absolute left-1/2 top-1/2 h-1/2 w-px -translate-x-1/2 bg-accent/40" aria-hidden="true" />}
+              {kind === 'blocked' ? (
+                <span class="relative z-10 flex size-[18px] items-center justify-center border border-amber/60 bg-bg font-mono text-[9.5px] font-semibold text-amber">✕</span>
+              ) : kind === 'loop' ? (
+                <span class="relative z-10 flex size-[18px] items-center justify-center border border-accent/50 bg-bg font-mono text-[9.5px] font-semibold text-accent">{r.n ?? '↺'}</span>
+              ) : (
+                <span class="relative z-10 flex size-[18px] items-center justify-center bg-accent font-mono text-[9.5px] font-semibold text-accent-ink">{r.n}</span>
+              )}
+            </div>
+            <!-- stub: rail → card (dashed when branching; grows with depth) -->
+            <span
+              class:list={['h-px shrink-0 self-center', kind === 'blocked' ? 'bg-amber/50' : 'bg-accent/40']}
+              style={`width:${6 + (r.depth ?? 0) * 14}px; ${branch ? 'background:none;border-top:1px dashed ' + (kind === 'blocked' ? 'color-mix(in srgb, var(--color-amber) 50%, transparent)' : 'color-mix(in srgb, var(--color-accent) 40%, transparent)') : ''}`}
+              aria-hidden="true"
+            />
+            <!-- node card -->
+            <div
+              class:list={[
+                'my-[3px] flex min-w-0 flex-1 items-center gap-2 border px-2 py-[5px]',
+                kind === 'blocked'
+                  ? 'border-dashed border-amber/40 bg-surface/40'
+                  : kind === 'loop'
+                    ? 'border-dashed border-edge/80 bg-surface/40'
+                    : 'border-edge bg-surface/70',
+              ]}
+            >
+              {r.icon && <Icon name={r.icon} class="size-3.5 shrink-0" />}
+              <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2">
+                {r.header && <span class="shrink-0 font-mono text-[9px] text-dim">{r.header}</span>}
+                {r.title && (
+                  <span
+                    class:list={[
+                      'shrink-0 font-mono text-[11px]',
+                      r.tone === 'amber' ? 'text-amber' : r.tone === 'accent' ? 'text-accent' : 'text-ink',
+                    ]}
+                  >
+                    {r.title}
+                  </span>
+                )}
+                {r.text && (
+                  <span class="min-w-0 max-w-full flex-1 truncate font-mono text-[10px] text-dim" title={r.text}>
+                    {r.text}
+                  </span>
+                )}
+              </span>
+              {r.tag && <span class="shrink-0 font-mono text-[9.5px] text-accent/80">{r.tag}</span>}
+            </div>
           </li>
         );
-      const badge =
-        kind === 'blocked' ? (
-          <span class="flex size-[18px] shrink-0 items-center justify-center border border-amber/60 font-mono text-[9.5px] font-semibold text-amber">✕</span>
-        ) : kind === 'loop' ? (
-          <span class="flex size-[18px] shrink-0 items-center justify-center border border-accent/50 font-mono text-[9.5px] font-semibold text-accent">{r.n ?? '↺'}</span>
-        ) : (
-          <span class="flex size-[18px] shrink-0 items-center justify-center bg-accent font-mono text-[9.5px] font-semibold text-accent-ink">{r.n}</span>
-        );
-      return (
-        <li class="flex min-w-0 items-center gap-2">
-          {badge}
-          <div
-            class:list={[
-              'flex min-w-0 flex-1 items-baseline gap-2 border px-2 py-[5px]',
-              kind === 'blocked'
-                ? 'border-dashed border-amber/40 bg-surface/40'
-                : kind === 'loop'
-                  ? 'border-dashed border-edge/80 bg-surface/40'
-                  : 'border-edge bg-surface/70',
-            ]}
-          >
-            {r.title && (
-              <span
-                class:list={[
-                  'shrink-0 font-mono text-[11px]',
-                  r.tone === 'amber' ? 'text-amber' : r.tone === 'accent' ? 'text-accent' : 'text-ink',
-                ]}
-              >
-                {r.title}
-              </span>
-            )}
-            {r.text && <span class="min-w-0 flex-1 truncate font-mono text-[10px] text-dim" title={r.text}>{r.text}</span>}
-            {r.tag && <span class="shrink-0 font-mono text-[9.5px] text-accent/80">{r.tag}</span>}
-          </div>
-        </li>
-      );
-    })
-  }
-</ol>
+      })
+    }
+  </ol>
+  {notes.map((r) => <p class="mt-1 pl-8 font-mono text-[10px] leading-relaxed text-dim">{r.text}</p>)}
+</div>

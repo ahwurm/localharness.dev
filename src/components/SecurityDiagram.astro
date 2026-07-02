@@ -8,10 +8,10 @@ import FlowLedger from './FlowLedger.astro';
 <FlowLedger
   class="sm:hidden"
   rows={[
-    { n: 1, title: 'untrusted content', text: 'the web, fetched pages', tone: 'amber' },
-    { n: 2, title: 'web-researcher', text: 'quarantine — web tools only, no bash · write · edit' },
-    { n: 3, title: 'your agent', text: 'structured summary in — host tools stay clean' },
-    { kind: 'blocked', title: 'bash · write · edit', text: 'host-mutating tools — no path from untrusted content' },
+    { n: 1, icon: 'globe', title: 'untrusted content', text: 'the web, fetched pages', tone: 'amber' },
+    { n: 2, icon: 'search', title: 'web-researcher', text: 'quarantine — web tools only, no bash · write · edit' },
+    { n: 3, icon: 'agent', title: 'your agent', text: 'structured summary in — host tools stay clean' },
+    { kind: 'blocked', icon: 'shield', title: 'bash · write · edit', text: 'host-mutating tools — no path from untrusted content' },
     { kind: 'note', text: 'refused where tools are resolved — fails closed, not left to the model' },
   ]}
 />

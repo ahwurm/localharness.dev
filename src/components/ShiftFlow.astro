@@ -9,12 +9,12 @@ import FlowLedger from './FlowLedger.astro';
 <FlowLedger
   class="sm:hidden"
   rows={[
-    { n: 1, title: 'explore', text: 'the workload', tag: ':explore' },
-    { n: 2, title: 'design', text: 'the eval', tag: ':design-eval' },
-    { n: 3, title: 'build', text: 'task + checks', tag: ':build' },
-    { n: 4, title: 'replicate', text: 'runs local', tag: ':replicate' },
-    { n: 5, title: 'evaluate', text: 'blind 1v1', tag: ':evaluate' },
-    { n: 6, title: 'cut over', text: 'no fallback', tag: ':shift' },
+    { n: 1, icon: 'search', title: 'explore', text: 'the workload', tag: ':explore' },
+    { n: 2, icon: 'studio', title: 'design', text: 'the eval', tag: ':design-eval' },
+    { n: 3, icon: 'box', title: 'build', text: 'task + checks', tag: ':build' },
+    { n: 4, icon: 'server', title: 'replicate', text: 'runs local', tag: ':replicate' },
+    { n: 5, icon: 'gauge', title: 'evaluate', text: 'blind 1v1', tag: ':evaluate' },
+    { n: 6, icon: 'cloud-off', title: 'cut over', text: 'no fallback', tag: ':shift' },
     { kind: 'note', text: 'claude code drives 1–3 + judging · 4 + the migrated job run claude-free in cron' },
     { kind: 'note', text: 'every run → runs/ledger.jsonl — the receipts /localshift:savings reads' },
   ]}

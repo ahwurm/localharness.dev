@@ -7,12 +7,12 @@ import FlowLedger from './FlowLedger.astro';
 <FlowLedger
   class="sm:hidden"
   rows={[
-    { n: 1, title: 'propose', text: 'one mutation' },
-    { n: 2, title: 'bench', text: 'train scenarios' },
-    { n: 3, title: 'gate', text: 'stats vs baseline', tone: 'accent' },
-    { n: 4, title: 'adopt', text: 'promote to config' },
-    { kind: 'loop', title: 'mutation archive', text: 'pareto sampling → next propose' },
-    { kind: 'loop', n: '⊘', title: 'sealed holdout', text: 'never run while proposing — final check only' },
+    { n: 1, icon: 'studio', title: 'propose', text: 'one mutation' },
+    { n: 2, icon: 'gauge', title: 'bench', text: 'train scenarios' },
+    { n: 3, icon: 'shield', title: 'gate', text: 'stats vs baseline', tone: 'accent' },
+    { n: 4, icon: 'repeat', title: 'adopt', text: 'promote to config' },
+    { kind: 'loop', icon: 'box', title: 'mutation archive', text: 'pareto sampling → next propose' },
+    { kind: 'loop', n: '⊘', icon: 'clock', title: 'sealed holdout', text: 'never run while proposing — final check only' },
   ]}
 />
 

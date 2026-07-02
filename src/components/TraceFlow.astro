@@ -8,19 +8,30 @@
 //
 // Two representations, one sync contract:
 //   sm+  → the 2D plate (inline SVG below)
-//   <sm  → the message ledger (readable plates; SVG text would microfiche at 390)
+//   <sm  → the node-wire rail (FlowLedger; SVG text would microfiche at 390)
 // Both carry the SAME data-node keys and data-edge indices 0…8 (flow[] in
 // demo-session.ts is the shared source for hop content), so DemoSession's
 // replay drives whichever is visible. Without JS (or reduced motion) the
 // complete flow renders statically.
 import Icon from './Icon.astro';
+import FlowLedger from './FlowLedger.astro';
 import { actors, flow } from '../data/demo-session';
 
-// "web-researcher" → ["web-", "researcher"]: prefix hidden below sm to fit 390px
-const split = (name: string) => {
+// "web-researcher" → "researcher": short names for the rail (it only renders below sm)
+const short = (name: string) => {
   const dash = name.indexOf('-');
-  return dash > 0 ? [name.slice(0, dash + 1), name.slice(dash + 1)] : ['', name];
+  return dash > 0 ? name.slice(dash + 1) : name;
 };
+const iconOf = (name: string) => actors.find((a) => a.label === name)?.icon;
+const railRows = flow.map((h, i) => ({
+  kind: h.kind === 'ret' ? ('loop' as const) : ('step' as const),
+  n: i + 1,
+  icon: iconOf(h.from),
+  header: `${short(h.from)} ▸ ${short(h.to)}`,
+  text: h.text,
+  depth: h.depth,
+  edge: i,
+}));
 ---
 
 <figure
@@ -144,64 +155,26 @@ const split = (name: string) => {
     </svg>
   </div>
 
-  <!-- <sm: message ledger (the plate's text would be illegible this small) -->
+  <!-- <sm: node-wire rail (the plate's text would be illegible this small) -->
   <div class="sm:hidden" aria-hidden="true">
     <div class="flex items-center">
       {
-        actors.map((a, i) => {
-          const [pre, rest] = split(a.label);
-          return (
-            <>
-              {i > 0 && <span class="h-px min-w-1.5 flex-1 bg-edge" />}
-              <span
-                data-node={a.key}
-                class="tf-chip inline-flex items-center gap-1 border border-edge bg-surface/70 px-1.5 py-1.5 font-mono text-[9px] text-ink"
-              >
-                <Icon name={a.icon} class="size-3" />
-                <span class="tf-chip-label">{pre && <span class="hidden sm:inline">{pre}</span>}{rest}</span>
-              </span>
-            </>
-          );
-        })
+        actors.map((a, i) => (
+          <>
+            {i > 0 && <span class="h-px min-w-1.5 flex-1 bg-edge" />}
+            <span
+              data-node={a.key}
+              class="tf-chip inline-flex items-center gap-1 border border-edge bg-surface/70 px-1.5 py-1.5 font-mono text-[9px] text-ink"
+            >
+              <Icon name={a.icon} class="size-3" />
+              <span class="tf-chip-label">{short(a.label)}</span>
+            </span>
+          </>
+        ))
       }
     </div>
 
-    <ol class="mt-3 space-y-1">
-      {
-        flow.map((h, i) => (
-          <li
-            data-edge={i}
-            class="flex min-w-0 items-center gap-2"
-            style={`margin-left:${h.depth * 14}px`}
-          >
-            {h.kind === 'call' ? (
-              <span class="flex size-[18px] shrink-0 items-center justify-center bg-accent font-mono text-[9.5px] font-semibold text-accent-ink">
-                {i + 1}
-              </span>
-            ) : (
-              <span class="flex size-[18px] shrink-0 items-center justify-center border border-accent/50 font-mono text-[9.5px] font-semibold text-accent">
-                {i + 1}
-              </span>
-            )}
-            <div
-              class:list={[
-                'flex min-w-0 flex-1 items-baseline gap-2 border px-2 py-[5px]',
-                h.kind === 'call' ? 'border-edge bg-surface/70' : 'border-dashed border-edge/80 bg-surface/40',
-              ]}
-            >
-              <span class="shrink-0 font-mono text-[9.5px] text-dim">
-                {split(h.from).map((s, j) => (j === 0 && s ? <span class="hidden sm:inline">{s}</span> : s))}
-                <span class="text-accent/70">▸</span>
-                {split(h.to).map((s, j) => (j === 0 && s ? <span class="hidden sm:inline">{s}</span> : s))}
-              </span>
-              <span class:list={['truncate font-mono text-[11px]', h.kind === 'call' ? 'text-ink' : 'text-dim']} title={h.text}>
-                {h.text}
-              </span>
-            </div>
-          </li>
-        ))
-      }
-    </ol>
+    <FlowLedger class="mt-3" rows={railRows} />
     <div class="mt-3 font-mono text-[10px] text-dim">solid → call · dashed → return</div>
   </div>
 </figure>
