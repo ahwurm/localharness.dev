@@ -1,40 +1,24 @@
 import { chromium } from 'playwright';
-import { mkdirSync } from 'node:fs';
+import { mkdirSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 const root = resolve(import.meta.dirname, '../..');
 const font = (pkg, file) => `file://${root}/node_modules/@fontsource-variable/${pkg}/files/${file}`;
+const dataUri = (path) => `data:image/png;base64,${readFileSync(`${root}/${path}`).toString('base64')}`;
 
 const cards = [
   {
     name: 'localharness',
-    brand: ['local', 'harness'],
-    tagline: 'AI agents on your own hardware.',
+    banner: dataUri('public/demos/localharness-banner.png'),
   },
   {
     name: 'localshift',
     brand: ['local', 'shift'],
     tagline: 'Same workflow. Same output. Much lower cost.',
   },
-  {
-    name: 'blog-flat-rate',
-    brand: ['local', 'harness'],
-    tagline: 'Flat-rate automation ends June 15.',
-  },
-  {
-    name: 'blog-harness',
-    brand: ['local', 'harness'],
-    tagline: 'The harness, not the model.',
-  },
-  {
-    name: 'blog-local-frontier',
-    brand: ['local', 'harness'],
-    tagline: 'Local is not small frontier.',
-  },
 ];
 
-const html = (c) => `<!doctype html>
-<html><head><style>
+const head = `<style>
   @font-face {
     font-family: 'Geist';
     src: url('${font('geist', 'geist-latin-wght-normal.woff2')}') format('woff2-variations');
@@ -49,17 +33,30 @@ const html = (c) => `<!doctype html>
   body {
     width: 1200px; height: 630px;
     background: #15161b;
-    display: flex; flex-direction: column; justify-content: center;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
     padding: 0 96px; box-sizing: border-box;
     font-family: 'Geist', sans-serif;
     position: relative; overflow: hidden;
   }
-  .brand { font-family: 'Geist Mono', monospace; font-weight: 600; font-size: 104px; letter-spacing: -0.03em; color: #eeeff2; }
+  .brand { font-family: 'Geist Mono', monospace; font-weight: 600; font-size: 104px; letter-spacing: -0.03em; color: #eeeff2; align-self: flex-start; }
   .brand .u { color: #5ee9a4; }
-  .tagline { margin-top: 26px; font-size: 40px; font-weight: 500; color: #c7cad2; letter-spacing: -0.01em; }
-  .domain { position: absolute; bottom: 56px; left: 96px; font-family: 'Geist Mono', monospace; font-size: 26px; color: #5ee9a4; }
-</style></head>
+  .tagline { margin-top: 26px; font-size: 40px; font-weight: 500; color: #c7cad2; letter-spacing: -0.01em; align-self: flex-start; }
+  .term { height: 504px; width: auto; border-radius: 16px; }
+  .domain { font-family: 'Geist Mono', monospace; font-size: 26px; color: #5ee9a4; }
+  .term + .domain { margin-top: 26px; }
+  .wordmark .domain { position: absolute; bottom: 56px; left: 96px; }
+</style>`;
+
+// Banner cards frame the real terminal startup banner; wordmark cards render the text logo.
+const html = (c) =>
+  c.banner
+    ? `<!doctype html><html><head>${head}</head>
 <body>
+  <img class="term" src="${c.banner}" />
+  <div class="domain">localharness.dev</div>
+</body></html>`
+    : `<!doctype html><html><head>${head}</head>
+<body class="wordmark">
   <div class="brand">${c.brand[0]}<span class="u">_</span>${c.brand[1]}</div>
   <div class="tagline">${c.tagline}</div>
   <div class="domain">localharness.dev</div>
