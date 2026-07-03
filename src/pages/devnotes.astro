@@ -7,6 +7,27 @@ import Eyebrow from '../components/Eyebrow.astro';
 // to a commit or CHANGELOG entry in github.com/ahwurm/localharness.
 const releases = [
   {
+    v: 'v0.5.3',
+    date: 'Jul 2, 2026',
+    entries: [
+      {
+        tag: 'Changed',
+        title: 'Built-in subagents: quarantined or read-only, no exceptions',
+        body: 'Two shell-holding specialist roles left the default roster after a live quality pass — one hung on an undeclared dependency on its first run, the other worked but had no business holding a shell by default. Both remain as documented opt-in examples. What ships now is exactly the set whose fences the security model can vouch for. (Released ahead of the in-progress memory milestone, which keeps the number below.)',
+      },
+      {
+        tag: 'Fixed',
+        title: 'Memory search survives real-world queries',
+        body: 'Hyphenated terms, tickers, and slashes used to leak into the search syntax and error out. Query text is now quoted term-by-term, so punctuation is content, never an operator.',
+      },
+      {
+        tag: 'Fixed',
+        title: 'Instant answers end as answers',
+        body: 'A question the model could answer without tools sometimes ended on a self-referential note instead of the answer. The loop now tells the model only its last reply is shown, and unchanged answers are confirmed with a sentinel the summary resolves back to the real text.',
+      },
+    ],
+  },
+  {
     v: 'v0.5.2',
     date: 'Jul 2, 2026',
     entries: [

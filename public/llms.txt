@@ -30,11 +30,13 @@ calling.
 ### Subagents and verification
 
 A parent delegates to specialist subagents, each sandboxed to its own toolset and a fresh
-context window: explore (read-only), web-researcher, data-analyst, frontend-designer, and a
-cruncher that reads documents larger than the context window losslessly — every section read,
-every figure traceable to its source, and untraceable figures surfaced as a warning rather than
-silently rewritten. Web research can run a blind search-verifier that re-fetches each claimed
-source and writes a verdict ledger. Define your own subagents in YAML.
+context window: explore (read-only), web-researcher (web-quarantined), and a cruncher that
+reads documents larger than the context window losslessly — every section read, every figure
+traceable to its source, and untraceable figures surfaced as a warning rather than silently
+rewritten. Web research can run a blind search-verifier that re-fetches each claimed source
+and writes a verdict ledger. As of v0.5.3 every built-in subagent is quarantined or
+read-only; shell-holding specialist roles (data-analyst, frontend-designer) ship as
+documented opt-in examples instead. Define your own subagents in YAML.
 Over-window reading explained: https://localharness.dev/architecture/#over-window
 
 ### Security
