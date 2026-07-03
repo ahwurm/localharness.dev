@@ -239,7 +239,7 @@ const jsonLd = [
        agent quarantined-or-read-only; data-analyst + frontend-designer are opt-in
        examples since the 2026-07-03 quality investigation) -->
   <section id="agents" data-reveal>
-    <div class="container-site gap-10 py-16 sm:py-20 xl:grid xl:grid-cols-[3fr_2fr]">
+    <div class="container-site gap-10 py-16 sm:py-20 xl:grid xl:grid-cols-[3fr_2fr] xl:min-h-[47.5rem]">
       <div class="min-w-0 xl:h-0 xl:min-h-full xl:flex xl:flex-col">
         <p class="mb-2 font-mono text-xs">
           <span class="text-accent/80">fig. 04</span> <span class="text-ink">— “List the subagents that ship built in…”</span>
@@ -250,6 +250,7 @@ const jsonLd = [
           lines={d4Lines}
           tailMeter={agentsTailMeter}
           boxClass="xl:flex-1 xl:min-h-0"
+          bodyClass="xl:flex-1 xl:min-h-0"
           restAt="top"
         />
         <p class="mt-2 font-mono text-[11px] text-dim">
