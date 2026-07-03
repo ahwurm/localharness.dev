@@ -1,17 +1,23 @@
 ---
-// The technical depth page (2026-07-02 IA split, adversarially reviewed 3 rounds):
-// sections moved content-verbatim from `/` — ids kept verbatim so /#security etc.
-// redirect by identity (script in Base.astro). Section order is decision-relevance
-// first: security/over-window → configuration → autoresearch → scope, then the
-// clone path at peak conviction, contributor cards. (localshift promo removed
-// 2026-07-02 night — Alex: keep localshift out of the localharness narrative.)
-// border-t on every section except the first (borders were adjacency-coupled on `/`).
+// The engineer deep-dive (2026-07-03 rework — ARCH-REWORK-SPEC rev 3 + phase-1
+// addendum). The old 5-section pamphlet became an 8-section skeleton on the module
+// pattern: heading → plate (where one exists) → mechanism column (**name** — plain
+// clause; last point is the failure path) → receipts row. Phase 1 = EXISTING figs
+// only (Security=01 → #delegation, OverWindow=02 → #context, Autoresearch=03 →
+// #autoresearch, YAML tabs → #yaml); the four new plates + bus-ticker + yaml 4th tab
+// + #memory content are later phases. All copy rewritten to a high-school reading
+// level; every claim verified against PUBLIC main (origin/main @ e885d0b / v0.5.3) —
+// never the local memory-branch checkout. No numbers/stats/version strings in copy.
+// Old `/#id` links still resolve: #hard-parts / #over-window are alias ids on the
+// section tops, #security sits on the SecurityDiagram wrapper (Base.astro's redirect
+// script is unchanged — these are its same-page targets).
 import Base from '../layouts/Base.astro';
 import Button from '../components/Button.astro';
 import Card from '../components/Card.astro';
 import CodeBlock from '../components/CodeBlock.astro';
 import Eyebrow from '../components/Eyebrow.astro';
 import FigureFrame from '../components/FigureFrame.astro';
+import Interstitial from '../components/Interstitial.astro';
 import AgentYamlTabs from '../components/AgentYamlTabs.astro';
 import OverWindowDiagram from '../components/OverWindowDiagram.astro';
 import SecurityDiagram from '../components/SecurityDiagram.astro';
@@ -23,90 +29,307 @@ const install = `git clone https://github.com/ahwurm/localharness
 cd localharness && uv sync
 uv run localharness init
 uv run localharness start`;
+
+// Receipt href builders — full GitHub blob/tree URLs on PUBLIC main.
+const REPO = 'https://github.com/ahwurm/localharness';
+const blob = (p: string) => `${REPO}/blob/main/${p}`;
+const tree = (p: string) => `${REPO}/tree/main/${p}`;
+
+// Top pips — same-page section index (mono _anchor links). No #memory (no DOM id).
+const pips = [
+  ['how it works', '#system'],
+  ['the agent loop', '#loop'],
+  ['delegation', '#delegation'],
+  ['past the window', '#context'],
+  ['configuration', '#yaml'],
+  ['autoresearch', '#autoresearch'],
+  ["what it isn't", '#scope'],
+  ['run it', '#run'],
+];
+
+// Mechanism points per section: [name, teaching clause]. Last point = failure path
+// (except #system, which is orientation and exempt).
+const sysPoints: [string, string][] = [
+  ['Channels', 'you reach it from a terminal or a chat app, and every conversation comes in the same way.'],
+  ['The agent loop', 'the main agent reads your task, picks a tool, looks at the result, and repeats until the job is done.'],
+  ['Tools and helpers', 'it can read files, run commands, search the web, and hand parts of the work to specialist helpers.'],
+  ['The model', 'the thinking runs on a model server you already have; the harness drives it, but it is not the model itself.'],
+  ['The event bus', 'every step is written down in order as it happens, so memory and the live view can follow along and you can replay the whole run.'],
+];
+const loopPoints: [string, string][] = [
+  ['Budgets', 'every run gets a ceiling on how many actions it may take and how long it may run, checked before each step.'],
+  ['Act-guard', 'if the model announces a plan but then stalls without doing anything, the harness nudges it once to actually take the step.'],
+  ['Self-check', 'before a plain answer goes out, the model is asked to review its own work and confirm it, or fix it.'],
+  ['Parse-repair', 'when the model’s tool request comes out garbled, the harness repairs the format and retries instead of crashing.'],
+  ['Stuck-detector', 'if it keeps repeating the same move without progress, the harness first nudges it, then stops the run rather than spin forever.'],
+];
+const delegationPoints: [string, string][] = [
+  ['Specialist helpers', 'the main agent hands a piece of the job to a helper built for it: reading files, searching the web, or checking sources.'],
+  ['A fresh window each', 'every helper starts with its own clean context, so one job’s clutter never leaks into another.'],
+  ['Hidden instructions go nowhere', 'hidden instructions can lurk inside web pages or files; that content never reaches powerful tools.'],
+  ['Untrusted content stays walled off', 'any helper that reads from the web never gets tools to run commands or edit files.'],
+  ['Fails closed', 'if it is unsure a hand-off is safe, it blocks the action and stops; it never guesses and allows it.'],
+];
+const contextPoints: [string, string][] = [
+  ['Split into sections', 'a document too big for the window is cut into sections, each read in its own fresh window.'],
+  ['Stored, not dropped', 'a big result’s full text is saved off to the side, and a short note that points to it holds its place in the window.'],
+  ['Evicted to make room', 'as the window fills, the bulkiest older results shrink down to those short notes so work can go on.'],
+  ['Pulled back on demand', 'when the agent needs an evicted result again, a single call brings the full text back.'],
+  ['Every claim traces back', 'every claim it makes points back to the exact place in the text; anything it cannot trace is flagged, not invented.'],
+  ['When room still runs out', 'nothing is silently lost: oversized results move to the store, and web pages that age out are simply re-fetched.'],
+];
+const yamlPoints: [string, string][] = [
+  ['One file, whole agent', 'an agent’s name, role, prompt, tools, and limits all live in one short text file you can read top to bottom.'],
+  ['You allow, then it can', 'permissions start closed: an agent may use only the tools you have explicitly given it.'],
+  ['Nothing extra sneaks in', 'a tool that is not on the list simply is not there for the agent to reach.'],
+  ['Rejected before it runs', 'a config that asks for something unsafe is refused when the file is checked, not discovered mid-run.'],
+];
+const autoresearchPoints: [string, string][] = [
+  ['One change at a time', 'it proposes a single tweak, never a big batch, so every result is easy to trace to its cause.'],
+  ['Tested head to head', 'the change runs the same fixed set of tasks as the version already in use.'],
+  ['Held to a real bar', 'it is kept only if it clearly beats the current version, not if it just edges ahead by luck.'],
+  ['A sealed set it never peeks at', 'a separate set of tasks stays sealed while it proposes, so it cannot quietly tune itself to the test.'],
+  ['The gate can say no', 'a change that does not clear the bar is rejected and left in the archive, never put into use.'],
+];
+
+// Receipts per section: [label, href, external?]. Demo labels carry their own _pip.
+const sysReceipts: [string, string, boolean][] = [
+  ['src/localharness/', tree('src/localharness'), true],
+  ['the design map', blob('docs/specs/00-architecture-overview.md'), true],
+  ['_zero to agent', '/#demo-startup', false],
+];
+const loopReceipts: [string, string, boolean][] = [
+  ['agent/loop.py', blob('src/localharness/agent/loop.py'), true],
+  ['_zero to agent', '/#demo-startup', false],
+];
+const delegationReceipts: [string, string, boolean][] = [
+  ['agent/subagent.py', blob('src/localharness/agent/subagent.py'), true],
+  ['tools/capabilities.py', blob('src/localharness/tools/capabilities.py'), true],
+  ['SECURITY.md', blob('SECURITY.md'), true],
+  ['_delegation, quarantined', '/#demo-research', false],
+];
+const contextReceipts: [string, string, boolean][] = [
+  ['agent/context.py', blob('src/localharness/agent/context.py'), true],
+  ['_bigger than the window', '/#demo-overwindow', false],
+];
+const yamlReceipts: [string, string, boolean][] = [
+  ['agent/subagent.py', blob('src/localharness/agent/subagent.py'), true],
+  ['tools/capabilities.py', blob('src/localharness/tools/capabilities.py'), true],
+  ['_built in', '/#agents', false],
+];
+const autoresearchReceipts: [string, string, boolean][] = [
+  ['autoresearch/experiment.py', blob('src/localharness/autoresearch/experiment.py'), true],
+  ['autoresearch/archive.py', blob('src/localharness/autoresearch/archive.py'), true],
+];
+const scopeReceipts: [string, string, boolean][] = [
+  ['SECURITY.md', blob('SECURITY.md'), true],
+  ['CHANGELOG.md', blob('CHANGELOG.md'), true],
+];
+
+// Read-the-code map (in #run): subsystem → primary source, assembled from the
+// receipts above. One row per subsystem — every section except reserved #memory.
+const codeMap: [string, string, string, string][] = [
+  ['how it works', '#system', 'src/localharness/', tree('src/localharness')],
+  ['the agent loop', '#loop', 'agent/loop.py', blob('src/localharness/agent/loop.py')],
+  ['delegation', '#delegation', 'agent/subagent.py', blob('src/localharness/agent/subagent.py')],
+  ['past the window', '#context', 'agent/context.py', blob('src/localharness/agent/context.py')],
+  ['configuration', '#yaml', 'tools/capabilities.py', blob('src/localharness/tools/capabilities.py')],
+  ['autoresearch', '#autoresearch', 'autoresearch/experiment.py', blob('src/localharness/autoresearch/experiment.py')],
+  ["what it isn't", '#scope', 'SECURITY.md', blob('SECURITY.md')],
+];
 ---
 
 <Base
   title="LocalHarness — architecture"
-  description="How LocalHarness is built: structural prompt-injection defense, reading past the context window, agents as YAML, and the autoresearch loop."
+  description="How LocalHarness works: the system shape, the agent loop, delegation fenced against prompt injection, reading past the context window, agents as YAML, and the self-improving autoresearch loop."
 >
   <h1 class="sr-only">LocalHarness — architecture</h1>
 
-  <!-- The hard parts: structural security + over-window reading -->
-  <section id="hard-parts" data-reveal>
+  <!-- #system — orientation (prose only; master system plate lands after v1.0.0) -->
+  <section id="system" data-reveal>
     <div class="container-site py-16 sm:py-20">
-      <Eyebrow label="the hard parts" />
+      <Eyebrow label="how it works" />
       <h2 class="mt-3 text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
-        Built for the hard parts of local.
+        How it works.
       </h2>
-      <div class="mt-10 grid gap-10 xl:grid-cols-2">
-        <div id="security" class="flex min-w-0 flex-col">
-          <h3 class="text-lg font-semibold tracking-tight">Prompt injection, structurally</h3>
-          <p class="mt-2 text-sm text-dim">
-            Untrusted content never shares an agent with <code class="font-mono text-ink">bash</code>,
-            <code class="font-mono text-ink">write</code>, or <code class="font-mono text-ink">edit</code>.
-            Fails closed —
-            <a
-              href="https://github.com/ahwurm/localharness/blob/main/SECURITY.md"
-              target="_blank"
-              rel="noopener"
-              class="text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent"
-              >SECURITY.md</a
-            >.
-          </p>
-          <FigureFrame num="01" caption="untrusted content, quarantined" class="mt-5 xl:mt-auto">
+      <p class="measure mt-3 text-dim">
+        Start here. The whole harness is a few parts passing work down a line — this is the shape
+        before the deep dive.
+      </p>
+      <nav class="mt-6 flex flex-wrap gap-x-6 gap-y-2 font-mono text-xs" aria-label="Sections">
+        {pips.map(([label, href]) => (
+          <a href={href} class="text-accent/80 transition-colors hover:text-accent">_{label}</a>
+        ))}
+      </nav>
+      <ol class="mt-10 max-w-3xl space-y-4 text-sm">
+        {sysPoints.map(([name, body]) => (
+          <li class="text-dim"><span class="font-semibold text-ink">{name}</span> — {body}</li>
+        ))}
+      </ol>
+      <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-xs">
+        <span class="text-dim">_deeper</span>
+        {sysReceipts.map(([label, href, ext]) => (
+          <a href={href} target={ext ? '_blank' : undefined} rel={ext ? 'noopener' : undefined} class="text-accent/80 transition-colors hover:text-accent">{label} ↗</a>
+        ))}
+      </div>
+      <p class="measure mt-4 text-xs text-dim">
+        The design map shows how it was meant to fit together — where the map and the code disagree,
+        the code wins.
+      </p>
+    </div>
+  </section>
+
+  <!-- #loop — the agent loop (prose only; lifecycle plate + bus module are later) -->
+  <section id="loop" class="border-t border-edge/70" data-reveal>
+    <div class="container-site py-16 sm:py-20">
+      <Eyebrow label="the agent loop" />
+      <h2 class="mt-3 text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
+        The agent loop.
+      </h2>
+      <p class="measure mt-3 text-dim">
+        One turn at a time, the agent reads, acts, and checks itself — with limits that keep a
+        run honest and stop it from running away.
+      </p>
+      <ol class="mt-10 max-w-3xl space-y-4 text-sm">
+        {loopPoints.map(([name, body]) => (
+          <li class="text-dim"><span class="font-semibold text-ink">{name}</span> — {body}</li>
+        ))}
+      </ol>
+      <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-xs">
+        <span class="text-dim">_deeper</span>
+        {loopReceipts.map(([label, href, ext]) => (
+          <a href={href} target={ext ? '_blank' : undefined} rel={ext ? 'noopener' : undefined} class="text-accent/80 transition-colors hover:text-accent">{label} ↗</a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- #delegation — fenced (SecurityDiagram = fig. 01; alias #hard-parts on the -->
+  <!-- section top, #security on the plate wrapper). Plate-left. -->
+  <section id="delegation" class="border-t border-edge/70" data-reveal>
+    <div id="hard-parts" class="container-site py-16 sm:py-20">
+      <Eyebrow label="delegation" />
+      <h2 class="mt-3 text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
+        Delegation, fenced.
+      </h2>
+      <p class="measure mt-3 text-dim">
+        Some work gets handed to helpers. The parts that could touch your machine are walled off
+        before they ever start.
+      </p>
+      <div class="mt-10 grid gap-10 xl:grid-cols-[3fr_2fr] xl:items-start">
+        <div id="security" class="min-w-0">
+          <FigureFrame num="01" caption="untrusted content, quarantined">
             <SecurityDiagram />
           </FigureFrame>
         </div>
-        <div id="over-window" class="flex min-w-0 flex-col">
-          <h3 class="text-lg font-semibold tracking-tight">
-            Documents bigger than the context window
-          </h3>
-          <p class="mt-2 text-sm text-dim">
-            Every section actually read. Every number traces back to its source.
-          </p>
-          <FigureFrame num="02" caption="the over-window read path" class="mt-5 xl:mt-auto">
+        <ol class="space-y-4 text-sm">
+          {delegationPoints.map(([name, body]) => (
+            <li class="text-dim"><span class="font-semibold text-ink">{name}</span> — {body}</li>
+          ))}
+        </ol>
+      </div>
+      <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-xs">
+        <span class="text-dim">_deeper</span>
+        {delegationReceipts.map(([label, href, ext]) => (
+          <a href={href} target={ext ? '_blank' : undefined} rel={ext ? 'noopener' : undefined} class="text-accent/80 transition-colors hover:text-accent">{label} ↗</a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <Interstitial icon="box" lead="The fence is what lets it scale" rest="— the same walls hold when the job grows past a single window." />
+
+  <!-- #context — bigger than the window (OverWindowDiagram = fig. 02; alias -->
+  <!-- #over-window on the section top). Plate-right. -->
+  <section id="context" data-reveal>
+    <div id="over-window" class="container-site py-16 sm:py-20">
+      <Eyebrow label="past the window" />
+      <h2 class="mt-3 text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
+        Bigger than the window.
+      </h2>
+      <p class="measure mt-3 text-dim">A context window is how much text the model can hold at once.</p>
+      <div class="mt-10 grid gap-10 xl:grid-cols-[2fr_3fr] xl:items-start">
+        <div class="min-w-0 xl:order-last">
+          <FigureFrame num="02" caption="reading what won't fit">
             <OverWindowDiagram />
           </FigureFrame>
         </div>
+        <ol class="space-y-4 text-sm">
+          {contextPoints.map(([name, body]) => (
+            <li class="text-dim"><span class="font-semibold text-ink">{name}</span> — {body}</li>
+          ))}
+        </ol>
+      </div>
+      <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-xs">
+        <span class="text-dim">_deeper</span>
+        {contextReceipts.map(([label, href, ext]) => (
+          <a href={href} target={ext ? '_blank' : undefined} rel={ext ? 'noopener' : undefined} class="text-accent/80 transition-colors hover:text-accent">{label} ↗</a>
+        ))}
       </div>
     </div>
   </section>
 
-  <!-- Agents are YAML -->
+  <!-- #yaml — configuration (AgentYamlTabs, 3 tabs unchanged; 4th tab is phase 5). -->
+  <!-- Plate-left. -->
   <section id="yaml" class="border-t border-edge/70" data-reveal>
-    <div class="container-site grid gap-10 py-16 sm:py-20 xl:grid-cols-[2fr_3fr] xl:items-center">
-      <div>
-        <Eyebrow label="configuration" />
-        <h2 class="mt-3 text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
-          The whole agent is a file you can read.
-        </h2>
-        <p class="measure mt-3 text-dim">Prompts, tools, permissions, memory — YAML, not Python.</p>
+    <div class="container-site py-16 sm:py-20">
+      <Eyebrow label="configuration" />
+      <h2 class="mt-3 text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
+        The whole agent is a file you can read.
+      </h2>
+      <p class="measure mt-3 text-dim">Prompt, tools, permissions — all in one text file you can open and read.</p>
+      <div class="mt-10 grid gap-10 xl:grid-cols-[3fr_2fr] xl:items-start">
+        <div class="min-w-0">
+          <AgentYamlTabs />
+        </div>
+        <ol class="space-y-4 text-sm">
+          {yamlPoints.map(([name, body]) => (
+            <li class="text-dim"><span class="font-semibold text-ink">{name}</span> — {body}</li>
+          ))}
+        </ol>
       </div>
-      <div class="min-w-0">
-        <AgentYamlTabs />
-      </div>
-    </div>
-  </section>
-
-  <!-- Autoresearch -->
-  <section id="autoresearch" class="border-t border-edge/70" data-reveal>
-    <div class="container-site grid gap-10 py-16 sm:py-20 xl:grid-cols-[3fr_2fr] xl:items-center">
-      <FigureFrame num="03" caption="propose → bench → gate → adopt" class="order-2 min-w-0 xl:order-1">
-        <AutoresearchDiagram />
-      </FigureFrame>
-      <div class="order-1 xl:order-2">
-        <Eyebrow label="autoresearch" />
-        <h2 class="mt-3 text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
-          The harness improves itself — under a gate.
-        </h2>
-        <p class="measure mt-3 text-dim">
-          One mutation at a time, adopted only if the stats say so.
-        </p>
+      <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-xs">
+        <span class="text-dim">_deeper</span>
+        {yamlReceipts.map(([label, href, ext]) => (
+          <a href={href} target={ext ? '_blank' : undefined} rel={ext ? 'noopener' : undefined} class="text-accent/80 transition-colors hover:text-accent">{label} ↗</a>
+        ))}
       </div>
     </div>
   </section>
 
-  <!-- What it isn't -->
+  <Interstitial icon="repeat" lead="The file is just a starting point" rest="— from here the harness can tune its own settings and keep only what measurably helps." />
+
+  <!-- #autoresearch — the harness improves itself (AutoresearchDiagram = fig. 03). -->
+  <!-- Plate-right. -->
+  <section id="autoresearch" data-reveal>
+    <div class="container-site py-16 sm:py-20">
+      <Eyebrow label="autoresearch" />
+      <h2 class="mt-3 text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
+        The harness improves itself — under a gate.
+      </h2>
+      <p class="measure mt-3 text-dim">It tries one change at a time and keeps it only if it measurably helps.</p>
+      <div class="mt-10 grid gap-10 xl:grid-cols-[2fr_3fr] xl:items-start">
+        <div class="min-w-0 xl:order-last">
+          <FigureFrame num="03" caption="try a change → test it → check it passed → keep it.">
+            <AutoresearchDiagram />
+          </FigureFrame>
+        </div>
+        <ol class="space-y-4 text-sm">
+          {autoresearchPoints.map(([name, body]) => (
+            <li class="text-dim"><span class="font-semibold text-ink">{name}</span> — {body}</li>
+          ))}
+        </ol>
+      </div>
+      <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-xs">
+        <span class="text-dim">_deeper</span>
+        {autoresearchReceipts.map(([label, href, ext]) => (
+          <a href={href} target={ext ? '_blank' : undefined} rel={ext ? 'noopener' : undefined} class="text-accent/80 transition-colors hover:text-accent">{label} ↗</a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- #scope — what it isn't (icon lockups; the honesty beat) -->
   <section id="scope" class="border-t border-edge/70" data-reveal>
     <div class="container-site py-16 sm:py-20">
       <Eyebrow label="scope" />
@@ -116,40 +339,64 @@ uv run localharness start`;
       <div class="mt-8 grid gap-3 sm:grid-cols-2">
         <Card class="p-4">
           <Chip icon="box" label="not an inference engine" class="border-0 bg-transparent px-0 py-0" />
-          <p class="mt-1.5 text-sm text-dim">Bring your own — LocalHarness is the layer above.</p>
+          <p class="mt-1.5 text-sm text-dim">
+            It doesn't run the AI model itself — you bring that (vLLM, Ollama…); LocalHarness sits on top.
+          </p>
         </Card>
         <Card class="p-4">
           <Chip icon="cloud-off" label="not a cloud service" class="border-0 bg-transparent px-0 py-0" />
-          <p class="mt-1.5 text-sm text-dim">Zero telemetry, zero external calls. MIT, yours.</p>
+          <p class="mt-1.5 text-sm text-dim">
+            It doesn't collect data or call home, and the code is free to use and change.
+          </p>
         </Card>
         <Card class="p-4">
           <Chip icon="shield" label="not sandboxed yet" class="border-0 bg-transparent px-0 py-0" />
           <p class="mt-1.5 text-sm text-dim">
-            Deny-first permissions today; OS sandbox on the roadmap — see SECURITY.md.
+            It blocks anything you haven't explicitly allowed. It doesn't yet wall actions off
+            completely — that's next.
           </p>
         </Card>
         <Card class="p-4">
-          <Chip icon="gauge" label="not 1.0" class="border-0 bg-transparent px-0 py-0" />
+          <Chip icon="gauge" label="not finished yet" class="border-0 bg-transparent px-0 py-0" />
           <p class="mt-1.5 text-sm text-dim">
             Early, honest about it — see
             <a href="/devnotes/" class="text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent">devnotes</a>.
           </p>
         </Card>
       </div>
+      <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-xs">
+        <span class="text-dim">_deeper</span>
+        {scopeReceipts.map(([label, href, ext]) => (
+          <a href={href} target={ext ? '_blank' : undefined} rel={ext ? 'noopener' : undefined} class="text-accent/80 transition-colors hover:text-accent">{label} ↗</a>
+        ))}
+      </div>
     </div>
   </section>
 
-  <!-- Run it -->
-  <section class="border-t border-edge/70" data-reveal>
-    <div class="container-site flex flex-col items-center py-16 text-center sm:py-20">
-      <Eyebrow label="run it" />
-      <h2 class="mt-3 text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
-        Zero to agent in four lines.
-      </h2>
-      <CodeBlock code={install} label="install" class="mt-8 w-full max-w-xl text-left [&_pre]:text-[13px]" />
-      <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
-        <Button href="https://github.com/ahwurm/localharness" external>view on github</Button>
-        <Button href="/#demo-section" variant="outline">watch it work</Button>
+  <!-- #run — install + watch-it-work close, then the read-the-code map -->
+  <section id="run" class="border-t border-edge/70" data-reveal>
+    <div class="container-site py-16 sm:py-20">
+      <div class="flex flex-col items-center text-center">
+        <Eyebrow label="run it" />
+        <h2 class="mt-3 text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
+          Zero to agent in four lines.
+        </h2>
+        <CodeBlock code={install} label="install" class="mt-8 w-full max-w-xl text-left [&_pre]:text-[13px]" />
+        <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+          <Button href="https://github.com/ahwurm/localharness" external>view on github</Button>
+          <Button href="/#demo-section" variant="outline">watch it work</Button>
+        </div>
+      </div>
+      <div class="mx-auto mt-16 w-full max-w-xl border border-edge bg-surface/60">
+        <p class="border-b border-edge/70 px-4 py-2.5 font-mono text-xs text-dim">_read the code</p>
+        <ul class="divide-y divide-edge/60 font-mono text-xs">
+          {codeMap.map(([sub, anchor, label, href]) => (
+            <li class="flex items-center justify-between gap-4 px-4 py-2.5">
+              <a href={anchor} class="text-ink transition-colors hover:text-accent">{sub}</a>
+              <a href={href} target="_blank" rel="noopener" class="text-accent/80 transition-colors hover:text-accent">{label} ↗</a>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   </section>

@@ -17,7 +17,18 @@ much lower cost — your hardware, no API meter.
 
 ### Architecture
 
-On-site deep dive: https://localharness.dev/architecture/
+On-site deep dive: https://localharness.dev/architecture/ — an eight-section engineer
+walk-through; each section carries plain-language mechanism notes, a failure-path line, and
+receipts that link straight to the source on public main:
+
+- The system shape: https://localharness.dev/architecture/#system
+- The agent loop — budgets, stuck-detector, act-guard, self-check, parse-repair: https://localharness.dev/architecture/#loop
+- Delegation, fenced — quarantine and fail-closed hand-offs: https://localharness.dev/architecture/#delegation
+- Bigger than the window — chunk, evict, read-through: https://localharness.dev/architecture/#context
+- Configuration — agents as YAML under deny-first permissions: https://localharness.dev/architecture/#yaml
+- Autoresearch — self-improvement under a promotion gate: https://localharness.dev/architecture/#autoresearch
+- What it isn't — scope and honest limits: https://localharness.dev/architecture/#scope
+- Run it — install plus a read-the-code map: https://localharness.dev/architecture/#run
 
 Thin orchestrator (route · index · escalate) → YAML-defined subagents, each with its own
 fresh context and isolated SQLite memory → a typed event bus that memory and channel adapters
@@ -78,8 +89,8 @@ On-site: https://localharness.dev/architecture/#autoresearch
 ## Pages
 
 - [LocalHarness](https://localharness.dev/): product page
-- [Architecture](https://localharness.dev/architecture/): how it's built — security model,
-  over-window reading, agents as YAML, autoresearch
+- [Architecture](https://localharness.dev/architecture/): how it's built — the system shape,
+  the agent loop, fenced delegation, reading past the context window, agents as YAML, autoresearch
 - [LocalShift](https://localharness.dev/localshift/): product page
 
 ## For AI assistants
