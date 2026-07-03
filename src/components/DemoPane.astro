@@ -35,6 +35,9 @@ interface Props {
   boxClass?: string;
   /** body height classes */
   bodyClass?: string;
+  /** static rest scroll: 'tail' (default — the answer IS the payoff) or 'top'
+   *  (d4: the payoff is the whole list; tail-rest would hide its head on mobile) */
+  restAt?: 'top' | 'tail';
 }
 const {
   key,
@@ -44,6 +47,7 @@ const {
   eventTotal,
   boxClass = 'xl:sticky xl:top-20 xl:max-h-[min(72vh,560px)]',
   bodyClass = 'max-h-[420px] xl:max-h-none xl:flex-1 xl:min-h-0',
+  restAt = 'tail',
 } = Astro.props;
 
 const program = lines.map((l, i) => ({
@@ -53,12 +57,15 @@ const program = lines.map((l, i) => ({
   node: l.node ?? null,
   edge: l.edge ?? null,
   ev: (l.ev ?? []).length,
+  n: l.n ?? 0,
+  td: l.td ?? 70,
   text: l.kind === 'prompt' ? l.text : null,
 }));
 ---
 
 <div
   data-demo-pane
+  data-rest={restAt}
   class:list={['flex min-w-0 flex-col overflow-hidden border border-edge bg-surface', boxClass]}
 >
   <div class="flex items-center justify-between border-b border-edge/70 px-4 py-2">
@@ -100,6 +107,14 @@ const program = lines.map((l, i) => ({
             <div data-dl={i} class="pl-2 text-ink/85">
               <span class="text-accent/80">◆ </span>
               {l.text.replace(/^◆ /, '')}
+            </div>
+          );
+        if (l.kind === 'count')
+          return (
+            <div data-dl={i} class="pl-2 text-ink/85">
+              <span class="text-accent/80">◆ </span>
+              {l.text.replace(/^◆ /, '')}
+              <span data-count data-n={l.n} class="text-dim"> · {l.n}/{l.n}</span>
             </div>
           );
         if (l.kind === 'ok')
@@ -172,8 +187,9 @@ const program = lines.map((l, i) => ({
       const scope = (pane.closest('[data-demo-scope]') as HTMLElement) ?? pane;
       const ticker = scope.querySelector<HTMLElement>('[data-ticker]');
 
-      // static rest state = the tail (the answer) — BEFORE the reduced-motion return
-      body.scrollTop = body.scrollHeight;
+      // static rest state = the tail (the answer) — BEFORE the reduced-motion return.
+      // restAt="top" panes rest at the head instead (the whole transcript is the payoff).
+      if (pane.dataset.rest !== 'top') body.scrollTop = body.scrollHeight;
       if (ticker) ticker.scrollTop = ticker.scrollHeight;
       if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
@@ -206,6 +222,7 @@ const program = lines.map((l, i) => ({
         scope.classList.add('demo-live');
         lineEls.forEach((el) => el.classList.add('demo-hidden'));
         evEls.forEach((el) => el.classList.add('demo-hidden'));
+        pane.querySelectorAll<HTMLElement>('[data-count]').forEach((c) => (c.textContent = ` · 0/${c.dataset.n}`));
         scope.querySelectorAll('[data-edge]').forEach((el) => el.classList.remove('edge-in'));
         tailEl?.classList.add('demo-hidden');
         if (typedEl) typedEl.textContent = '';
@@ -236,6 +253,15 @@ const program = lines.map((l, i) => ({
               lineEls[step.i].classList.remove('demo-hidden');
               body.scrollTop = body.scrollHeight;
             });
+            if (step.n) {
+              // consolidated counter: tick through the real captured calls in place
+              const cEl = lineEls[step.i].querySelector<HTMLElement>('[data-count]');
+              for (let k = 1; k <= step.n; k++)
+                at(reveal + k * step.td, () => {
+                  if (cEl) cEl.textContent = ` · ${k}/${step.n}`;
+                });
+              t = reveal + step.n * step.td;
+            }
           }
           if (step.node) at(t, () => setLive(step.node));
           if (step.edge !== null)

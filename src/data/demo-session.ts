@@ -34,6 +34,10 @@ export type DemoLine = {
   ev?: string[];
   /** flow plate (data-edge index) revealed with this line */
   edge?: number;
+  /** consolidated live counter: total ticks — each tick is one real captured call */
+  n?: number;
+  /** ms per counter tick (replay pacing) */
+  td?: number;
 };
 
 export const promptText =

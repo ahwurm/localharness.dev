@@ -10,7 +10,6 @@ import Interstitial from '../components/Interstitial.astro';
 import { d1Lines, d3Lines, eventTotal } from '../data/demo-session';
 import { d2Lines, overwindowTailMeter } from '../data/demo-overwindow';
 import Chip from '../components/Chip.astro';
-import Icon from '../components/Icon.astro';
 import GetInvolved from '../components/GetInvolved.astro';
 
 const install = `git clone https://github.com/ahwurm/localharness
@@ -104,11 +103,11 @@ const jsonLd = [
 
       <!-- Demo 1: zero to agent -->
       <div id="demo-startup" class="mt-12 gap-10 xl:grid xl:grid-cols-[3fr_2fr]">
-        <div class="min-w-0">
+        <div class="min-w-0 xl:h-0 xl:min-h-full xl:flex xl:flex-col">
           <p class="mb-2 font-mono text-xs">
             <span class="text-accent/80">fig. 01</span> <span class="text-ink">— zero to a working agent, cold start</span>
           </p>
-          <DemoPane key="d1" title="~/localharness — real session · qwen3.6-27b on vLLM" lines={d1Lines} />
+          <DemoPane key="d1" title="~/localharness — real session · qwen3.6-27b on vLLM" lines={d1Lines} boxClass="xl:flex-1 xl:min-h-0" restAt="top" />
           <p class="mt-2 font-mono text-[11px] text-dim">captured 2026-07-02 · the session continues in fig. 03</p>
         </div>
         <div class="mt-6 xl:mt-0">
@@ -138,7 +137,7 @@ const jsonLd = [
   <!-- Demo 2: bigger than the window -->
   <section id="demo-overwindow" data-reveal>
     <div class="container-site gap-10 py-16 sm:py-20 xl:grid xl:grid-cols-[3fr_2fr]">
-      <div class="min-w-0">
+      <div class="min-w-0 xl:h-0 xl:min-h-full xl:flex xl:flex-col">
         <p class="mb-2 font-mono text-xs">
           <span class="text-accent/80">fig. 02</span> <span class="text-ink">— “How does Odysseus defeat the Cyclops?”</span>
         </p>
@@ -147,6 +146,7 @@ const jsonLd = [
           title="~/localharness — real session · Homer’s Odyssey"
           lines={d2Lines}
           tailMeter={overwindowTailMeter}
+          boxClass="xl:flex-1 xl:min-h-0"
         />
         <p class="mt-2 font-mono text-[11px] text-dim">
           the Odyssey whole — 678,822 characters vs a 126,976-token window · answer verified against the text
@@ -234,14 +234,16 @@ const jsonLd = [
 
   <Interstitial icon="repeat" lead="Same workflow, same output" rest="— much lower cost. No meter, no telemetry." />
 
-  <!-- Built in -->
+  <!-- Built in — verified roles only (data-analyst + frontend-designer held pending
+       quality investigation, per owner 2026-07-02; the roster demo capture is archived
+       in src/data/demo-agents.ts for revival once they're verified) -->
   <section id="agents" data-reveal>
     <div class="container-site py-16 sm:py-20">
       <Eyebrow label="agents" />
       <h2 class="mt-3 text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
         Built in.
       </h2>
-      <div class="mt-8 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <div class="mt-8 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
         <Card class="p-4">
           <Chip icon="agent" label="default" class="border-0 bg-transparent px-0 py-0" />
           <p class="mt-1.5 text-sm text-dim">What start gives you — three lines of YAML.</p>
@@ -261,14 +263,6 @@ const jsonLd = [
         <Card class="p-4">
           <Chip icon="box" label="cruncher" class="border-0 bg-transparent px-0 py-0" />
           <p class="mt-1.5 text-sm text-dim">Reads documents bigger than the window — fig. 02's engine.</p>
-        </Card>
-        <Card class="p-4">
-          <Chip icon="gauge" label="data-analyst" class="border-0 bg-transparent px-0 py-0" />
-          <p class="mt-1.5 text-sm text-dim">Computes answers over local files — python, pandas.</p>
-        </Card>
-        <Card class="p-4">
-          <Chip icon="studio" label="frontend-designer" class="border-0 bg-transparent px-0 py-0" />
-          <p class="mt-1.5 text-sm text-dim">Builds a page, screenshots it, iterates.</p>
         </Card>
         <Card class="p-4">
           <Chip icon="prompt" label="yours" class="border-0 bg-transparent px-0 py-0" />

@@ -12,12 +12,16 @@
 //   - run: `localharness start` driven over stdin; the model called
 //     load_document, then delegated to the cruncher with a content grant; the
 //     harness split the text into sections and read EVERY one in a fresh
-//     chunk-summarizer window (the tool_result_get lines below are those reads,
-//     verbatim, in their REAL concurrent interleave order — do not tidy them
-//     into call/return pairs); the cruncher combined the extracts tool-lessly.
+//     chunk-summarizer window; the cruncher combined the extracts tool-lessly.
+//   - the 42 real ◆ tool_result_get calls (+ their ✓ returns) are consolidated
+//     to ONE live counter line — each tick is one captured call/return pair, in
+//     order, at the pair-equivalent replay pacing (140ms = the prior 70ms × 2
+//     lines). Owner call 2026-07-02 ("consolidate — keep true behavior"); the
+//     line-per-call form lives in this file's git history and start-odyssey.txt.
 //   - bus events: 429 (410 from chunk-summarizer leaves) — bus-events-odyssey.jsonl
-//   - real duration 163.2s; the replay compresses pacing only (leaf reads
-//     at ~70ms), never text. The Cyclops episode's mechanism (heated olive-wood stake; escape under the flock) verified against the text.
+//   - real duration 163.2s; the replay compresses pacing only, never text. The
+//     Cyclops episode's mechanism (heated olive-wood stake; escape under the
+//     flock) verified against the text.
 // Cosmetic normalizations (same policy as demo-session.ts): sandbox path
 // /tmp/lh-cap-odyssey/docs/ rendered as ~/docs/; REPL panels re-rendered as CSS
 // boxes; 80-col wrapped lines re-joined; spinner frames not re-rendered.
@@ -33,90 +37,7 @@ export const d2Lines: DemoLine[] = [
   { kind: 'tool', text: '◆ load_document ~/docs/odyssey.txt', d: 500 },
   { kind: 'ok', text: '✓ load_document (2 lines)', d: 350 },
   { kind: 'tool', text: '◆ agent cruncher', d: 1100 },
-  { kind: 'tool', text: '◆ tool_result_get ff1d056ab581', d: 600 },
-  { kind: 'ok', text: '✓ tool_result_get (3 lines)', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get 882218be1223', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (18 lines)', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get 09f921a784af', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get 5a6fa74e7d4c', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get e49b22a4e58d', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get 25610245fa2d', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (4 lines)', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (4 lines)', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (3 lines)', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (3 lines)', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get fc4b25e2b9b2', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get 6f75779495d7', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (3 lines)', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (3 lines)', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get f5dfa83bcbcb', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (3 lines)', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get 44f182869bad', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get 0d4cd9faa2c6', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get 4d8d393fe0fc', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (3 lines)', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (3 lines)', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (3 lines)', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get c517e3bc9651', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get 921744d0307e', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get 6a7ba6692eeb', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (3 lines)', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (3 lines)', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (3 lines)', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get 3a588e7859f4', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (3 lines)', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get 8f2683998def', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (3 lines)', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get 19ee5bf208a5', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get 69c5b23e63b4', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (5 lines)', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (3 lines)', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get 43ee29081393', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (3 lines)', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get 478a1d46f9ba', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (3 lines)', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get fab6251aab22', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (5 lines)', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get cde82f21dc5a', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (4 lines)', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get bd01e1ec03a6', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (3 lines)', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get e04e25366fbe', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (3 lines)', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get fd0a76688578', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (3 lines)', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get e1e214afc8d0', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (3 lines)', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get 8e34d923b173', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (3 lines)', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get f18f13b51a59', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (3 lines)', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get 73dc89737999', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (3 lines)', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get f272ba43afbd', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (3 lines)', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get f2747c0660f6', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (4 lines)', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get 23a20a7933ac', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (3 lines)', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get 16d0440b6307', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (3 lines)', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get ed7202ab7490', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (3 lines)', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get 7146830a74d2', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (3 lines)', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get 1971ce4185f4', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (3 lines)', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get b4db0c1448e9', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (3 lines)', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get 02b9b2ef99e8', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (3 lines)', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get 5e764caa4b52', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (3 lines)', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get aa7cb6b6ea70', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (4 lines)', d: 70 },
-  { kind: 'tool', text: '◆ tool_result_get 32012eebd337', d: 70 },
-  { kind: 'ok', text: '✓ tool_result_get (3 lines)', d: 70 },
+  { kind: 'count', text: 'tool_result_get — section reads, a fresh window each', n: 42, td: 140, d: 600 },
   { kind: 'ok', text: '✓ agent (3 lines)', d: 900 },
   {
     kind: 'answer',
