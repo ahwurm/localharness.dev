@@ -80,7 +80,7 @@ const program = lines.map((l, i) => ({
   <div
     data-body
     class:list={[
-      'dp-fade overflow-y-auto p-4 pb-10 font-mono text-[13px] leading-[1.75] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
+      'dp-fade overflow-y-auto p-4 pb-10 font-mono text-[13px] leading-[1.75] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden max-xl:min-h-[var(--replay-h)]',
       bodyClass,
     ]}
   >
@@ -214,6 +214,13 @@ const program = lines.map((l, i) => ({
       };
 
       const play = () => {
+        // reserve the steady-state height ONCE, before the first hide, so the pane
+        // can't collapse-then-grow during replay. below xl the pane is auto-height;
+        // --replay-h feeds max-xl:min-h on [data-body]. scoped below xl so the xl
+        // pinned grid-cell height contract is untouched. measured here (not at parse)
+        // so the web-mono font is loaded — first play is scroll/click-triggered.
+        if (!pane.style.getPropertyValue('--replay-h'))
+          pane.style.setProperty('--replay-h', `${Math.ceil(body.getBoundingClientRect().height)}px`);
         played = true;
         w.__dpLastStart = Date.now();
         timers.forEach(clearTimeout);
