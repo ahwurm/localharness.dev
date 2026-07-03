@@ -96,26 +96,26 @@ const autoresearchPoints: [string, string][] = [
 const sysReceipts: [string, string, boolean][] = [
   ['src/localharness/', tree('src/localharness'), true],
   ['the design map', blob('docs/specs/00-architecture-overview.md'), true],
-  ['_zero to a working agent, cold start', '/#demo-startup', false],
+  ['_startup', '/#demo-startup', false],
 ];
 const loopReceipts: [string, string, boolean][] = [
   ['agent/loop.py', blob('src/localharness/agent/loop.py'), true],
-  ['_zero to a working agent, cold start', '/#demo-startup', false],
+  ['_startup', '/#demo-startup', false],
 ];
 const delegationReceipts: [string, string, boolean][] = [
   ['agent/subagent.py', blob('src/localharness/agent/subagent.py'), true],
   ['tools/capabilities.py', blob('src/localharness/tools/capabilities.py'), true],
   ['SECURITY.md', blob('SECURITY.md'), true],
-  ['_delegation, fenced off', '/#demo-research', false],
+  ['_delegation', '/#demo-research', false],
 ];
 const contextReceipts: [string, string, boolean][] = [
   ['agent/context.py', blob('src/localharness/agent/context.py'), true],
-  ['_a document bigger than the window, read whole', '/#demo-overwindow', false],
+  ['_overwindow', '/#demo-overwindow', false],
 ];
 const yamlReceipts: [string, string, boolean][] = [
   ['agent/subagent.py', blob('src/localharness/agent/subagent.py'), true],
   ['tools/capabilities.py', blob('src/localharness/tools/capabilities.py'), true],
-  ['_the agents in the box', '/#agents', false],
+  ['_agents', '/#agents', false],
 ];
 const autoresearchReceipts: [string, string, boolean][] = [
   ['autoresearch/experiment.py', blob('src/localharness/autoresearch/experiment.py'), true],
