@@ -4,13 +4,14 @@ import Wordmark from './Wordmark.astro';
 const path = Astro.url.pathname;
 const links = [
   { href: '/architecture/', label: 'architecture' },
-  { href: '/devnotes/', label: 'devnotes' },
+  // devnotes hides below 420px — the row can't fit all links at 390 (PRD nav contract)
+  { href: '/devnotes/', label: 'devnotes', cls: 'hidden min-[420px]:inline' },
 ];
 const isActive = (href: string) => path === href || path === href.replace(/\/$/, '');
 ---
 
 <header class="sticky top-0 z-50 border-b border-edge/70 bg-bg/80 backdrop-blur">
-  <nav class="container-site flex h-14 items-center justify-between" aria-label="Main">
+  <nav class="container-site flex h-14 items-center justify-between gap-4" aria-label="Main">
     <a
       href="/"
       class="text-sm text-ink transition-colors duration-200 hover:text-accent sm:text-base"
@@ -25,6 +26,7 @@ const isActive = (href: string) => path === href || path === href.replace(/\/$/,
             aria-current={isActive(l.href) ? 'page' : undefined}
             class:list={[
               'transition-colors duration-200 hover:text-ink',
+              l.cls,
               isActive(l.href) &&
                 'text-ink underline decoration-accent/70 decoration-2 underline-offset-8',
             ]}
