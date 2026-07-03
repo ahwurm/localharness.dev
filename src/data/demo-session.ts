@@ -19,7 +19,10 @@
 // CSS boxes matching the real rendering — box-drawing glyphs themselves, the
 // non-TTY warning and spinner frames are not reproduced glyph-for-glyph;
 // 80-col wrapped lines re-joined (the demo terminal wraps at its own width);
-// the star-ask footer line of `init` is trimmed. Raw captures:
+// the star-ask footer line of `init` is trimmed; the idle `Describe a task,
+// or /help for commands.` prompt that `start` prints after the banner is
+// likewise trimmed from fig. 01's rest state (same allowed curation —
+// cosmetic, the banner still shows). Raw captures:
 // .planning/captures/ (init-web.txt, start-web.txt, bus-events-web.jsonl, untracked).
 import bannerRaw from './banner.txt?raw';
 
@@ -104,7 +107,6 @@ export const d1Lines: DemoLine[] = [
   // the full startup banner, exactly as the real REPL dumps it
   { kind: 'art', text: bannerRaw, d: 350 },
   { kind: 'meta', text: 'v0.5.1    qwen3.6-27b    ~/localharness', d: 250 },
-  { kind: 'out', text: 'Describe a task, or /help for commands.', d: 200 },
   { kind: 'meta', text: '(0.2s startup) -- 1 agent', d: 200 },
 ];
 

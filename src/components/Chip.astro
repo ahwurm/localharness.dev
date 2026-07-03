@@ -1,20 +1,34 @@
 ---
 // Eraser-style widget chip: tiny stroke glyph + mono label, square, hairline.
+// With `href` it renders an external source/download link (new tab, noopener)
+// and gains a subtle accent hover; without it, a plain non-interactive span.
 import Icon, { type IconName } from './Icon.astro';
 interface Props {
   label: string;
   icon: IconName;
+  href?: string;
   class?: string;
 }
-const { label, icon, class: className = '' } = Astro.props;
+const { label, icon, href, class: className = '' } = Astro.props;
+const base =
+  'inline-flex min-h-9 items-center gap-2 border border-edge bg-surface/70 px-3 py-1.5 font-mono text-xs text-ink';
 ---
 
-<span
-  class:list={[
-    'inline-flex min-h-9 items-center gap-2 border border-edge bg-surface/70 px-3 py-1.5 font-mono text-xs text-ink',
-    className,
-  ]}
->
-  <Icon name={icon} />
-  {label}
-</span>
+{
+  href ? (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener"
+      class:list={[base, 'transition-colors duration-200 hover:border-accent/40 hover:text-accent', className]}
+    >
+      <Icon name={icon} />
+      {label}
+    </a>
+  ) : (
+    <span class:list={[base, className]}>
+      <Icon name={icon} />
+      {label}
+    </span>
+  )
+}

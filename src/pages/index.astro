@@ -2,7 +2,6 @@
 import Base from '../layouts/Base.astro';
 import Button from '../components/Button.astro';
 import CodeBlock from '../components/CodeBlock.astro';
-import Eyebrow from '../components/Eyebrow.astro';
 import DemoPane from '../components/DemoPane.astro';
 import TraceFlow from '../components/TraceFlow.astro';
 import Interstitial from '../components/Interstitial.astro';
@@ -64,16 +63,13 @@ const jsonLd = [
         aria-hidden="true"
         class="ascii-art focus-in overflow-hidden text-left text-[length:clamp(0.42rem,1.9vw,1.05rem)] leading-none text-accent">{banner}</pre>
       <p class="focus-in mt-6 font-mono text-sm text-dim [--fi-delay:120ms]">
-        Describe a task, or <span class="text-accent">/help</span> for commands.
-      </p>
-      <p class="focus-in mt-5 font-mono text-sm text-dim [--fi-delay:240ms]">
         the agent layer for the endpoint you already run — not another inference engine
       </p>
       <div class="focus-in mt-4 flex max-w-[300px] flex-wrap items-center justify-center gap-2 [--fi-delay:320ms] sm:max-w-none">
-        <Chip icon="server" label="vLLM" />
-        <Chip icon="llama" label="Ollama" />
-        <Chip icon="studio" label="LM Studio" />
-        <Chip icon="cpp" label="llama.cpp" />
+        <Chip icon="server" label="vLLM" href="https://docs.vllm.ai/en/latest/getting_started/installation/" />
+        <Chip icon="llama" label="Ollama" href="https://ollama.com/download" />
+        <Chip icon="studio" label="LM Studio" href="https://lmstudio.ai/download" />
+        <Chip icon="cpp" label="llama.cpp" href="https://github.com/ggml-org/llama.cpp/releases" />
       </div>
       <CodeBlock
         code={install}
@@ -87,33 +83,25 @@ const jsonLd = [
     </div>
   </section>
 
-  <!-- Watch it work: three demos, real sessions -->
+  <!-- Demo 1: zero to a working agent, cold start — the terminal, then the get-running journey -->
   <section id="demo-section" class="border-t border-edge/70" data-reveal>
-    <div class="container-site py-16 sm:py-20">
-      <Eyebrow label="watch it work" />
-      <h2 class="mt-3 text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
-        Watch it work.
+    <div id="demo-startup" class="container-site py-16 sm:py-20">
+      <h2 class="font-mono text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
+        <span class="text-ink" aria-hidden="true">_</span><span class="text-accent">zero to a working agent, cold start</span>
       </h2>
-      <p class="mt-3 text-dim">Real sessions, replayed — from cold start to a verified answer.</p>
-      <div data-demo-pips class="mt-4 flex flex-wrap gap-x-8 gap-y-2 font-mono text-xs">
-        <a href="#demo-startup" class="text-accent/80 transition-colors hover:text-accent">_zero to agent</a>
-        <a href="#demo-overwindow" class="text-accent/80 transition-colors hover:text-accent">_bigger than the window</a>
-        <a href="#demo-research" class="text-accent/80 transition-colors hover:text-accent">_delegation, quarantined</a>
-        <a href="#agents" class="text-accent/80 transition-colors hover:text-accent">_built in</a>
-      </div>
-
-      <!-- Demo 1: zero to agent -->
-      <div id="demo-startup" class="mt-12 gap-10 xl:grid xl:grid-cols-[3fr_2fr] xl:min-h-[23rem]">
+      <div class="mt-10 gap-10 xl:grid xl:grid-cols-[3fr_2fr] xl:min-h-[23rem]">
         <div class="min-w-0 xl:h-0 xl:min-h-full xl:flex xl:flex-col">
-          <p class="mb-2 font-mono text-xs">
-            <span class="text-accent/80">fig. 01</span> <span class="text-ink">— zero to a working agent, cold start</span>
-          </p>
-          <DemoPane key="d1" title="~/localharness — real session · qwen3.6-27b on vLLM" lines={d1Lines} boxClass="xl:flex-1 xl:min-h-0" restAt="top" />
-          <p class="mt-2 font-mono text-[11px] text-dim">captured 2026-07-02 · the session continues in fig. 03</p>
+          <p class="mb-2 font-mono text-xs"><span class="text-accent/80">fig. 01</span></p>
+          <DemoPane key="d1" title="~/localharness — real session · qwen3.6-27b on vLLM" lines={d1Lines} boxClass="xl:flex-1 xl:min-h-0" bodyClass="xl:flex-1 xl:min-h-0" />
         </div>
         <div class="mt-6 xl:mt-0">
-          <Eyebrow label="zero to agent" />
-          <h3 class="mt-3 text-xl font-semibold tracking-tight">Point it at the endpoint you already run.</h3>
+          <h3 class="font-mono text-xl font-semibold tracking-[-0.01em]">
+            <span class="text-ink" aria-hidden="true">_</span><span class="text-accent">No API key, no signup — the model you're already running.</span>
+          </h3>
+          <p class="mt-3 text-sm text-dim">
+            Download a local model and a server to run it — vLLM, Ollama, LM Studio, or llama.cpp — then clone
+            LocalHarness and run four lines. <span class="text-ink">Zero to agent.</span>
+          </p>
           <ol class="mt-5 space-y-4">
             <li>
               <span class="font-mono text-[13px] text-accent">01 · probes for what's running</span>
@@ -133,64 +121,66 @@ const jsonLd = [
     </div>
   </section>
 
-  <Interstitial icon="server" lead="No API key, no signup" rest="— the model you're already running." />
-
-  <!-- Demo 2: bigger than the window -->
-  <section id="demo-overwindow" data-reveal>
-    <div class="container-site gap-10 py-16 sm:py-20 xl:grid xl:grid-cols-[3fr_2fr]">
-      <div class="min-w-0 xl:h-0 xl:min-h-full xl:flex xl:flex-col">
-        <p class="mb-2 font-mono text-xs">
-          <span class="text-accent/80">fig. 02</span> <span class="text-ink">— “How does Odysseus defeat the Cyclops?”</span>
-        </p>
-        <DemoPane
-          key="d2"
-          title="~/localharness — real session · Homer’s Odyssey"
-          lines={d2Lines}
-          tailMeter={overwindowTailMeter}
-          boxClass="xl:flex-1 xl:min-h-0"
-        />
-        <p class="mt-2 font-mono text-[11px] text-dim">
-          the Odyssey whole — 678,822 characters vs a 126,976-token window · answer verified against the text
-        </p>
-      </div>
-      <div class="mt-6 xl:mt-0">
-        <Eyebrow label="bigger than the window" />
-        <h3 class="mt-3 text-xl font-semibold tracking-tight">It reads what can't fit.</h3>
-        <ol class="mt-5 space-y-4">
-          <li>
-            <span class="font-mono text-[13px] text-accent">01 · the whole epic, one handle</span>
-            <p class="mt-1 text-sm text-dim">A context window is how much text the model can hold at once. This epic is a third again bigger.</p>
-          </li>
-          <li>
-            <span class="font-mono text-[13px] text-accent">02 · every section actually read</span>
-            <p class="mt-1 text-sm text-dim">The harness cuts the text into sections and reads each one in a fresh window — that's the cascade.</p>
-          </li>
-          <li>
-            <span class="font-mono text-[13px] text-accent">03 · one grounded answer</span>
-            <p class="mt-1 text-sm text-dim">The section extracts combine into one reply that quotes the text exactly.</p>
-          </li>
-        </ol>
-        <p class="mt-5 font-mono text-xs">
-          <a href="/architecture/#over-window" class="text-accent/80 transition-colors hover:text-accent">the full mechanism ↗</a>
-        </p>
+  <!-- Demo 2: a document bigger than the window, read whole -->
+  <section id="demo-overwindow" class="border-t border-edge/70" data-reveal>
+    <div class="container-site py-16 sm:py-20">
+      <h2 class="font-mono text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
+        <span class="text-ink" aria-hidden="true">_</span><span class="text-accent">a document bigger than the window, read whole</span>
+      </h2>
+      <div class="mt-10 gap-10 xl:grid xl:grid-cols-[3fr_2fr]">
+        <div class="min-w-0 xl:h-0 xl:min-h-full xl:flex xl:flex-col">
+          <p class="mb-2 font-mono text-xs">
+            <span class="text-accent/80">fig. 02</span> <span class="text-ink">— “How does Odysseus defeat the Cyclops?”</span>
+          </p>
+          <DemoPane
+            key="d2"
+            title="~/localharness — real session · Homer’s Odyssey"
+            lines={d2Lines}
+            tailMeter={overwindowTailMeter}
+            boxClass="xl:flex-1 xl:min-h-0"
+          />
+          <p class="mt-2 font-mono text-[11px] text-dim">
+            the Odyssey whole — 678,822 characters vs a 126,976-token window · answer verified against the text
+          </p>
+        </div>
+        <div class="mt-6 xl:mt-0">
+          <ol class="space-y-4">
+            <li>
+              <span class="font-mono text-[13px] text-accent">01 · the whole epic, one handle</span>
+              <p class="mt-1 text-sm text-dim">A context window is how much text the model can hold at once. This epic is a third again bigger.</p>
+            </li>
+            <li>
+              <span class="font-mono text-[13px] text-accent">02 · every section actually read</span>
+              <p class="mt-1 text-sm text-dim">The harness cuts the text into sections and reads each one in a fresh window — that's the cascade.</p>
+            </li>
+            <li>
+              <span class="font-mono text-[13px] text-accent">03 · one grounded answer</span>
+              <p class="mt-1 text-sm text-dim">The section extracts combine into one reply that quotes the text exactly.</p>
+            </li>
+          </ol>
+          <p class="mt-5 font-mono text-xs">
+            <a href="/architecture/#over-window" class="text-accent/80 transition-colors hover:text-accent">the full mechanism ↗</a>
+          </p>
+        </div>
       </div>
     </div>
   </section>
 
   <Interstitial icon="clock" lead="It takes longer" rest="— local models are slower. That's the tradeoff." />
 
-  <!-- Demo 3: delegation, quarantined (the fig. 01 session, continued) -->
+  <!-- Demo 3: delegation, quarantined — the agent loop + built-in web search -->
   <section id="demo-research" data-reveal>
     <div class="container-site py-16 sm:py-20">
-      <Eyebrow label="delegation, quarantined" />
-      <h3 class="mt-3 text-xl font-semibold tracking-tight">Subagents, fenced by construction.</h3>
-      <p class="mb-2 mt-8 font-mono text-xs">
+      <h2 class="font-mono text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
+        <span class="text-ink" aria-hidden="true">_</span><span class="text-accent">delegation, fenced off</span>
+      </h2>
+      <p class="mb-2 mt-10 font-mono text-xs">
         <span class="text-accent/80">fig. 03</span> <span class="text-ink">— “Find the best open-source model for a 128 GB machine.”</span>
       </p>
       <div data-demo-scope id="demo-research-scope" class="grid gap-6 xl:grid-cols-[1.2fr_1fr]">
         <DemoPane
           key="d3"
-          title="~/localharness — the fig. 01 session, continued"
+          title="~/localharness — the agent loop, out of the box"
           lines={d3Lines}
           tailMeter="░░░░░░░░░░ 3%"
           eventTotal={eventTotal}
@@ -212,12 +202,9 @@ const jsonLd = [
           </div>
         </div>
       </div>
-      <p class="mt-2 font-mono text-[11px] text-dim">
-        the fig. 01 session, continued · replayed from its own bus trace
-      </p>
       <p class="measure mt-6 text-sm text-dim">
-        Continuing the same captured session as fig. 01: one prompt, and the agent hands research to a
-        web-quarantined child. Subagents get fresh windows and only the tools their job needs — the
+        This is the agent loop out of the box — web search included. One prompt, and the agent hands
+        research to a web-quarantined child. Subagents get fresh windows and only the tools their job needs — the
         web-researcher can touch only the web, a verifier re-pulls its sources blind, and every web
         result arrives stamped <span class="text-ink">UNTRUSTED</span>, with no path to
         <code class="font-mono text-ink">bash</code> or <code class="font-mono text-ink">write</code>.
@@ -238,46 +225,47 @@ const jsonLd = [
   <!-- Demo 4: built in — the harness asked about itself (v0.5.3 roster: every default
        agent quarantined-or-read-only; data-analyst + frontend-designer are opt-in
        examples since the 2026-07-03 quality investigation) -->
+  <!-- Demo 4: the agents in the box -->
   <section id="agents" data-reveal>
-    <div class="container-site gap-10 py-16 sm:py-20 xl:grid xl:grid-cols-[3fr_2fr] xl:min-h-[47.5rem]">
-      <div class="min-w-0 xl:h-0 xl:min-h-full xl:flex xl:flex-col">
-        <p class="mb-2 font-mono text-xs">
-          <span class="text-accent/80">fig. 04</span> <span class="text-ink">— “List the subagents that ship built in…”</span>
-        </p>
-        <DemoPane
-          key="d4"
-          title="~/localharness — real session · fresh install"
-          lines={d4Lines}
-          tailMeter={agentsTailMeter}
-          boxClass="xl:flex-1 xl:min-h-0"
-          bodyClass="xl:flex-1 xl:min-h-0"
-          restAt="top"
-        />
-        <p class="mt-2 font-mono text-[11px] text-dim">
-          captured 2026-07-02 · a cold install’s first question — answered from the system prompt, no tools
-        </p>
-      </div>
-      <div class="mt-6 xl:mt-0">
-        <Eyebrow label="agents" />
-        <h3 class="mt-3 text-xl font-semibold tracking-tight">Built in.</h3>
-        <ol class="mt-5 space-y-4">
-          <li>
-            <span class="font-mono text-[13px] text-accent">01 · a bench of specialists</span>
-            <p class="mt-1 text-sm text-dim">The main agent delegates to them on its own — each runs in a fresh context window.</p>
-          </li>
-          <li>
-            <span class="font-mono text-[13px] text-accent">02 · each fenced to its job</span>
-            <p class="mt-1 text-sm text-dim">A specialist gets only the tools its job needs — none of them holds bash or write.</p>
-          </li>
-          <li>
-            <span class="font-mono text-[13px] text-accent">03 · yours is one YAML file</span>
-            <p class="mt-1 text-sm text-dim">Name, role, tools, budget. One command scaffolds it into ~/.localharness/agents/.</p>
-          </li>
-        </ol>
-        <p class="mt-5 flex flex-wrap gap-x-8 gap-y-2 font-mono text-xs">
-          <a href="/architecture/#yaml" class="text-accent/80 transition-colors hover:text-accent">how agents are defined ↗</a>
-          <a href="/architecture/#security" class="text-accent/80 transition-colors hover:text-accent">how quarantine works ↗</a>
-        </p>
+    <div class="container-site py-16 sm:py-20">
+      <h2 class="font-mono text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
+        <span class="text-ink" aria-hidden="true">_</span><span class="text-accent">the agents in the box</span>
+      </h2>
+      <div class="mt-10 gap-10 xl:grid xl:grid-cols-[3fr_2fr] xl:min-h-[36rem]">
+        <div class="min-w-0 xl:h-0 xl:min-h-full xl:flex xl:flex-col">
+          <p class="mb-2 font-mono text-xs">
+            <span class="text-accent/80">fig. 04</span> <span class="text-ink">— “List the subagents that ship built in…”</span>
+          </p>
+          <DemoPane
+            key="d4"
+            title="~/localharness — real session · fresh install"
+            lines={d4Lines}
+            tailMeter={agentsTailMeter}
+            boxClass="xl:flex-1 xl:min-h-0"
+            bodyClass="xl:flex-1 xl:min-h-0"
+            restAt="top"
+          />
+        </div>
+        <div class="mt-6 xl:mt-0">
+          <ol class="space-y-4">
+            <li>
+              <span class="font-mono text-[13px] text-accent">01 · a bench of specialists</span>
+              <p class="mt-1 text-sm text-dim">The main agent delegates to them on its own — each runs in a fresh context window.</p>
+            </li>
+            <li>
+              <span class="font-mono text-[13px] text-accent">02 · each fenced to its job</span>
+              <p class="mt-1 text-sm text-dim">A specialist gets only the tools its job needs — none of them holds bash or write.</p>
+            </li>
+            <li>
+              <span class="font-mono text-[13px] text-accent">03 · yours is one YAML file</span>
+              <p class="mt-1 text-sm text-dim">Name, role, tools, budget. One command scaffolds it into ~/.localharness/agents/.</p>
+            </li>
+          </ol>
+          <p class="mt-5 flex flex-wrap gap-x-8 gap-y-2 font-mono text-xs">
+            <a href="/architecture/#yaml" class="text-accent/80 transition-colors hover:text-accent">how agents are defined ↗</a>
+            <a href="/architecture/#security" class="text-accent/80 transition-colors hover:text-accent">how quarantine works ↗</a>
+          </p>
+        </div>
       </div>
     </div>
   </section>
