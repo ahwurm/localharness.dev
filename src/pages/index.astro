@@ -4,7 +4,6 @@ import Button from '../components/Button.astro';
 import CodeBlock from '../components/CodeBlock.astro';
 import DemoPane from '../components/DemoPane.astro';
 import TraceFlow from '../components/TraceFlow.astro';
-import Interstitial from '../components/Interstitial.astro';
 import SectionBand from '../components/SectionBand.astro';
 import { d1Lines, d3Lines, eventTotal } from '../data/demo-session';
 import { d2Lines, overwindowTailMeter } from '../data/demo-overwindow';
@@ -167,12 +166,11 @@ const jsonLd = [
     </div>
   </section>
 
-  <Interstitial icon="repeat" lead="Same workflow, same output" rest="— much lower cost. No meter, no telemetry." />
 
   <!-- Demo (#demo-research) — the agent loop, out of the box; web search included,
        delegated to a web-quarantined child. -->
   <section id="demo-research" data-reveal>
-    <SectionBand icon="search" title="Demo" topBorder={false} />
+    <SectionBand icon="search" title="Demo" />
     <div class="container-site py-16 sm:py-20">
       <p class="mb-2 font-mono text-xs">
         <span class="text-accent/80">fig. 02</span> <span class="text-ink">— “Find the best open-source model for a 128 GB machine.”</span>
@@ -265,12 +263,11 @@ const jsonLd = [
     </div>
   </section>
 
-  <Interstitial icon="clock" lead="It takes longer" rest="— local models are slower. That's the tradeoff." />
 
   <!-- Quality > Speed (#demo-overwindow) — a document bigger than the window,
        read whole and answered verified-against-text. LAST demo section. -->
   <section id="demo-overwindow" data-reveal>
-    <SectionBand icon="doc" title="Quality > Speed" topBorder={false} />
+    <SectionBand icon="doc" title="Quality > Speed" />
     <div class="container-site py-16 sm:py-20">
       <div class="gap-10 xl:grid xl:grid-cols-[3fr_2fr] xl:min-h-[23rem]">
         <div class="min-w-0 xl:h-0 xl:min-h-full xl:flex xl:flex-col">
