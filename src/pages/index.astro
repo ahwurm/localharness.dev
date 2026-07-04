@@ -64,7 +64,7 @@ const jsonLd = [
         aria-hidden="true"
         class="ascii-art focus-in overflow-hidden text-left text-[length:clamp(0.42rem,1.9vw,1.05rem)] leading-none text-accent">{banner}</pre>
       <p class="focus-in mt-6 font-mono text-sm text-dim [--fi-delay:120ms]">
-        the agent layer for the endpoint you already run — not another inference engine
+        runs AI agents on the model you’re already running — it drives your model, it isn’t one
       </p>
       <div class="focus-in mt-4 flex max-w-[300px] flex-wrap items-center justify-center gap-2 [--fi-delay:320ms] sm:max-w-none">
         <Chip icon="server" label="vLLM" href="https://docs.vllm.ai/en/latest/getting_started/installation/" />
@@ -197,21 +197,55 @@ const jsonLd = [
           </div>
         </div>
       </div>
-      <p class="measure mt-6 text-sm text-dim">
-        This is the agent loop out of the box — web search included. One prompt, and the agent hands
-        research to a web-quarantined child. Subagents get fresh windows and only the tools their job needs — the
-        web-researcher can touch only the web, a verifier re-pulls its sources blind, and every web
-        result arrives stamped <span class="text-ink">UNTRUSTED</span>, with no path to
-        <code class="font-mono text-ink">bash</code> or <code class="font-mono text-ink">write</code>.
-        Fails closed —
-        <a
-          href="https://github.com/ahwurm/localharness/blob/main/SECURITY.md"
-          target="_blank"
-          rel="noopener"
-          class="text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent"
-          >SECURITY.md</a
-        >.
-      </p>
+      <div class="measure mt-6">
+        <p class="eyebrow">fenced off</p>
+        <ul class="mt-3 space-y-2.5">
+          <li class="flex items-start gap-3">
+            <Icon name="globe" class="size-4" />
+            <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
+              <span class="font-mono text-[13px] text-ink">web search, built in</span>
+              <span class="text-sm text-dim">hands it off to a helper walled off from the rest</span>
+            </span>
+          </li>
+          <li class="flex items-start gap-3">
+            <Icon name="box" class="size-4" />
+            <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
+              <span class="font-mono text-[13px] text-ink">each helper is boxed in</span>
+              <span class="text-sm text-dim">it starts clean, with only the tools its job needs</span>
+            </span>
+          </li>
+          <li class="flex items-start gap-3">
+            <Icon name="repeat" class="size-4" />
+            <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
+              <span class="font-mono text-[13px] text-ink">a checker re-does the work</span>
+              <span class="text-sm text-dim">it fetches the sources again from scratch</span>
+            </span>
+          </li>
+          <li class="flex items-start gap-3">
+            <Icon name="shield" class="size-4" />
+            <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
+              <span class="font-mono text-[13px] text-ink">the web is marked untrusted</span>
+              <span class="text-sm text-dim">it can't run commands or change files</span>
+            </span>
+          </li>
+          <li class="flex items-start gap-3">
+            <Icon name="check" class="size-4" />
+            <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
+              <span class="font-mono text-[13px] text-ink">safe by default</span>
+              <span class="text-sm text-dim">if it's unsure, it blocks the action</span>
+            </span>
+          </li>
+        </ul>
+        <p class="mt-5 font-mono text-xs">
+          <a
+            href="https://github.com/ahwurm/localharness/blob/main/SECURITY.md"
+            target="_blank"
+            rel="noopener"
+            class="text-accent/80 transition-colors hover:text-accent"
+            >SECURITY.md ↗</a
+          >
+        </p>
+      </div>
     </div>
   </section>
 
@@ -237,18 +271,31 @@ const jsonLd = [
           />
         </div>
         <div class="mt-6 xl:mt-0">
-          <ol class="space-y-4">
-            <li>
-              <span class="font-mono text-[13px] text-accent">01 · a bench of specialists</span>
-              <p class="mt-1 text-sm text-dim">The main agent delegates to them on its own — each runs in a fresh context window.</p>
+          <p class="eyebrow">the roster</p>
+          <ol class="mt-3 space-y-2.5">
+            <li class="flex items-start gap-3">
+              <span class="flex size-5 shrink-0 items-center justify-center border border-accent/50 bg-accent/10 font-mono text-[11px] font-semibold text-accent">1</span>
+              <Icon name="agent" class="size-4" />
+              <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                <span class="font-mono text-[13px] text-ink">a bench of specialists</span>
+                <span class="text-sm text-dim">the main agent calls them on its own — each with a clean slate</span>
+              </span>
             </li>
-            <li>
-              <span class="font-mono text-[13px] text-accent">02 · each fenced to its job</span>
-              <p class="mt-1 text-sm text-dim">A specialist gets only the tools its job needs — none of them holds bash or write.</p>
+            <li class="flex items-start gap-3">
+              <span class="flex size-5 shrink-0 items-center justify-center border border-accent/50 bg-accent/10 font-mono text-[11px] font-semibold text-accent">2</span>
+              <Icon name="shield" class="size-4" />
+              <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                <span class="font-mono text-[13px] text-ink">each fenced to its job</span>
+                <span class="text-sm text-dim">only the tools its job needs — none can run commands or change files</span>
+              </span>
             </li>
-            <li>
-              <span class="font-mono text-[13px] text-accent">03 · yours is one YAML file</span>
-              <p class="mt-1 text-sm text-dim">Name, role, tools, budget. One command scaffolds it into ~/.localharness/agents/.</p>
+            <li class="flex items-start gap-3">
+              <span class="flex size-5 shrink-0 items-center justify-center border border-accent/50 bg-accent/10 font-mono text-[11px] font-semibold text-accent">3</span>
+              <Icon name="doc" class="size-4" />
+              <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                <span class="font-mono text-[13px] text-ink">yours is one YAML file</span>
+                <span class="text-sm text-dim">name, role, tools, budget — one command creates it for you</span>
+              </span>
             </li>
           </ol>
           <p class="mt-5 flex flex-wrap gap-x-8 gap-y-2 font-mono text-xs">
@@ -279,22 +326,35 @@ const jsonLd = [
             boxClass="xl:flex-1 xl:min-h-0"
           />
           <p class="mt-2 font-mono text-[11px] text-dim">
-            the Odyssey whole — 678,822 characters vs a 126,976-token window · answer verified against the text
+            the whole Odyssey — far more text than the model can hold at once · answer checked against the book
           </p>
         </div>
         <div class="mt-6 xl:mt-0">
-          <ol class="space-y-4">
-            <li>
-              <span class="font-mono text-[13px] text-accent">01 · the whole epic, one handle</span>
-              <p class="mt-1 text-sm text-dim">A context window is how much text the model can hold at once. This epic is a third again bigger.</p>
+          <p class="eyebrow">read whole</p>
+          <ol class="mt-3 space-y-2.5">
+            <li class="flex items-start gap-3">
+              <span class="flex size-5 shrink-0 items-center justify-center border border-accent/50 bg-accent/10 font-mono text-[11px] font-semibold text-accent">1</span>
+              <Icon name="box" class="size-4" />
+              <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                <span class="font-mono text-[13px] text-ink">the whole epic, one handle</span>
+                <span class="text-sm text-dim">a context window is how much text the model can hold at once. This epic is a third again bigger.</span>
+              </span>
             </li>
-            <li>
-              <span class="font-mono text-[13px] text-accent">02 · every section actually read</span>
-              <p class="mt-1 text-sm text-dim">The harness cuts the text into sections and reads each one in a fresh window — that's the cascade.</p>
+            <li class="flex items-start gap-3">
+              <span class="flex size-5 shrink-0 items-center justify-center border border-accent/50 bg-accent/10 font-mono text-[11px] font-semibold text-accent">2</span>
+              <Icon name="search" class="size-4" />
+              <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                <span class="font-mono text-[13px] text-ink">every section actually read</span>
+                <span class="text-sm text-dim">the harness cuts the text into sections and reads each one in a fresh window — that's the cascade.</span>
+              </span>
             </li>
-            <li>
-              <span class="font-mono text-[13px] text-accent">03 · one grounded answer</span>
-              <p class="mt-1 text-sm text-dim">The section extracts combine into one reply that quotes the text exactly.</p>
+            <li class="flex items-start gap-3">
+              <span class="flex size-5 shrink-0 items-center justify-center border border-accent/50 bg-accent/10 font-mono text-[11px] font-semibold text-accent">3</span>
+              <Icon name="check" class="size-4" />
+              <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                <span class="font-mono text-[13px] text-ink">one grounded answer</span>
+                <span class="text-sm text-dim">each section's findings combine into one reply that quotes the text exactly.</span>
+              </span>
             </li>
           </ol>
           <p class="mt-5 font-mono text-xs">
