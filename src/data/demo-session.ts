@@ -1,8 +1,8 @@
 // REAL captured session — no fabricated terminal output (site rule).
 // Presented on the homepage in TWO ACTS of the SAME session (pacing only, no
-// text changes): `d1Lines` (init → ready) is demo 1 "_zero to agent";
-// `d3Lines` (prompt → answer) is demo 3 "_delegation, quarantined", and its
-// on-page caption says it continues demo 1's session.
+// text changes): `d1Lines` (init → ready) renders as fig. 01 "Getting Started";
+// `d3Lines` (prompt → answer) renders as fig. 02 "Demo" (the agent loop +
+// quarantined web search).
 //
 // Provenance: captured 2026-07-02 17:35Z on the DGX Spark reference box.
 //   - repo: github.com/ahwurm/localharness @ main (78564b9, v0.5.1), fresh worktree

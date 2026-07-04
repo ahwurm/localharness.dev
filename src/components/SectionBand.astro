@@ -1,0 +1,24 @@
+---
+// Full-width section-title band — the demo sections' h2, in the Interstitial's
+// visual family (hairline border-y strip, surface tint, container-site inner)
+// but sized up to a title with a square stroke-icon chip. Replaces the old big
+// green `_word` h2 form (retired 2026-07-03). `topBorder={false}` drops the top
+// hairline when an Interstitial sits directly above, so the two bands share one
+// separator instead of doubling it.
+import Icon, { type IconName } from './Icon.astro';
+interface Props {
+  icon: IconName;
+  title: string;
+  topBorder?: boolean;
+}
+const { icon, title, topBorder = true } = Astro.props;
+---
+
+<div class:list={['border-b border-edge/70 bg-surface/40', topBorder && 'border-t']}>
+  <div class="container-site flex items-center gap-3 py-4 sm:py-5">
+    <span class="flex size-9 shrink-0 items-center justify-center border border-accent/50 bg-accent/10">
+      <Icon name={icon} class="size-4" />
+    </span>
+    <h2 class="font-mono text-[clamp(1.5rem,2.6vw,2rem)] font-semibold tracking-[-0.02em] text-ink">{title}</h2>
+  </div>
+</div>

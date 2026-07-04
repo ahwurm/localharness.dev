@@ -5,10 +5,12 @@ import CodeBlock from '../components/CodeBlock.astro';
 import DemoPane from '../components/DemoPane.astro';
 import TraceFlow from '../components/TraceFlow.astro';
 import Interstitial from '../components/Interstitial.astro';
+import SectionBand from '../components/SectionBand.astro';
 import { d1Lines, d3Lines, eventTotal } from '../data/demo-session';
 import { d2Lines, overwindowTailMeter } from '../data/demo-overwindow';
 import { d4Lines, agentsTailMeter } from '../data/demo-agents';
 import Chip from '../components/Chip.astro';
+import Icon from '../components/Icon.astro';
 import GetInvolved from '../components/GetInvolved.astro';
 
 const install = `git clone https://github.com/ahwurm/localharness
@@ -83,99 +85,97 @@ const jsonLd = [
     </div>
   </section>
 
-  <!-- Demo 1: _startup — cold start to a working agent; terminal + get-running journey -->
-  <section id="demo-section" class="border-t border-edge/70" data-reveal>
+  <!-- Getting Started (#demo-section > #demo-startup) — cold start to a working agent;
+       terminal + get-running journey. FIRST demo section; #demo-section is the hero
+       "watch it work" scroll target, so it stays here. -->
+  <section id="demo-section" data-reveal>
+    <SectionBand icon="prompt" title="Getting Started" />
     <div id="demo-startup" class="container-site py-16 sm:py-20">
-      <h2 class="font-mono text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
-        <span class="text-ink" aria-hidden="true">_</span><span class="text-accent">startup</span>
-      </h2>
-      <div class="mt-10 gap-10 xl:grid xl:grid-cols-[3fr_2fr] xl:min-h-[23rem]">
+      <div class="gap-10 xl:grid xl:grid-cols-[3fr_2fr] xl:min-h-[23rem]">
         <div class="min-w-0 xl:h-0 xl:min-h-full xl:flex xl:flex-col">
           <p class="mb-2 font-mono text-xs"><span class="text-accent/80">fig. 01</span></p>
           <DemoPane key="d1" title="~/localharness — real session · qwen3.6-27b on vLLM" lines={d1Lines} boxClass="xl:flex-1 xl:min-h-0" bodyClass="xl:flex-1 xl:min-h-0" />
         </div>
         <div class="mt-6 xl:mt-0">
-          <h3 class="font-mono text-xl font-semibold tracking-[-0.01em]">
-            <span class="text-ink" aria-hidden="true">_</span><span class="text-accent">No API key, no signup — the model you're already running.</span>
-          </h3>
-          <p class="mt-3 text-sm text-dim">
-            Download a local model and a server to run it — vLLM, Ollama, LM Studio, or llama.cpp — then clone
-            LocalHarness and run four lines. <span class="text-ink">Zero to agent.</span>
-          </p>
-          <ol class="mt-5 space-y-4">
-            <li>
-              <span class="font-mono text-[13px] text-accent">01 · probes for what's running</span>
-              <p class="mt-1 text-sm text-dim">Checks localhost for a live model server: vLLM, Ollama, LM Studio, llama.cpp.</p>
+          <h3 class="font-mono text-xl font-semibold tracking-[-0.01em] text-ink">Running</h3>
+          <p class="mt-2 font-mono text-xs text-dim">No API key, no signup.</p>
+
+          <!-- THE JOURNEY — numbered square-badge strip: model → server → four lines → agent -->
+          <p class="eyebrow mt-6">the journey</p>
+          <ol class="mt-3 space-y-2.5">
+            <li class="flex items-center gap-3">
+              <span class="flex size-5 shrink-0 items-center justify-center border border-accent/50 bg-accent/10 font-mono text-[11px] font-semibold text-accent">1</span>
+              <Icon name="download" class="size-4" />
+              <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                <span class="font-mono text-[13px] text-ink">model</span>
+                <span class="text-sm text-dim">download any open-source model</span>
+              </span>
             </li>
-            <li>
-              <span class="font-mono text-[13px] text-accent">02 · confirms it can act</span>
-              <p class="mt-1 text-sm text-dim">Verifies the model can trigger a command, not just chat, before any agent runs.</p>
+            <li class="flex items-center gap-3">
+              <span class="flex size-5 shrink-0 items-center justify-center border border-accent/50 bg-accent/10 font-mono text-[11px] font-semibold text-accent">2</span>
+              <Icon name="server" class="size-4" />
+              <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                <span class="font-mono text-[13px] text-ink">server</span>
+                <span class="text-sm text-dim">vLLM · Ollama · LM Studio · llama.cpp</span>
+              </span>
             </li>
-            <li>
-              <span class="font-mono text-[13px] text-accent">03 · sets the limit itself</span>
-              <p class="mt-1 text-sm text-dim">Reads how much text the model can hold straight off the server. Nothing to hand-write.</p>
+            <li class="flex items-center gap-3">
+              <span class="flex size-5 shrink-0 items-center justify-center border border-accent/50 bg-accent/10 font-mono text-[11px] font-semibold text-accent">3</span>
+              <Icon name="prompt" class="size-4" />
+              <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                <span class="font-mono text-[13px] text-ink">four lines</span>
+                <span class="text-sm text-dim">clone · sync · init · start</span>
+              </span>
+            </li>
+            <li class="flex items-center gap-3">
+              <span class="flex size-5 shrink-0 items-center justify-center border border-accent/50 bg-accent/10 font-mono text-[11px] font-semibold text-accent">4</span>
+              <Icon name="agent" class="size-4" />
+              <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                <span class="font-mono text-[13px] text-ink">agent</span>
+                <span class="text-sm text-dim">zero to agent</span>
+              </span>
             </li>
           </ol>
+
+          <!-- WHAT INIT DOES — icon-led lockups (no numerals), the three init facts -->
+          <p class="eyebrow mt-8">what init does</p>
+          <ul class="mt-3 space-y-2.5">
+            <li class="flex items-center gap-3">
+              <Icon name="search" class="size-4" />
+              <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                <span class="font-mono text-[13px] text-ink">probes for what's running</span>
+                <span class="text-sm text-dim">checks localhost for a live server</span>
+              </span>
+            </li>
+            <li class="flex items-center gap-3">
+              <Icon name="check" class="size-4" />
+              <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                <span class="font-mono text-[13px] text-ink">confirms it can act</span>
+                <span class="text-sm text-dim">can trigger a command, not just chat</span>
+              </span>
+            </li>
+            <li class="flex items-center gap-3">
+              <Icon name="gauge" class="size-4" />
+              <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                <span class="font-mono text-[13px] text-ink">sets the limit itself</span>
+                <span class="text-sm text-dim">reads it straight off the server</span>
+              </span>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Demo 2: _overwindow — a document bigger than the window, read whole -->
-  <section id="demo-overwindow" class="border-t border-edge/70" data-reveal>
-    <div class="container-site py-16 sm:py-20">
-      <h2 class="font-mono text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
-        <span class="text-ink" aria-hidden="true">_</span><span class="text-accent">overwindow</span>
-      </h2>
-      <div class="mt-10 gap-10 xl:grid xl:grid-cols-[3fr_2fr]">
-        <div class="min-w-0 xl:h-0 xl:min-h-full xl:flex xl:flex-col">
-          <p class="mb-2 font-mono text-xs">
-            <span class="text-accent/80">fig. 02</span> <span class="text-ink">— “How does Odysseus defeat the Cyclops?”</span>
-          </p>
-          <DemoPane
-            key="d2"
-            title="~/localharness — real session · Homer’s Odyssey"
-            lines={d2Lines}
-            tailMeter={overwindowTailMeter}
-            boxClass="xl:flex-1 xl:min-h-0"
-          />
-          <p class="mt-2 font-mono text-[11px] text-dim">
-            the Odyssey whole — 678,822 characters vs a 126,976-token window · answer verified against the text
-          </p>
-        </div>
-        <div class="mt-6 xl:mt-0">
-          <ol class="space-y-4">
-            <li>
-              <span class="font-mono text-[13px] text-accent">01 · the whole epic, one handle</span>
-              <p class="mt-1 text-sm text-dim">A context window is how much text the model can hold at once. This epic is a third again bigger.</p>
-            </li>
-            <li>
-              <span class="font-mono text-[13px] text-accent">02 · every section actually read</span>
-              <p class="mt-1 text-sm text-dim">The harness cuts the text into sections and reads each one in a fresh window — that's the cascade.</p>
-            </li>
-            <li>
-              <span class="font-mono text-[13px] text-accent">03 · one grounded answer</span>
-              <p class="mt-1 text-sm text-dim">The section extracts combine into one reply that quotes the text exactly.</p>
-            </li>
-          </ol>
-          <p class="mt-5 font-mono text-xs">
-            <a href="/architecture/#over-window" class="text-accent/80 transition-colors hover:text-accent">the full mechanism ↗</a>
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
+  <Interstitial icon="repeat" lead="Same workflow, same output" rest="— much lower cost. No meter, no telemetry." />
 
-  <Interstitial icon="clock" lead="It takes longer" rest="— local models are slower. That's the tradeoff." />
-
-  <!-- Demo 3: delegation, quarantined — the agent loop + built-in web search -->
+  <!-- Demo (#demo-research) — the agent loop, out of the box; web search included,
+       delegated to a web-quarantined child. -->
   <section id="demo-research" data-reveal>
+    <SectionBand icon="search" title="Demo" topBorder={false} />
     <div class="container-site py-16 sm:py-20">
-      <h2 class="font-mono text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
-        <span class="text-ink" aria-hidden="true">_</span><span class="text-accent">delegation</span>
-      </h2>
-      <p class="mb-2 mt-10 font-mono text-xs">
-        <span class="text-accent/80">fig. 03</span> <span class="text-ink">— “Find the best open-source model for a 128 GB machine.”</span>
+      <p class="mb-2 font-mono text-xs">
+        <span class="text-accent/80">fig. 02</span> <span class="text-ink">— “Find the best open-source model for a 128 GB machine.”</span>
       </p>
       <div data-demo-scope id="demo-research-scope" class="grid gap-6 xl:grid-cols-[1.2fr_1fr]">
         <DemoPane
@@ -220,21 +220,16 @@ const jsonLd = [
     </div>
   </section>
 
-  <Interstitial icon="repeat" lead="Same workflow, same output" rest="— much lower cost. No meter, no telemetry." />
-
-  <!-- Demo 4: built in — the harness asked about itself (v0.5.3 roster: every default
-       agent quarantined-or-read-only; data-analyst + frontend-designer are opt-in
+  <!-- Agents (#agents) — the roster in the box (v0.5.3: every default agent
+       quarantined-or-read-only; data-analyst + frontend-designer are opt-in
        examples since the 2026-07-03 quality investigation) -->
-  <!-- Demo 4: _agents — the roster in the box -->
   <section id="agents" data-reveal>
+    <SectionBand icon="agent" title="Agents" />
     <div class="container-site py-16 sm:py-20">
-      <h2 class="font-mono text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
-        <span class="text-ink" aria-hidden="true">_</span><span class="text-accent">agents</span>
-      </h2>
-      <div class="mt-10 gap-10 xl:grid xl:grid-cols-[3fr_2fr] xl:min-h-[36rem]">
+      <div class="gap-10 xl:grid xl:grid-cols-[3fr_2fr] xl:min-h-[36rem]">
         <div class="min-w-0 xl:h-0 xl:min-h-full xl:flex xl:flex-col">
           <p class="mb-2 font-mono text-xs">
-            <span class="text-accent/80">fig. 04</span> <span class="text-ink">— “List the subagents that ship built in…”</span>
+            <span class="text-accent/80">fig. 03</span> <span class="text-ink">— “List the subagents that ship built in…”</span>
           </p>
           <DemoPane
             key="d4"
@@ -264,6 +259,52 @@ const jsonLd = [
           <p class="mt-5 flex flex-wrap gap-x-8 gap-y-2 font-mono text-xs">
             <a href="/architecture/#yaml" class="text-accent/80 transition-colors hover:text-accent">how agents are defined ↗</a>
             <a href="/architecture/#security" class="text-accent/80 transition-colors hover:text-accent">how quarantine works ↗</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Interstitial icon="clock" lead="It takes longer" rest="— local models are slower. That's the tradeoff." />
+
+  <!-- Quality > Speed (#demo-overwindow) — a document bigger than the window,
+       read whole and answered verified-against-text. LAST demo section. -->
+  <section id="demo-overwindow" data-reveal>
+    <SectionBand icon="doc" title="Quality > Speed" topBorder={false} />
+    <div class="container-site py-16 sm:py-20">
+      <div class="gap-10 xl:grid xl:grid-cols-[3fr_2fr] xl:min-h-[23rem]">
+        <div class="min-w-0 xl:h-0 xl:min-h-full xl:flex xl:flex-col">
+          <p class="mb-2 font-mono text-xs">
+            <span class="text-accent/80">fig. 04</span> <span class="text-ink">— “How does Odysseus defeat the Cyclops?”</span>
+          </p>
+          <DemoPane
+            key="d2"
+            title="~/localharness — real session · Homer’s Odyssey"
+            lines={d2Lines}
+            tailMeter={overwindowTailMeter}
+            boxClass="xl:flex-1 xl:min-h-0"
+          />
+          <p class="mt-2 font-mono text-[11px] text-dim">
+            the Odyssey whole — 678,822 characters vs a 126,976-token window · answer verified against the text
+          </p>
+        </div>
+        <div class="mt-6 xl:mt-0">
+          <ol class="space-y-4">
+            <li>
+              <span class="font-mono text-[13px] text-accent">01 · the whole epic, one handle</span>
+              <p class="mt-1 text-sm text-dim">A context window is how much text the model can hold at once. This epic is a third again bigger.</p>
+            </li>
+            <li>
+              <span class="font-mono text-[13px] text-accent">02 · every section actually read</span>
+              <p class="mt-1 text-sm text-dim">The harness cuts the text into sections and reads each one in a fresh window — that's the cascade.</p>
+            </li>
+            <li>
+              <span class="font-mono text-[13px] text-accent">03 · one grounded answer</span>
+              <p class="mt-1 text-sm text-dim">The section extracts combine into one reply that quotes the text exactly.</p>
+            </li>
+          </ol>
+          <p class="mt-5 font-mono text-xs">
+            <a href="/architecture/#over-window" class="text-accent/80 transition-colors hover:text-accent">the full mechanism ↗</a>
           </p>
         </div>
       </div>

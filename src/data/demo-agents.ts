@@ -1,5 +1,5 @@
 // REAL captured session — no fabricated terminal output (site rule).
-// Demo 4 "_built in": a fresh install asked what it ships.
+// Renders as fig. 03 "Agents" (#agents): a fresh install asked what it ships.
 //
 // Provenance: captured 2026-07-03T01:37Z (2026-07-02 local) on the DGX Spark reference box.
 //   - repo: github.com/ahwurm/localharness @ main (e885d0b, v0.5.3 — the release that

@@ -1,5 +1,5 @@
 // REAL captured session — no fabricated terminal output (site rule).
-// Demo 2 "_bigger than the window": the over-window / cruncher read.
+// Renders as fig. 04 "Quality > Speed" (#demo-overwindow): the over-window / cruncher read.
 //
 // Provenance: captured 2026-07-02 on the DGX Spark reference box.
 //   - repo: github.com/ahwurm/localharness @ main (78564b9, v0.5.1), fresh worktree
