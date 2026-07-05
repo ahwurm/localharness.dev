@@ -1,13 +1,13 @@
 ---
 // The out-of-the-box story, felt: three REAL artifacts, tabbable. No fabricated
-// content — `default.yaml` is what `localharness start` generates; `web-researcher`
+// content — `orchestrator.yaml` is what `localharness start` generates; `web-researcher`
 // is verbatim-abridged from src/localharness/agent/subagent.py @ main (built-ins
 // ship as code — YOUR agents are the YAML); the third tab is a real
 // `agent create --dry-run` invocation + its verbatim output.
 const tabs = [
   {
-    id: 'default',
-    file: '~/.localharness/agents/default.yaml',
+    id: 'orchestrator',
+    file: '~/.localharness/agents/orchestrator.yaml',
     note: 'What start gives you — a working agent is three lines.',
     lang: 'yaml',
   },
@@ -48,10 +48,10 @@ const tabs = [
     }
   </div>
 
-  <div data-yt-panel="default" id="yt-panel-default" role="tabpanel" aria-labelledby="yt-tab-default">
-    <div class="border-b border-edge/60 px-4 py-1.5 font-mono text-[11px] text-dim">~/.localharness/agents/default.yaml</div>
+  <div data-yt-panel="orchestrator" id="yt-panel-orchestrator" role="tabpanel" aria-labelledby="yt-tab-orchestrator">
+    <div class="border-b border-edge/60 px-4 py-1.5 font-mono text-[11px] text-dim">~/.localharness/agents/orchestrator.yaml</div>
     <pre class="overflow-x-auto whitespace-pre-wrap [overflow-wrap:anywhere] p-4 font-mono text-[13px] leading-relaxed text-ink sm:whitespace-pre"><code><span class="text-dim">model:</span> inherit
-<span class="text-dim">name:</span> default
+<span class="text-dim">name:</span> orchestrator
 <span class="text-dim">role:</span> General-purpose assistant</code></pre>
   </div>
 

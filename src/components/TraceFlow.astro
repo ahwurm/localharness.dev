@@ -66,7 +66,7 @@ const railRows = flow.map((h, i) => ({
       </g>
       <g data-node="agent">
         <rect x="198" y="48" width="128" height="46" class="fill-surface stroke-edge" stroke-width="1.4"></rect>
-        <text x="262" y="68" text-anchor="middle" class="fill-ink font-mono text-[12px]">main agent</text>
+        <text x="262" y="68" text-anchor="middle" class="fill-ink font-mono text-[12px]">orchestrator</text>
         <text x="262" y="81" text-anchor="middle" class="fill-dim font-mono text-[9px]">qwen3.6-27b · vLLM</text>
       </g>
       <g data-node="researcher">
@@ -85,9 +85,9 @@ const railRows = flow.map((h, i) => ({
         <rect x="386" y="162" width="110" height="188" class="fill-bg stroke-edge" stroke-width="1.4"></rect>
         <text x="441" y="184" text-anchor="middle" class="fill-ink font-mono text-[12px]">web</text>
         <text x="441" y="202" text-anchor="middle" class="fill-dim font-mono text-[9px]">ddgs · live pages</text>
-        <text x="441" y="220" text-anchor="middle" class="fill-dim font-mono text-[9px]">web_search ×10</text>
-        <text x="441" y="234" text-anchor="middle" class="fill-dim font-mono text-[9px]">web_fetch ×7</text>
-        <text x="441" y="248" text-anchor="middle" class="fill-dim font-mono text-[9px]">page_query ×2</text>
+        <text x="441" y="220" text-anchor="middle" class="fill-dim font-mono text-[9px]">web_search ×14</text>
+        <text x="441" y="234" text-anchor="middle" class="fill-dim font-mono text-[9px]">web_fetch ×16</text>
+        <text x="441" y="248" text-anchor="middle" class="fill-dim font-mono text-[9px]">page_query ×3</text>
         <line x1="398" y1="312" x2="484" y2="312" class="stroke-edge" stroke-width="1"></line>
         <text x="441" y="327" text-anchor="middle" class="fill-dim font-mono text-[9px]">no path to bash</text>
         <text x="441" y="339" text-anchor="middle" class="fill-dim font-mono text-[9px]">/ write / edit</text>
@@ -107,7 +107,7 @@ const railRows = flow.map((h, i) => ({
         <text x="228" y="121" text-anchor="middle" class="fill-accent-ink font-mono text-[9px] font-semibold">2</text>
       </g>
       <g data-edge="2">
-        <text x="356" y="179" text-anchor="middle" class="fill-dim font-mono text-[9px]">queries ×8</text>
+        <text x="356" y="179" text-anchor="middle" class="fill-dim font-mono text-[9px]">queries ×23</text>
         <line x1="326" y1="190" x2="378" y2="190" pathLength="1" class="stroke-accent" stroke-width="1.4" marker-end="url(#tf-a)"></line>
         <circle cx="348" cy="190" r="7" class="fill-accent"></circle>
         <text x="348" y="193" text-anchor="middle" class="fill-accent-ink font-mono text-[9px] font-semibold">3</text>
@@ -125,7 +125,7 @@ const railRows = flow.map((h, i) => ({
         <text x="228" y="251" text-anchor="middle" class="fill-accent-ink font-mono text-[9px] font-semibold">5</text>
       </g>
       <g data-edge="5">
-        <text x="356" y="312" text-anchor="middle" class="fill-dim font-mono text-[9px]">re-pull</text>
+        <text x="356" y="312" text-anchor="middle" class="fill-dim font-mono text-[9px]">re-pull ×7</text>
         <line x1="326" y1="323" x2="378" y2="323" pathLength="1" class="stroke-accent" stroke-width="1.4" marker-end="url(#tf-a)"></line>
         <circle cx="348" cy="323" r="7" class="fill-accent"></circle>
         <text x="348" y="326" text-anchor="middle" class="fill-accent-ink font-mono text-[9px] font-semibold">6</text>
@@ -157,7 +157,7 @@ const railRows = flow.map((h, i) => ({
 
   <!-- <sm: node-wire rail (the plate's text would be illegible this small) -->
   <div class="sm:hidden" aria-hidden="true">
-    <div class="flex items-center">
+    <div class="flex flex-wrap items-center gap-y-2">
       {
         actors.map((a, i) => (
           <>

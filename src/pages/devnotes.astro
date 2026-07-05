@@ -7,6 +7,68 @@ import Eyebrow from '../components/Eyebrow.astro';
 // to a commit or CHANGELOG entry in github.com/ahwurm/localharness.
 const releases = [
   {
+    v: 'v0.7.0',
+    date: 'Jul 4, 2026',
+    entries: [
+      {
+        tag: 'Added',
+        title: 'The next sitting remembers the last',
+        body: 'Every run of the harness is now a session with its own record. When one ends, the harness distills a one-line, payload-first summary of what actually happened — the error you resolved, the stuck loop it recovered from — and files it to the agent\'s memory; a sitting with nothing of substance writes nothing rather than padding with filler. A fresh session then answers "what did we do last time?" straight from its injected memory block, without a tool call. Summaries written when context is compacted persist the same way, so what got compacted away isn\'t lost to the next sitting.',
+      },
+      {
+        tag: 'Added',
+        title: 'A Recent Session History shelf',
+        body: 'The injected memory now carries a Recent Session History block — each past sitting on its own line, tagged with a relative day and clock time, newest first, capped to a short window; older sittings stay in the store and remain searchable. When a sitting has no error-lesson to lead with, its summary leads instead with a trimmed slice of what you asked — so a pure conversation is no longer invisible to memory. Rendering reads the session records directly and stays byte-stable within a day; the whole path runs without a model call.',
+      },
+      {
+        tag: 'Added',
+        title: 'A live thinking indicator in the REPL',
+        body: 'While the model is generating, the terminal shows an animated "thinking…" spinner that clears the instant real output arrives — a tool-call line, the answer panel, or the next prompt. It replaces the occasional static "Working…" line, so a long generation no longer looks like the box has hung.',
+      },
+      {
+        tag: 'Changed',
+        title: 'The root agent is the orchestrator, by name',
+        body: 'The root agent is now created and selected as "orchestrator" rather than "default", matching the architecture\'s own vocabulary. Existing installs migrate on first start and keep every memory — the agent file and the whole memory store are adopted under the new name, one-time and crash-safe. If you already run your own agent named orchestrator, the migration refuses rather than merge or overwrite anything, the root keeps its old name, and a console note explains how to resolve. The old name still redirects to it, and orchestrator is now reserved for the root.',
+      },
+      {
+        tag: 'Fixed',
+        title: 'A conversational reply arrives once, not twice',
+        body: 'The act-guard — the nudge that turns a stated intent to go look something up into an actual tool call — used to ask the model to restate its final answer when no tools were needed, which could surface a narrated duplicate of the reply you had already been given. It now requests a marker the harness swallows, and the original reply is delivered unchanged. This retires a leak that had been live since an earlier release.',
+      },
+    ],
+  },
+  {
+    v: 'v0.6.0',
+    date: 'Jul 3, 2026',
+    entries: [
+      {
+        tag: 'Added',
+        title: 'Persistent memory that learns from experience',
+        body: 'Agents now write, rank, consolidate, and retrieve long-term memory on their own — no memory prompt-engineering. There are two write paths: a deliberate save, and an automatic gate that captures lessons from the harness\'s own prediction-error signals — a tool call that failed then later succeeded, a stuck loop that recovered — at no extra model cost. Nothing is ever overwritten: a conflicting fact supersedes the old one, which stays retrievable on request, and every fact carries provenance back to the episode it came from.',
+      },
+      {
+        tag: 'Added',
+        title: 'Ranking and consolidation at no token cost',
+        body: 'Which facts earn prompt space is decided by activation scoring — used-often plus used-recently — computed inside the database at query time, so ranking costs nothing. When you go idle, a background "sleep" pass promotes lessons seen across more than one episode, decays unused facts out of the visible index without deleting them from the store, and trims a soft cap by demotion rather than silent deletion. Your next message cancels an in-flight pass at once.',
+      },
+      {
+        tag: 'Added',
+        title: 'A byte-stable memory index',
+        body: 'The in-prompt memory is an index — fact names with one-line, payload-first descriptions — not the full bodies, which are pulled on demand. Reads and retrieval no longer perturb its bytes; they accumulate in a staging ledger instead of reordering anything. The bytes move only at genuine writes, consolidation folds, and day boundaries, keeping the inference server\'s prefix cache intact between those points — stability that is load-bearing on a long prompt, not cosmetic.',
+      },
+      {
+        tag: 'Added',
+        title: 'Structure-aware memory search',
+        body: 'An over-window document read now persists its gist-and-schema tree, so a later search routes through that structure — the gists steer the search, the leaf records anchor the answer. The number-provenance net from the over-window work extends here too: a figure promoted into a gist that traces back to no source leaf is flagged, never silently kept.',
+      },
+      {
+        tag: 'Fixed',
+        title: 'Promoted lessons survive every render layer',
+        body: 'A promoted lesson\'s payload now survives every render layer — the line budget for the index no longer truncates the discriminating detail out of a lesson before it reaches the prompt.',
+      },
+    ],
+  },
+  {
     v: 'v0.5.3',
     date: 'Jul 2, 2026',
     entries: [
