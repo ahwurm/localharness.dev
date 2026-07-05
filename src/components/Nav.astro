@@ -1,11 +1,12 @@
 ---
 import Wordmark from './Wordmark.astro';
+import Icon from './Icon.astro';
 
 const path = Astro.url.pathname;
 const links = [
   { href: '/architecture/', label: 'architecture' },
-  // devnotes hides below 420px — the row can't fit all links at 390 (PRD nav contract)
-  { href: '/devnotes/', label: 'devnotes', cls: 'hidden min-[420px]:inline' },
+  { href: '/devnotes/', label: 'devnotes' },
+  { href: 'https://github.com/ahwurm/localharness', label: 'github ↗', external: true },
 ];
 const isActive = (href: string) => path === href || path === href.replace(/\/$/, '');
 ---
@@ -18,29 +19,101 @@ const isActive = (href: string) => path === href || path === href.replace(/\/$/,
     >
       <Wordmark />
     </a>
-    <div class="flex items-center gap-4 font-mono text-xs text-dim sm:gap-8 sm:text-[13px]">
-      {
-        links.map((l) => (
-          <a
-            href={l.href}
-            aria-current={isActive(l.href) ? 'page' : undefined}
-            class:list={[
-              'transition-colors duration-200 hover:text-ink',
-              l.cls,
-              isActive(l.href) &&
-                'text-ink underline decoration-accent/70 decoration-2 underline-offset-8',
-            ]}
-          >
-            {l.label}
-          </a>
-        ))
-      }
-      <a
-        href="https://github.com/ahwurm/localharness"
-        class="transition-colors duration-200 hover:text-ink"
-        target="_blank"
-        rel="noopener">github&nbsp;↗</a
+
+    <details class="menu relative">
+      <summary
+        class="menu-toggle inline-flex size-10 cursor-pointer items-center justify-center border border-transparent transition-colors duration-200 hover:border-edge hover:bg-surface"
+        aria-label="Menu"
       >
-    </div>
+        <span class="menu-icon"><Icon name="menu" class="size-5" /></span>
+        <span class="menu-icon-close"><Icon name="close" class="size-5" /></span>
+      </summary>
+
+      <div
+        class="menu-panel absolute right-0 top-full z-50 mt-2 flex min-w-[11rem] origin-top-right flex-col border border-edge bg-surface py-1"
+      >
+        {
+          links.map((l) => (
+            <a
+              href={l.href}
+              aria-current={!l.external && isActive(l.href) ? 'page' : undefined}
+              target={l.external ? '_blank' : undefined}
+              rel={l.external ? 'noopener' : undefined}
+              class:list={[
+                'flex min-h-[40px] items-center px-4 font-mono text-[13px] text-dim transition-colors duration-200 hover:bg-surface-2 hover:text-ink',
+                !l.external && isActive(l.href) && 'text-ink',
+              ]}
+            >
+              {l.label}
+            </a>
+          ))
+        }
+      </div>
+    </details>
   </nav>
 </header>
+
+<style>
+  /* remove the default disclosure triangle — the hamburger glyph is the affordance */
+  .menu-toggle {
+    list-style: none;
+  }
+  .menu-toggle::-webkit-details-marker {
+    display: none;
+  }
+
+  /* glyph swap: hamburger closed, X open (instant — swap needs no motion) */
+  .menu-icon {
+    display: inline-flex;
+  }
+  .menu-icon-close {
+    display: none;
+  }
+  details[open] .menu-icon {
+    display: none;
+  }
+  details[open] .menu-icon-close {
+    display: inline-flex;
+  }
+  details[open] .menu-toggle {
+    border-color: var(--color-edge);
+    background-color: color-mix(in oklab, var(--color-accent) 12%, transparent);
+  }
+
+  /* active-page link: hairline accent bar on the left */
+  .menu-panel a[aria-current='page'] {
+    box-shadow: inset 2px 0 0 0 var(--color-accent);
+  }
+
+  /* subtle reveal on open — pure CSS (no JS); instant under reduced-motion */
+  @media (prefers-reduced-motion: no-preference) {
+    .menu-panel {
+      transition:
+        opacity 0.18s var(--ease-reveal),
+        transform 0.18s var(--ease-reveal);
+    }
+    @starting-style {
+      details[open] .menu-panel {
+        opacity: 0;
+        transform: scale(0.97) translateY(-4px);
+      }
+    }
+  }
+</style>
+
+<script>
+  // Progressive enhancement only — the <details> disclosure works fully without this.
+  // Adds: close on outside-click, close on Escape, close after following a link.
+  document.querySelectorAll<HTMLDetailsElement>('details.menu').forEach((menu) => {
+    const close = () => menu.removeAttribute('open');
+    document.addEventListener('click', (e) => {
+      if (menu.open && !menu.contains(e.target as Node)) close();
+    });
+    menu.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') close();
+    });
+    menu.querySelector('.menu-panel')?.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('a')) close();
+    });
+  });
+</script>
