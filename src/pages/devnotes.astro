@@ -1,6 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
 import Eyebrow from '../components/Eyebrow.astro';
+import Icon from '../components/Icon.astro';
+import type { IconName } from '../components/Icon.astro';
 
 // Real shipped changes grouped by release, newest first. Versions on this page are
 // a user directive (2026-07-02); entry bodies stay number-free. Each entry traces
@@ -205,6 +207,14 @@ const tagStyle = (tag: string) =>
   tag === 'Added'
     ? 'border-accent/30 bg-accent/10 text-accent'
     : 'border-amber/30 bg-amber/10 text-amber';
+
+// Icon-led rows: glyph + color follow the tag. Icon.astro bakes stroke-accent into
+// every glyph, so text-amber alone can't recolor it — the descendant stroke override
+// carries the amber for Changed/Fixed without touching the shared component.
+const iconGlyph = (tag: string): IconName =>
+  tag === 'Added' ? 'download' : tag === 'Changed' ? 'repeat' : 'check';
+const iconColor = (tag: string) =>
+  tag === 'Added' ? 'text-accent' : 'text-amber [&_*]:stroke-amber';
 ---
 
 <Base
@@ -218,45 +228,63 @@ const tagStyle = (tag: string) =>
     </h1>
     <p class="mt-4 text-dim">Release by release, newest first. The full history lives on GitHub.</p>
 
-    <div class="mt-12 flex flex-col gap-12">
-      {
-        releases.map((r) => (
-          <section aria-label={r.v}>
-            <header class="flex items-baseline gap-3 border-b border-edge pb-3">
-              <span class="border border-accent/40 bg-accent/10 px-2 py-0.5 font-mono text-sm text-accent">
-                {r.v}
-              </span>
-              <span class="font-mono text-xs text-dim">{r.date}</span>
-            </header>
-            <div class="divide-y divide-edge/60">
-              {r.entries.map((n) => (
-                <article class="py-4">
-                  <div class="flex flex-wrap items-center gap-x-3 gap-y-1.5">
-                    <span
-                      class:list={[
-                        'shrink-0 border px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-wide',
-                        tagStyle(n.tag),
-                      ]}
-                    >
-                      {n.tag}
-                    </span>
-                    <h2 class="text-base font-medium text-ink">{n.title}</h2>
-                  </div>
-                  <p class="mt-2 text-sm leading-relaxed text-dim">{n.body}</p>
-                </article>
-              ))}
-            </div>
-          </section>
-        ))
-      }
+    <div class="relative mt-12">
+      <span class="absolute inset-y-0 left-0 w-px bg-accent/25" aria-hidden="true"></span>
+      <div class="flex flex-col gap-12">
+        {
+          releases.map((r, i) => (
+            <section aria-label={r.v} data-reveal class="pl-5 sm:pl-6">
+              <header class="-ml-5 flex items-baseline gap-3 border-b border-edge pb-3 sm:-ml-6">
+                <span class="bg-bg">
+                  <span class="border border-accent/40 bg-accent/10 px-2 py-0.5 font-mono text-sm text-accent">
+                    {r.v}
+                  </span>
+                </span>
+                <span class="font-mono text-xs text-dim">{r.date}</span>
+                {i === 0 && (
+                  <span class="border border-accent/30 bg-accent/10 px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-wide text-accent">
+                    latest
+                  </span>
+                )}
+              </header>
+              <div class="divide-y divide-edge/60">
+                {r.entries.map((n) => (
+                  <article class="flex items-start gap-3 py-4">
+                    <Icon
+                      name={iconGlyph(n.tag)}
+                      class={`mt-1 size-4 shrink-0 ${iconColor(n.tag)}`}
+                      aria-hidden="true"
+                    />
+                    <div class="min-w-0 flex-1">
+                      <h2 class="text-base font-medium text-ink">
+                        <span
+                          class:list={[
+                            'mr-2.5 inline-block border px-1.5 py-0.5 align-[0.1em] font-mono text-[11px] uppercase tracking-wide',
+                            tagStyle(n.tag),
+                          ]}
+                        >
+                          {n.tag}
+                        </span>
+                        {n.title}
+                      </h2>
+                      <p class="mt-2 text-sm leading-relaxed text-dim">{n.body}</p>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </section>
+          ))
+        }
+      </div>
+      <p class="mt-12 pl-5 font-mono text-xs sm:pl-6">
+        <a
+          href="https://github.com/ahwurm/localharness/commits/main"
+          target="_blank"
+          rel="noopener"
+          class="text-accent/80 transition-colors hover:text-accent"
+          >full history on github ↗</a
+        >
+      </p>
     </div>
-
-    <a
-      href="https://github.com/ahwurm/localharness/commits/main"
-      target="_blank"
-      rel="noopener"
-      class="mt-12 inline-block font-mono text-sm text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent"
-      >full history on github ↗</a
-    >
   </section>
 </Base>
