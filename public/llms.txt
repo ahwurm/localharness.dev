@@ -24,17 +24,26 @@ receipts that link straight to the source on public main:
 - The system shape: https://localharness.dev/architecture/#system
 - The agent loop — budgets, stuck-detector, act-guard, self-check, parse-repair: https://localharness.dev/architecture/#loop
 - Delegation, fenced — quarantine and fail-closed hand-offs: https://localharness.dev/architecture/#delegation
-- Bigger than the window — chunk, evict, read-through: https://localharness.dev/architecture/#context
+- Memory — at every scale, from one window to lasting SQLite + MEMORY.md: https://localharness.dev/architecture/#memory
 - Configuration — agents as YAML under deny-first permissions: https://localharness.dev/architecture/#yaml
 - Autoresearch — self-improvement under a promotion gate: https://localharness.dev/architecture/#autoresearch
 - What it isn't — scope and honest limits: https://localharness.dev/architecture/#scope
 - Run it — install plus a read-the-code map: https://localharness.dev/architecture/#run
 
-Thin orchestrator (route · index · escalate) → YAML-defined subagents, each with its own
-fresh context and isolated SQLite memory → a typed event bus that memory and channel adapters
-subscribe to, persisted as an append-only JSONL trace → a ReAct agent loop with stuck detection,
-action/duration budgets, and context compaction → built-in tools (read, write, edit, glob, grep,
-bash, agent delegation, web search/fetch) under deny-first permissions → provider auto-detection
+A single root orchestrator agent reads the task and runs a ReAct loop — think, act, look — kept
+honest by action and duration budgets, a stuck-detector that nudges then stops a spinning run, an
+act-guard that catches turns which announce a plan without taking it, and a self-check before any
+plain answer is returned. Whole pieces of work are delegated through an agent tool to specialist
+subagents, each spawned in a fresh context window and fenced to its own toolset; untrusted web or
+file content is quarantined from any agent that can mutate the host. A from-scratch typed event
+bus records every step as an append-only JSONL trace that memory, the live view, and replay all
+subscribe to. A ContentStore holds oversized tool results as handles, evicts them to short stubs
+as the window fills, and reads the full text back on demand. Each agent carries persistent memory
+across sessions — a SQLite store of facts (superseded, never overwritten, and read back after
+every write), rolling session-history summaries, and a human-readable MEMORY.md — with writes
+gated on prediction error, idle-time consolidation of recurring lessons, and a byte-stable index
+injected at the start of each run. Built-in tools (read, write, edit, glob, grep, bash, agent
+delegation, web search/fetch) run under deny-first permissions, and providers are auto-detected
 against any OpenAI-compatible endpoint, with an XML fallback for models without native function
 calling.
 
@@ -49,6 +58,16 @@ and writes a verdict ledger. As of v0.5.3 every built-in subagent is quarantined
 read-only; shell-holding specialist roles (data-analyst, frontend-designer) ship as
 documented opt-in examples instead. Define your own subagents in YAML.
 Over-window reading explained: https://localharness.dev/architecture/#over-window
+
+### Memory
+
+Every agent keeps its own persistent memory across sessions: a SQLite store of facts that are
+superseded rather than overwritten and read back after every write, rolling session-history
+summaries, and a human-readable MEMORY.md you can edit by hand. Writes are gated on prediction
+error — it keeps what you tell it to and what genuinely surprises it, not routine results — and
+idle time consolidates recurring lessons while letting stale ones fade. A byte-stable index of
+what it knows is injected at the start of each run, so the same knowledge produces the same
+context. On-site: https://localharness.dev/architecture/#memory
 
 ### Security
 

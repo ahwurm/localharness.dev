@@ -79,8 +79,10 @@ instruction-injection phrasing. Update it when page content changes.
 
 `TraceFlow.astro` (sequence lanes + numbered message arrows, `data-node`/`data-edge` hooks for
 the DemoSession sync), `ShiftFlow.astro` (localshift pipeline as numbered flow),
-`OverWindowDiagram.astro`, `SecurityDiagram.astro`, `AutoresearchDiagram.astro` — hand-built
-inline SVG (dark, SQUARE nodes, dashed groups, mono labels, numbered accent badges for message
+`OverWindowDiagram.astro`, `SecurityDiagram.astro`, `AutoresearchDiagram.astro`, and the
+/architecture/ v2 plates `SystemPlate.astro` (fig 01 canonical component view, badges 1..7
+map to the `_the parts` rows) / `LoopPlate.astro` (turn cycle + five gates) /
+`MemoryPlate.astro` (memory-at-every-scale ladder) — hand-built inline SVG (dark, SQUARE nodes, dashed groups, mono labels, numbered accent badges for message
 order, theme-token classes: fill-surface/stroke-edge/stroke-accent). Icon vocabulary lives in
 `Icon.astro` (generic stroke glyphs, never third-party brand marks) used via `Chip.astro`.
 Diagrams SHRINK WHOLE (`w-full`, no min-width) — never min-w + hidden-scrollbar clipping.

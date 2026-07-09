@@ -1,0 +1,116 @@
+---
+// fig. 02 — one turn of the ReAct loop and the five gates that keep it honest.
+// Four stations cycle (task in → think → act → look → back to think); think exits
+// to an accent answer node. Gates are small square checkpoints sitting ON the edge
+// they guard. Plate SVG at sm+, FlowLedger rail below sm. Marker ids f02- prefixed.
+// Vocabulary inlined from plateTokens.ts (do NOT import). Tight-gap edge labels are
+// one word; full gate names live in the rail + aria-label.
+import FlowLedger from './FlowLedger.astro';
+---
+
+<figure
+  role="img"
+  aria-label="One turn of the loop. A task comes in; the model thinks, calls a tool to act, then looks at the result — and loops back to think. When the work is done it exits to an answer. Five gates keep the run honest: budgets cap the work before each step; parse-repair fixes a malformed tool call; act-guard checks it actually acted before it answers; self-check reviews the answer before it ships; and the stuck-detector watches the loop, nudging once and then stopping a run that spins."
+>
+  <!-- sm+: architectural-plate diagram -->
+  <div class="hidden w-full sm:block" aria-hidden="true">
+    <svg viewBox="0 0 560 262" class="mx-auto w-full max-w-[560px]">
+      <defs>
+        <marker id="f02-a" viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+          <path d="M0,0.5 L7,4 L0,7.5" class="fill-none stroke-accent" stroke-width="1.4"></path>
+        </marker>
+        <marker id="f02-d" viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+          <path d="M0,0.5 L7,4 L0,7.5" class="fill-none stroke-dim" stroke-width="1.3"></path>
+        </marker>
+      </defs>
+
+      <!-- answer (exit) -->
+      <g data-node="answer">
+        <rect x="150" y="16" width="116" height="46" class="fill-surface stroke-accent/70" stroke-width="1.4"></rect>
+        <text x="208" y="36" text-anchor="middle" class="fill-accent font-mono text-[12px]">answer</text>
+        <text x="208" y="49" text-anchor="middle" class="fill-dim font-mono text-[9px]">the turn ends</text>
+      </g>
+
+      <!-- stations -->
+      <g data-node="taskin">
+        <rect x="24" y="118" width="92" height="46" class="fill-surface stroke-edge" stroke-width="1.4"></rect>
+        <text x="70" y="138" text-anchor="middle" class="fill-ink font-mono text-[12px]">task in</text>
+        <text x="70" y="151" text-anchor="middle" class="fill-dim font-mono text-[9px]">a turn begins</text>
+        <circle cx="24" cy="118" r="7" class="fill-accent"></circle>
+        <text x="24" y="121" text-anchor="middle" class="fill-accent-ink font-mono text-[9px] font-semibold">1</text>
+      </g>
+      <g data-node="think">
+        <rect x="156" y="118" width="104" height="46" class="fill-surface stroke-edge" stroke-width="1.4"></rect>
+        <text x="208" y="138" text-anchor="middle" class="fill-ink font-mono text-[12px]">think</text>
+        <text x="208" y="151" text-anchor="middle" class="fill-dim font-mono text-[9px]">the model</text>
+        <circle cx="156" cy="118" r="7" class="fill-accent"></circle>
+        <text x="156" y="121" text-anchor="middle" class="fill-accent-ink font-mono text-[9px] font-semibold">2</text>
+      </g>
+      <g data-node="act">
+        <rect x="300" y="118" width="96" height="46" class="fill-surface stroke-edge" stroke-width="1.4"></rect>
+        <text x="348" y="138" text-anchor="middle" class="fill-ink font-mono text-[12px]">act</text>
+        <text x="348" y="151" text-anchor="middle" class="fill-dim font-mono text-[9px]">a tool call</text>
+        <circle cx="300" cy="118" r="7" class="fill-accent"></circle>
+        <text x="300" y="121" text-anchor="middle" class="fill-accent-ink font-mono text-[9px] font-semibold">3</text>
+      </g>
+      <g data-node="look">
+        <rect x="440" y="118" width="96" height="46" class="fill-surface stroke-edge" stroke-width="1.4"></rect>
+        <text x="488" y="138" text-anchor="middle" class="fill-ink font-mono text-[12px]">look</text>
+        <text x="488" y="151" text-anchor="middle" class="fill-dim font-mono text-[9px]">the result</text>
+        <circle cx="440" cy="118" r="7" class="fill-accent"></circle>
+        <text x="440" y="121" text-anchor="middle" class="fill-accent-ink font-mono text-[9px] font-semibold">4</text>
+      </g>
+
+      <!-- forward edges -->
+      <line x1="118" y1="141" x2="154" y2="141" class="stroke-accent" stroke-width="1.4" marker-end="url(#f02-a)"></line>
+      <line x1="262" y1="141" x2="298" y2="141" class="stroke-accent" stroke-width="1.4" marker-end="url(#f02-a)"></line>
+      <line x1="398" y1="141" x2="438" y2="141" class="stroke-accent" stroke-width="1.4" marker-end="url(#f02-a)"></line>
+
+      <!-- return loop: look -> think, watched by the stuck-detector -->
+      <path d="M488,164 L488,206 L208,206 L208,166" class="fill-none stroke-dim" stroke-width="1.2" stroke-dasharray="4 4" marker-end="url(#f02-d)"></path>
+
+      <!-- exit: think -> answer, guarded by act-guard then self-check -->
+      <line x1="208" y1="116" x2="208" y2="64" class="stroke-accent" stroke-width="1.4" marker-end="url(#f02-a)"></line>
+
+      <!-- gate checkpoints (squares sit ON the edge they guard) -->
+      <rect x="129" y="134" width="14" height="14" class="fill-accent/10 stroke-accent/60" stroke-width="1.2"></rect>
+      <text x="136" y="160" text-anchor="middle" class="fill-dim font-mono text-[9px]">budgets</text>
+
+      <rect x="273" y="134" width="14" height="14" class="fill-accent/10 stroke-accent/60" stroke-width="1.2"></rect>
+      <text x="280" y="160" text-anchor="middle" class="fill-dim font-mono text-[9px]">repair</text>
+
+      <rect x="201" y="93" width="14" height="14" class="fill-accent/10 stroke-accent/60" stroke-width="1.2"></rect>
+      <text x="220" y="103" text-anchor="start" class="fill-dim font-mono text-[9px]">act-guard</text>
+
+      <rect x="201" y="71" width="14" height="14" class="fill-accent/10 stroke-accent/60" stroke-width="1.2"></rect>
+      <text x="220" y="81" text-anchor="start" class="fill-dim font-mono text-[9px]">self-check</text>
+
+      <rect x="341" y="199" width="14" height="14" class="fill-accent/10 stroke-accent/60" stroke-width="1.2"></rect>
+      <text x="348" y="192" text-anchor="middle" class="fill-dim font-mono text-[9px]">stuck-detector</text>
+      <!-- escape: nudge once, then stop -->
+      <line x1="348" y1="213" x2="348" y2="234" class="stroke-dim" stroke-width="1.2" stroke-dasharray="4 4" marker-end="url(#f02-d)"></line>
+      <text x="356" y="228" text-anchor="start" class="fill-dim font-mono text-[9px]">nudge, then stop</text>
+
+      <!-- legend -->
+      <text x="16" y="252" class="fill-dim font-mono text-[9px]">squares — where the harness steps in</text>
+      <text x="544" y="252" text-anchor="end" class="fill-dim font-mono text-[9px]">① … ④ — the stations</text>
+    </svg>
+  </div>
+
+  <!-- <sm: node-wire rail -->
+  <FlowLedger
+    class="sm:hidden"
+    rows={[
+      { n: 1, icon: 'prompt', title: 'task in', text: 'a turn begins' },
+      { n: 2, icon: 'agent', title: 'think', text: 'the model' },
+      { n: 3, icon: 'box', title: 'act', text: 'a tool call' },
+      { n: 4, icon: 'search', title: 'look', text: 'the result — then loop back to think' },
+      { kind: 'loop', title: 'budgets', text: 'cap the work before each step' },
+      { kind: 'loop', title: 'parse-repair', text: 'fix a malformed tool call' },
+      { kind: 'loop', title: 'act-guard', text: 'did it actually act, before answering?' },
+      { kind: 'loop', title: 'self-check', text: 'review the answer before it ships' },
+      { kind: 'loop', title: 'stuck-detector', text: 'nudge once, then stop a run that spins' },
+      { n: '✓', icon: 'check', title: 'answer', text: 'the turn ends', tone: 'accent' },
+    ]}
+  />
+</figure>

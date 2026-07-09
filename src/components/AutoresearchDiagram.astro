@@ -8,9 +8,9 @@ import FlowLedger from './FlowLedger.astro';
   class="sm:hidden"
   rows={[
     { n: 1, icon: 'studio', title: 'propose', text: 'one mutation' },
-    { n: 2, icon: 'gauge', title: 'bench', text: 'train scenarios' },
+    { n: 2, icon: 'gauge', title: 'bench', text: 'in a throwaway copy' },
     { n: 3, icon: 'shield', title: 'gate', text: 'stats vs baseline', tone: 'accent' },
-    { n: 4, icon: 'repeat', title: 'adopt', text: 'promote to config' },
+    { n: 4, icon: 'repeat', title: 'adopt', text: 'a revertible commit' },
     { kind: 'loop', icon: 'box', title: 'mutation archive', text: 'pareto sampling → next propose' },
     { kind: 'loop', n: '⊘', icon: 'clock', title: 'sealed holdout', text: 'never run while proposing — final check only' },
   ]}
@@ -41,7 +41,7 @@ import FlowLedger from './FlowLedger.astro';
 
   <rect x="158" y="66" width="110" height="56" class="fill-surface stroke-edge" stroke-width="1.5"></rect>
   <text x="213" y="90" text-anchor="middle" class="fill-ink font-mono text-[13px] font-medium">bench</text>
-  <text x="213" y="108" text-anchor="middle" class="fill-dim text-[10px]">train scenarios</text>
+  <text x="213" y="108" text-anchor="middle" class="fill-dim text-[10px]">in a throwaway copy</text>
 
   <line x1="268" y1="94" x2="294" y2="94" class="stroke-dim" stroke-width="1.2" marker-end="url(#arr2)"></line>
 
@@ -53,7 +53,7 @@ import FlowLedger from './FlowLedger.astro';
 
   <rect x="434" y="66" width="110" height="56" class="fill-surface stroke-edge" stroke-width="1.5"></rect>
   <text x="489" y="90" text-anchor="middle" class="fill-ink font-mono text-[13px] font-medium">adopt</text>
-  <text x="489" y="108" text-anchor="middle" class="fill-dim text-[10px]">promote to config</text>
+  <text x="489" y="108" text-anchor="middle" class="fill-dim text-[10px]">a revertible commit</text>
 
   <!-- sealed holdout -->
   <line x1="351" y1="122" x2="351" y2="166" class="stroke-dim" stroke-width="1.2" stroke-dasharray="3 4" marker-end="url(#arr2)"></line>
