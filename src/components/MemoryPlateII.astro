@@ -1,0 +1,282 @@
+---
+// PLATE II — hierarchical memory: fast capture, slow consolidation, recall.
+// Engineering-drawing emulation of the "II — Hierarchical memory" region of
+// plate-full.png (drawing no. LH-ARCH-001). Five group containers, all memory-cyan
+// (`mem` @theme token); the numbered badges ①–⑤ trace ONE FACT's path, USER FLOW
+// FIRST: ① as you work, bus events hit the capture gates → ② below-line writes land
+// in the store → ③ while idle, the sleep pass files them → ④ chapters/lessons cross
+// the line → ⑤ next sitting, recall injects — back to Plate I (accent-green chip).
+// LANDING (on branch) work is drawn honestly: 45° mem-hatch + amber LANDING tag
+// (idle_llm, the whole semanticizer group, the chapters-first recall order).
+// Per VERIFIED FACTS: shipped load_context has NO "chapters first" line (that is a
+// separate landing microbox); mining lifts to ·65; reconciliation has three outcomes
+// (CONFIRM / REVERT / UNDECIDED); the "first-move prevention" planned strip is
+// omitted entirely. All labels source-true. No hardcoded colour; square corners.
+// Marker ids p2-*. SVG at sm+; FlowLedger rail below sm carries the same story.
+import FlowLedger from './FlowLedger.astro';
+---
+
+<svg
+  role="img"
+  aria-label="Plate two of the architecture drawing: hierarchical memory — fast capture, slow consolidation, recall — one fact's path, numbered one to five. One: as you work, bus events feed the capture gates, all shipped — the write gate's motif floors at 0.65 for resolved errors, 0.60 stuck, 0.50 novelty; the predictive gate scoring surprise from action-expectation against observed outcome; the predictive write gate superseding or quarantining surprising failures at 0.69 and below; and the user-signal tripwire with its correction and confirm lexicon, recall about twenty-three percent, disclosed. Two: writes below the 0.7 line land in the memory store — a SQLite knowledge graph of fact, gist and schema nodes with FTS5 edges, superseded never overwritten; only facts at confidence 0.7 and recall strength 0.2 or higher are visible. The history writer's append-only JSONL and the per-sitting session shelf sit alongside — all shipped. Three: while idle, the consolidation pass — shipped — folds, promotes, decays and cap-trims; two or more sittings promote to confidence 0.8, crossing the line; any user turn cancels instantly; promoted lessons at 0.7 and above return to the store. Its idle-LLM helper is landing on branch: the one safe idle-LLM path, cancellable, char-capped, killed by grounding. Four: the semanticizer, the chapter-writer — the whole group landing on branch — clusters stable lessons from two or more sittings in pure compute, writes one grounded 0.8 chapter per cluster, a hundred lessons folding to one line with members folded out; the grounding kill blocks any token underivable from members; reconciliation drains pending corrections to CONFIRM, REVERT or UNDECIDED; mining lifts trigger-word-free corrections and personal facts to 0.65. Five: next sitting, recall — shipped — load_context renders the memory index, facts index then session shelf, byte-stable and injected each turn at loop.py line 621; the chapters-first index order is landing on branch; persist_gist_tree routes document gists at confidence 0.6 but injects nothing — back into the agent loop on Plate one."
+  viewBox="0 0 1160 576"
+  class="hidden w-full lg:block"
+>
+  <defs>
+    <marker id="p2-mem" viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="6.2" markerHeight="6.2" orient="auto-start-reverse">
+      <path d="M0,0.5 L7,4 L0,7.5" class="fill-none stroke-mem" stroke-width="1.4"></path>
+    </marker>
+    <marker id="p2-memd" viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0.5 L7,4 L0,7.5" class="fill-none stroke-mem/55" stroke-width="1.3"></path>
+    </marker>
+    <marker id="p2-infra" viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0.5 L7,4 L0,7.5" class="fill-none stroke-infra" stroke-width="1.3"></path>
+    </marker>
+    <marker id="p2-dash" viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0.5 L7,4 L0,7.5" class="fill-none stroke-dim" stroke-width="1.3"></path>
+    </marker>
+    <pattern id="p2-hatch" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="6" class="stroke-mem/12" stroke-width="1.4"></line>
+    </pattern>
+  </defs>
+
+  <!-- ===== header ===== -->
+  <rect x="16" y="18" width="20" height="20" class="fill-mem"></rect>
+  <text x="26" y="33" text-anchor="middle" class="fill-accent-ink font-mono text-[12px] font-semibold">II</text>
+  <text x="46" y="34" class="fill-ink font-sans text-[15px] font-semibold">Hierarchical memory</text>
+
+  <text x="1144" y="16" text-anchor="end" class="fill-dim font-mono text-[8px]">LH-ARCH-001 · PLATE II · SHEET 3 OF 4</text>
+  <text x="1144" y="27" text-anchor="end" class="fill-dim font-mono text-[8px]">REV v0.8.0 → 1.0 · 2026-07-09</text>
+  <text x="1144" y="38" text-anchor="end" class="fill-dim font-mono text-[8px]">MILESTONE semanticization</text>
+  <text x="1144" y="63" text-anchor="end" class="fill-dim font-mono text-[9px]">fast capture / slow consolidation / a hierarchy above experience</text>
+
+  <!-- groups legend -->
+  <text x="16" y="62" class="fill-dim font-mono text-[8px]">GROUPS</text>
+  <rect x="64" y="53" width="10" height="10" class="fill-mem/20 stroke-mem"></rect>
+  <text x="78" y="62" class="fill-dim font-mono text-[8px]">MEMORY</text>
+  <rect x="126" y="53" width="10" height="10" class="fill-accent/20 stroke-accent"></rect>
+  <text x="140" y="62" class="fill-dim font-mono text-[8px]">RUNTIME</text>
+
+  <line x1="16" y1="76" x2="1144" y2="76" class="stroke-edge" stroke-width="1"></line>
+
+  <!-- ===== the fact path (solid mem) ===== -->
+  <g class="fill-none stroke-mem/80" stroke-width="1.4">
+    <line x1="480" y1="140" x2="584" y2="140" marker-end="url(#p2-mem)"></line>
+    <line x1="836" y1="140" x2="892" y2="140" marker-end="url(#p2-mem)"></line>
+    <path d="M430,366 L430,322 L616,322 L616,275" marker-end="url(#p2-mem)"></path>
+    <line x1="800" y1="272" x2="800" y2="363" marker-end="url(#p2-mem)"></line>
+    <path d="M940,418 L951,418 L951,478 L959,478" marker-end="url(#p2-mem)"></path>
+  </g>
+
+  <!-- dashed: bus-events entry (infra, from Plate I's world) -->
+  <line x1="4" y1="150" x2="69" y2="150" class="fill-none stroke-infra" stroke-width="1.2" stroke-dasharray="4 4" marker-end="url(#p2-infra)"></line>
+  <!-- dashed: promoted lessons return (sleep → store) -->
+  <path d="M960,282 L960,306 L820,306 L820,275" class="fill-none stroke-mem/55" stroke-width="1.2" stroke-dasharray="4 4" marker-end="url(#p2-memd)"></path>
+
+  <!-- edge labels -->
+  <text x="4" y="136" class="fill-dim font-mono text-[8.5px]">bus events</text>
+  <text x="534" y="126" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">writes &lt; 0.7</text>
+  <text x="866" y="126" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">idle</text>
+  <text x="523" y="314" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">0.8 chapter</text>
+  <text x="890" y="298" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">promoted ≥0.7 lessons</text>
+  <text x="790" y="330" text-anchor="end" class="fill-dim font-mono text-[8.5px]">recall</text>
+
+  <!-- ===== CAPTURE GATES ===== -->
+  <rect x="72" y="92" width="420" height="180" class="fill-none stroke-mem/45" stroke-width="1" stroke-dasharray="5 5"></rect>
+  <rect x="84" y="85" width="84" height="14" class="fill-bg stroke-mem" stroke-width="1"></rect>
+  <text x="126" y="95" text-anchor="middle" class="fill-mem font-mono text-[8px] tracking-[0.08em]">CAPTURE GATES</text>
+  <text x="484" y="107" text-anchor="end" class="fill-dim font-mono text-[8px]">fast hand · writes below the line</text>
+
+  <rect x="84" y="118" width="208" height="64" class="fill-bg stroke-mem/70" stroke-width="1.3"></rect>
+  <text x="188" y="135" text-anchor="middle" class="fill-ink font-mono text-[12px]">WriteGate</text>
+  <text x="188" y="149" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">gate.py · motif floor</text>
+  <text x="188" y="161" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">resolved_err ·65 · stuck ·60 · nov ·50</text>
+  <text x="188" y="173" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">→ MemoryGateFired</text>
+
+  <rect x="304" y="118" width="176" height="64" class="fill-bg stroke-mem/70" stroke-width="1.3"></rect>
+  <text x="392" y="135" text-anchor="middle" class="fill-ink font-mono text-[12px]">PredictiveGate</text>
+  <text x="392" y="149" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">predictive_gate.py</text>
+  <text x="392" y="161" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">Action→Expect · Obs→Outcome</text>
+  <text x="392" y="173" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">→ SurpriseScored + quadrant</text>
+
+  <rect x="84" y="196" width="208" height="52" class="fill-bg stroke-mem/70" stroke-width="1.3"></rect>
+  <text x="188" y="213" text-anchor="middle" class="fill-ink font-mono text-[12px]">PredictiveWriteGate</text>
+  <text x="188" y="227" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">surprising_failure ≤ ·69</text>
+  <text x="188" y="239" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">correction: supersede / quarantine</text>
+
+  <rect x="304" y="196" width="176" height="64" class="fill-bg stroke-mem/70" stroke-width="1.3"></rect>
+  <text x="392" y="213" text-anchor="middle" class="fill-ink font-mono text-[11px]">UserSignalDetector</text>
+  <text x="392" y="227" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">user_signals.py · tripwire</text>
+  <text x="392" y="239" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">correction / confirm lexicon</text>
+  <text x="392" y="251" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">recall ~23% (disclosed)</text>
+
+  <!-- ===== STORE ===== -->
+  <rect x="576" y="92" width="272" height="180" class="fill-none stroke-mem/45" stroke-width="1" stroke-dasharray="5 5"></rect>
+  <rect x="588" y="85" width="40" height="14" class="fill-bg stroke-mem" stroke-width="1"></rect>
+  <text x="608" y="95" text-anchor="middle" class="fill-mem font-mono text-[8px] tracking-[0.08em]">STORE</text>
+
+  <rect x="588" y="118" width="248" height="76" class="fill-bg stroke-mem/70" stroke-width="1.3"></rect>
+  <text x="712" y="135" text-anchor="middle" class="fill-ink font-mono text-[12px]">MemoryStore</text>
+  <text x="712" y="149" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">sqlite.py · knowledge graph</text>
+  <text x="712" y="161" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">facts: node_kind fact|gist|schema</text>
+  <text x="712" y="173" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">edges · FTS5 · supersede-not-overwrite</text>
+  <text x="712" y="185" text-anchor="middle" class="fill-mem font-mono text-[8.5px]">visibility: conf≥0.7 AND rs≥0.2</text>
+
+  <rect x="588" y="206" width="118" height="52" class="fill-bg stroke-mem/70" stroke-width="1.3"></rect>
+  <text x="647" y="223" text-anchor="middle" class="fill-ink font-mono text-[11px]">HistoryWriter</text>
+  <text x="647" y="237" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">history.py</text>
+  <text x="647" y="249" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">append-only JSONL</text>
+
+  <rect x="718" y="206" width="118" height="52" class="fill-bg stroke-mem/70" stroke-width="1.3"></rect>
+  <text x="777" y="223" text-anchor="middle" class="fill-ink font-mono text-[11px]">sessions</text>
+  <text x="777" y="237" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">SessionAccumulator</text>
+  <text x="777" y="249" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">per-sitting shelf</text>
+
+  <!-- ===== CONSOLIDATION · THE SLEEP ===== -->
+  <rect x="884" y="92" width="260" height="190" class="fill-none stroke-mem/45" stroke-width="1" stroke-dasharray="5 5"></rect>
+  <rect x="896" y="85" width="148" height="14" class="fill-bg stroke-mem" stroke-width="1"></rect>
+  <text x="970" y="95" text-anchor="middle" class="fill-mem font-mono text-[8px] tracking-[0.08em]">CONSOLIDATION · THE SLEEP</text>
+  <text x="1136" y="107" text-anchor="end" class="fill-dim font-mono text-[8px]">idle · cancellable</text>
+
+  <rect x="896" y="118" width="236" height="76" class="fill-bg stroke-mem/70" stroke-width="1.3"></rect>
+  <text x="1014" y="135" text-anchor="middle" class="fill-ink font-mono text-[12px]">ConsolidationPass</text>
+  <text x="1014" y="149" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">consolidation.py · the idle pass</text>
+  <text x="1014" y="161" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">fold → promote → decay → cap-trim</text>
+  <text x="1014" y="173" text-anchor="middle" class="fill-mem font-mono text-[8.5px]">≥2 sittings → conf 0.8 — crosses the line</text>
+  <text x="1014" y="185" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">any user turn cancels instantly</text>
+
+  <!-- idle_llm — LANDING -->
+  <rect x="896" y="206" width="236" height="64" class="fill-bg stroke-mem/70" stroke-width="1.3"></rect>
+  <rect x="896" y="206" width="236" height="64" fill="url(#p2-hatch)"></rect>
+  <text x="1014" y="223" text-anchor="middle" class="fill-ink font-mono text-[12px]">idle_llm</text>
+  <text x="1014" y="237" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">idle_llm.py · the one safe idle-LLM path</text>
+  <text x="1014" y="249" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">cancellable · char-capped · grounding kills</text>
+  <rect x="1084" y="255" width="44" height="11" class="fill-bg stroke-amber/60" stroke-width="1"></rect>
+  <text x="1106" y="263.5" text-anchor="middle" class="fill-amber font-mono text-[7.5px]">LANDING</text>
+
+  <!-- ===== SEMANTICIZER · THE CHAPTER-WRITER (all landing) ===== -->
+  <rect x="16" y="340" width="612" height="202" class="fill-none stroke-mem/45" stroke-width="1" stroke-dasharray="5 5"></rect>
+  <rect x="28" y="333" width="192" height="14" class="fill-bg stroke-mem" stroke-width="1"></rect>
+  <text x="124" y="343" text-anchor="middle" class="fill-mem font-mono text-[8px] tracking-[0.08em]">SEMANTICIZER · THE CHAPTER-WRITER</text>
+  <text x="620" y="356" text-anchor="end" class="fill-dim font-mono text-[8px]">the model writes memory — landing on branch</text>
+
+  <rect x="28" y="366" width="170" height="76" class="fill-bg stroke-mem/70" stroke-width="1.3"></rect>
+  <rect x="28" y="366" width="170" height="76" fill="url(#p2-hatch)"></rect>
+  <text x="113" y="383" text-anchor="middle" class="fill-ink font-mono text-[12px]">clustering</text>
+  <text x="113" y="397" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">clustering.py</text>
+  <text x="113" y="409" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">stable lesson clusters</text>
+  <text x="113" y="421" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">≥2 sittings · pure compute</text>
+  <rect x="150" y="427" width="44" height="11" class="fill-bg stroke-amber/60" stroke-width="1"></rect>
+  <text x="172" y="435.5" text-anchor="middle" class="fill-amber font-mono text-[7.5px]">LANDING</text>
+
+  <!-- chapter_writer — the headline, accent-underlaid -->
+  <rect x="210" y="366" width="240" height="76" class="fill-bg stroke-mem/70" stroke-width="1.3"></rect>
+  <rect x="210" y="366" width="240" height="76" class="fill-accent/8"></rect>
+  <rect x="210" y="366" width="240" height="76" fill="url(#p2-hatch)"></rect>
+  <text x="330" y="383" text-anchor="middle" class="fill-ink font-mono text-[12px]">chapter_writer</text>
+  <text x="330" y="397" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">chapter_writer.py</text>
+  <text x="330" y="409" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">one grounded chapter per cluster</text>
+  <text x="330" y="421" text-anchor="middle" class="fill-accent font-mono text-[8.5px]">100 lessons → 1 line · members folded out</text>
+  <rect x="402" y="427" width="44" height="11" class="fill-bg stroke-amber/60" stroke-width="1"></rect>
+  <text x="424" y="435.5" text-anchor="middle" class="fill-amber font-mono text-[7.5px]">LANDING</text>
+
+  <rect x="462" y="366" width="154" height="64" class="fill-bg stroke-mem/70" stroke-width="1.3"></rect>
+  <rect x="462" y="366" width="154" height="64" fill="url(#p2-hatch)"></rect>
+  <text x="539" y="383" text-anchor="middle" class="fill-ink font-mono text-[12px]">grounding kill</text>
+  <text x="539" y="397" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">no token underivable</text>
+  <text x="539" y="409" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">from members → no write</text>
+  <rect x="568" y="415" width="44" height="11" class="fill-bg stroke-amber/60" stroke-width="1"></rect>
+  <text x="590" y="423.5" text-anchor="middle" class="fill-amber font-mono text-[7.5px]">LANDING</text>
+
+  <rect x="28" y="454" width="180" height="76" class="fill-bg stroke-mem/70" stroke-width="1.3"></rect>
+  <rect x="28" y="454" width="180" height="76" fill="url(#p2-hatch)"></rect>
+  <text x="118" y="471" text-anchor="middle" class="fill-ink font-mono text-[12px]">reconciliation</text>
+  <text x="118" y="485" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">reconciliation.py</text>
+  <text x="118" y="497" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">drains correction_pending</text>
+  <text x="118" y="509" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">CONFIRM / REVERT / UNDECIDED</text>
+  <rect x="160" y="515" width="44" height="11" class="fill-bg stroke-amber/60" stroke-width="1"></rect>
+  <text x="182" y="523.5" text-anchor="middle" class="fill-amber font-mono text-[7.5px]">LANDING</text>
+
+  <rect x="220" y="454" width="180" height="76" class="fill-bg stroke-mem/70" stroke-width="1.3"></rect>
+  <rect x="220" y="454" width="180" height="76" fill="url(#p2-hatch)"></rect>
+  <text x="310" y="471" text-anchor="middle" class="fill-ink font-mono text-[12px]">mining</text>
+  <text x="310" y="485" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">mining.py</text>
+  <text x="310" y="497" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">trigger-word-free corrections</text>
+  <text x="310" y="509" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">+ personal facts → ·65</text>
+  <rect x="352" y="515" width="44" height="11" class="fill-bg stroke-amber/60" stroke-width="1"></rect>
+  <text x="374" y="523.5" text-anchor="middle" class="fill-amber font-mono text-[7.5px]">LANDING</text>
+
+  <!-- ===== RECALL ===== -->
+  <rect x="656" y="340" width="488" height="202" class="fill-none stroke-mem/45" stroke-width="1" stroke-dasharray="5 5"></rect>
+  <rect x="668" y="333" width="46" height="14" class="fill-bg stroke-mem" stroke-width="1"></rect>
+  <text x="691" y="343" text-anchor="middle" class="fill-mem font-mono text-[8px] tracking-[0.08em]">RECALL</text>
+  <text x="1136" y="356" text-anchor="end" class="fill-dim font-mono text-[8px]">schemas-first · byte-stable</text>
+
+  <rect x="668" y="366" width="272" height="64" class="fill-bg stroke-mem/70" stroke-width="1.3"></rect>
+  <text x="804" y="383" text-anchor="middle" class="fill-ink font-mono text-[12px]">load_context</text>
+  <text x="804" y="397" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">_render_memory_index</text>
+  <text x="804" y="409" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">facts index → session shelf</text>
+  <text x="804" y="421" text-anchor="middle" class="fill-mem font-mono text-[8.5px]">byte-stable · injected each turn @ loop.py:621</text>
+
+  <rect x="962" y="366" width="170" height="64" class="fill-bg stroke-mem/70" stroke-width="1.3"></rect>
+  <text x="1047" y="383" text-anchor="middle" class="fill-ink font-mono text-[11px]">persist_gist_tree</text>
+  <text x="1047" y="397" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">hierarchy.py · document gists</text>
+  <text x="1047" y="409" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">conf 0.6 · routes, injects not</text>
+
+  <!-- chapters first — LANDING microbox (the landing renderer's order) -->
+  <rect x="668" y="454" width="204" height="56" class="fill-bg stroke-mem/70" stroke-width="1.3"></rect>
+  <rect x="668" y="454" width="204" height="56" fill="url(#p2-hatch)"></rect>
+  <text x="770" y="471" text-anchor="middle" class="fill-ink font-mono text-[11px]">chapters first</text>
+  <text x="770" y="485" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">### Knowledge — one line per chapter</text>
+  <rect x="824" y="495" width="44" height="11" class="fill-bg stroke-amber/60" stroke-width="1"></rect>
+  <text x="846" y="503.5" text-anchor="middle" class="fill-amber font-mono text-[7.5px]">LANDING</text>
+
+  <!-- AgentLoop pointer chip (runtime green, cross-plate) -->
+  <rect x="962" y="454" width="170" height="48" class="fill-bg stroke-accent/60" stroke-width="1.3" stroke-dasharray="3 3"></rect>
+  <text x="1047" y="473" text-anchor="middle" class="fill-accent font-mono text-[12px]">AgentLoop</text>
+  <text x="1047" y="487" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">injected each turn — PLATE I</text>
+
+  <!-- ===== flow badges (on the fact-path edges, in order) ===== -->
+  <g>
+    <circle cx="37" cy="150" r="8" class="fill-mem"></circle>
+    <text x="37" y="153" text-anchor="middle" class="fill-accent-ink font-mono text-[9px] font-semibold">1</text>
+    <circle cx="534" cy="140" r="8" class="fill-mem"></circle>
+    <text x="534" y="143" text-anchor="middle" class="fill-accent-ink font-mono text-[9px] font-semibold">2</text>
+    <circle cx="866" cy="140" r="8" class="fill-mem"></circle>
+    <text x="866" y="143" text-anchor="middle" class="fill-accent-ink font-mono text-[9px] font-semibold">3</text>
+    <circle cx="616" cy="297" r="8" class="fill-mem"></circle>
+    <text x="616" y="300" text-anchor="middle" class="fill-accent-ink font-mono text-[9px] font-semibold">4</text>
+    <circle cx="800" cy="312" r="8" class="fill-mem"></circle>
+    <text x="800" y="315" text-anchor="middle" class="fill-accent-ink font-mono text-[9px] font-semibold">5</text>
+  </g>
+
+  <!-- ===== KEY row ===== -->
+  <text x="16" y="564" class="fill-dim font-mono text-[8.5px]">KEY</text>
+  <line x1="44" y1="561" x2="64" y2="561" class="stroke-mem/80" stroke-width="1.4" marker-end="url(#p2-mem)"></line>
+  <text x="70" y="564" class="fill-dim font-mono text-[8.5px]">a fact's path</text>
+  <line x1="148" y1="561" x2="168" y2="561" class="stroke-dim" stroke-width="1.2" stroke-dasharray="3 3" marker-end="url(#p2-dash)"></line>
+  <text x="174" y="564" class="fill-dim font-mono text-[8.5px]">pub / sub</text>
+  <rect x="250" y="556" width="8" height="8" class="fill-none stroke-ink" stroke-width="1.2"></rect>
+  <text x="262" y="564" class="fill-dim font-mono text-[8.5px]">shipped</text>
+  <rect x="330" y="556" width="8" height="8" class="fill-none stroke-amber/60" stroke-width="1.2"></rect>
+  <line x1="330" y1="562" x2="336" y2="556" class="stroke-amber/60" stroke-width="0.8"></line>
+  <line x1="332" y1="564" x2="338" y2="558" class="stroke-amber/60" stroke-width="0.8"></line>
+  <text x="342" y="564" class="fill-dim font-mono text-[8.5px]">landing (on branch)</text>
+  <rect x="452" y="556" width="8" height="8" class="fill-none stroke-dim" stroke-width="1" stroke-dasharray="2 2"></rect>
+  <text x="464" y="564" class="fill-dim font-mono text-[8.5px]">planned</text>
+</svg>
+
+<!-- <sm: node-wire rail — the same fact path, landing rows tagged -->
+<FlowLedger
+  class="lg:hidden"
+  rows={[
+    { n: 1, icon: 'gauge', title: 'gates score every outcome', text: 'as you work — write · predictive · user-signal' },
+    { n: 2, icon: 'layers', title: 'below-line writes land', text: 'SQLite knowledge graph — visible at conf≥0.7 AND rs≥0.2' },
+    { n: 3, icon: 'clock', title: 'while idle, the sleep pass files them', text: 'fold → promote → decay — any user turn cancels' },
+    { kind: 'loop', icon: 'agent', title: 'idle_llm', text: 'the one safe idle-LLM path — cancellable, grounding kills', tag: 'landing' },
+    { n: 4, icon: 'book', title: 'chapters cross the line', text: 'one grounded 0.8 chapter per cluster — 100 lessons → 1 line', tag: 'landing' },
+    { kind: 'loop', icon: 'shield', title: 'grounding kill · reconciliation · mining', text: 'CONFIRM / REVERT / UNDECIDED — corrections + personal facts → ·65', tag: 'landing' },
+    { n: 5, icon: 'repeat', title: 'next sitting, recall injects', text: 'byte-stable, each turn — back to PLATE I', tone: 'accent' },
+    { kind: 'loop', icon: 'doc', title: 'chapters first', text: '### Knowledge — one line per chapter', tag: 'landing' },
+  ]}
+/>

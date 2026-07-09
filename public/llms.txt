@@ -17,18 +17,16 @@ much lower cost — your hardware, no API meter.
 
 ### Architecture
 
-On-site deep dive: https://localharness.dev/architecture/ — an eight-section engineer
-walk-through; each section carries plain-language mechanism notes, a failure-path line, and
-receipts that link straight to the source on public main:
+On-site deep dive: https://localharness.dev/architecture/ — the architecture drawn to
+scale: component-level engineering plates (real class and module names, verified against
+public main), each with plain-language notes, a failure-path line, and receipts that link
+straight to the source:
 
-- The system shape: https://localharness.dev/architecture/#system
+- The system — Plate I, the shipped runtime on one sheet: https://localharness.dev/architecture/#system
 - The agent loop — budgets, stuck-detector, act-guard, self-check, parse-repair: https://localharness.dev/architecture/#loop
-- Delegation, fenced — quarantine and fail-closed hand-offs: https://localharness.dev/architecture/#delegation
-- Memory — at every scale, from one window to lasting SQLite + MEMORY.md: https://localharness.dev/architecture/#memory
-- Configuration — agents as YAML under deny-first permissions: https://localharness.dev/architecture/#yaml
-- Autoresearch — self-improvement under a promotion gate: https://localharness.dev/architecture/#autoresearch
-- What it isn't — scope and honest limits: https://localharness.dev/architecture/#scope
-- Run it — install plus a read-the-code map: https://localharness.dev/architecture/#run
+- Delegation — Plate IV, the capability floor and the quarantined roster: https://localharness.dev/architecture/#delegation
+- Memory — Plate II plus a detail sheet inside the store, down to one fact's life: https://localharness.dev/architecture/#memory
+- Autoresearch — Plate III, self-improvement under a promotion gate: https://localharness.dev/architecture/#autoresearch
 
 A single root orchestrator agent reads the task and runs a ReAct loop — think, act, look — kept
 honest by action and duration budgets, a stuck-detector that nudges then stops a spinning run, an

@@ -1,0 +1,199 @@
+---
+// DETAIL A — inside the memory store: one fact's life.
+// Engineering-drawing DETAIL sheet under Plate II (a zoom into memory/sqlite.py):
+// one facts-table row, drawn to scale, followed through its five-step life. The
+// plate's heart is THE VISIBILITY LINE — a literal labeled horizontal line the
+// above/below boxes respect: the injected block reads only conf ≥ 0.7 AND rs ≥ 0.2.
+// Badges ①–⑤ ride the lifecycle rail: ① captured → ② staged → ③ folded →
+// ④ promoted / decayed / superseded → ⑤ recalled (injected above the line, or
+// searched below it). All box labels are source-true (memory/sqlite.py, gate.py,
+// predictive_write_gate.py, consolidation.py, hierarchy.py — see DRAWING-SPEC).
+// Single hue: mem (cyan) via @theme tokens (stroke-mem/fill-mem + /NN); no
+// hardcoded colour. Square corners. Marker ids p5-*. SVG at sm+; FlowLedger below sm.
+import FlowLedger from './FlowLedger.astro';
+---
+
+<figure
+  role="img"
+  aria-label="Detail A of the architecture drawing, a zoom into the memory store: one fact's life, numbered one to five. On the left, the record — a single facts-table row: key, value and provenance; confidence and retrieval strength; access_count with its staged twins; node_kind of fact, gist or schema; and status, active or superseded pointing at superseded_by. One active truth per key is enforced by a partial unique index. One: the fact is captured — gates write it at a confidence of point-five to point-six-nine, always below the visibility line. Two: it is staged — reads only bump its staged access counters. Three: it is folded — fold_staged_access runs only at a consolidation boundary. Four: its fate is decided — two or more episodes promote it to point-eight, which crosses the line; unused facts decay on a half-life to a floor of point-oh-five; cap-trim demotes but never deletes; and a new value supersedes the old, whose row stays. Every write is read back, raising MemoryVerifyError if it did not stick. The visibility line is the invariant at the heart of the store: the injected block reads only facts with confidence at least point-seven and retrieval strength at least point-two. Above the line sits the injected index — byte-stable between consolidations, scored by lh_slow_score at day granularity over folded columns only. Below the line sits staging — searchable but not steering, scored by lh_fused_score at hour granularity with BM25, which memory_search re-ranks freely. Five: the fact is recalled — injected if it is above the line, or found by search below it. On the right, the graph: edges of derived_from, member_of, supports and contradicts; gists route retrieval by a neighborhood breadth-first search of depth up to four but never inject themselves; and FTS5 quotes every token so operators stay literal."
+>
+  <!-- sm+: architectural DETAIL sheet -->
+  <div class="hidden w-full lg:block" aria-hidden="true">
+    <svg viewBox="0 0 1160 468" class="w-full">
+      <defs>
+        <marker id="p5-solid" viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="6.2" markerHeight="6.2" orient="auto-start-reverse">
+          <path d="M0,0.5 L7,4 L0,7.5" class="fill-none stroke-mem" stroke-width="1.4"></path>
+        </marker>
+        <marker id="p5-dash" viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0.5 L7,4 L0,7.5" class="fill-none stroke-dim" stroke-width="1.3"></path>
+        </marker>
+      </defs>
+
+      <!-- ===== header ===== -->
+      <rect x="16" y="18" width="20" height="20" class="fill-mem"></rect>
+      <text x="26" y="33" text-anchor="middle" class="fill-bg font-mono text-[12px] font-semibold">A</text>
+      <text x="46" y="34" class="fill-ink font-sans text-[15px] font-semibold">inside the memory store — one fact's life</text>
+      <text x="46" y="58" class="fill-dim font-mono text-[9px]">DETAIL A · zoom into memory/sqlite.py · the fact's-eye view</text>
+
+      <text x="1144" y="16" text-anchor="end" class="fill-dim font-mono text-[8px]">LH-ARCH-001 · DETAIL A · OF PLATE II</text>
+      <text x="1144" y="27" text-anchor="end" class="fill-dim font-mono text-[8px]">REV v0.8.0 → 1.0 · 2026-07-09</text>
+      <text x="1144" y="38" text-anchor="end" class="fill-dim font-mono text-[8px]">MILESTONE semanticization</text>
+      <text x="1144" y="58" text-anchor="end" class="fill-dim font-mono text-[9px]">one facts-row · the visibility line · the lifecycle</text>
+
+      <line x1="16" y1="76" x2="1144" y2="76" class="stroke-edge" stroke-width="1"></line>
+
+      <!-- ===== secondary edge: the record's conf · rs land it on the line ===== -->
+      <line x1="340" y1="198" x2="376" y2="196" class="fill-none stroke-dim" stroke-width="1.2" stroke-dasharray="4 4" marker-end="url(#p5-dash)"></line>
+
+      <!-- ===== THE RECORD ===== -->
+      <rect x="16" y="92" width="336" height="208" class="fill-none stroke-mem/45" stroke-width="1" stroke-dasharray="5 5"></rect>
+      <rect x="28" y="85" width="72" height="14" class="fill-bg stroke-mem" stroke-width="1"></rect>
+      <text x="64" y="95" text-anchor="middle" class="fill-mem font-mono text-[8px]">THE RECORD</text>
+
+      <rect x="28" y="112" width="312" height="176" class="fill-bg stroke-mem/70" stroke-width="1.3"></rect>
+      <text x="184" y="130" text-anchor="middle" class="fill-ink font-mono text-[12px]">facts row</text>
+      <line x1="40" y1="140" x2="328" y2="140" class="stroke-mem/25" stroke-width="1"></line>
+      <text x="184" y="160" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">key · value · provenance</text>
+      <text x="184" y="180" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">confidence · retrieval_strength</text>
+      <text x="184" y="200" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">access_count (+ _staged twins)</text>
+      <text x="184" y="220" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">node_kind: fact | gist | schema</text>
+      <text x="184" y="240" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">status: active | superseded → superseded_by</text>
+      <line x1="40" y1="252" x2="328" y2="252" class="stroke-mem/40" stroke-width="1"></line>
+      <text x="184" y="272" text-anchor="middle" class="fill-mem font-mono text-[8.5px]">one active truth per key · partial unique index</text>
+
+      <!-- ===== THE VISIBILITY LINE (the plate's heart) ===== -->
+      <rect x="368" y="92" width="470" height="208" class="fill-none stroke-mem/45" stroke-width="1" stroke-dasharray="5 5"></rect>
+      <rect x="380" y="85" width="120" height="14" class="fill-bg stroke-mem" stroke-width="1"></rect>
+      <text x="440" y="95" text-anchor="middle" class="fill-mem font-mono text-[8px]">THE VISIBILITY LINE</text>
+
+      <!-- above the line: injected index -->
+      <rect x="380" y="114" width="446" height="54" class="fill-bg stroke-mem/70" stroke-width="1.3"></rect>
+      <text x="603" y="132" text-anchor="middle" class="fill-ink font-mono text-[12px]">injected index</text>
+      <text x="603" y="147" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">byte-stable between consolidations</text>
+      <text x="603" y="159" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">lh_slow_score · day-granular · folded columns only</text>
+
+      <!-- the line itself + its invariant label -->
+      <text x="603" y="186" text-anchor="middle" class="fill-mem font-mono text-[9.5px] font-semibold">the injected block reads only:  conf ≥ 0.7 AND rs ≥ 0.2</text>
+      <line x1="380" y1="196" x2="826" y2="196" class="stroke-mem" stroke-width="2"></line>
+      <line x1="380" y1="191" x2="380" y2="201" class="stroke-mem" stroke-width="2"></line>
+      <line x1="826" y1="191" x2="826" y2="201" class="stroke-mem" stroke-width="2"></line>
+
+      <!-- below the line: staging -->
+      <rect x="380" y="210" width="446" height="78" class="fill-bg stroke-mem/70" stroke-width="1.3"></rect>
+      <text x="603" y="228" text-anchor="middle" class="fill-ink font-mono text-[12px]">staging</text>
+      <text x="603" y="244" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">searchable, not steering</text>
+      <text x="603" y="258" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">lh_fused_score · hour-granular · + BM25</text>
+      <text x="603" y="272" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">memory_search re-ranks freely</text>
+
+      <!-- ===== THE GRAPH ===== -->
+      <rect x="854" y="92" width="290" height="208" class="fill-none stroke-mem/45" stroke-width="1" stroke-dasharray="5 5"></rect>
+      <rect x="866" y="85" width="68" height="14" class="fill-bg stroke-mem" stroke-width="1"></rect>
+      <text x="900" y="95" text-anchor="middle" class="fill-mem font-mono text-[8px]">THE GRAPH</text>
+
+      <rect x="866" y="116" width="266" height="44" class="fill-bg stroke-mem/70" stroke-width="1.3"></rect>
+      <text x="999" y="134" text-anchor="middle" class="fill-ink font-mono text-[12px]">edges</text>
+      <text x="999" y="150" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">derived_from · member_of · supports · contradicts</text>
+
+      <rect x="866" y="170" width="266" height="56" class="fill-bg stroke-mem/70" stroke-width="1.3"></rect>
+      <text x="999" y="188" text-anchor="middle" class="fill-ink font-mono text-[12px]">gists route</text>
+      <text x="999" y="204" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">neighborhood BFS (≤4)</text>
+      <text x="999" y="216" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">route retrieval — they never inject</text>
+
+      <rect x="866" y="236" width="266" height="46" class="fill-bg stroke-mem/70" stroke-width="1.3"></rect>
+      <text x="999" y="254" text-anchor="middle" class="fill-ink font-mono text-[12px]">FTS5</text>
+      <text x="999" y="272" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">every token quoted · operators stay literal</text>
+
+      <!-- ===== solid fact-life edges (drawn under the boxes' badges) ===== -->
+      <g class="fill-none stroke-mem" stroke-width="1.4">
+        <!-- entry: the record is captured -->
+        <path d="M184,288 L184,322 L132,322 L132,338" marker-end="url(#p5-solid)"></path>
+        <!-- rail: captured → staged → folded → promoted -->
+        <line x1="237" y1="384" x2="251" y2="384" marker-end="url(#p5-solid)"></line>
+        <line x1="460" y1="384" x2="474" y2="384" marker-end="url(#p5-solid)"></line>
+        <line x1="683" y1="384" x2="697" y2="384" marker-end="url(#p5-solid)"></line>
+        <!-- promoted → superseded (part of step 4's fate, no badge) -->
+        <line x1="906" y1="384" x2="920" y2="384" marker-end="url(#p5-solid)"></line>
+        <!-- recall ⑤: the fact is read back — injected above the line / searched below -->
+        <path d="M801,338 L801,320 L603,320 L603,290" marker-end="url(#p5-solid)"></path>
+      </g>
+      <text x="700" y="310" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">recalled</text>
+
+      <!-- ===== THE LIFECYCLE (badges ride here) ===== -->
+      <rect x="16" y="314" width="1128" height="124" class="fill-none stroke-mem/45" stroke-width="1" stroke-dasharray="5 5"></rect>
+      <rect x="28" y="307" width="82" height="14" class="fill-bg stroke-mem" stroke-width="1"></rect>
+      <text x="69" y="317" text-anchor="middle" class="fill-mem font-mono text-[8px]">THE LIFECYCLE</text>
+      <text x="1132" y="309" text-anchor="end" class="fill-dim font-mono text-[8px]">the fact's five steps — captured to recalled</text>
+
+      <rect x="28" y="338" width="209" height="92" class="fill-bg stroke-mem/70" stroke-width="1.3"></rect>
+      <text x="132" y="360" text-anchor="middle" class="fill-ink font-mono text-[12px]">captured</text>
+      <text x="132" y="377" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">gates write at ·5 – ·69</text>
+      <text x="132" y="391" text-anchor="middle" class="fill-mem font-mono text-[8.5px]">always below the line</text>
+
+      <rect x="251" y="338" width="209" height="92" class="fill-bg stroke-mem/70" stroke-width="1.3"></rect>
+      <text x="355" y="360" text-anchor="middle" class="fill-ink font-mono text-[12px]">staged</text>
+      <text x="355" y="377" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">reads bump _staged</text>
+      <text x="355" y="391" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">counters only</text>
+
+      <rect x="474" y="338" width="209" height="92" class="fill-bg stroke-mem/70" stroke-width="1.3"></rect>
+      <text x="578" y="360" text-anchor="middle" class="fill-ink font-mono text-[12px]">folded</text>
+      <text x="578" y="377" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">fold_staged_access</text>
+      <text x="578" y="391" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">only at a consolidation</text>
+      <text x="578" y="405" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">boundary</text>
+
+      <rect x="697" y="338" width="209" height="92" class="fill-bg stroke-mem/70" stroke-width="1.3"></rect>
+      <text x="801" y="358" text-anchor="middle" class="fill-ink font-mono text-[12px]">promoted / decayed</text>
+      <text x="801" y="374" text-anchor="middle" class="fill-mem font-mono text-[8.5px]">≥2 episodes → ·8 crosses</text>
+      <text x="801" y="388" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">half-life decay, floor ·05</text>
+      <text x="801" y="402" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">cap-trim demotes — never deletes</text>
+
+      <rect x="920" y="338" width="209" height="92" class="fill-bg stroke-mem/70" stroke-width="1.3"></rect>
+      <text x="1024" y="356" text-anchor="middle" class="fill-ink font-mono text-[12px]">superseded</text>
+      <text x="1024" y="372" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">a new value supersedes —</text>
+      <text x="1024" y="384" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">the old row stays</text>
+      <text x="1024" y="399" text-anchor="middle" class="fill-mem font-mono text-[8.5px]">every write read back —</text>
+      <text x="1024" y="411" text-anchor="middle" class="fill-mem font-mono text-[8.5px]">MemoryVerifyError if it didn't stick</text>
+
+      <!-- ===== flow badges ①–⑤ (on the fact-life edges, in order) ===== -->
+      <g>
+        <circle cx="158" cy="322" r="7" class="fill-mem"></circle>
+        <text x="158" y="325" text-anchor="middle" class="fill-accent-ink font-mono text-[9px] font-semibold">1</text>
+        <circle cx="244" cy="384" r="7" class="fill-mem"></circle>
+        <text x="244" y="387" text-anchor="middle" class="fill-accent-ink font-mono text-[9px] font-semibold">2</text>
+        <circle cx="467" cy="384" r="7" class="fill-mem"></circle>
+        <text x="467" y="387" text-anchor="middle" class="fill-accent-ink font-mono text-[9px] font-semibold">3</text>
+        <circle cx="690" cy="384" r="7" class="fill-mem"></circle>
+        <text x="690" y="387" text-anchor="middle" class="fill-accent-ink font-mono text-[9px] font-semibold">4</text>
+        <circle cx="603" cy="308" r="7" class="fill-mem"></circle>
+        <text x="603" y="311" text-anchor="middle" class="fill-accent-ink font-mono text-[9px] font-semibold">5</text>
+      </g>
+
+      <!-- ===== KEY row ===== -->
+      <text x="16" y="458" class="fill-dim font-mono text-[8.5px]">KEY</text>
+      <line x1="44" y1="455" x2="64" y2="455" class="stroke-mem" stroke-width="1.4" marker-end="url(#p5-solid)"></line>
+      <text x="70" y="458" class="fill-dim font-mono text-[8.5px]">a fact's life</text>
+      <line x1="150" y1="455" x2="170" y2="455" class="stroke-dim" stroke-width="1.2" stroke-dasharray="3 3" marker-end="url(#p5-dash)"></line>
+      <text x="176" y="458" class="fill-dim font-mono text-[8.5px]">reads · governs</text>
+      <rect x="278" y="451" width="8" height="8" class="fill-none stroke-ink" stroke-width="1.2"></rect>
+      <text x="290" y="458" class="fill-dim font-mono text-[8.5px]">shipped</text>
+      <rect x="348" y="451" width="8" height="8" class="fill-none stroke-amber/60" stroke-width="1.2"></rect>
+      <line x1="348" y1="457" x2="354" y2="451" class="stroke-amber/60" stroke-width="0.8"></line>
+      <line x1="350" y1="459" x2="356" y2="453" class="stroke-amber/60" stroke-width="0.8"></line>
+      <text x="360" y="458" class="fill-dim font-mono text-[8.5px]">landing (on branch)</text>
+      <rect x="472" y="451" width="8" height="8" class="fill-none stroke-dim" stroke-width="1" stroke-dasharray="2 2"></rect>
+      <text x="484" y="458" class="fill-dim font-mono text-[8.5px]">planned</text>
+    </svg>
+  </div>
+
+  <!-- <sm: node-wire rail — the five lifecycle steps + the line invariant -->
+  <FlowLedger
+    class="lg:hidden"
+    rows={[
+      { n: 1, icon: 'doc', title: 'captured', text: 'gates write at ·5 – ·69 — always below the line' },
+      { n: 2, icon: 'layers', title: 'staged', text: 'reads bump _staged access counters only' },
+      { n: 3, icon: 'clock', title: 'folded', text: 'fold_staged_access — only at a consolidation boundary' },
+      { n: 4, icon: 'gauge', title: 'promoted / decayed / superseded', text: '≥2 episodes → ·8 crosses · decay floor ·05 · old row stays' },
+      { n: 5, icon: 'search', title: 'recalled', text: 'injected above the line, or searched below it' },
+      { kind: 'note', text: 'the visibility line: the injected block reads only conf ≥ 0.7 AND rs ≥ 0.2 — and every write is read back or raises MemoryVerifyError.' },
+    ]}
+  />
+</figure>

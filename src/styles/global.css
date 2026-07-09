@@ -16,6 +16,15 @@
   --color-accent-ink: oklch(22% 0.06 152);
   --color-amber: oklch(82% 0.15 85);
 
+  /* LH-ARCH drawing-plate group hues (architecture plates ONLY — the rest of the
+     site stays single-accent green; emulates Alex's plate-full.png group semantics) */
+  --color-mem: oklch(80% 0.12 210);
+  --color-infra: oklch(78% 0.1 245);
+  --color-tool: oklch(78% 0.12 295);
+  --color-orch: oklch(76% 0.1 275);
+  --color-research: oklch(78% 0.14 55);
+  --color-bench: oklch(74% 0.14 25);
+
   /* one easing everywhere — motion feels authored, not defaulted */
   --ease-reveal: cubic-bezier(0.22, 1, 0.36, 1);
 }

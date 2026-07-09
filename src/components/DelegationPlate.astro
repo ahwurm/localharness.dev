@@ -1,0 +1,217 @@
+---
+// PLATE IV — delegation, fenced: the capability floor.
+// Engineering-drawing emulation in the LH-ARCH-001 family (see plate-full.png). A NEW
+// plate — replaces the old SecurityDiagram in #delegation. The numbered badges ①–⑤
+// trace one delegation along the SOLID accent path, USER FLOW FIRST:
+//   ① the orchestrator delegates ingestion via the `agent` tool — it never fetches the
+//      web itself → ② a helper spawns in a FRESH window with ONLY its job's tools →
+//   ③ web content comes back stamped UNTRUSTED → ④ a blind verifier re-fetches and
+//      writes a strict verdict → ⑤ findings return DISTILLED, never the raw transcript.
+// Between them sits THE CAPABILITY FLOOR (capabilities.py): untrusted-ingest tools and
+// host-dangerous tools never coexist in one agent — CoResidenceError, fails closed. The
+// amber ✕ path shows an untrusted helper reaching for host tools, refused at the floor.
+// All facts source-true against origin/main (agent/subagent.py, tools/capabilities.py,
+// tools/builtin/web_tool.py, cli/start_cmd.py, SECURITY.md — see DRAWING-SPEC Plate IV).
+// Group hues via @theme tokens (stroke-accent / stroke-amber / stroke-tool + fill-* +
+// /NN); no hardcoded colour. Square corners. Marker ids p4-*. SVG at sm+; FlowLedger
+// rail below sm carries the same story.
+import FlowLedger from './FlowLedger.astro';
+---
+
+<figure
+  role="img"
+  aria-label="Plate four of the architecture drawing: delegation, fenced — the capability floor. One delegation traced one to five along the solid path. One: your agent, the orchestrator, delegates ingestion through the agent tool — it holds the host tools, has its web tools stripped at start, and never fetches the web itself. Two: a helper spawns in a fresh window carrying only its job's tools. Three: open web content comes back to the web-researcher stamped untrusted — every result is marked treat strictly as data, behind an SSRF guard that blocks loopback and private networks. Four: a blind search-verifier re-fetches, seeing only the claim, entity and url, and writes a strict verdict. Five: findings return to the orchestrator distilled — never the raw transcript. Governing it all is the capability floor in capabilities dot py: untrusted-ingest tools — web search, web fetch, web page query, mcp and plugin tools — and host-dangerous tools — bash exec, write, edit, python exec — never coexist in one agent, or a CoResidenceError fails closed; a grant keystone asserts a granted handle never reaches a host-dangerous agent. The amber crossed-out path shows an untrusted helper reaching for the host tools bash, write and edit — refused where tools are resolved, fails closed. The other helpers — explore, cruncher, chunk-summarizer and your own agents defined in yaml — each spawn fenced in their own fresh window. Everything drawn here is shipped."
+>
+  <!-- sm+: architectural plate -->
+  <div class="hidden w-full lg:block" aria-hidden="true">
+    <svg viewBox="0 0 1160 512" class="w-full">
+      <defs>
+        <marker id="p4-solid" viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="6.2" markerHeight="6.2" orient="auto-start-reverse">
+          <path d="M0,0.5 L7,4 L0,7.5" class="fill-none stroke-accent" stroke-width="1.4"></path>
+        </marker>
+        <marker id="p4-amber" viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0.5 L7,4 L0,7.5" class="fill-none stroke-amber" stroke-width="1.3"></path>
+        </marker>
+        <marker id="p4-tool" viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0.5 L7,4 L0,7.5" class="fill-none stroke-tool" stroke-width="1.3"></path>
+        </marker>
+      </defs>
+
+      <!-- ===== header ===== -->
+      <rect x="16" y="18" width="20" height="20" class="fill-accent"></rect>
+      <text x="26" y="33" text-anchor="middle" class="fill-accent-ink font-mono text-[12px] font-semibold">IV</text>
+      <text x="46" y="34" class="fill-ink font-sans text-[15px] font-semibold">delegation, fenced — the capability floor</text>
+
+      <text x="1144" y="16" text-anchor="end" class="fill-dim font-mono text-[8px]">LH-ARCH-001 · PLATE IV · SHEET 2 OF 4</text>
+      <text x="1144" y="27" text-anchor="end" class="fill-dim font-mono text-[8px]">REV v0.8.0 → 1.0 · 2026-07-09</text>
+      <text x="1144" y="38" text-anchor="end" class="fill-dim font-mono text-[8px]">MILESTONE semanticization</text>
+      <text x="1144" y="63" text-anchor="end" class="fill-dim font-mono text-[9px]">fenced delegation · untrusted-ingest fenced from host tools · fails closed</text>
+
+      <!-- groups legend -->
+      <text x="16" y="62" class="fill-dim font-mono text-[8px]">GROUPS</text>
+      <rect x="64" y="53" width="10" height="10" class="fill-accent/20 stroke-accent"></rect>
+      <text x="78" y="62" class="fill-dim font-mono text-[8px]">YOUR AGENT</text>
+      <rect x="146" y="53" width="10" height="10" class="fill-amber/20 stroke-amber"></rect>
+      <text x="160" y="62" class="fill-dim font-mono text-[8px]">CAPABILITY FLOOR</text>
+      <rect x="264" y="53" width="10" height="10" class="fill-tool/20 stroke-tool"></rect>
+      <text x="278" y="62" class="fill-dim font-mono text-[8px]">HELPERS</text>
+      <rect x="330" y="53" width="10" height="10" class="fill-amber/20 stroke-amber"></rect>
+      <text x="344" y="62" class="fill-dim font-mono text-[8px]">OPEN WEB</text>
+
+      <line x1="16" y1="76" x2="1144" y2="76" class="stroke-edge" stroke-width="1"></line>
+
+      <!-- ===== faint floor line (flows cross it) ===== -->
+      <line x1="16" y1="300" x2="1144" y2="300" class="stroke-amber/25" stroke-width="1"></line>
+
+      <!-- ===== solid delegation / findings path (accent) ===== -->
+      <g class="fill-none stroke-accent" stroke-width="1.4">
+        <path d="M188,220 L188,240 L818,240 L818,374" marker-end="url(#p4-solid)"></path>
+        <path d="M848,374 L848,205 L346,205" marker-end="url(#p4-solid)"></path>
+      </g>
+
+      <!-- ===== web ingest (amber) + verify (tool) ===== -->
+      <line x1="980" y1="410" x2="923" y2="410" class="fill-none stroke-amber" stroke-width="1.4" marker-end="url(#p4-amber)"></line>
+      <path d="M852,444 L852,454 L701,454 L701,444" class="fill-none stroke-tool" stroke-width="1.4" marker-end="url(#p4-tool)"></path>
+
+      <!-- ===== blocked path (amber dashed) — untrusted reaches for host tools, refused AT the floor ===== -->
+      <path d="M875,374 L875,308" class="fill-none stroke-amber/60" stroke-width="1.2" stroke-dasharray="4 4"></path>
+      <path d="M871,292 L843,266" class="fill-none stroke-amber/45" stroke-width="1.2" stroke-dasharray="4 4"></path>
+      <circle cx="875" cy="300" r="9" class="fill-bg stroke-amber/70" stroke-width="1"></circle>
+      <line x1="870" y1="295" x2="880" y2="305" class="stroke-amber" stroke-width="1.6"></line>
+      <line x1="880" y1="295" x2="870" y2="305" class="stroke-amber" stroke-width="1.6"></line>
+
+      <!-- ===== edge labels ===== -->
+      <text x="600" y="197" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">distilled — not the transcript</text>
+      <text x="690" y="230" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">delegate · agent tool</text>
+      <text x="798" y="356" text-anchor="end" class="fill-dim font-mono text-[8.5px]">fresh window · own tools</text>
+      <text x="948" y="404" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">untrusted</text>
+      <text x="776" y="470" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">verify · blind</text>
+      <text x="895" y="296" class="fill-amber font-mono text-[8.5px]">→ host tool</text>
+      <text x="895" y="308" class="fill-dim font-mono text-[8.5px]">refused · fails closed</text>
+
+      <!-- ===== YOUR AGENT ===== -->
+      <rect x="16" y="96" width="560" height="134" class="fill-none stroke-accent/45" stroke-width="1" stroke-dasharray="5 5"></rect>
+      <rect x="28" y="89" width="70" height="14" class="fill-bg stroke-accent" stroke-width="1"></rect>
+      <text x="63" y="99" text-anchor="middle" class="fill-accent font-mono text-[8px]">YOUR AGENT</text>
+
+      <rect x="28" y="116" width="318" height="104" class="fill-bg stroke-accent/70" stroke-width="1.3"></rect>
+      <text x="187" y="135" text-anchor="middle" class="fill-accent font-mono text-[12px]">orchestrator</text>
+      <text x="187" y="154" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">holds the host tools</text>
+      <text x="187" y="168" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">web tools stripped at start</text>
+      <text x="187" y="182" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">apply_root_capability_floor()</text>
+      <text x="187" y="198" text-anchor="middle" class="fill-accent font-mono text-[8.5px]">delegates ingestion — never fetches</text>
+
+      <rect x="360" y="116" width="204" height="60" class="fill-bg stroke-accent/70" stroke-width="1.3"></rect>
+      <text x="462" y="135" text-anchor="middle" class="fill-ink font-mono text-[11px]">bash · write · edit</text>
+      <text x="462" y="152" text-anchor="middle" class="fill-amber font-mono text-[8.5px]">HOST-DANGEROUS</text>
+      <text x="462" y="164" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">never with untrusted content</text>
+
+      <!-- reading guide (top-right corridor) -->
+      <text x="600" y="120" class="fill-dim font-mono text-[9px]">delegation is the capability boundary:</text>
+      <text x="600" y="134" class="fill-dim font-mono text-[9px]">each helper gets ONLY its job's tools;</text>
+      <text x="600" y="148" class="fill-dim font-mono text-[9px]">untrusted web is fenced from host tools.</text>
+
+      <!-- ===== THE CAPABILITY FLOOR ===== -->
+      <rect x="16" y="252" width="1128" height="96" class="fill-none stroke-amber/45" stroke-width="1" stroke-dasharray="5 5"></rect>
+      <rect x="28" y="245" width="158" height="14" class="fill-bg stroke-amber" stroke-width="1"></rect>
+      <text x="107" y="255" text-anchor="middle" class="fill-amber font-mono text-[8px]">THE CAPABILITY FLOOR</text>
+
+      <rect x="28" y="264" width="520" height="72" class="fill-bg stroke-amber/70" stroke-width="1.3"></rect>
+      <text x="288" y="282" text-anchor="middle" class="fill-ink font-mono text-[12px]">capabilities.py</text>
+      <text x="288" y="298" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">UNTRUSTED-INGEST: web_search · web_fetch · web_page_query · mcp:* · plugin:*</text>
+      <text x="288" y="312" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">HOST-DANGEROUS: bash_exec · write · edit · python_exec</text>
+      <text x="288" y="328" text-anchor="middle" class="fill-amber font-mono text-[8.5px]">never in one agent — CoResidenceError · fails closed</text>
+
+      <rect x="564" y="264" width="240" height="72" class="fill-bg stroke-amber/70" stroke-width="1.3"></rect>
+      <text x="684" y="282" text-anchor="middle" class="fill-ink font-mono text-[12px]">grant keystone</text>
+      <text x="688" y="300" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">assert_grant_target_safe</text>
+      <text x="688" y="314" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">a granted handle never reaches</text>
+      <text x="688" y="328" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">a host-dangerous agent</text>
+
+      <!-- ===== HELPERS ===== -->
+      <rect x="16" y="364" width="948" height="96" class="fill-none stroke-tool/45" stroke-width="1" stroke-dasharray="5 5"></rect>
+      <rect x="28" y="357" width="176" height="14" class="fill-bg stroke-tool" stroke-width="1"></rect>
+      <text x="116" y="367" text-anchor="middle" class="fill-tool font-mono text-[8px]">HELPERS · FRESH WINDOW EACH</text>
+
+      <rect x="28" y="376" width="138" height="68" class="fill-bg stroke-tool/70" stroke-width="1.3"></rect>
+      <text x="97" y="393" text-anchor="middle" class="fill-ink font-mono text-[11px]">explore</text>
+      <text x="97" y="409" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">read · glob · grep</text>
+      <text x="97" y="421" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">read-only · leaf</text>
+
+      <rect x="179" y="376" width="138" height="68" class="fill-bg stroke-tool/70" stroke-width="1.3"></rect>
+      <text x="248" y="393" text-anchor="middle" class="fill-ink font-mono text-[11px]">cruncher</text>
+      <text x="248" y="409" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">grant-fed · chunk</text>
+      <text x="248" y="421" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">never fetches</text>
+
+      <rect x="330" y="376" width="138" height="68" class="fill-bg stroke-tool/70" stroke-width="1.3"></rect>
+      <text x="399" y="393" text-anchor="middle" class="fill-ink font-mono text-[11px]">chunk-summarizer</text>
+      <text x="399" y="409" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">leaf · one chunk each</text>
+
+      <rect x="481" y="376" width="138" height="68" class="fill-bg stroke-tool/70" stroke-width="1.3"></rect>
+      <text x="550" y="393" text-anchor="middle" class="fill-ink font-mono text-[11px]">agents/&lt;name&gt;.yaml</text>
+      <text x="550" y="409" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">your own · agent stripped</text>
+      <text x="550" y="421" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">depth-capped</text>
+
+      <rect x="632" y="376" width="138" height="68" class="fill-bg stroke-tool/70" stroke-width="1.3"></rect>
+      <text x="701" y="393" text-anchor="middle" class="fill-ink font-mono text-[11px]">search-verifier</text>
+      <text x="701" y="409" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">blind — claim · url only</text>
+      <text x="701" y="421" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">re-fetch → strict verdict</text>
+
+      <rect x="783" y="376" width="138" height="68" class="fill-bg stroke-tool/70" stroke-width="1.3"></rect>
+      <text x="852" y="393" text-anchor="middle" class="fill-ink font-mono text-[11px]">web-researcher</text>
+      <text x="852" y="409" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">web tools only</text>
+      <text x="852" y="421" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">may nest verifier</text>
+
+      <!-- ===== OPEN WEB ===== -->
+      <rect x="980" y="364" width="164" height="96" class="fill-none stroke-amber/45" stroke-width="1" stroke-dasharray="5 5"></rect>
+      <rect x="992" y="357" width="66" height="14" class="fill-bg stroke-amber" stroke-width="1"></rect>
+      <text x="1025" y="367" text-anchor="middle" class="fill-amber font-mono text-[8px]">OPEN WEB</text>
+
+      <rect x="992" y="376" width="140" height="68" class="fill-bg stroke-amber/70" stroke-width="1.3"></rect>
+      <text x="1062" y="392" text-anchor="middle" class="fill-ink font-mono text-[11px]">web</text>
+      <text x="1062" y="406" text-anchor="middle" class="fill-dim font-mono text-[8px]">every result stamped</text>
+      <text x="1062" y="418" text-anchor="middle" class="fill-amber font-mono text-[8px]">UNTRUSTED —</text>
+      <text x="1062" y="429" text-anchor="middle" class="fill-amber font-mono text-[8px]">treat as data</text>
+      <text x="1062" y="441" text-anchor="middle" class="fill-dim font-mono text-[8px]">SSRF-guarded</text>
+
+      <!-- ===== flow badges (accent, on the path in order) ===== -->
+      <g>
+        <circle cx="818" cy="270" r="8" class="fill-accent"></circle>
+        <text x="818" y="273" text-anchor="middle" class="fill-accent-ink font-mono text-[9px] font-semibold">1</text>
+        <circle cx="818" cy="365" r="8" class="fill-accent"></circle>
+        <text x="818" y="368" text-anchor="middle" class="fill-accent-ink font-mono text-[9px] font-semibold">2</text>
+        <circle cx="948" cy="410" r="8" class="fill-accent"></circle>
+        <text x="948" y="413" text-anchor="middle" class="fill-accent-ink font-mono text-[9px] font-semibold">3</text>
+        <circle cx="776" cy="454" r="8" class="fill-accent"></circle>
+        <text x="776" y="457" text-anchor="middle" class="fill-accent-ink font-mono text-[9px] font-semibold">4</text>
+        <circle cx="848" cy="330" r="8" class="fill-accent"></circle>
+        <text x="848" y="333" text-anchor="middle" class="fill-accent-ink font-mono text-[9px] font-semibold">5</text>
+      </g>
+
+      <!-- ===== KEY row ===== -->
+      <text x="16" y="500" class="fill-dim font-mono text-[8.5px]">KEY</text>
+      <line x1="44" y1="497" x2="64" y2="497" class="stroke-accent" stroke-width="1.4" marker-end="url(#p4-solid)"></line>
+      <text x="70" y="500" class="fill-dim font-mono text-[8.5px]">a delegation's path</text>
+      <line x1="180" y1="497" x2="200" y2="497" class="stroke-amber/60" stroke-width="1.2" stroke-dasharray="4 4"></line>
+      <line x1="185" y1="493" x2="195" y2="501" class="stroke-amber" stroke-width="1.2"></line>
+      <line x1="195" y1="493" x2="185" y2="501" class="stroke-amber" stroke-width="1.2"></line>
+      <text x="206" y="500" class="fill-dim font-mono text-[8.5px]">blocked — fails closed</text>
+      <rect x="336" y="493" width="8" height="8" class="fill-none stroke-ink" stroke-width="1.2"></rect>
+      <text x="348" y="500" class="fill-dim font-mono text-[8.5px]">shipped</text>
+    </svg>
+  </div>
+
+  <!-- <sm: node-wire rail — same delegation story in user-flow order -->
+  <FlowLedger
+    class="lg:hidden"
+    rows={[
+      { n: 1, icon: 'agent', title: 'the orchestrator delegates', text: 'via the agent tool — it never fetches the web itself', tone: 'accent' },
+      { n: 2, icon: 'box', title: 'a helper spawns', text: 'fresh window, only its job’s tools' },
+      { n: 3, icon: 'globe', title: 'web comes back untrusted', text: 'every result stamped: treat strictly as data', tone: 'amber' },
+      { n: 4, icon: 'search', title: 'a blind verifier re-fetches', text: 'sees claim · entity · url only → strict verdict' },
+      { n: 5, icon: 'check', title: 'findings return distilled', text: 'never the raw transcript' },
+      { kind: 'blocked', icon: 'shield', title: 'untrusted → host tools', text: 'refused where tools resolve — CoResidenceError, fails closed' },
+      { kind: 'note', text: 'the capability floor: untrusted-ingest and host-dangerous tools never coexist in one agent.' },
+    ]}
+  />
+</figure>

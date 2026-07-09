@@ -1,61 +1,49 @@
 ---
-// The engineer deep-dive — v2 (ARCH-V2-BUILD-SPEC, 2026-07-09). Eight SectionBand-led
-// sections on the module pattern: band → lead → plate (where one exists) → mechanism
-// rows (mono keyword + dim clause; last row = the failure path) → `_deeper` receipts.
-// fig. 01 (SystemPlate) is the table of contents — its numbered parts map 1:1 to the
-// sections below (zoom-in). Every claim verified against localharness PUBLIC
-// origin/main @ v0.8.0. No numbers/stats/version strings in copy. The in-flight
-// hierarchical-memory branch (tag-graph / mining / schema) is NOT public and appears
-// nowhere here. Bands + interstitials carry all hairlines now (no per-section border-t).
-// Old `/#id` links still resolve as alias ids: #hard-parts (on #delegation's
-// container), #security (on the SecurityDiagram wrapper), #over-window (on the
-// OverWindow wrapper) — Base.astro's redirect targets — plus #context (on #memory's
-// container) for llms.txt's old deep link (never a Base.astro redirect id).
+// The engineer deep-dive — v3 "drawn to scale" (DRAWING-SPEC, 2026-07-09 evening).
+// Five sections, each led by an LH-ARCH engineering plate emulating Alex's reference
+// drawing (plate-full.png): PLATE I runtime (fig 01) → LoopPlate zoom (fig 02, kept
+// verbatim — "great") → PLATE IV delegation/capability-floor (fig 03) → PLATE II
+// memory + DETAIL A store-internals + over-window zoom (figs 04-06) → PLATE III
+// autoresearch (fig 07). Sections Configuration / What It Isn't / Run It DROPPED
+// (Alex 2026-07-09); their legacy anchors resolve via invisible alias divs: #yaml
+// (in #delegation — agents-as-YAML lives on Plate IV), #scope + #run (around
+// GetInvolved). #hard-parts / #security / #context / #over-window aliases unchanged.
+// Every plate label verified against localharness PUBLIC origin/main @ v0.8.0;
+// branch-only memory work appears ONLY inside plates as hatched `landing` boxes (the
+// drawing key carries the honesty). Explainer rows are icon-led (no numeral badges —
+// the plates' circled numbers trace FLOW order, not row order).
 import Base from '../layouts/Base.astro';
-import Button from '../components/Button.astro';
-import Card from '../components/Card.astro';
-import CodeBlock from '../components/CodeBlock.astro';
 import Icon, { type IconName } from '../components/Icon.astro';
 import FigureFrame from '../components/FigureFrame.astro';
 import Interstitial from '../components/Interstitial.astro';
 import SectionBand from '../components/SectionBand.astro';
-import AgentYamlTabs from '../components/AgentYamlTabs.astro';
 import OverWindowDiagram from '../components/OverWindowDiagram.astro';
-import SecurityDiagram from '../components/SecurityDiagram.astro';
-import AutoresearchDiagram from '../components/AutoresearchDiagram.astro';
-import SystemPlate from '../components/SystemPlate.astro';
+import RuntimePlate from '../components/RuntimePlate.astro';
 import LoopPlate from '../components/LoopPlate.astro';
-import MemoryPlate from '../components/MemoryPlate.astro';
-import Chip from '../components/Chip.astro';
+import DelegationPlate from '../components/DelegationPlate.astro';
+import MemoryPlateII from '../components/MemoryPlateII.astro';
+import MemoryDetailPlate from '../components/MemoryDetailPlate.astro';
+import AutoresearchPlate from '../components/AutoresearchPlate.astro';
 import GetInvolved from '../components/GetInvolved.astro';
-
-const install = `git clone https://github.com/ahwurm/localharness
-cd localharness && uv sync
-uv run localharness init
-uv run localharness start`;
 
 // Receipt href builders — full GitHub blob/tree URLs on PUBLIC main.
 const REPO = 'https://github.com/ahwurm/localharness';
 const blob = (p: string) => `${REPO}/blob/main/${p}`;
 const tree = (p: string) => `${REPO}/tree/main/${p}`;
 
-// Top pips — same-page section index (mono _anchor links). The eight sections.
+// Top pips — same-page section index (mono _anchor links). The five sections.
 const pips: [string, string][] = [
   ['the system', '#system'],
   ['the loop', '#loop'],
   ['delegation', '#delegation'],
   ['memory', '#memory'],
-  ['configuration', '#yaml'],
   ['autoresearch', '#autoresearch'],
-  ["what it isn't", '#scope'],
-  ['run it', '#run'],
 ];
 
-// Mechanism rows: [icon, keyword, clause]. Numbered lists badge by index; icon-led
-// lists drop the numeral. Last row of each section is the failure path (the #system
-// parts are orientation — exempt).
+// Explainer rows: [icon, keyword, clause] — the plain-language layer under each
+// plate. Icon-led (parallel facts); last row of each list is the failure path.
 
-// #system — the parts (badges 1..7 map 1:1 to SystemPlate's numbered nodes)
+// #system — the parts (what's on Plate I, in request-path order)
 const parts: [IconName, string, string][] = [
   ['prompt', 'you', 'a terminal or a chat app; every conversation comes in the same way.'],
   ['agent', 'the orchestrator', 'one main agent reads your task and runs the loop: think, act, check, repeat.'],
@@ -66,7 +54,7 @@ const parts: [IconName, string, string][] = [
   ['layers', 'memory', 'what it learns outlives the session — gated on the way in, filed while idle.'],
 ];
 
-// #loop — the gates that keep a turn honest (icon-led; last = failure path)
+// #loop — the gates that keep a turn honest (kept verbatim; last = failure path)
 const loopGates: [IconName, string, string][] = [
   ['gauge', 'Budgets', 'every run gets a ceiling on how many actions it may take and how long it may run, checked before each step.'],
   ['prompt', 'Act-guard', 'if the model announces a plan but then stalls without doing anything, the harness nudges it once to actually take the step.'],
@@ -75,24 +63,23 @@ const loopGates: [IconName, string, string][] = [
   ['shield', 'Stuck-detector', 'if it keeps repeating the same move without progress, the harness first nudges it, then stops the run rather than spin forever.'],
 ];
 
-// #delegation — fenced (icon-led; row 1 rewritten to the roster; last = failure path)
+// #delegation — fenced (last = failure path)
 const fenced: [IconName, string, string][] = [
   ['search', 'Specialist helpers', 'explore · web-researcher · search-verifier · cruncher — each built for one job, in its own fresh window.'],
   ['box', 'A fresh window each', 'every helper starts with its own clean context, so one job’s clutter never leaks into another.'],
-  ['shield', 'Hidden instructions go nowhere', 'hidden instructions can lurk inside web pages or files; that content never reaches powerful tools.'],
-  ['globe', 'Untrusted content stays walled off', 'any helper that reads from the web never gets tools to run commands or edit files.'],
+  ['doc', 'Yours is one YAML file', 'your own helpers are text files — and they can never hand work onward themselves.'],
+  ['shield', 'The capability floor', 'anything that reads the web can never also run commands or edit files — one agent never holds both.'],
+  ['globe', 'Hidden instructions go nowhere', 'hidden instructions can lurk inside web pages; that content never reaches powerful tools.'],
   ['check', 'Fails closed', 'if it is unsure a hand-off is safe, it blocks the action and stops; it never guesses and allows it.'],
 ];
 
-// #memory — at every scale (badges 1..4 map 1:1 to MemoryPlate's rungs)
+// #memory — at every scale (last = failure path across both groups)
 const scales: [IconName, string, string][] = [
   ['doc', 'the window', 'big results park as short notes; one call pulls the full text back.'],
   ['search', 'the task', 'a document bigger than the window is read in sections — and the section notes persist.'],
   ['clock', 'the sitting', 'every step is recorded in order; each sitting ends with a short summary on the shelf.'],
   ['layers', 'for good', 'facts survive across sittings, in a database and a file you can read.'],
 ];
-
-// #memory — how it learns (icon-led; last = failure path)
 const learns: [IconName, string, string][] = [
   ['prompt', 'two ways in', 'it saves what you tell it to, and what surprises it.'],
   ['gauge', 'surprise, measured', 'it learns each tool’s usual result; a surprising failure is worth remembering.'],
@@ -102,15 +89,7 @@ const learns: [IconName, string, string][] = [
   ['check', 'it never pretends', 'every write is read back and checked; a failed write fails loudly.'],
 ];
 
-// #yaml — deny first (icon-led; last row is already the failure path)
-const denyFirst: [IconName, string, string][] = [
-  ['doc', 'One file, whole agent', 'an agent’s name, role, prompt, tools, and limits all live in one short text file you can read top to bottom.'],
-  ['shield', 'You allow, then it can', 'permissions start closed: an agent may use only the tools you have explicitly given it.'],
-  ['box', 'Nothing extra sneaks in', 'a tool that is not on the list simply is not there for the agent to reach.'],
-  ['check', 'Rejected before it runs', 'a config that asks for something unsafe is refused when the file is checked, not discovered mid-run.'],
-];
-
-// #autoresearch — the gate (badges 1..6; last = failure path)
+// #autoresearch — the gate (last = failure path)
 const gate: [IconName, string, string][] = [
   ['studio', 'a stronger model proposes', 'a separate, stronger model suggests one change at a time.'],
   ['box', 'tested in a throwaway copy', 'the change runs a fixed task set in a disposable checkout; your setup is never touched.'],
@@ -143,73 +122,49 @@ const memoryReceipts: [string, string, boolean][] = [
   ['agent/context.py', blob('src/localharness/agent/context.py'), true],
   ['_quality > speed', '/#demo-overwindow', false],
 ];
-const yamlReceipts: [string, string, boolean][] = [
-  ['tools/capabilities.py', blob('src/localharness/tools/capabilities.py'), true],
-  ['config/models.py', blob('src/localharness/config/models.py'), true],
-  ['_agents', '/#agents', false],
-];
 const autoresearchReceipts: [string, string, boolean][] = [
   ['autoresearch/experiment.py', blob('src/localharness/autoresearch/experiment.py'), true],
   ['autoresearch/proposer.py', blob('src/localharness/autoresearch/proposer.py'), true],
   ['autoresearch/archive.py', blob('src/localharness/autoresearch/archive.py'), true],
 ];
-const scopeReceipts: [string, string, boolean][] = [
-  ['SECURITY.md', blob('SECURITY.md'), true],
-  ['CHANGELOG.md', blob('CHANGELOG.md'), true],
-];
-
-// Read-the-code map (in #run): subsystem → primary source, in the new IA order.
-const codeMap: [string, string, string, string][] = [
-  ['the system', '#system', 'src/localharness/', tree('src/localharness')],
-  ['the loop', '#loop', 'agent/loop.py', blob('src/localharness/agent/loop.py')],
-  ['delegation', '#delegation', 'agent/subagent.py', blob('src/localharness/agent/subagent.py')],
-  ['memory', '#memory', 'memory/sqlite.py', blob('src/localharness/memory/sqlite.py')],
-  ['configuration', '#yaml', 'tools/capabilities.py', blob('src/localharness/tools/capabilities.py')],
-  ['autoresearch', '#autoresearch', 'autoresearch/experiment.py', blob('src/localharness/autoresearch/experiment.py')],
-  ["what it isn't", '#scope', 'SECURITY.md', blob('SECURITY.md')],
-];
 ---
 
 <Base
   title="LocalHarness — architecture"
-  description="How LocalHarness works: the system on one plate, the agent loop and its gates, delegation fenced against prompt injection, memory at every scale, agents as YAML, and the self-improving autoresearch loop."
+  description="How LocalHarness works, drawn to scale: the shipped runtime on one plate, the agent loop and its gates, delegation fenced by a capability floor, memory at every scale down to one fact's life, and the self-improving autoresearch loop."
 >
   <h1 class="sr-only">LocalHarness — architecture</h1>
 
-  <!-- #system — the whole harness on one plate; fig. 01 is the table of contents. -->
+  <!-- #system — PLATE I: the whole shipped runtime, one request finding its way through. -->
   <section id="system" data-reveal>
     <SectionBand icon="box" title="The System" />
     <div class="container-site py-16 sm:py-20">
       <p class="measure text-dim">
-        Start here — the whole harness on one plate. Each numbered part gets its own section below.
+        The architecture, drawn to scale — one request finding its way through the shipped
+        runtime. The plates below zoom in.
       </p>
       <nav class="mt-6 flex flex-wrap gap-x-6 gap-y-2 font-mono text-xs" aria-label="Sections">
         {pips.map(([label, href]) => (
           <a href={href} class="text-accent/80 transition-colors hover:text-accent">_{label}</a>
         ))}
       </nav>
-      <div class="mt-10 grid gap-10 xl:grid-cols-[3fr_2fr] xl:items-start">
-        <div class="min-w-0">
-          <FigureFrame num="01" caption="the whole harness on one plate">
-            <SystemPlate />
-          </FigureFrame>
-        </div>
-        <div>
-          <p class="eyebrow">the parts</p>
-          <ol class="mt-3 space-y-2.5">
-            {parts.map(([icon, kw, clause], i) => (
-              <li class="flex items-start gap-3">
-                <span class="flex size-5 shrink-0 items-center justify-center border border-accent/50 bg-accent/10 font-mono text-[11px] font-semibold text-accent">{i + 1}</span>
-                <Icon name={icon} class="size-4" />
-                <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
-                  <span class="font-mono text-[13px] text-ink">{kw}</span>
-                  <span class="text-sm text-dim">{clause}</span>
-                </span>
-              </li>
-            ))}
-          </ol>
-        </div>
+      <div class="mt-10">
+        <FigureFrame num="01" caption="PLATE I — the shipped runtime: one request finding its way through">
+          <RuntimePlate />
+        </FigureFrame>
       </div>
+      <p class="eyebrow mt-10">the parts</p>
+      <ul class="mt-3 grid gap-x-12 gap-y-2.5 xl:grid-flow-col xl:grid-rows-4">
+        {parts.map(([icon, kw, clause]) => (
+          <li class="flex items-start gap-3">
+            <Icon name={icon} class="size-4" />
+            <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
+              <span class="font-mono text-[13px] text-ink">{kw}</span>
+              <span class="text-sm text-dim">{clause}</span>
+            </span>
+          </li>
+        ))}
+      </ul>
       <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-xs">
         <span class="text-dim">_deeper</span>
         {sysReceipts.map(([label, href, ext]) => (
@@ -219,7 +174,7 @@ const codeMap: [string, string, string, string][] = [
     </div>
   </section>
 
-  <!-- #loop — one turn and the gates that keep it honest (LoopPlate = fig. 02, right). -->
+  <!-- #loop — one turn and the gates that keep it honest (kept verbatim — fig. 02). -->
   <section id="loop" data-reveal>
     <SectionBand icon="repeat" title="The Loop" />
     <div class="container-site py-16 sm:py-20">
@@ -256,25 +211,65 @@ const codeMap: [string, string, string, string][] = [
     </div>
   </section>
 
-  <!-- #delegation — fenced (SecurityDiagram = fig. 03; #hard-parts on the container, -->
-  <!-- #security on the plate wrapper). Plate-left. -->
+  <!-- #delegation — PLATE IV: the capability floor (fig. 03; replaces the old
+       SecurityDiagram). #hard-parts on the container, #security on the plate wrapper,
+       #yaml alias anchor here (agents-as-YAML lives on the plate's roster). -->
   <section id="delegation" data-reveal>
     <SectionBand icon="shield" title="Delegation" />
-    <div id="hard-parts" class="container-site py-16 sm:py-20">
-      <p class="measure text-dim">
-        Some work gets handed to helpers. The parts that could touch your machine are walled off
-        before they ever start.
-      </p>
-      <div class="mt-10 grid gap-10 xl:grid-cols-[3fr_2fr] xl:items-start">
-        <div id="security" class="min-w-0">
-          <FigureFrame num="03" caption="untrusted content, quarantined">
-            <SecurityDiagram />
+    <div id="hard-parts" class="container-site">
+      <div id="yaml" class="py-16 sm:py-20">
+        <p class="measure text-dim">
+          Some work gets handed to helpers. The parts that could touch your machine are walled off
+          before they ever start.
+        </p>
+        <div id="security" class="mt-10">
+          <FigureFrame num="03" caption="PLATE IV — delegation, fenced: the capability floor">
+            <DelegationPlate />
           </FigureFrame>
         </div>
+        <p class="eyebrow mt-10">fenced</p>
+        <ul class="mt-3 grid gap-x-12 gap-y-2.5 xl:grid-flow-col xl:grid-rows-3">
+          {fenced.map(([icon, kw, clause]) => (
+            <li class="flex items-start gap-3">
+              <Icon name={icon} class="size-4" />
+              <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                <span class="font-mono text-[13px] text-ink">{kw}</span>
+                <span class="text-sm text-dim">{clause}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
+        <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-xs">
+          <span class="text-dim">_deeper</span>
+          {delegationReceipts.map(([label, href, ext]) => (
+            <a href={href} target={ext ? '_blank' : undefined} rel={ext ? 'noopener' : undefined} class="text-accent/80 transition-colors hover:text-accent">{label} ↗</a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Interstitial icon="box" lead="The fence is what lets it scale" rest="— the same walls hold when the job grows past a single window." />
+
+  <!-- #memory — PLATE II + DETAIL A + the over-window zoom (figs 04-06). #context on
+       the container, #over-window on the OverWindow wrapper. -->
+  <section id="memory" data-reveal>
+    <SectionBand icon="layers" title="Memory" topBorder={false} />
+    <div id="context" class="container-site py-16 sm:py-20">
+      <p class="measure text-dim">
+        It takes notes while it works, and files them while it sleeps — memory at every scale,
+        from one window to forever.
+      </p>
+      <div class="mt-10">
+        <FigureFrame num="04" caption="PLATE II — hierarchical memory: fast capture, slow consolidation, recall">
+          <MemoryPlateII />
+        </FigureFrame>
+      </div>
+      <div class="mt-10 grid gap-x-12 gap-y-8 xl:grid-cols-2">
         <div>
-          <p class="eyebrow">fenced</p>
+          <p class="eyebrow">at every scale</p>
           <ul class="mt-3 space-y-2.5">
-            {fenced.map(([icon, kw, clause]) => (
+            {scales.map(([icon, kw, clause]) => (
               <li class="flex items-start gap-3">
                 <Icon name={icon} class="size-4" />
                 <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
@@ -285,49 +280,8 @@ const codeMap: [string, string, string, string][] = [
             ))}
           </ul>
         </div>
-      </div>
-      <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-xs">
-        <span class="text-dim">_deeper</span>
-        {delegationReceipts.map(([label, href, ext]) => (
-          <a href={href} target={ext ? '_blank' : undefined} rel={ext ? 'noopener' : undefined} class="text-accent/80 transition-colors hover:text-accent">{label} ↗</a>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <Interstitial icon="box" lead="The fence is what lets it scale" rest="— the same walls hold when the job grows past a single window." />
-
-  <!-- #memory — memory at every scale (MemoryPlate = fig. 04; #context on the -->
-  <!-- container, #over-window on the OverWindow wrapper). topBorder off under the -->
-  <!-- interstitial. Plate-left; the over-window figure sits full-width below. -->
-  <section id="memory" data-reveal>
-    <SectionBand icon="layers" title="Memory" topBorder={false} />
-    <div id="context" class="container-site py-16 sm:py-20">
-      <p class="measure text-dim">
-        It takes notes while it works, and files them while it sleeps — memory at every scale,
-        from one window to forever.
-      </p>
-      <div class="mt-10 grid gap-10 xl:grid-cols-[2fr_3fr] xl:items-start">
-        <div class="min-w-0 xl:order-last">
-          <FigureFrame num="04" caption="memory at every scale">
-            <MemoryPlate />
-          </FigureFrame>
-        </div>
         <div>
-          <p class="eyebrow">at every scale</p>
-          <ol class="mt-3 space-y-2.5">
-            {scales.map(([icon, kw, clause], i) => (
-              <li class="flex items-start gap-3">
-                <span class="flex size-5 shrink-0 items-center justify-center border border-accent/50 bg-accent/10 font-mono text-[11px] font-semibold text-accent">{i + 1}</span>
-                <Icon name={icon} class="size-4" />
-                <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
-                  <span class="font-mono text-[13px] text-ink">{kw}</span>
-                  <span class="text-sm text-dim">{clause}</span>
-                </span>
-              </li>
-            ))}
-          </ol>
-          <p class="eyebrow mt-8">how it learns</p>
+          <p class="eyebrow">how it learns</p>
           <ul class="mt-3 space-y-2.5">
             {learns.map(([icon, kw, clause]) => (
               <li class="flex items-start gap-3">
@@ -341,8 +295,13 @@ const codeMap: [string, string, string, string][] = [
           </ul>
         </div>
       </div>
+      <div class="mt-12">
+        <FigureFrame num="05" caption="DETAIL A — inside the memory store: one fact's life">
+          <MemoryDetailPlate />
+        </FigureFrame>
+      </div>
       <div id="over-window" class="mx-auto mt-12 max-w-3xl">
-        <FigureFrame num="05" caption="reading what won't fit">
+        <FigureFrame num="06" caption="reading what won't fit">
           <OverWindowDiagram />
         </FigureFrame>
       </div>
@@ -355,69 +314,30 @@ const codeMap: [string, string, string, string][] = [
     </div>
   </section>
 
-  <!-- #yaml — configuration (AgentYamlTabs, 3 tabs). Plate-left. -->
-  <section id="yaml" data-reveal>
-    <SectionBand icon="doc" title="Configuration" />
-    <div class="container-site py-16 sm:py-20">
-      <p class="measure text-dim">Prompt, tools, permissions — all in one text file you can open and read.</p>
-      <div class="mt-10 grid gap-10 xl:grid-cols-[3fr_2fr] xl:items-start">
-        <div class="min-w-0">
-          <AgentYamlTabs />
-        </div>
-        <div>
-          <p class="eyebrow">deny first</p>
-          <ul class="mt-3 space-y-2.5">
-            {denyFirst.map(([icon, kw, clause]) => (
-              <li class="flex items-start gap-3">
-                <Icon name={icon} class="size-4" />
-                <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
-                  <span class="font-mono text-[13px] text-ink">{kw}</span>
-                  <span class="text-sm text-dim">{clause}</span>
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-      <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-xs">
-        <span class="text-dim">_deeper</span>
-        {yamlReceipts.map(([label, href, ext]) => (
-          <a href={href} target={ext ? '_blank' : undefined} rel={ext ? 'noopener' : undefined} class="text-accent/80 transition-colors hover:text-accent">{label} ↗</a>
-        ))}
-      </div>
-    </div>
-  </section>
+  <Interstitial icon="repeat" lead="The settings are just a starting point" rest="— the harness tunes them itself and keeps only what measurably helps." />
 
-  <Interstitial icon="repeat" lead="The file is just a starting point" rest="— from here the harness tunes its own settings and keeps only what measurably helps." />
-
-  <!-- #autoresearch — the harness improves itself under a gate (fig. 06, right). -->
-  <!-- topBorder off under the interstitial. -->
+  <!-- #autoresearch — PLATE III: the loop that tunes the harness (fig. 07). -->
   <section id="autoresearch" data-reveal>
     <SectionBand icon="gauge" title="Autoresearch" topBorder={false} />
     <div class="container-site py-16 sm:py-20">
       <p class="measure text-dim">It tries one change at a time and keeps it only if it measurably helps.</p>
-      <div class="mt-10 grid gap-10 xl:grid-cols-[2fr_3fr] xl:items-start">
-        <div class="min-w-0 xl:order-last">
-          <FigureFrame num="06" caption="try a change → test it → check it passed → keep it.">
-            <AutoresearchDiagram />
-          </FigureFrame>
-        </div>
-        <div>
-          <p class="eyebrow">the gate</p>
-          <ol class="mt-3 space-y-2.5">
-            {gate.map(([icon, kw, clause], i) => (
-              <li class="flex items-start gap-3">
-                <span class="flex size-5 shrink-0 items-center justify-center border border-accent/50 bg-accent/10 font-mono text-[11px] font-semibold text-accent">{i + 1}</span>
-                <Icon name={icon} class="size-4" />
-                <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
-                  <span class="font-mono text-[13px] text-ink">{kw}</span>
-                  <span class="text-sm text-dim">{clause}</span>
-                </span>
-              </li>
-            ))}
-          </ol>
-        </div>
+      <div class="mt-10">
+        <FigureFrame num="07" caption="PLATE III — the autoresearch loop: propose, gate, adopt — against its own corpus">
+          <AutoresearchPlate />
+        </FigureFrame>
       </div>
+      <p class="eyebrow mt-10">the gate</p>
+      <ul class="mt-3 grid gap-x-12 gap-y-2.5 xl:grid-flow-col xl:grid-rows-3">
+        {gate.map(([icon, kw, clause]) => (
+          <li class="flex items-start gap-3">
+            <Icon name={icon} class="size-4" />
+            <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
+              <span class="font-mono text-[13px] text-ink">{kw}</span>
+              <span class="text-sm text-dim">{clause}</span>
+            </span>
+          </li>
+        ))}
+      </ul>
       <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-xs">
         <span class="text-dim">_deeper</span>
         {autoresearchReceipts.map(([label, href, ext]) => (
@@ -427,71 +347,11 @@ const codeMap: [string, string, string, string][] = [
     </div>
   </section>
 
-  <!-- #scope — what it isn't (icon lockups; the honesty beat) -->
-  <section id="scope" data-reveal>
-    <SectionBand icon="cloud-off" title="What It Isn't" />
-    <div class="container-site py-16 sm:py-20">
-      <div class="grid gap-3 sm:grid-cols-2">
-        <Card class="p-4">
-          <Chip icon="box" label="not an inference engine" class="border-0 bg-transparent px-0 py-0" />
-          <p class="mt-1.5 text-sm text-dim">
-            It doesn't run the AI model itself — you bring that (vLLM, Ollama…); LocalHarness sits on top.
-          </p>
-        </Card>
-        <Card class="p-4">
-          <Chip icon="cloud-off" label="not a cloud service" class="border-0 bg-transparent px-0 py-0" />
-          <p class="mt-1.5 text-sm text-dim">
-            It doesn't collect data or call home, and the code is free to use and change.
-          </p>
-        </Card>
-        <Card class="p-4">
-          <Chip icon="shield" label="not sandboxed yet" class="border-0 bg-transparent px-0 py-0" />
-          <p class="mt-1.5 text-sm text-dim">
-            It blocks anything you haven't explicitly allowed. It doesn't yet wall actions off
-            completely — that's next.
-          </p>
-        </Card>
-        <Card class="p-4">
-          <Chip icon="gauge" label="not finished yet" class="border-0 bg-transparent px-0 py-0" />
-          <p class="mt-1.5 text-sm text-dim">
-            Early, honest about it — see
-            <a href="/devnotes/" class="text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent">devnotes</a>.
-          </p>
-        </Card>
-      </div>
-      <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-xs">
-        <span class="text-dim">_deeper</span>
-        {scopeReceipts.map(([label, href, ext]) => (
-          <a href={href} target={ext ? '_blank' : undefined} rel={ext ? 'noopener' : undefined} class="text-accent/80 transition-colors hover:text-accent">{label} ↗</a>
-        ))}
-      </div>
+  <!-- Legacy alias anchors for the dropped sections (Base.astro redirect ids + old
+       llms.txt links): #scope ("what it isn't") and #run ("run it") land on the close. -->
+  <div id="scope">
+    <div id="run">
+      <GetInvolved />
     </div>
-  </section>
-
-  <!-- #run — install + watch-it-work close, then the read-the-code map -->
-  <section id="run" data-reveal>
-    <SectionBand icon="prompt" title="Run It" />
-    <div class="container-site py-16 sm:py-20">
-      <div class="flex flex-col items-center text-center">
-        <CodeBlock code={install} label="install" class="w-full max-w-xl text-left [&_pre]:text-[13px]" />
-        <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
-          <Button href="https://github.com/ahwurm/localharness" external>view on github</Button>
-          <Button href="/#demo-startup" variant="outline">watch it work</Button>
-        </div>
-      </div>
-      <div class="mx-auto mt-16 w-full max-w-xl border border-edge bg-surface/60">
-        <p class="border-b border-edge/70 px-4 py-2.5 font-mono text-xs text-dim">_read the code</p>
-        <ul class="divide-y divide-edge/60 font-mono text-xs">
-          {codeMap.map(([sub, anchor, label, href]) => (
-            <li class="flex items-center justify-between gap-4 px-4 py-2.5">
-              <a href={anchor} class="text-ink transition-colors hover:text-accent">{sub}</a>
-              <a href={href} target="_blank" rel="noopener" class="text-accent/80 transition-colors hover:text-accent">{label} ↗</a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <GetInvolved />
+  </div>
 </Base>
