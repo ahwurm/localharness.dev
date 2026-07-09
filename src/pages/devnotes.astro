@@ -234,21 +234,26 @@ const iconColor = (tag: string) =>
         {
           releases.map((r, i) => (
             <section aria-label={r.v} data-reveal class="pl-5 sm:pl-6">
-              <header class="-ml-5 flex items-baseline gap-3 border-b border-edge pb-3 sm:-ml-6">
-                <span class="bg-bg">
-                  <span class="border border-accent/40 bg-accent/10 px-2 py-0.5 font-mono text-sm text-accent">
-                    {r.v}
+              <details class="release group" open={i === 0}>
+                <summary class="-ml-5 flex cursor-pointer items-baseline gap-3 border-b border-edge pb-3 transition-colors duration-200 hover:border-accent/40 sm:-ml-6">
+                  <span class="bg-bg">
+                    <span class="border border-accent/40 bg-accent/10 px-2 py-0.5 font-mono text-sm text-accent">
+                      {r.v}
+                    </span>
                   </span>
-                </span>
-                <span class="font-mono text-xs text-dim">{r.date}</span>
-                {/* `latest` rides index 0 — the releases array must stay newest-first */}
-                {i === 0 && (
-                  <span class="border border-accent/30 bg-accent/10 px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-wide text-accent">
-                    latest
+                  <span class="font-mono text-xs text-dim">{r.date}</span>
+                  {/* `latest` rides index 0 — the releases array must stay newest-first */}
+                  {i === 0 && (
+                    <span class="border border-accent/30 bg-accent/10 px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-wide text-accent">
+                      latest
+                    </span>
+                  )}
+                  <span class="ml-auto font-mono text-sm text-dim" aria-hidden="true">
+                    <span class="group-open:hidden">+</span>
+                    <span class="hidden group-open:inline">−</span>
                   </span>
-                )}
-              </header>
-              <div class="divide-y divide-edge/60">
+                </summary>
+                <div class="divide-y divide-edge/60">
                 {r.entries.map((n) => (
                   <article class="flex items-start gap-3 py-4">
                     <Icon name={iconGlyph(n.tag)} class={`mt-1 size-4 shrink-0 ${iconColor(n.tag)}`} />
@@ -268,7 +273,8 @@ const iconColor = (tag: string) =>
                     </div>
                   </article>
                 ))}
-              </div>
+                </div>
+              </details>
             </section>
           ))
         }
@@ -285,3 +291,26 @@ const iconColor = (tag: string) =>
     </div>
   </section>
 </Base>
+
+<style>
+  /* releases collapse via native <details> — no JS, no-JS visitors get working
+     disclosure. Marker stripped (the +/− glyph is the affordance, Nav's idiom). */
+  .release > summary {
+    list-style: none;
+  }
+  .release > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  /* entries fade in on open — pure CSS; instant under reduced-motion */
+  @media (prefers-reduced-motion: no-preference) {
+    .release > div {
+      transition: opacity 0.18s var(--ease-reveal);
+    }
+    @starting-style {
+      .release[open] > div {
+        opacity: 0;
+      }
+    }
+  }
+</style>
