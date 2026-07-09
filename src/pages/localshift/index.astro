@@ -6,11 +6,12 @@ import Chip from '../../components/Chip.astro';
 import CodeBlock from '../../components/CodeBlock.astro';
 import Icon from '../../components/Icon.astro';
 import SectionBand from '../../components/SectionBand.astro';
-import VerdictCard from '../../components/VerdictCard.astro';
 import ReplayTerminal from '../../components/ReplayTerminal.astro';
 import ShiftFlow from '../../components/ShiftFlow.astro';
 import FigureFrame from '../../components/FigureFrame.astro';
+import FileTabs from '../../components/FileTabs.astro';
 import GetInvolved from '../../components/GetInvolved.astro';
+import { ledgerRows } from '../../data/ledger-sample';
 
 const install = `/plugin marketplace add ahwurm/localshift
 /plugin install localshift@localshift`;
@@ -47,6 +48,79 @@ const runnerDemo = [
     kind: 'dim' as const,
     text: '2026-07-02T12:48:09.851195+00:00 smoke [local] model=qwen3.6-27b tokens=1358/52 exit=0 artifacts_ok=True',
     d: 400,
+  },
+];
+
+// REAL files, shown verbatim (checks.yaml verbatim-abridged: three of six rules,
+// elision stated in-pane). Source: tasks/smoke.yaml, tasks/smoke-prompt.md,
+// workloads/smoke/checks.yaml on github.com/ahwurm/localshift @ origin/main —
+// the same task the fig. 02 capture runs.
+const dim = (s: string) => `<span class="text-dim">${s}</span>`;
+const acc = (s: string) => `<span class="text-accent/90">${s}</span>`;
+const taskYaml = [
+  dim('name:') + ' smoke',
+  dim('source:') + ' localshift Phase 1 runner self-test',
+  dim('prompt_file:') + ' tasks/smoke-prompt.md',
+  dim('env_vars:') + ' [SMOKE_OUT]',
+  dim('workdir:') + ' runs/smoke',
+  dim('tools:') + ' [write]',
+  dim('budget:'),
+  '  ' + dim('max_actions:') + ' 3',
+  '  ' + dim('max_duration_minutes:') + ' 3.0',
+  dim('artifacts:'),
+  '  - "${SMOKE_OUT}"',
+  dim('models:'),
+  '  ' + dim('local:') + ' ' + acc('qwen3.6-27b'),
+  '  ' + dim('frontier:') + ' ' + acc('"claude -p (cron default)"'),
+].join('\n');
+const promptMd = [
+  'You must call the write tool exactly once, with these exact parameters:',
+  'path=${SMOKE_OUT} and content=`localshift smoke ok`. After the tool result',
+  'comes back, reply with the single word: done. Do not create or modify any',
+  'other file.',
+].join('\n');
+const checksYaml = [
+  dim('checks:'),
+  '  ' + dim('# the run produced its artifact at all'),
+  '  - ' + dim('id:') + ' artifact-present',
+  '    ' + dim('type:') + ' artifact_exists',
+  '    ' + dim('target:') + ' ${SMOKE_OUT}',
+  '    ' + dim('hard:') + ' true',
+  '',
+  '  ' + dim('# the success marker the downstream consumer keys off is present'),
+  '  - ' + dim('id:') + ' has-marker',
+  '    ' + dim('type:') + ' contains',
+  '    ' + dim('target:') + ' ${SMOKE_OUT}',
+  '    ' + dim('value:') + ' "smoke ok"',
+  '    ' + dim('hard:') + ' true',
+  '',
+  '  ' + dim('# NEVER-rule: no fabricated/placeholder markers leaked into the artifact'),
+  '  - ' + dim('id:') + ' ' + acc('no-fabrication'),
+  '    ' + dim('type:') + ' forbid_regex',
+  '    ' + dim('target:') + ' ${SMOKE_OUT}',
+  '    ' + dim('value:') + ' "FABRICATED|PLACEHOLDER|TODO"',
+  '    ' + dim('hard:') + ' true',
+  '',
+  '  ' + dim('# …plus fixture-parses, shape-ok, json-count — fig. 02 runs all six'),
+].join('\n');
+const evalTabs = [
+  {
+    id: 'task.yaml',
+    file: 'tasks/smoke.yaml',
+    note: 'the fig. 02 job’s whole spec — one path comment trimmed',
+    html: taskYaml,
+  },
+  {
+    id: 'prompt',
+    file: 'tasks/smoke-prompt.md',
+    note: 'prompt_file resolves to this — the job’s actual instruction',
+    html: promptMd,
+  },
+  {
+    id: 'checks.yaml',
+    file: 'workloads/smoke/checks.yaml',
+    note: 'three of the six rules, verbatim — fig. 02 runs all six',
+    html: checksYaml,
   },
 ];
 
@@ -89,8 +163,7 @@ const jsonLd = [
         Same workflow. Same output.<br /><span class="whitespace-nowrap text-accent">Much lower cost.</span>
       </h1>
       <p class="focus-in mt-5 max-w-xl text-dim [--fi-delay:220ms]">
-        Point Claude Code at an AI job you pay for on repeat. It comes back running on your own
-        model — free, with receipts.
+        Point Claude Code at a job you pay for on repeat. It comes back local — with receipts.
       </p>
       <CodeBlock
         code={install}
@@ -193,12 +266,17 @@ const jsonLd = [
   <section id="demo" data-reveal>
     <SectionBand icon="server" title="Demo" />
     <div class="container-site py-16 sm:py-20">
-      <div class="gap-10 xl:grid xl:grid-cols-[3fr_2fr]">
-        <div class="min-w-0">
+      <div class="gap-10 xl:grid xl:grid-cols-[3fr_2fr] xl:min-h-[23rem]">
+        <div class="min-w-0 xl:flex xl:h-0 xl:min-h-full xl:flex-col">
           <p class="mb-2 font-mono text-xs">
             <span class="text-accent/80">fig. 02</span> <span class="text-ink">— the migrated job, running claude-free</span>
           </p>
-          <ReplayTerminal title="~/localshift — real smoke run · qwen3.6-27b on vLLM" lines={runnerDemo} />
+          <ReplayTerminal
+            title="~/localshift — real run · qwen3.6-27b"
+            lines={runnerDemo}
+            class="xl:flex xl:min-h-0 xl:flex-1 xl:flex-col"
+            bodyClass="xl:h-auto xl:min-h-0 xl:flex-1"
+          />
           <p class="mt-2 font-mono text-[11px] text-dim">
             the whole claude-free loop — one of the checks: <span class="text-ink">no-fabrication</span>
           </p>
@@ -239,14 +317,122 @@ const jsonLd = [
               </span>
             </li>
           </ol>
+          <p class="mt-5 font-mono text-xs">
+            <a
+              href={`${shiftRepo}/blob/main/bin/localshift`}
+              target="_blank"
+              rel="noopener"
+              class="text-accent/80 transition-colors hover:text-accent"
+              >the runner ↗</a
+            >
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-          <p class="eyebrow mt-8">proven, not assumed</p>
+  <!-- The Eval (#eval) — the real files behind the run above -->
+  <section id="eval" data-reveal>
+    <SectionBand icon="doc" title="The Eval" />
+    <div class="container-site py-16 sm:py-20">
+      <FileTabs tabs={evalTabs} label="The eval as files" class="max-w-4xl" />
+      <div class="mt-8 max-w-4xl">
+        <p class="eyebrow">files, not vibes</p>
+        <ul class="mt-3 grid gap-x-10 gap-y-3 sm:grid-cols-3">
+          <li class="flex items-start gap-3">
+            <Icon name="doc" class="size-4" />
+            <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
+              <span class="font-mono text-[13px] text-ink">one yaml per job</span>
+              <span class="text-sm text-dim">prompt, tools, budget, artifacts — the whole spec</span>
+            </span>
+          </li>
+          <li class="flex items-start gap-3">
+            <Icon name="shield" class="size-4" />
+            <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
+              <span class="font-mono text-[13px] text-ink">hard rules gate</span>
+              <span class="text-sm text-dim">hard: true fails the run; soft rules advise</span>
+            </span>
+          </li>
+          <li class="flex items-start gap-3">
+            <Icon name="gauge" class="size-4" />
+            <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
+              <span class="font-mono text-[13px] text-ink">the bar is yours</span>
+              <span class="text-sm text-dim">set from your job's real outputs, not a benchmark</span>
+            </span>
+          </li>
+        </ul>
+        <p class="mt-5 font-mono text-xs">
+          <a
+            href={`${shiftRepo}/blob/main/tasks/smoke.yaml`}
+            target="_blank"
+            rel="noopener"
+            class="text-accent/80 transition-colors hover:text-accent"
+            >the task ↗</a
+          >
+          <a
+            href={`${shiftRepo}/blob/main/workloads/smoke/checks.yaml`}
+            target="_blank"
+            rel="noopener"
+            class="ml-8 text-accent/80 transition-colors hover:text-accent"
+            >the checks ↗</a
+          >
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Receipts (#receipts) — the real ledger from the dogfood cutover + the three verdicts -->
+  <section id="receipts" data-reveal>
+    <SectionBand icon="book" title="Receipts" />
+    <div class="container-site py-16 sm:py-20">
+      <div class="gap-10 xl:grid xl:grid-cols-[3fr_2fr]">
+        <div class="min-w-0">
+          <p class="mb-2 font-mono text-xs">
+            <span class="text-accent/80">fig. 03</span> <span class="text-ink">— a real cutover week, one line per run</span>
+          </p>
+          <div data-ledger class="overflow-hidden border border-edge bg-surface/80">
+            <div class="flex items-center justify-between gap-3 border-b border-edge/70 px-4 py-2 font-mono text-xs text-dim">
+              <span class="truncate">runs/ledger.jsonl<span class="hidden sm:inline"> — append-only</span> · qwen3.6-27b</span>
+              <span class="shrink-0"><span data-lg-count>{ledgerRows.length}</span> rows</span>
+            </div>
+            <ol data-lg-list class="h-[272px] overflow-y-auto px-4 py-2 font-mono text-[11px] leading-[1.9] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {ledgerRows.map((r, i) => (
+                <li data-lg-row={i} class="flex flex-wrap gap-x-2">
+                  <span class="text-dim">{r.t}</span>
+                  <span class="text-ink/85">{r.w}</span>
+                  <span class={r.ok ? 'text-accent/80' : 'text-amber'}>{r.s}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+          <p class="mt-2 font-mono text-[11px] text-dim">
+            the <span class="text-amber">exit 1</span> row stays — failures recorded as failures
+          </p>
+        </div>
+        <div class="mt-6 xl:mt-0">
+          <p class="eyebrow">three verdicts</p>
           <ul class="mt-3 space-y-2.5">
             <li class="flex items-start gap-3">
-              <Icon name="book" class="size-4" />
+              <span class="mt-0.5 inline-block shrink-0 border border-accent/40 bg-accent/5 px-2 py-0.5 font-mono text-xs text-accent">migrate</span>
+              <span class="text-sm text-dim">passes blind — cut over</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="mt-0.5 inline-block shrink-0 border border-amber/40 bg-amber/5 px-2 py-0.5 font-mono text-xs text-amber">conditional</span>
+              <span class="text-sm text-dim">specific gaps — fix, then flip</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="mt-0.5 inline-block shrink-0 border border-edge px-2 py-0.5 font-mono text-xs text-ink">keep-frontier</span>
+              <span class="text-sm text-dim">local can't meet it yet — said plainly</span>
+            </li>
+          </ul>
+
+          <p class="eyebrow mt-8">not a router</p>
+          <ul class="mt-3 space-y-2.5">
+            <li class="flex items-start gap-3">
+              <Icon name="cloud-off" class="size-4" />
               <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
-                <span class="font-mono text-[13px] text-ink">the author's own jobs</span>
-                <span class="text-sm text-dim">production pipelines, migrated end-to-end and cut over — failures included</span>
+                <span class="font-mono text-[13px] text-ink">calls deleted, not proxied</span>
+                <span class="text-sm text-dim">no silent fallback</span>
               </span>
             </li>
           </ul>
@@ -264,50 +450,63 @@ const jsonLd = [
     </div>
   </section>
 
-  <!-- Verdicts — honest outcomes, not a router -->
-  <section id="verdicts" data-reveal>
-    <SectionBand icon="shield" title="Verdicts" />
-    <div class="container-site py-16 sm:py-20">
-      <h3 class="text-xl font-medium tracking-[-0.01em] text-ink">It's not a router.</h3>
-      <p class="measure mt-3 text-dim">
-        Routers keep the paid model in the loop by design. LocalShift ends with the paid calls
-        deleted, not proxied. Every job earns one of three verdicts:
-      </p>
-      <div class="mt-6 grid gap-4 sm:grid-cols-3">
-        <VerdictCard name="migrate" tone="green" desc="Passes every check, judged blind against the original. Cut over." />
-        <VerdictCard name="conditional" tone="amber" desc="Specific, fixable gaps. Migrate after the fix list." />
-        <VerdictCard
-          name="keep-frontier"
-          tone="neutral"
-          desc="Local can't meet the bar yet — said plainly. A first-class outcome, not a failure."
-        />
-      </div>
-    </div>
-  </section>
-
-  <!-- Fast or Slow — the two cutover modes -->
+  <!-- Fast or Slow (#cutover) — the two cutover modes as plates -->
   <section id="cutover" data-reveal>
     <SectionBand icon="gauge" title="Fast or Slow" />
     <div class="container-site py-16 sm:py-20">
-      <h3 class="text-xl font-medium tracking-[-0.01em] text-ink">Same test underneath.</h3>
-      <p class="measure mt-3 text-dim">Your call on how fast the paid calls go away.</p>
-      <div class="mt-6 grid gap-4 sm:grid-cols-2">
-        <div class="border border-edge bg-surface/60 p-8">
-          <h3 class="text-xl font-semibold tracking-tight">Cut over now, optimize after</h3>
-          <div class="mt-2 inline-block border border-accent/40 bg-accent/10 px-2 py-0.5 font-mono text-xs text-accent">fast</div>
-          <p class="mt-3 text-sm text-dim">
-            Move the whole job local in one pass. What breaks fails loudly — fix it on the
-            receipts. Least effort, free from day one.
-          </p>
-        </div>
-        <div class="border border-edge bg-surface/60 p-8">
-          <h3 class="text-xl font-semibold tracking-tight">Migrate piece by piece</h3>
-          <div class="mt-2 inline-block border border-amber/40 bg-amber/10 px-2 py-0.5 font-mono text-xs text-amber">slow</div>
-          <p class="mt-3 text-sm text-dim">
-            Judge each piece blind, one at a time. Flip only what passes — the rest stays where
-            it is until it does.
-          </p>
-        </div>
+      <h3 class="text-xl font-medium tracking-[-0.01em] text-ink">Same eval underneath — your call on speed.</h3>
+      <div class="mt-6 grid max-w-4xl gap-4 sm:grid-cols-2">
+        <FigureFrame num="04" caption="fast — the whole job at once; what breaks fails loudly" bodyClass="p-5 sm:p-6">
+          <div class="mb-4 inline-block border border-accent/40 bg-accent/10 px-2 py-0.5 font-mono text-xs text-accent">fast</div>
+          <svg viewBox="0 0 320 128" role="img" aria-label="Fast cutover: the whole job moves from the paid API to local in one pass, then an optimize-on-receipts loop" class="w-full">
+            <defs>
+              <marker id="fx-a" viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M0,0.5 L7,4 L0,7.5" class="fill-none stroke-dim" stroke-width="1.3"></path>
+              </marker>
+            </defs>
+            <rect x="6" y="26" width="118" height="52" class="fill-bg stroke-edge" stroke-width="1.4" stroke-dasharray="4 3"></rect>
+            <text x="65" y="48" text-anchor="middle" class="fill-ink font-mono text-[11px]">the whole job</text>
+            <text x="65" y="64" text-anchor="middle" class="fill-dim text-[8.5px]">on the paid API</text>
+            <line x1="124" y1="52" x2="192" y2="52" class="stroke-accent/80" stroke-width="1.5" marker-end="url(#fx-a)"></line>
+            <text x="159" y="44" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">cut over now</text>
+            <rect x="196" y="26" width="118" height="52" class="fill-surface stroke-edge" stroke-width="1.4"></rect>
+            <text x="255" y="48" text-anchor="middle" class="fill-ink font-mono text-[11px]">local</text>
+            <text x="255" y="64" text-anchor="middle" class="fill-dim text-[8.5px]">your hardware · free</text>
+            <path d="M296,78 v20 h-82 v-14" class="fill-none stroke-dim" stroke-width="1.2" stroke-dasharray="3 3" marker-end="url(#fx-a)"></path>
+            <text x="255" y="115" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">optimize on receipts</text>
+          </svg>
+        </FigureFrame>
+        <FigureFrame num="05" caption="slow — every seat judged blind; flip only what passes" bodyClass="p-5 sm:p-6">
+          <div class="mb-4 inline-block border border-amber/40 bg-amber/10 px-2 py-0.5 font-mono text-xs text-amber">slow</div>
+          <svg viewBox="0 0 320 128" role="img" aria-label="Slow cutover: each seat goes through a blind one-versus-one judge; passing seats flip to local, the rest stay on the paid API until they pass" class="w-full">
+            <defs>
+              <marker id="sx-a" viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M0,0.5 L7,4 L0,7.5" class="fill-none stroke-dim" stroke-width="1.3"></path>
+              </marker>
+            </defs>
+            <rect x="6" y="8" width="64" height="24" class="fill-bg stroke-edge" stroke-width="1.2" stroke-dasharray="4 3"></rect>
+            <text x="38" y="23" text-anchor="middle" class="fill-ink font-mono text-[9.5px]">seat</text>
+            <rect x="6" y="52" width="64" height="24" class="fill-bg stroke-edge" stroke-width="1.2" stroke-dasharray="4 3"></rect>
+            <text x="38" y="67" text-anchor="middle" class="fill-ink font-mono text-[9.5px]">seat</text>
+            <rect x="6" y="96" width="64" height="24" class="fill-bg stroke-edge" stroke-width="1.2" stroke-dasharray="4 3"></rect>
+            <text x="38" y="111" text-anchor="middle" class="fill-ink font-mono text-[9.5px]">seat</text>
+            <line x1="70" y1="20" x2="116" y2="54" class="stroke-dim" stroke-width="1"></line>
+            <line x1="70" y1="64" x2="116" y2="64" class="stroke-dim" stroke-width="1"></line>
+            <line x1="70" y1="108" x2="116" y2="74" class="stroke-dim" stroke-width="1"></line>
+            <rect x="118" y="46" width="78" height="36" class="fill-surface stroke-edge" stroke-width="1.4"></rect>
+            <text x="157" y="61" text-anchor="middle" class="fill-ink font-mono text-[10px]">judge</text>
+            <text x="157" y="74" text-anchor="middle" class="fill-dim text-[8.5px]">blind 1v1</text>
+            <line x1="196" y1="56" x2="228" y2="20" class="stroke-accent/80" stroke-width="1.3" marker-end="url(#sx-a)"></line>
+            <line x1="196" y1="64" x2="228" y2="64" class="stroke-accent/80" stroke-width="1.3" marker-end="url(#sx-a)"></line>
+            <line x1="196" y1="72" x2="228" y2="108" class="stroke-dim" stroke-width="1" stroke-dasharray="3 3" marker-end="url(#sx-a)"></line>
+            <rect x="232" y="8" width="82" height="24" class="fill-surface stroke-edge" stroke-width="1.2"></rect>
+            <text x="273" y="23" text-anchor="middle" class="fill-accent/90 font-mono text-[9.5px]">local</text>
+            <rect x="232" y="52" width="82" height="24" class="fill-surface stroke-edge" stroke-width="1.2"></rect>
+            <text x="273" y="67" text-anchor="middle" class="fill-accent/90 font-mono text-[9.5px]">local</text>
+            <rect x="232" y="96" width="82" height="24" class="fill-bg stroke-edge" stroke-width="1.2" stroke-dasharray="4 3"></rect>
+            <text x="273" y="111" text-anchor="middle" class="fill-dim font-mono text-[9.5px]">stays — for now</text>
+          </svg>
+        </FigureFrame>
       </div>
       <p class="mt-5 font-mono text-xs">
         <a
@@ -344,4 +543,40 @@ const jsonLd = [
     docsHref={`${shiftRepo}/tree/main/docs`}
     docsDesc="The journey, the cutover recipe, the receipts."
   />
+
+  <script>
+    // Ledger replay: server renders the complete list; JS (motion permitting)
+    // hides rows then appends them at ledger cadence. No-JS / reduced-motion
+    // always see the full static list. Pane height is fixed — it never grows.
+    document.querySelectorAll<HTMLElement>('[data-ledger]').forEach((root) => {
+      if (root.dataset.lgInit) return;
+      root.dataset.lgInit = '1';
+      const list = root.querySelector<HTMLElement>('[data-lg-list]');
+      const count = root.querySelector<HTMLElement>('[data-lg-count]');
+      const rows = [...root.querySelectorAll<HTMLElement>('[data-lg-row]')];
+      if (!list || !rows.length) return;
+      const anchor = () => (list.scrollTop = list.scrollHeight);
+      anchor();
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      let played = false;
+      new IntersectionObserver(
+        (entries, io) => {
+          if (!entries.some((e) => e.isIntersecting) || played) return;
+          played = true;
+          io.disconnect();
+          rows.forEach((r) => (r.style.display = 'none'));
+          if (count) count.textContent = '0';
+          list.scrollTop = 0;
+          rows.forEach((r, i) =>
+            setTimeout(() => {
+              r.style.display = '';
+              if (count) count.textContent = String(i + 1);
+              anchor();
+            }, 400 + i * 280)
+          );
+        },
+        { threshold: 0.35 }
+      ).observe(root);
+    });
+  </script>
 </Base>

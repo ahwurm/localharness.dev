@@ -1,0 +1,84 @@
+---
+// Generic tabbed file pane — AgentYamlTabs' visual chrome, made reusable and
+// multi-instance-safe. Content must be REAL files, verbatim or verbatim-abridged,
+// with provenance documented at the call site. `html` is pre-highlighted markup
+// (dim comments/keys, ink values, accent sparingly) rendered via set:html.
+export interface FileTab {
+  id: string;
+  file: string;
+  note: string;
+  html: string;
+}
+interface Props {
+  tabs: FileTab[];
+  label?: string;
+  class?: string;
+}
+const { tabs, label = 'File examples', class: className = '' } = Astro.props;
+const uid = `ft-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<div id={uid} data-file-tabs class:list={['overflow-hidden border border-edge bg-surface/80', className]}>
+  <div class="flex flex-wrap items-center gap-1 border-b border-edge/70 px-2 py-1.5" role="tablist" aria-label={label}>
+    {
+      tabs.map((t, i) => (
+        <button
+          type="button"
+          role="tab"
+          id={`${uid}-tab-${t.id}`}
+          aria-controls={`${uid}-panel-${t.id}`}
+          aria-selected={i === 0 ? 'true' : 'false'}
+          data-ft-tab={t.id}
+          class:list={[
+            'border px-3 py-1.5 font-mono text-xs transition-colors duration-200',
+            i === 0 ? 'border-accent/50 bg-accent/10 text-accent' : 'border-transparent text-dim hover:text-ink',
+          ]}
+        >
+          {t.id}
+        </button>
+      ))
+    }
+  </div>
+
+  {
+    tabs.map((t, i) => (
+      <div data-ft-panel={t.id} id={`${uid}-panel-${t.id}`} role="tabpanel" aria-labelledby={`${uid}-tab-${t.id}`} hidden={i !== 0}>
+        <div class="border-b border-edge/60 px-4 py-1.5 font-mono text-[11px] text-dim">{t.file}</div>
+        <pre
+          class="overflow-x-auto whitespace-pre-wrap [overflow-wrap:anywhere] p-4 font-mono text-[13px] leading-relaxed text-ink sm:whitespace-pre [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"><code set:html={t.html} /></pre>
+      </div>
+    ))
+  }
+
+  <div class="border-t border-edge/70 px-4 py-2.5 font-mono text-xs text-dim">
+    {
+      tabs.map((t, i) => (
+        <span data-ft-note={t.id} hidden={i !== 0}>
+          {t.note}
+        </span>
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-file-tabs]').forEach((root) => {
+    if (root.dataset.ftInit) return;
+    root.dataset.ftInit = '1';
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[data-ft-tab]')];
+    const activate = (id: string) => {
+      tabs.forEach((b) => {
+        const on = b.dataset.ftTab === id;
+        b.setAttribute('aria-selected', String(on));
+        b.classList.toggle('border-accent/50', on);
+        b.classList.toggle('bg-accent/10', on);
+        b.classList.toggle('text-accent', on);
+        b.classList.toggle('border-transparent', !on);
+        b.classList.toggle('text-dim', !on);
+      });
+      root.querySelectorAll<HTMLElement>('[data-ft-panel]').forEach((p) => (p.hidden = p.dataset.ftPanel !== id));
+      root.querySelectorAll<HTMLElement>('[data-ft-note]').forEach((n) => (n.hidden = n.dataset.ftNote !== id));
+    };
+    tabs.forEach((b) => b.addEventListener('click', () => activate(b.dataset.ftTab!)));
+  });
+</script>
