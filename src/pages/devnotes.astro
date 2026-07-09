@@ -9,6 +9,17 @@ import type { IconName } from '../components/Icon.astro';
 // to a commit or CHANGELOG entry in github.com/ahwurm/localharness.
 const releases = [
   {
+    v: 'v0.8.1',
+    date: 'Jul 9, 2026',
+    entries: [
+      {
+        tag: 'Fixed',
+        title: 'The benchmark can no longer pass on nothing',
+        body: 'Three test-suite holes shared one disease: point the live benchmark at a misconfigured server and it could still come up green — every run erroring, nothing measured. A success check that matched on empty text is now rejected when scenarios load; the budget-cap test demands the capped behavior itself — one action taken, the follow-up absent — instead of accepting any failure as proof; and the endpoint health check and the tests it guards now resolve the same pinned model and server from one place, refusing loudly to run unpinned. Verified against a live endpoint: green only when correctly pinned, loud on everything else.',
+      },
+    ],
+  },
+  {
     v: 'v0.8.0',
     date: 'Jul 5, 2026',
     entries: [
