@@ -7,6 +7,32 @@ import Eyebrow from '../components/Eyebrow.astro';
 // to a commit or CHANGELOG entry in github.com/ahwurm/localharness.
 const releases = [
   {
+    v: 'v0.8.0',
+    date: 'Jul 5, 2026',
+    entries: [
+      {
+        tag: 'Added',
+        title: 'Surprise decides what gets remembered',
+        body: 'Alongside the existing capture floor — a tool error that later resolved, a stuck loop that recovered — every tool outcome is now scored against that tool\'s own track record, computed inside the database with no model call and no token cost. A normally-reliable tool erroring is a surprise, and becomes a memory; a tool failing the way it always fails stops being news — the junk the old floor had no way to suppress. A tool with too little history to predict from is scored as a cold start rather than guessed at, and the capture floor still covers it from the first turn.',
+      },
+      {
+        tag: 'Added',
+        title: 'Corrections become quarantined, reversible facts',
+        body: 'When you correct the agent — "no", "I meant…", "actually…" — the harness now records it. A direct correction supersedes the most recent fact it was likely about, with the original text preserved behind a dispute marker, never erased; anything less clear-cut is filed as its own quarantined fact in your own words. Everything is reversible through fact history, and repeating a correction confirms the existing record instead of duplicating it. The trigger is a plain word list, not a model — a correction that uses none of the words is missed, and a false trigger costs one stored record.',
+      },
+      {
+        tag: 'Added',
+        title: 'Capture first, behavior later',
+        body: 'Every new write in this release lands below the injected memory\'s visibility line: stored and searchable, but kept out of the prompt — so it cannot change what the agent does — until an idle consolidation pass confirms it. Corrections and disputed facts are held back further, for a deeper reconciliation pass. A single config lever reverts the whole live path to the old capture floor while the scorer keeps logging — a kill switch committed in advance, not improvised after. The injected block still does not steer the agent\'s first move; this release is capture, and says so.',
+      },
+      {
+        tag: 'Added',
+        title: 'Proven by replaying a real session',
+        body: 'The gate comparison ran offline: one real session trace, replayed through the old gate and the new one, measured against the full set of surprising failures rather than a hand-labeled proxy. The new gate captured every one; the old floor missed a few. The junk-write comparison depends on how strictly junk is graded — under the strictest grading it inverts — so both gradings ship in the repo\'s report tooling rather than as one headline number. The trace carried no expected failures and no recovered stalls, so those paths are proven by unit tests, not a live occurrence — disclosed, not declared won.',
+      },
+    ],
+  },
+  {
     v: 'v0.7.0',
     date: 'Jul 4, 2026',
     entries: [
