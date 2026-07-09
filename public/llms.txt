@@ -82,6 +82,9 @@ On-site: https://localharness.dev/architecture/#autoresearch
 - Verdicts: migrate / conditional / keep-frontier — keep-frontier is a first-class honest outcome
 - Not a router: the cutover is no-fallback — frontier calls are deleted, not proxied
 - Migrated jobs run claude-free on the LocalHarness runtime in cron
+- Deep docs: [the journey on one example workload](https://github.com/ahwurm/localshift/blob/main/docs/JOURNEY.md),
+  [the fast/slow cutover recipe](https://github.com/ahwurm/localshift/blob/main/docs/CUTOVER.md),
+  [dogfood receipts — the author's own production pipelines, migrated and cut over](https://github.com/ahwurm/localshift/blob/main/docs/receipts/DOGFOOD-REPORT.md)
 - Relevant context: from June 15, 2026, headless `claude -p` / Agent SDK usage draws from a
   metered monthly credit pool while interactive Claude Code stays on-plan — see
   [Anthropic's help center](https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan)
