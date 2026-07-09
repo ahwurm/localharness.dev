@@ -27,8 +27,13 @@
 //     web_page_query (local re-reads of already-fetched pages) + 1 memory_search
 //     (no local hits). The 30 web hits are consolidated to ONE live `count` line
 //     (the anti-"run run run" directive, same as d2); the memory_search opener is
-//     kept to the ticker only. The line-per-call form lives in this file's git
-//     history + start-research-070.txt.
+//     kept to the ticker only. The line-per-call form is surfaced in the count
+//     line's `calls` drill-down (verbatim from start-research-070.txt, wraps
+//     re-joined, ✓/✗ + line counts kept; the two "— search-verifier …" dividers
+//     and "— web-researcher resumes —" mark the real actor handoffs and are not
+//     ticks; the 3 web_page_query local re-reads stay outside the 30 as before).
+//     Since localharness ceaff5b the REAL terminal emits this consolidated
+//     counter line itself — future captures need no hand-consolidation.
 //   - bus events: 147 real events for the turn (16 at the orchestrator + 131 from
 //     the web-researcher / search-verifier children, linked by parent_id to the
 //     root session 8ab93553-4fe7-48ec-b984-6d29c6ef8e83). ev[] samples them in
@@ -71,6 +76,10 @@ export type DemoLine = {
   n?: number;
   /** ms per counter tick (replay pacing) */
   td?: number;
+  /** drill-down behind a count line: the real captured per-call lines, verbatim
+   *  (one row per tick, capture order; "— …" rows are actor dividers, not ticks;
+   *  ✗ marks a captured error). Rendered as a native <details> the viewer can open. */
+  calls?: string[];
 };
 
 export const promptText =
@@ -172,6 +181,41 @@ export const d3Lines: DemoLine[] = [
     d: 700,
     node: 'web',
     edge: 2,
+    calls: [
+      'web_search NVIDIA DGX Spark specifications VRAM GPU memory specs — ✓ 3 lines',
+      'web_search open-weight coding models benchmarks SWE-bench LiveCodeBench 2025 2026 best scores — ✓ 2 lines',
+      'web_fetch https://www.nvidia.com/en-us/products/workstations/dgx-spark/ — ✓ 2 lines',
+      'web_fetch https://benchlm.ai/coding — ✓ 2 lines',
+      'web_fetch https://ark-forge.github.io/genesis/benchmark.html — ✓ 8 lines',
+      'web_fetch https://www.banandre.com/blog/memory-bandwidth-is-the-only-spec-that-matters-a-four-way-battle-between-m5-max-dgx-spark-strix-halo-and-rtx-6000 — ✓ 7 lines',
+      'web_search NVIDIA DGX Spark GB10 Grace Blackwell GPU memory HBM specs detailed — ✓ 3 lines',
+      'web_fetch https://docs.nvidia.com/dgx/dgx-spark/hardware.html — ✓ 8 lines',
+      'web_fetch https://www.chiplog.io/p/analysis-of-nvidia-dgx-sparks-gb10 — ✓ 5 lines',
+      'web_search Qwen3-Coder SWE-bench Verified LiveCodeBench benchmark scores 2026 — ✓ 4 lines',
+      'web_search DeepSeek-Coder-V3 open-weight benchmark SWE-bench LiveCodeBench scores 2026 — ✓ 2 lines',
+      'web_fetch https://leaderboard.steel.dev/leaderboards/swe-bench-verified/ — ✓ 6 lines',
+      'web_fetch https://www.morphllm.com/best-open-source-llm — ✗ 429 Too Many Requests, skipped',
+      'web_search open weight coding models SWE-bench scores Kimi K2.5 Devstral Qwen3-Coder 2026 benchmark — ✓ 4 lines',
+      'web_search Qwen3-Coder-480B-A35B VRAM requirements inference memory 128GB — ✓ 3 lines',
+      'web_fetch https://willitrunai.com/models/qwen-3-coder-480b-a35b — ✓ 2 lines',
+      'web_fetch https://www.promptquorum.com/local-llms/best-local-llms-for-coding — ✓ 2 lines',
+      'web_search Kimi K2.6 K2.7 open-weight SWE-bench Verified LiveCodeBench benchmark scores VRAM — ✓ 2 lines',
+      'web_search Devstral 2 Devstral Small 24B SWE-bench LiveCodeBench benchmark scores parameters — ✓ 3 lines',
+      'web_fetch https://huggingface.co/moonshotai/Kimi-K2.6 — ✓ 9 lines',
+      'web_fetch https://devstral2.dev/en/devstral-2-benchmark — ✓ 5 lines',
+      '— search-verifier, blind round 1: re-pulls the sources itself —',
+      'web_fetch https://docs.nvidia.com/dgx/dgx-spark/hardware.html — ✓ 8 lines',
+      'web_search NVIDIA DGX Spark hardware specs 128GB LPDDR5X 6144 CUDA cores — ✓ 3 lines',
+      'web_search NVIDIA DGX Spark GB10 Grace Blackwell Superchip 6144 CUDA cores — ✓ 2 lines',
+      '— search-verifier, blind round 2 —',
+      'web_fetch https://huggingface.co/moonshotai/Kimi-K2.6 — ✓ 9 lines',
+      'web_search Kimi K2.6 SWE-bench Verified LiveCodeBench 1T parameters 32B active — ✓ 3 lines',
+      'web_search Kimi K2.6 LiveCodeBench 89.6 — ✓ 3 lines',
+      'web_fetch https://build.nvidia.com/moonshotai/kimi-k2.6/modelcard — ✓ 12 lines',
+      '— web-researcher resumes —',
+      'web_search Kimi K2.6 VRAM requirements 128GB inference quantization Q4 — ✓ 3 lines',
+      'web_fetch https://unsloth.ai/docs/models/kimi-k2.6 — ✓ 6 lines',
+    ],
     ev: [
       '013 · [web-researcher] Action — tool_call web_search',
       '014 · [web-researcher] Observation — web_search (UNTRUSTED banner)',

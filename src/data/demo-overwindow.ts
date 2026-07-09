@@ -22,7 +22,10 @@
 //     to ONE live counter line — each tick is one captured call/return pair, in
 //     order, at the pair-equivalent replay pacing (140ms = the prior 70ms × 2
 //     lines). Owner call 2026-07-02 ("consolidate — keep true behavior"); the
-//     line-per-call form lives in this file's git history and start-odyssey.txt.
+//     line-per-call form is surfaced in the count line's `calls` drill-down
+//     (verbatim handle + return line-count per pair, from start-odyssey.txt).
+//     Since localharness ceaff5b the REAL terminal emits this consolidated
+//     counter line itself — future captures need no hand-consolidation.
 //   - bus events: 253 (198 from chunk-summarizer leaves; 43 leaf windows) — bus-events-odyssey.jsonl
 //   - real duration 525.3s; the replay compresses pacing only, never text. The
 //     Cyclops episode's mechanism (fire-hardened olive-wood stake; escape under the
@@ -43,7 +46,37 @@ export const d2Lines: DemoLine[] = [
   { kind: 'tool', text: '◆ load_document ~/docs/odyssey.txt', d: 500 },
   { kind: 'ok', text: '✓ load_document (2 lines)', d: 350 },
   { kind: 'tool', text: '◆ agent cruncher', d: 1100 },
-  { kind: 'count', text: 'tool_result_get — section reads, a fresh window each', n: 22, td: 140, d: 600 },
+  {
+    kind: 'count',
+    text: 'tool_result_get — section reads, a fresh window each',
+    n: 22,
+    td: 140,
+    d: 600,
+    calls: [
+      'tool_result_get 5613cfd00330 — ✓ 18 lines',
+      'tool_result_get 695bb3032f1f — ✓ 3 lines',
+      'tool_result_get 8e37f672c554 — ✓ 3 lines',
+      'tool_result_get e9a727b3f514 — ✓ 3 lines',
+      'tool_result_get 2aa84fcee663 — ✓ 3 lines',
+      'tool_result_get 57e797dd896c — ✓ 3 lines',
+      'tool_result_get 38146f5b066d — ✓ 3 lines',
+      'tool_result_get ffcc354a38ba — ✓ 3 lines',
+      'tool_result_get 3791c62a65b3 — ✓ 3 lines',
+      'tool_result_get 9dc7e7ecdfe3 — ✓ 3 lines',
+      'tool_result_get 258eb10b4f50 — ✓ 3 lines',
+      'tool_result_get 8d9290c193c2 — ✓ 3 lines',
+      'tool_result_get ac963161c2c6 — ✓ 3 lines',
+      'tool_result_get 0f60eb955f89 — ✓ 3 lines',
+      'tool_result_get dd88df9bebaa — ✓ 4 lines',
+      'tool_result_get 4924fd4a4010 — ✓ 3 lines',
+      'tool_result_get d37ac6a0278b — ✓ 3 lines',
+      'tool_result_get 726764399c68 — ✓ 3 lines',
+      'tool_result_get 7f0f28d9c89b — ✓ 3 lines',
+      'tool_result_get e5e3dbfe6785 — ✓ 3 lines',
+      'tool_result_get f62a78d6f848 — ✓ 5 lines',
+      'tool_result_get 4058a041e6f6 — ✓ 3 lines',
+    ],
+  },
   { kind: 'ok', text: '✓ agent (3 lines)', d: 900 },
   {
     kind: 'answer',
