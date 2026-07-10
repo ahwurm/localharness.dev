@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Button from '../components/Button.astro';
-import InstallTabs from '../components/InstallTabs.astro';
+import CodeBlock from '../components/CodeBlock.astro';
 import DemoPane from '../components/DemoPane.astro';
 import TraceFlow from '../components/TraceFlow.astro';
 import SectionBand from '../components/SectionBand.astro';
@@ -12,33 +12,12 @@ import Chip from '../components/Chip.astro';
 import Icon from '../components/Icon.astro';
 import GetInvolved from '../components/GetInvolved.astro';
 
-const installTabs = [
-  {
-    id: 'uv',
-    code: `uv tool install localharness
+// Installs a real `localharness` command via uv, straight from the public repo —
+// works today, no PyPI needed. Swap to `uv tool install localharness` once the
+// package is published.
+const install = `uv tool install git+https://github.com/ahwurm/localharness
 localharness init
-localharness start`,
-  },
-  {
-    id: 'curl',
-    code: `curl -fsSL https://localharness.dev/install.sh | sh
-localharness init
-localharness start`,
-  },
-  {
-    id: 'pip',
-    code: `pip install localharness
-localharness init
-localharness start`,
-  },
-  {
-    id: 'git',
-    code: `git clone https://github.com/ahwurm/localharness
-cd localharness && uv sync
-uv run localharness init
-uv run localharness start`,
-  },
-];
+localharness start`;
 
 // The LOCAL_/HARNESS startup banner exactly as `localharness start` prints it —
 // extracted mechanically from .planning/captures/start-main.txt into banner.txt.
@@ -95,8 +74,9 @@ const jsonLd = [
         <Chip icon="studio" label="LM Studio" href="https://lmstudio.ai/download" />
         <Chip icon="cpp" label="llama.cpp" href="https://github.com/ggml-org/llama.cpp/releases" />
       </div>
-      <InstallTabs
-        tabs={installTabs}
+      <CodeBlock
+        code={install}
+        label="install"
         class="focus-in mt-8 w-full max-w-xl text-left [--fi-delay:420ms] [&_pre]:text-[13px]"
       />
       <div class="focus-in mt-6 flex flex-wrap items-center justify-center gap-3 [--fi-delay:540ms]">
