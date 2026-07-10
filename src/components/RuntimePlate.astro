@@ -16,7 +16,7 @@ import FlowLedger from './FlowLedger.astro';
 
 <figure
   role="img"
-  aria-label="Plate one of the architecture drawing: the shipped LocalHarness runtime — one request finding its way through, numbered one to seven along the solid request path. One: you type into the terminal channel. Two: the channel routes the request to the orchestrator, which scores an agent card by keyword, Jaccard and capability — live per-turn wiring is still planned. Three: the agent loop takes the turn, running its ReAct cycle of reason, act, observe. Four: the context manager builds a token-budgeted window, compacting at eighty percent, and the model client completes it against a local model server — Ollama, vLLM, llama.cpp or LM Studio. Five: the loop dispatches tool calls to the tool system, where the registry validates them and fires pre and post hooks, running fenced built-ins over MCP and plugins. Six: memory injects recalled context back into the loop each turn — detailed on Plate three. Seven: the fenced built-in tools run and return their result for the loop to observe. Underneath runs a pub/sub spine, drawn dashed: the terminal streams and the loop publishes every step to the typed, append-only event bus; bus-events dot jsonl is the log of record, replayable and resumable. Config loads YAML from org to division to agent."
+  aria-label="Plate one of the architecture drawing: the shipped LocalHarness runtime — one request finding its way through, numbered one to seven along the solid request path. One: you type into the terminal channel. Two: the channel routes the request to the orchestrator, which scores an agent card by keyword, Jaccard and capability — live per-turn wiring is still planned. Three: the agent loop takes the turn, running its ReAct cycle of reason, act, observe. Four: the context manager builds a token-budgeted window, compacting at eighty percent, and the model client completes it against a local model server — Ollama, vLLM, llama.cpp or LM Studio. Five: the loop dispatches tool calls to the tool system, where the registry validates them and fires pre and post hooks, running fenced built-ins over MCP and plugins. Six: memory injects recalled context back into the loop each turn — detailed on Plate two. Seven: the fenced built-in tools run and return their result for the loop to observe. Underneath runs a pub/sub spine, drawn dashed: the terminal streams and the loop publishes every step to the typed, append-only event bus; bus-events dot jsonl is the log of record, replayable and resumable. Config loads YAML from org to division to agent."
 >
   <!-- sm+: architectural plate -->
   <div class="hidden w-full lg:block" aria-hidden="true">
@@ -38,7 +38,7 @@ import FlowLedger from './FlowLedger.astro';
       <text x="26" y="33" text-anchor="middle" class="fill-accent-ink font-mono text-[12px] font-semibold">I</text>
       <text x="46" y="34" class="fill-ink font-sans text-[15px] font-semibold">The runtime — shipped</text>
 
-      <text x="1144" y="16" text-anchor="end" class="fill-dim font-mono text-[8px]">LH-ARCH-001 · PLATE I · SHEET 1 OF 4</text>
+      <text x="1144" y="16" text-anchor="end" class="fill-dim font-mono text-[8px]">LH-ARCH-001 · PLATE I · SHEET 1 OF 3</text>
       <text x="1144" y="27" text-anchor="end" class="fill-dim font-mono text-[8px]">REV v0.8.0 → 1.0 · 2026-07-09</text>
       <text x="1144" y="38" text-anchor="end" class="fill-dim font-mono text-[8px]">MILESTONE semanticization</text>
       <text x="1144" y="63" text-anchor="end" class="fill-dim font-mono text-[9px]">ReAct while-loop · bus · fenced tools · local model</text>
@@ -169,7 +169,7 @@ import FlowLedger from './FlowLedger.astro';
       <rect x="28" y="420" width="198" height="44" class="fill-bg stroke-mem/50" stroke-width="1.3" stroke-dasharray="3 3"></rect>
       <text x="127" y="437" text-anchor="middle" class="fill-mem font-mono text-[12px]">MemoryStore</text>
       <text x="127" y="451" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">the memory knowledge graph</text>
-      <text x="127" y="463" text-anchor="middle" class="fill-mem font-mono text-[8.5px]">— see PLATE III —</text>
+      <text x="127" y="463" text-anchor="middle" class="fill-mem font-mono text-[8.5px]">— see PLATE II —</text>
 
       <!-- ===== AGENT RUNTIME (the heart) ===== -->
       <rect x="252" y="268" width="438" height="236" class="fill-none stroke-accent/45" stroke-width="1" stroke-dasharray="5 5"></rect>
