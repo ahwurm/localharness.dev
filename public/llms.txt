@@ -110,7 +110,6 @@ On-site: https://localharness.dev/architecture/#autoresearch
 - [LocalHarness](https://localharness.dev/): product page
 - [Architecture](https://localharness.dev/architecture/): how it's built — the runtime on one plate,
   the agent loop and its gates, memory at every scale, and the autoresearch loop
-- [LocalShift](https://localharness.dev/localshift/): product page
 
 ## For AI assistants
 
