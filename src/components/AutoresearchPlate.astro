@@ -1,5 +1,5 @@
 ---
-// fig. 06 / PLATE III — the autoresearch loop, tuned against its own corpus (all shipped).
+// fig. 06 / PLATE IV — the autoresearch loop, tuned against its own corpus (all shipped).
 // Context groups sit on top (BENCH SUBSTRATE + CORPUS SPLIT in bench-red, COMPONENT
 // REGISTRY in research-orange) feeding the loop below; the loop runs in USER-FLOW order
 // ①→⑦ (ParentSampler → Proposer → run_experiment → interpret → adopt → Mutation Archive
@@ -17,7 +17,7 @@ import FlowLedger from './FlowLedger.astro';
   <!-- sm+: engineering-drawing plate -->
   <svg
     role="img"
-    aria-label="Plate 3 of 4: the autoresearch loop, tuned against the harness's own corpus — all shipped. A benchmark substrate runs each scenario as a per-run trace; the corpus is split into a train slice of 25 scenarios, whose traces the proposer may read, and a sealed holdout slice of 10 scenarios used for scores only. The mutation surface is a registry of six tunable component families: system prompt, tool description, compaction threshold, stuck detector, recovery injection, and hook config. The loop runs in order. One, ParentSampler draws a parent config from the archive — epsilon-greedy over a Pareto front, so rejected branches stay reachable. Two, the Proposer, a stronger model, reads failed TRAIN traces and emits one GEPA-style change with a rationale. Three, run_experiment applies that single-component mutation in an isolated git worktree and scores it — Welch's t-test on TRAIN, non-regression on the sealed HOLDOUT with Bonferroni correction. Four, interpret returns one verdict: ADOPT, HOLD, REJECT, or SKIP. Five, adopt is automatic — not an approval gate — writing a clean win as a git commit that reverts in one command; each adoption is logged to audit.jsonl as a ComponentMutated event. Six, the Mutation Archive, a sqlite store, records the id, parent, component, diff, train and holdout scores and p-value of every attempt, and feeds ParentSampler to close the loop. Seven, a daily report surfaces HELD, inconclusive wins for asynchronous review; there is no every-N-promotions human gate. Two read-only guards sit beside the loop and never halt it: BudgetController is a circuit breaker on wallclock, iterations and token window, and the Eval Sentinel watches overfit gap, near-duplicates and saturation to guard the holdout. A clean adopt becomes the committed New Baseline for the next iteration. Solid edges are loop order; dashed edges are feedback."
+    aria-label="Plate 4 of 4: the autoresearch loop, tuned against the harness's own corpus — all shipped. A benchmark substrate runs each scenario as a per-run trace; the corpus is split into a train slice of 25 scenarios, whose traces the proposer may read, and a sealed holdout slice of 10 scenarios used for scores only. The mutation surface is a registry of six tunable component families: system prompt, tool description, compaction threshold, stuck detector, recovery injection, and hook config. The loop runs in order. One, ParentSampler draws a parent config from the archive — epsilon-greedy over a Pareto front, so rejected branches stay reachable. Two, the Proposer, a stronger model, reads failed TRAIN traces and emits one GEPA-style change with a rationale. Three, run_experiment applies that single-component mutation in an isolated git worktree and scores it — Welch's t-test on TRAIN, non-regression on the sealed HOLDOUT with Bonferroni correction. Four, interpret returns one verdict: ADOPT, HOLD, REJECT, or SKIP. Five, adopt is automatic — not an approval gate — writing a clean win as a git commit that reverts in one command; each adoption is logged to audit.jsonl as a ComponentMutated event. Six, the Mutation Archive, a sqlite store, records the id, parent, component, diff, train and holdout scores and p-value of every attempt, and feeds ParentSampler to close the loop. Seven, a daily report surfaces HELD, inconclusive wins for asynchronous review; there is no every-N-promotions human gate. Two read-only guards sit beside the loop and never halt it: BudgetController is a circuit breaker on wallclock, iterations and token window, and the Eval Sentinel watches overfit gap, near-duplicates and saturation to guard the holdout. A clean adopt becomes the committed New Baseline for the next iteration. Solid edges are loop order; dashed edges are feedback."
     viewBox="0 0 1160 600"
     class="hidden w-full lg:block"
   >
@@ -34,13 +34,13 @@ import FlowLedger from './FlowLedger.astro';
     </defs>
 
     <!-- title strip (top-right) -->
-    <text x="1144" y="16" text-anchor="end" class="fill-dim font-mono text-[8px]">LH-ARCH-001 · PLATE III · SHEET 4 OF 4</text>
+    <text x="1144" y="16" text-anchor="end" class="fill-dim font-mono text-[8px]">LH-ARCH-001 · PLATE IV · SHEET 4 OF 4</text>
     <text x="1144" y="28" text-anchor="end" class="fill-dim font-mono text-[8px]">REV v0.8.0 → 1.0 · 2026-07-09</text>
     <text x="1144" y="40" text-anchor="end" class="fill-dim font-mono text-[8px]">MILESTONE semanticization</text>
 
     <!-- plate marker (top-left) -->
     <rect x="20" y="13" width="22" height="22" class="fill-research"></rect>
-    <text x="31" y="28" text-anchor="middle" class="fill-bg font-mono text-[12px] font-semibold">III</text>
+    <text x="31" y="28" text-anchor="middle" class="fill-bg font-mono text-[12px] font-semibold">IV</text>
     <text x="52" y="25" class="fill-ink font-mono text-[15px]">The autoresearch loop</text>
     <text x="52" y="40" class="fill-dim font-mono text-[9px]">tuned against its own corpus — shipped</text>
 

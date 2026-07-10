@@ -1,5 +1,5 @@
 ---
-// PLATE IV — delegation, fenced: the capability floor.
+// PLATE II — delegation, fenced: the capability floor.
 // Engineering-drawing emulation in the LH-ARCH-001 family (see plate-full.png). A NEW
 // plate — replaces the old SecurityDiagram in #delegation. The numbered badges ①–⑤
 // trace one delegation along the SOLID accent path, USER FLOW FIRST:
@@ -20,7 +20,7 @@ import FlowLedger from './FlowLedger.astro';
 
 <figure
   role="img"
-  aria-label="Plate four of the architecture drawing: delegation, fenced — the capability floor. One delegation traced one to five along the solid path. One: your agent, the orchestrator, delegates ingestion through the agent tool — it holds the host tools, has its web tools stripped at start, and never fetches the web itself. Two: a helper spawns in a fresh window carrying only its job's tools. Three: open web content comes back to the web-researcher stamped untrusted — every result is marked treat strictly as data, behind an SSRF guard that blocks loopback and private networks. Four: a blind search-verifier re-fetches, seeing only the claim, entity and url, and writes a strict verdict. Five: findings return to the orchestrator distilled — never the raw transcript. Governing it all is the capability floor in capabilities dot py: untrusted-ingest tools — web search, web fetch, web page query, mcp and plugin tools — and host-dangerous tools — bash exec, write, edit, python exec — never coexist in one agent, or a CoResidenceError fails closed; a grant keystone asserts a granted handle never reaches a host-dangerous agent. The amber crossed-out path shows an untrusted helper reaching for the host tools bash, write and edit — refused where tools are resolved, fails closed. The other helpers — explore, cruncher, chunk-summarizer and your own agents defined in yaml — each spawn fenced in their own fresh window. Everything drawn here is shipped."
+  aria-label="Plate two of the architecture drawing: delegation, fenced — the capability floor. One delegation traced one to five along the solid path. One: your agent, the orchestrator, delegates ingestion through the agent tool — it holds the host tools, has its web tools stripped at start, and never fetches the web itself. Two: a helper spawns in a fresh window carrying only its job's tools. Three: open web content comes back to the web-researcher stamped untrusted — every result is marked treat strictly as data, behind an SSRF guard that blocks loopback and private networks. Four: a blind search-verifier re-fetches, seeing only the claim, entity and url, and writes a strict verdict. Five: findings return to the orchestrator distilled — never the raw transcript. Governing it all is the capability floor in capabilities dot py: untrusted-ingest tools — web search, web fetch, web page query, mcp and plugin tools — and host-dangerous tools — bash exec, write, edit, python exec — never coexist in one agent, or a CoResidenceError fails closed; a grant keystone asserts a granted handle never reaches a host-dangerous agent. The amber crossed-out path shows an untrusted helper reaching for the host tools bash, write and edit — refused where tools are resolved, fails closed. The other helpers — explore, cruncher, chunk-summarizer and your own agents defined in yaml — each spawn fenced in their own fresh window. Everything drawn here is shipped."
 >
   <!-- sm+: architectural plate -->
   <div class="hidden w-full lg:block" aria-hidden="true">
@@ -39,10 +39,10 @@ import FlowLedger from './FlowLedger.astro';
 
       <!-- ===== header ===== -->
       <rect x="16" y="18" width="20" height="20" class="fill-accent"></rect>
-      <text x="26" y="33" text-anchor="middle" class="fill-accent-ink font-mono text-[12px] font-semibold">IV</text>
+      <text x="26" y="33" text-anchor="middle" class="fill-accent-ink font-mono text-[12px] font-semibold">II</text>
       <text x="46" y="34" class="fill-ink font-sans text-[15px] font-semibold">delegation, fenced — the capability floor</text>
 
-      <text x="1144" y="16" text-anchor="end" class="fill-dim font-mono text-[8px]">LH-ARCH-001 · PLATE IV · SHEET 2 OF 4</text>
+      <text x="1144" y="16" text-anchor="end" class="fill-dim font-mono text-[8px]">LH-ARCH-001 · PLATE II · SHEET 2 OF 4</text>
       <text x="1144" y="27" text-anchor="end" class="fill-dim font-mono text-[8px]">REV v0.8.0 → 1.0 · 2026-07-09</text>
       <text x="1144" y="38" text-anchor="end" class="fill-dim font-mono text-[8px]">MILESTONE semanticization</text>
       <text x="1144" y="63" text-anchor="end" class="fill-dim font-mono text-[9px]">fenced delegation · untrusted-ingest fenced from host tools · fails closed</text>

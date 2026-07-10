@@ -24,9 +24,9 @@ straight to the source:
 
 - The system — Plate I, the shipped runtime on one sheet: https://localharness.dev/architecture/#system
 - The agent loop — budgets, stuck-detector, act-guard, self-check, parse-repair: https://localharness.dev/architecture/#loop
-- Delegation — Plate IV, the capability floor and the quarantined roster: https://localharness.dev/architecture/#delegation
-- Memory — Plate II plus a detail sheet inside the store, down to one fact's life: https://localharness.dev/architecture/#memory
-- Autoresearch — Plate III, self-improvement under a promotion gate: https://localharness.dev/architecture/#autoresearch
+- Delegation — Plate II, the capability floor and the quarantined roster: https://localharness.dev/architecture/#delegation
+- Memory — Plate III plus a detail sheet inside the store, down to one fact's life: https://localharness.dev/architecture/#memory
+- Autoresearch — Plate IV, self-improvement under a promotion gate: https://localharness.dev/architecture/#autoresearch
 
 A single root orchestrator agent reads the task and runs a ReAct loop — think, act, look — kept
 honest by action and duration budgets, a stuck-detector that nudges then stops a spinning run, an

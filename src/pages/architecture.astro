@@ -2,11 +2,13 @@
 // The engineer deep-dive — v3 "drawn to scale" (DRAWING-SPEC, 2026-07-09 evening).
 // Five sections, each led by an LH-ARCH engineering plate emulating Alex's reference
 // drawing (plate-full.png): PLATE I runtime (fig 01) → LoopPlate zoom (fig 02, kept
-// verbatim — "great") → PLATE IV delegation/capability-floor (fig 03) → PLATE II
-// memory + DETAIL A store-internals + over-window zoom (figs 04-06) → PLATE III
-// autoresearch (fig 07). Sections Configuration / What It Isn't / Run It DROPPED
+// verbatim — "great") → PLATE II delegation/capability-floor (fig 03) → PLATE III
+// memory + DETAIL A store-internals + over-window zoom (figs 04-06) → PLATE IV
+// autoresearch (fig 07). Plate numerals follow PAGE order (Alex 2026-07-09 — they
+// diverge from the reference drawing's original I/II/III assignment on purpose).
+// Sections Configuration / What It Isn't / Run It DROPPED
 // (Alex 2026-07-09); their legacy anchors resolve via invisible alias divs: #yaml
-// (in #delegation — agents-as-YAML lives on Plate IV), #scope + #run (around
+// (in #delegation — agents-as-YAML lives on Plate II), #scope + #run (around
 // GetInvolved). #hard-parts / #security / #context / #over-window aliases unchanged.
 // Every plate label verified against localharness PUBLIC origin/main @ v0.8.0;
 // branch-only memory work appears ONLY inside plates as hatched `landing` boxes (the
@@ -223,7 +225,7 @@ const autoresearchReceipts: [string, string, boolean][] = [
           before they ever start.
         </p>
         <div id="security" class="mt-10">
-          <FigureFrame num="03" caption="PLATE IV — delegation, fenced: the capability floor">
+          <FigureFrame num="03" caption="PLATE II — delegation, fenced: the capability floor">
             <DelegationPlate />
           </FigureFrame>
         </div>
@@ -261,7 +263,7 @@ const autoresearchReceipts: [string, string, boolean][] = [
         from one window to forever.
       </p>
       <div class="mt-10">
-        <FigureFrame num="04" caption="PLATE II — hierarchical memory: fast capture, slow consolidation, recall">
+        <FigureFrame num="04" caption="PLATE III — hierarchical memory: fast capture, slow consolidation, recall">
           <MemoryPlateII />
         </FigureFrame>
       </div>
@@ -322,7 +324,7 @@ const autoresearchReceipts: [string, string, boolean][] = [
     <div class="container-site py-16 sm:py-20">
       <p class="measure text-dim">It tries one change at a time and keeps it only if it measurably helps.</p>
       <div class="mt-10">
-        <FigureFrame num="07" caption="PLATE III — the autoresearch loop: propose, gate, adopt — against its own corpus">
+        <FigureFrame num="07" caption="PLATE IV — the autoresearch loop: propose, gate, adopt — against its own corpus">
           <AutoresearchPlate />
         </FigureFrame>
       </div>
