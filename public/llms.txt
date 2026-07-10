@@ -10,8 +10,9 @@ much lower cost — your hardware, no API meter.
 ## LocalHarness
 
 - [Repository](https://github.com/ahwurm/localharness): source, README, quick start
-- Install: `git clone https://github.com/ahwurm/localharness && cd localharness && uv sync`
-- First run: `uv run localharness init` — probes vLLM :8000, Ollama :11434, LM Studio :1234,
+- Install: `uv tool install localharness` — also `curl -fsSL https://localharness.dev/install.sh | sh`,
+  `pip install localharness`, or `git clone https://github.com/ahwurm/localharness && cd localharness && uv sync`
+- First run: `localharness init` — probes vLLM :8000, Ollama :11434, LM Studio :1234,
   llama.cpp :8080; writes `~/.localharness/config.yaml`
 - CLI: init · start · doctor · validate · propose · agent · bench · autoresearch · components · experiment
 
