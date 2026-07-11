@@ -9,6 +9,42 @@ import type { IconName } from '../components/Icon.astro';
 // to a commit or CHANGELOG entry in github.com/ahwurm/localharness.
 const releases = [
   {
+    v: 'v0.9.0',
+    date: 'Jul 11, 2026',
+    entries: [
+      {
+        tag: 'Added',
+        title: 'Memory writes topic chapters that keep their identity',
+        body: 'Facts that cluster around one topic are now written up as a chapter — and the chapter survives its own growth. When new facts join, the grown cluster supersedes its old chapter instead of minting a parallel copy, and a chapter can never be absorbed into a cluster built from its own members. Topics only relate on two independent signals — embedding similarity plus a shared salient token, never similarity alone. One caveat carried from the changelog: the eval\'s passing verdict holds under its standard grounding rule and flips under a stricter one — disclosed as such, not hidden.',
+      },
+      {
+        tag: 'Added',
+        title: 'Unused evidence gets re-mined, not dropped',
+        body: 'Transcript records that a mining pass read but did not use are no longer lost — they queue in a residue ledger, and later idle passes re-mine them under a bounded attempt cap, so nothing loops forever. Every pass now reports its own coverage: what it saw, what it cited, what it queued, rescued, or retired.',
+      },
+      {
+        tag: 'Added',
+        title: 'A re-learned fact folds into the one already stored',
+        body: 'Extraction could mint near-duplicates of a fact it already held. A novelty gate now checks every candidate against the existing record — only genuinely new information earns a new entry; everything else folds into the fact it repeats. The gate is deliberately conservative, so distinct facts never merge.',
+      },
+      {
+        tag: 'Added',
+        title: 'The model cannot vouch for itself',
+        body: 'Only user-authored evidence can advance a fact\'s confidence. The model restating its own earlier claim no longer counts — an agent cannot talk itself into certainty. Limit, stated in the changelog: a numeric claim grounded in a tool result and one the model merely asserted still earn equal trust today; a source-reliability gate is planned.',
+      },
+      {
+        tag: 'Fixed',
+        title: 'Corrections retire the stale fact, every time',
+        body: 'Two correction bugs closed: correcting a fact now retires the stale value even when the corrected value was already on file, and the supersede directive is recognized wherever it appears in the extractor\'s output, not only in the one spot the parser used to look.',
+      },
+      {
+        tag: 'Changed',
+        title: 'Tool calls read as one line in the terminal',
+        body: 'The terminal now renders each tool call as a compact one-line summary with its markup escaped — bracketed text inside a call no longer corrupts the line it prints on.',
+      },
+    ],
+  },
+  {
     v: 'v0.8.1',
     date: 'Jul 9, 2026',
     entries: [

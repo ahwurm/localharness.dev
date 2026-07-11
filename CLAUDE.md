@@ -4,7 +4,9 @@
 picking up site work: Alex's standing taste directives, current state, critic-pass process,
 and the open-refinements backlog.
 
-Static marketing site for LocalHarness (`/`) + LocalShift (`/localshift/`).
+Static marketing site for LocalHarness (`/`). The `/localshift/` page was DROPPED 2026-07-09
+(Alex: "it dilutes the message") — kept: the `/localshift/github` shortlink redirect, llms.txt's
+LocalShift repo section, and the page's components dormant on disk. Don't resurrect without Alex.
 ("Local__ family" branding removed from all copy per user 2026-06-10 — don't reintroduce.)
 Astro 5 + Tailwind v4, static output, GitHub Pages deploy, domain `localharness.dev` (Route 53).
 
@@ -36,7 +38,9 @@ Astro 5 + Tailwind v4, static output, GitHub Pages deploy, domain `localharness.
 - **No placeholder/sample data.** Every on-page claim must trace to a real fact in
   `~/localharness`, `~/localshift`, or their GitHub READMEs.
 - No fabricated terminal output; commands only, with comment annotations.
-- No `npm install` / `pip install` copy — not published to registries. Install = clone + `uv sync`.
+- No registry-install copy (`npm install` / `pip install` / bare `uv tool install localharness`) —
+  not published yet. Install = `uv tool install git+https://github.com/ahwurm/localharness`
+  (works today; swap to the bare form when PyPI lands).
 - Star-count badge stays behind `SHOW_STARS = false` until repos have stars.
 - Dark theme only; one accent (terminal green, used via alpha steps — `accent/10`…`accent/80` — not flat).
 - Motion system (2026-07-02 pi-uplevel redesign, supersedes the old hover-only rule): `focus-in`

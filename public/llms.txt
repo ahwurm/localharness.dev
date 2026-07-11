@@ -13,8 +13,11 @@ much lower cost — your hardware, no API meter.
 - Install: `uv tool install git+https://github.com/ahwurm/localharness` — installs the
   `localharness` command from source via uv (switches to `uv tool install localharness`
   once the PyPI release lands)
-- First run: `localharness init` — probes vLLM :8000, Ollama :11434, LM Studio :1234,
+- First run: `localharness init` — probes vLLM :8081/:8000, Ollama :11434, LM Studio :1234,
   llama.cpp :8080; writes `~/.localharness/config.yaml`
+- Backends: vLLM is the tested path — live-verified end to end on the maintainer's hardware,
+  with an opt-in live test suite. Ollama, LM Studio, and llama.cpp are auto-detected and speak
+  the same OpenAI-compatible API, but are not yet verified end to end.
 - CLI: init · start · doctor · validate · propose · agent · bench · autoresearch · components · experiment
 
 ### Architecture
@@ -66,7 +69,12 @@ summaries, and a human-readable MEMORY.md you can edit by hand. Writes are gated
 error — it keeps what you tell it to and what genuinely surprises it, not routine results — and
 idle time consolidates recurring lessons while letting stale ones fade. A byte-stable index of
 what it knows is injected at the start of each run, so the same knowledge produces the same
-context. On-site: https://localharness.dev/architecture/#memory
+context. Extraction is recoverable: transcript evidence that goes unused is queued and re-mined
+on later idle passes, and a re-extracted fact folds into the atom already stored instead of
+minting a duplicate. Related facts consolidate into topic chapters that keep their identity as
+membership grows; only user-authored evidence — not the model restating its own claims — can
+raise a fact's confidence; and a correction retires the stale value even when the corrected
+value was already on file. On-site: https://localharness.dev/architecture/#memory
 
 ### Security
 
@@ -80,8 +88,9 @@ non-privileged user. See SECURITY.md. On-site: https://localharness.dev/architec
 The harness improves itself under a gate: a proposer suggests one mutation at a time; candidates
 live in a mutation archive (Pareto sampling); each runs the train scenario bench and must pass a
 statistical promotion gate against baseline before adoption; a sealed holdout set is never run
-while proposing. CLI: `localharness autoresearch run | review | adopt`,
-`localharness components list | get | set`, `localharness bench train | holdout`.
+while proposing. CLI: `localharness autoresearch run | review | adopt | report | sentinel | archive`,
+`localharness propose`, `localharness experiment run`,
+`localharness components list | get | set`, `localharness bench | bench compare`.
 On-site: https://localharness.dev/architecture/#autoresearch
 
 - Deep docs: [README](https://github.com/ahwurm/localharness/blob/main/README.md),

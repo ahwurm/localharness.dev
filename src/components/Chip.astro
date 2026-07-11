@@ -2,16 +2,32 @@
 // Eraser-style widget chip: tiny stroke glyph + mono label, square, hairline.
 // With `href` it renders an external source/download link (new tab, noopener)
 // and gains a subtle accent hover; without it, a plain non-interactive span.
+// tone: 'accent' = proven/tested state (green), 'dim' = present but not yet proven
+// (grey label + grey glyph via the [&_*]:stroke-dim descendant override — Icon
+// hardcodes stroke-accent); default = neutral ink.
 import Icon, { type IconName } from './Icon.astro';
 interface Props {
   label: string;
   icon: IconName;
   href?: string;
   class?: string;
+  tone?: 'accent' | 'dim';
 }
-const { label, icon, href, class: className = '' } = Astro.props;
-const base =
-  'inline-flex min-h-9 items-center gap-2 border border-edge bg-surface/70 px-3 py-1.5 font-mono text-xs text-ink';
+const { label, icon, href, class: className = '', tone } = Astro.props;
+const tones = {
+  accent: 'border-accent/50 bg-accent/10 text-accent',
+  dim: 'border-edge bg-surface/70 text-dim [&_*]:stroke-dim',
+  ink: 'border-edge bg-surface/70 text-ink',
+};
+const base = `inline-flex min-h-9 items-center gap-2 border px-3 py-1.5 font-mono text-xs ${tones[tone ?? 'ink']}`;
+// dim hover brightens the BORDER only — text+glyph keep their status grey (the tint is
+// state, not decoration; critic 2026-07-11 caught text/glyph diverging on hover).
+const hover =
+  tone === 'accent'
+    ? 'transition-colors duration-200 hover:border-accent/70'
+    : tone === 'dim'
+      ? 'transition-colors duration-200 hover:border-accent/40'
+      : 'transition-colors duration-200 hover:border-accent/40 hover:text-accent';
 ---
 
 {
@@ -20,7 +36,7 @@ const base =
       href={href}
       target="_blank"
       rel="noopener"
-      class:list={[base, 'transition-colors duration-200 hover:border-accent/40 hover:text-accent', className]}
+      class:list={[base, hover, className]}
     >
       <Icon name={icon} />
       {label}

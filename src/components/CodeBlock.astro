@@ -5,6 +5,13 @@ interface Props {
   class?: string;
 }
 const { code, label, class: className = '' } = Astro.props;
+// Below `sm` the pre soft-wraps. Bare [overflow-wrap:anywhere] broke long URLs at
+// arbitrary chars (critic 2026-07-11: the install one-liner split inside "localharness").
+// Display-only <wbr> after each "/" + break-word makes wrapping prefer path boundaries;
+// copy stays verbatim via data-copy (raw code). sm+ never wraps — unaffected.
+const esc = (s: string) =>
+  s.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+const displayCode = esc(code).replaceAll('/', '/<wbr>');
 ---
 
 <div class:list={['overflow-hidden border border-edge bg-surface/80', className]}>
@@ -24,7 +31,7 @@ const { code, label, class: className = '' } = Astro.props;
     )
   }
   <div class="relative">
-    <pre class="overflow-x-auto whitespace-pre-wrap [overflow-wrap:anywhere] p-4 font-mono text-sm leading-relaxed text-ink sm:whitespace-pre"><code>{code}</code></pre>
+    <pre class="overflow-x-auto whitespace-pre-wrap [overflow-wrap:break-word] p-4 font-mono text-sm leading-relaxed text-ink sm:whitespace-pre"><code set:html={displayCode} /></pre>
     {
       !label && (
         <button
