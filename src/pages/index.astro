@@ -12,10 +12,10 @@ import Chip from '../components/Chip.astro';
 import Icon from '../components/Icon.astro';
 import GetInvolved from '../components/GetInvolved.astro';
 
-// Installs a real `localharness` command via uv, straight from the public repo —
-// works today, no PyPI needed. Swap to `uv tool install localharness` once the
-// package is published.
-const install = `uv tool install git+https://github.com/ahwurm/localharness
+// Installs the real `localharness` command from PyPI via uv — published since
+// v0.9.9 (trusted publishing fires on every GitHub release), verified by a
+// clean-env install test before this swap.
+const install = `uv tool install localharness
 localharness init
 localharness start`;
 

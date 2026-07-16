@@ -10,9 +10,9 @@ much lower cost — your hardware, no API meter.
 ## LocalHarness
 
 - [Repository](https://github.com/ahwurm/localharness): source, README, quick start
-- Install: `uv tool install git+https://github.com/ahwurm/localharness` — installs the
-  `localharness` command from source via uv (switches to `uv tool install localharness`
-  once the PyPI release lands)
+- Install: `uv tool install localharness` — installs the `localharness` command from
+  PyPI via uv (from-source alternative:
+  `uv tool install git+https://github.com/ahwurm/localharness`)
 - First run: `localharness init` — probes vLLM :8081/:8000, Ollama :11434, LM Studio :1234,
   llama.cpp :8080; writes `~/.localharness/config.yaml`
 - Backends: vLLM is the tested path — live-verified end to end on the maintainer's hardware,
