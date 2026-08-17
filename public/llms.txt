@@ -2,7 +2,7 @@
 
 > Open-source, model-agnostic agent harness for local LLMs. Define agents in YAML —
 > prompts, tools, permissions, memory — and run them against any OpenAI-compatible endpoint
-> (vLLM, Ollama, LM Studio, llama.cpp). MIT. Python >=3.12 + uv.
+> (vLLM, llama.cpp, Ollama, LM Studio). MIT. Python >=3.12 + uv.
 
 The tradeoff, stated plainly: same workflow and output as frontier automation; longer runtime;
 much lower cost — your hardware, no API meter.
@@ -15,9 +15,18 @@ much lower cost — your hardware, no API meter.
   `uv tool install git+https://github.com/ahwurm/localharness`)
 - First run: `localharness init` — probes vLLM :8081/:8000, Ollama :11434, LM Studio :1234,
   llama.cpp :8080; writes `~/.localharness/config.yaml`
-- Backends: vLLM is the tested path — live-verified end to end on the maintainer's hardware,
-  with an opt-in live test suite. Ollama, LM Studio, and llama.cpp are auto-detected and speak
-  the same OpenAI-compatible API, but are not yet verified end to end.
+- Backends: vLLM and llama.cpp are the tested paths — both live-verified end to end on the
+  maintainer's hardware (vLLM also carries an opt-in live test suite). llama.cpp serves the
+  default reference configuration and both speculative-decoding configs: tool calling runs on
+  the model's own chat template, the August 2026 live-use test pass recorded no tool-call parse
+  failures in any session, and decode speed is read from the engine's own report rather than
+  timed from outside. Ollama and LM Studio are auto-detected and speak the same OpenAI-compatible API,
+  but are not yet verified end to end.
+- Reference hardware: four tested configurations on an NVIDIA DGX Spark — two served by
+  llama.cpp (a dense multimodal Qwen driven by its own speculative-decode head; a DeepSeek MoE
+  reasoning model with a draft model) and two by vLLM — plus a proposed base Mac mini config.
+  Recipes, measured decode rates and caveats:
+  https://github.com/ahwurm/localharness/tree/main/docs/reference-architectures
 - CLI: init · start · doctor · validate · propose · agent · bench · autoresearch · components · experiment
 
 ### Architecture
