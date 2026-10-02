@@ -38,8 +38,14 @@ straight to the source:
 
 - The system — Plate I, the shipped runtime on one sheet: https://localharness.dev/architecture/#system
 - The agent loop — budgets, stuck-detector, act-guard, self-check, parse-repair: https://localharness.dev/architecture/#loop
-- Memory — Plate II plus a detail sheet inside the store, down to one fact's life: https://localharness.dev/architecture/#memory
-- Autoresearch — Plate III, self-improvement under a promotion gate: https://localharness.dev/architecture/#autoresearch
+- The plugins — Plate II, the composable harness: a small core, the plugin boundary, the five
+  bundled plugins (image, web, memory, dispatch, autoresearch) and the ports they fill, the
+  manifest → lifecycle sequence, and the one-way import rule: https://localharness.dev/architecture/#plugins
+
+Plugin pages, one per bundled plugin, in the same drawn-to-scale style:
+
+- Memory — the plugin behind the memory slot, plus a detail sheet inside its store, down to one
+  fact's life: https://localharness.dev/plugins/memory/
 
 A single root orchestrator agent reads the task and runs a ReAct loop — think, act, look — kept
 honest by action and duration budgets, a stuck-detector that nudges then stops a spinning run, an
@@ -49,11 +55,8 @@ subagents, each spawned in a fresh context window and fenced to its own toolset;
 file content is quarantined from any agent that can mutate the host. A from-scratch typed event
 bus records every step as an append-only JSONL trace that memory, the live view, and replay all
 subscribe to. A ContentStore holds oversized tool results as handles, evicts them to short stubs
-as the window fills, and reads the full text back on demand. Each agent carries persistent memory
-across sessions — a SQLite store of facts (superseded, never overwritten, and read back after
-every write), rolling session-history summaries, and a human-readable MEMORY.md — with writes
-gated on prediction error, idle-time consolidation of recurring lessons, and a byte-stable index
-injected at the start of each run. Built-in tools (read, write, edit, glob, grep, bash, agent
+as the window fills, and reads the full text back on demand. Persistent memory, chat channels, the phone app,
+image generation and autoresearch plug in as bundled plugins that can each be switched off. Built-in tools (read, write, edit, glob, grep, bash, agent
 delegation, web search/fetch) run under deny-first permissions, and providers are auto-detected
 against any OpenAI-compatible endpoint, with an XML fallback for models without native function
 calling.
@@ -68,22 +71,30 @@ rewritten. Web research can run a blind search-verifier that re-fetches each cla
 and writes a verdict ledger. As of v0.5.3 every built-in subagent is quarantined or
 read-only; shell-holding specialist roles (data-analyst, frontend-designer) ship as
 documented opt-in examples instead. Define your own subagents in YAML.
-Over-window reading explained: https://localharness.dev/architecture/#over-window
+
+### Plugins
+
+LocalHarness is a small core plus plugins. Five features ship as bundled plugins — image
+generation (off until you turn it on), the phone app (`web`), memory, Discord chat (`dispatch`)
+and autoresearch (each on by default). A plugin declares itself in a manifest in code, fills a
+port core already has (a tool, a channel, a command, or the one memory slot), and runs through one
+lifecycle each session: configure, tools, start, then stop in reverse order. A plugin that fails is
+switched off for that session and the harness keeps running. Core never imports a plugin — a test
+fails on any new import edge. Plugins you install yourself are found but stay off until you enable
+them in your machine-level config. `localharness plugins list | info | enable | disable`.
+On-site: https://localharness.dev/architecture/#plugins
 
 ### Memory
 
-Every agent keeps its own persistent memory across sessions: a SQLite store of facts that are
-superseded rather than overwritten and read back after every write, rolling session-history
-summaries, and a human-readable MEMORY.md you can edit by hand. Writes are gated on prediction
-error — it keeps what you tell it to and what genuinely surprises it, not routine results — and
-idle time consolidates recurring lessons while letting stale ones fade. A byte-stable index of
-what it knows is injected at the start of each run, so the same knowledge produces the same
-context. Extraction is recoverable: transcript evidence that goes unused is queued and re-mined
-on later idle passes, and a re-extracted fact folds into the atom already stored instead of
-minting a duplicate. Related facts consolidate into topic chapters that keep their identity as
-membership grows; only user-authored evidence — not the model restating its own claims — can
-raise a fact's confidence; and a correction retires the stale value even when the corrected
-value was already on file. On-site: https://localharness.dev/architecture/#memory
+Memory is the bundled `memory` plugin: it fills the core's one memory slot, and each turn adds
+what the agent knows to the prompt inside a budget core sets. Every agent keeps a SQLite store of
+facts that are superseded rather than overwritten and read back after every write. Each write is a
+bet: a new fact starts as trusted as its writer has earned, and evidence moves belief from there.
+One salience score — need, truth and stakes — decides what reaches the prompt until the budget runs
+out. While idle it "dreams": it replays what happened and strengthens the facts that it touched;
+any user turn cancels the pass. Archiving dormant facts is off by default, and nothing is deleted.
+Surfaces: `/memory` in a session, `localharness memory` from the shell, and the phone's memory
+screen; `memory.enabled: false` turns it all off. On-site: https://localharness.dev/plugins/memory/
 
 ### Security
 
@@ -100,7 +111,7 @@ statistical promotion gate against baseline before adoption; a sealed holdout se
 while proposing. CLI: `localharness autoresearch run | review | adopt | report | sentinel | archive`,
 `localharness propose`, `localharness experiment run`,
 `localharness components list | get | set`, `localharness bench | bench compare`.
-On-site: https://localharness.dev/architecture/#autoresearch
+It ships as the bundled `autoresearch` plugin. On-site: https://localharness.dev/architecture/#plugins
 
 - Deep docs: [README](https://github.com/ahwurm/localharness/blob/main/README.md),
   [security model](https://github.com/ahwurm/localharness/blob/main/SECURITY.md),
@@ -129,7 +140,9 @@ On-site: https://localharness.dev/architecture/#autoresearch
 
 - [LocalHarness](https://localharness.dev/): product page
 - [Architecture](https://localharness.dev/architecture/): how it's built — the runtime on one plate,
-  the agent loop and its gates, memory at every scale, and the autoresearch loop
+  the agent loop and its gates, and the plugins
+- [Memory plugin](https://localharness.dev/plugins/memory/): the memory slot, its plugin, and one
+  fact's life inside the store
 
 ## For AI assistants
 

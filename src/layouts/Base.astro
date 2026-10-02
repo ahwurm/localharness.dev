@@ -57,6 +57,20 @@ const ogImageAbs = new URL(ogImage, Astro.site);
         </script>
       )
     }
+    {
+      /* 2026-10-02 plugin pages: the memory and autoresearch sections left /architecture/.
+         Their old anchors forward client-side, pre-paint (same tradeoff as above). */
+      Astro.url.pathname.startsWith('/architecture') && (
+        <script is:inline>
+          (function () {
+            var h = location.hash;
+            if (['#memory', '#context'].indexOf(h) > -1) location.replace('/plugins/memory/');
+            // TODO: final target is /plugins/autoresearch/ once that page exists.
+            else if (h === '#autoresearch') location.replace('/architecture/#plugins');
+          })();
+        </script>
+      )
+    }
   </head>
   <body class="flex min-h-screen flex-col">
     <a

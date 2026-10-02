@@ -1,19 +1,18 @@
 ---
 // The engineer deep-dive — v3 "drawn to scale" (DRAWING-SPEC, 2026-07-09 evening).
-// Five sections, each led by an LH-ARCH engineering plate emulating Alex's reference
+// Three sections, each led by an LH-ARCH engineering plate emulating Alex's reference
 // drawing (plate-full.png): PLATE I runtime (fig 01) → LoopPlate zoom (fig 02, kept
-// verbatim — "great") → PLATE II memory + DETAIL A store-internals (figs 03-04) →
-// PLATE III autoresearch (fig 05). A clean I·II·III in page order (Alex 2026-07-09
-// night: delegation section + the over-window figure + the forward/pips REMOVED —
-// bands open straight onto plates). Legacy anchors resolve via invisible alias divs:
-// #delegation/#hard-parts/#security/#yaml nested in #system (Plate I carries the
-// fenced-helpers story), #over-window in #memory, #scope + #run around GetInvolved;
-// #context stays on #memory's container. DelegationPlate.astro + OverWindowDiagram
-// .astro stay on disk unimported (cut for focus, not superseded).
-// Every plate label verified against localharness PUBLIC origin/main @ v0.9.0 (2026-07-11);
-// any branch-only work would appear ONLY inside plates as hatched `landing` boxes (none
-// drawn as of v0.9.0 — the key carries the honesty). Explainer rows are icon-led (no numeral badges —
-// the plates' circled numbers trace FLOW order, not row order).
+// verbatim — "great") → PLATE II the plugins (fig 03, 2026-10-02). Memory and autoresearch
+// moved to their own plugin pages (/plugins/<name>/, Alex 2026-10-02: one architecture page
+// per plugin in this style; this page describes the composable harness). Legacy anchors
+// resolve via invisible alias divs: #delegation/#hard-parts/#security/#yaml nested in
+// #system; #scope + #run around GetInvolved; #memory/#context/#over-window/#autoresearch are
+// forwarded by Base.astro. DelegationPlate / OverWindowDiagram / AutoresearchPlate stay on
+// disk unimported (AutoresearchPlate awaits /plugins/autoresearch/).
+// Every plate label verified against localharness main @ 98682e4 (2026-10-02). NOTE: that
+// commit is local main, ahead of public origin/main — plugin-system receipts below 404 on
+// GitHub until the release lands; merge this page only after it does. Explainer rows are
+// icon-led (no numeral badges — the plates' circled numbers trace FLOW order, not row order).
 import Base from '../layouts/Base.astro';
 import Icon, { type IconName } from '../components/Icon.astro';
 import FigureFrame from '../components/FigureFrame.astro';
@@ -21,9 +20,7 @@ import Interstitial from '../components/Interstitial.astro';
 import SectionBand from '../components/SectionBand.astro';
 import RuntimePlate from '../components/RuntimePlate.astro';
 import LoopPlate from '../components/LoopPlate.astro';
-import MemoryPlateII from '../components/MemoryPlateII.astro';
-import MemoryDetailPlate from '../components/MemoryDetailPlate.astro';
-import AutoresearchPlate from '../components/AutoresearchPlate.astro';
+import PluginPlate from '../components/PluginPlate.astro';
 import GetInvolved from '../components/GetInvolved.astro';
 
 // Receipt href builders — full GitHub blob/tree URLs on PUBLIC main.
@@ -42,7 +39,7 @@ const parts: [IconName, string, string][] = [
   ['search', 'the helpers', 'specialists take delegated pieces, each in a fresh window, fenced to its job.'],
   ['server', 'the model server', 'the thinking runs on the server you already have — vLLM, llama.cpp, Ollama, LM Studio.'],
   ['repeat', 'the bus', 'every step is written down in order; the live view and the replay read it.'],
-  ['layers', 'memory', 'what it learns outlives the session — gated on the way in, filed while idle.'],
+  ['layers', 'the plugins', 'memory, chat, the phone app, pictures and autoresearch plug in — and each can be switched off.'],
 ];
 
 // #loop — the gates that keep a turn honest (kept verbatim; last = failure path)
@@ -54,31 +51,23 @@ const loopGates: [IconName, string, string][] = [
   ['shield', 'Stuck-detector', 'if it keeps repeating the same move without progress, the harness first nudges it, then stops the run rather than spin forever.'],
 ];
 
-// #memory — at every scale (last = failure path across both groups)
-const scales: [IconName, string, string][] = [
-  ['doc', 'the window', 'big results park as short notes; one call pulls the full text back.'],
-  ['search', 'the task', 'a document bigger than the window is read in sections — and the section notes persist.'],
-  ['clock', 'the sitting', 'every step is recorded in order; each sitting ends with a short summary on the shelf.'],
-  ['layers', 'for good', 'facts survive across sittings, in a database and a file you can read.'],
+// #plugins — the composable harness (last = the rule that keeps it composable)
+const pluginRows: [IconName, string, string][] = [
+  ['doc', 'the manifest', 'each plugin declares itself in code — its name, its kind, its commands, its settings and what it needs.'],
+  ['repeat', 'the lifecycle', 'every session runs each plugin through the same steps, then stops them in reverse order.'],
+  ['layers', 'the slots', 'a plugin fills a port core already has — a tool, a channel, a command, or the one memory slot.'],
+  ['check', 'doctor', 'each plugin brings its own health checks, and doctor runs them without starting anything.'],
+  ['meter-off', 'the off switch', 'any bundled plugin turns off with one setting, and its commands then say how to turn it back on.'],
+  ['shield', 'the import rule', 'core never imports a plugin — a test fails on any new edge, and its list of old exceptions is empty.'],
 ];
-const learns: [IconName, string, string][] = [
-  ['prompt', 'two ways in', 'it saves what you tell it to, and what surprises it.'],
-  ['gauge', 'surprise, measured', 'it learns each tool’s usual result; a surprising failure is worth remembering.'],
-  ['clock', 'new memories wait', 'fresh notes stay out of view until idle time confirms them.'],
-  ['repeat', 'it sleeps on it', 'while idle, it files recurring lessons and lets stale ones fade.'],
-  ['book', 'lessons become chapters', 'related lessons are written up as one chapter that keeps its identity as it grows.'],
-  ['shield', 'corrections stay careful', 'when you say “that’s wrong,” the fix is saved separately and can be undone.'],
-  ['check', 'it never pretends', 'every write is read back and checked; a failed write fails loudly.'],
-];
-
-// #autoresearch — the gate (last = failure path)
-const gate: [IconName, string, string][] = [
-  ['studio', 'a stronger model proposes', 'a separate, stronger model suggests one change at a time.'],
-  ['box', 'tested in a throwaway copy', 'the change runs a fixed task set in a disposable checkout; your setup is never touched.'],
-  ['gauge', 'held to a real bar', 'kept only if it clearly beats the current version, not if it just edges ahead by luck.'],
-  ['clock', 'a sealed set it never sees', 'a final exam it cannot study for, checked only at the end.'],
-  ['repeat', 'adopted as a commit', 'a win lands as a git commit; undoing it is one command.'],
-  ['shield', 'the gate can say no', 'a change that misses the bar is archived, never adopted.'],
+// Plugin pages in code order. PROTOTYPE: only memory is built; the rest render unlinked
+// until their pages exist (the plate's boxes already point at the final URLs).
+const pluginPages: [string, string, boolean][] = [
+  ['image', '/plugins/image/', false],
+  ['web', '/plugins/web/', false],
+  ['memory', '/plugins/memory/', true],
+  ['dispatch', '/plugins/dispatch/', false],
+  ['autoresearch', '/plugins/autoresearch/', false],
 ];
 
 // Receipts per section: [label, href, external?]. Demo cross-links carry their own _pip.
@@ -91,23 +80,18 @@ const loopReceipts: [string, string, boolean][] = [
   ['agent/loop.py', blob('src/localharness/agent/loop.py'), true],
   ['_demo', '/#demo-research', false],
 ];
-const memoryReceipts: [string, string, boolean][] = [
-  ['memory/sqlite.py', blob('src/localharness/memory/sqlite.py'), true],
-  ['memory/consolidation.py', blob('src/localharness/memory/consolidation.py'), true],
-  ['memory/gate.py', blob('src/localharness/memory/gate.py'), true],
-  ['agent/context.py', blob('src/localharness/agent/context.py'), true],
-  ['_quality > speed', '/#demo-overwindow', false],
-];
-const autoresearchReceipts: [string, string, boolean][] = [
-  ['autoresearch/experiment.py', blob('src/localharness/autoresearch/experiment.py'), true],
-  ['autoresearch/proposer.py', blob('src/localharness/autoresearch/proposer.py'), true],
-  ['autoresearch/archive.py', blob('src/localharness/autoresearch/archive.py'), true],
+const pluginReceipts: [string, string, boolean][] = [
+  ['plugins/api.py', blob('src/localharness/plugins/api.py'), true],
+  ['plugins/builtin.py', blob('src/localharness/plugins/builtin.py'), true],
+  ['spec 09 — plugins', blob('docs/specs/09-hooks-plugins.md'), true],
+  ['test_import_direction.py', blob('tests/unit/test_import_direction.py'), true],
+  ['examples/plugin-template/', tree('examples/plugin-template'), true],
 ];
 ---
 
 <Base
   title="LocalHarness — architecture"
-  description="How LocalHarness works, drawn to scale: the shipped runtime on one plate, the agent loop and its gates, memory at every scale down to one fact's life, and the self-improving autoresearch loop."
+  description="How LocalHarness works, drawn to scale: the runtime on one plate, the agent loop and its gates, and the small core that every plugin plugs into."
 >
   <h1 class="sr-only">LocalHarness — architecture</h1>
 
@@ -179,82 +163,21 @@ const autoresearchReceipts: [string, string, boolean][] = [
     </div>
   </section>
 
-  <Interstitial icon="layers" lead="Each turn ends; what it learned doesn't" rest="— memory carries it to the next one." />
+  <Interstitial icon="box" lead="The core stays small" rest="— everything else plugs in, and can be switched off." />
 
-  <!-- #memory — PLATE II + DETAIL A (figs 03-04). #context on the container;
-       #over-window alias div inside (its figure was removed). -->
-  <section id="memory" data-reveal>
-    <SectionBand icon="layers" title="Memory" topBorder={false} />
-    <div id="context" class="container-site py-16 sm:py-20">
-      <div id="over-window"></div>
-      <p class="measure text-dim">
-        It takes notes while it works, and files them while it sleeps — memory at every scale,
-        from one window to forever.
-      </p>
-      <div class="mt-10">
-        <FigureFrame num="03" caption="PLATE II — hierarchical memory: fast capture, slow consolidation, recall">
-          <MemoryPlateII />
-        </FigureFrame>
-      </div>
-      <div class="mt-10 grid gap-x-12 gap-y-8 xl:grid-cols-2">
-        <div>
-          <p class="eyebrow">at every scale</p>
-          <ul class="mt-3 space-y-2.5">
-            {scales.map(([icon, kw, clause]) => (
-              <li class="flex items-start gap-3">
-                <Icon name={icon} class="size-4" />
-                <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
-                  <span class="font-mono text-[13px] text-ink">{kw}</span>
-                  <span class="text-sm text-dim">{clause}</span>
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <p class="eyebrow">how it learns</p>
-          <ul class="mt-3 space-y-2.5">
-            {learns.map(([icon, kw, clause]) => (
-              <li class="flex items-start gap-3">
-                <Icon name={icon} class="size-4" />
-                <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
-                  <span class="font-mono text-[13px] text-ink">{kw}</span>
-                  <span class="text-sm text-dim">{clause}</span>
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-      <div class="mt-12">
-        <FigureFrame num="04" caption="DETAIL A — inside the memory store: one fact's life">
-          <MemoryDetailPlate />
-        </FigureFrame>
-      </div>
-      <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-xs">
-        <span class="text-dim">_deeper</span>
-        {memoryReceipts.map(([label, href, ext]) => (
-          <a href={href} target={ext ? '_blank' : undefined} rel={ext ? 'noopener' : undefined} class="text-accent/80 transition-colors hover:text-accent">{label} ↗</a>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <Interstitial icon="repeat" lead="The settings are just a starting point" rest="— the harness tunes them itself and keeps only what measurably helps." />
-
-  <!-- #autoresearch — PLATE III: the loop that tunes the harness (fig. 07). -->
-  <section id="autoresearch" data-reveal>
-    <SectionBand icon="gauge" title="Autoresearch" topBorder={false} />
+  <!-- #plugins — PLATE II: the composable harness (fig. 03). -->
+  <section id="plugins" data-reveal>
+    <SectionBand icon="box" title="The Plugins" topBorder={false} />
     <div class="container-site py-16 sm:py-20">
-      <p class="measure text-dim">It tries one change at a time and keeps it only if it measurably helps.</p>
+      <p class="measure text-dim">A small core runs the loop, and everything else plugs in through one manifest and one lifecycle.</p>
       <div class="mt-10">
-        <FigureFrame num="05" caption="PLATE III — the autoresearch loop: propose, gate, adopt — against its own corpus">
-          <AutoresearchPlate />
+        <FigureFrame num="03" caption="PLATE II — the plugins: a small core, five bundled plugins, imports one way">
+          <PluginPlate />
         </FigureFrame>
       </div>
-      <p class="eyebrow mt-10">the gate</p>
+      <p class="eyebrow mt-10">how it composes</p>
       <ul class="mt-3 grid gap-x-12 gap-y-2.5 xl:grid-flow-col xl:grid-rows-3">
-        {gate.map(([icon, kw, clause]) => (
+        {pluginRows.map(([icon, kw, clause]) => (
           <li class="flex items-start gap-3">
             <Icon name={icon} class="size-4" />
             <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
@@ -265,8 +188,18 @@ const autoresearchReceipts: [string, string, boolean][] = [
         ))}
       </ul>
       <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-xs">
+        <span class="text-dim">_plugin pages</span>
+        {pluginPages.map(([label, href, built]) =>
+          built ? (
+            <a href={href} class="text-accent/80 transition-colors hover:text-accent">{label} →</a>
+          ) : (
+            <span class="text-dim/60">{label}</span>
+          )
+        )}
+      </div>
+      <div class="mt-3 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-xs">
         <span class="text-dim">_deeper</span>
-        {autoresearchReceipts.map(([label, href, ext]) => (
+        {pluginReceipts.map(([label, href, ext]) => (
           <a href={href} target={ext ? '_blank' : undefined} rel={ext ? 'noopener' : undefined} class="text-accent/80 transition-colors hover:text-accent">{label} ↗</a>
         ))}
       </div>
