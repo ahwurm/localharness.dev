@@ -95,7 +95,7 @@ export const SETUP: Record<string, SetupFlowData> = {
       { kind: 'dim', text: 'Or paste this into your coding agent to set it up for your hardware:' },
       { kind: 'out', text: '  Run `localharness web`, then scan its pairing QR with your phone.' },
     ],
-    'web: on, but its check failed: not enrolled yet',
+    'web: on, but not set up yet — not enrolled yet',
     [],
     "Set up the LocalHarness phone app on this machine. Install LocalHarness with its web extra, keeping the extras I already use. Run `localharness web` and leave it running: it serves the page on this machine only, so do not pass --allow-unsafe-bind. To reach it from my phone, put it behind a private network I already use, for example `tailscale serve --bg 8765`, rather than opening a port to the internet. You are done when `localharness doctor` shows web enrolled and my phone has scanned the pairing QR."
   ),
