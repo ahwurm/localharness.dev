@@ -4,6 +4,7 @@ import { resolve } from 'node:path';
 
 const root = resolve(import.meta.dirname, '../..');
 const font = (pkg, file) => `file://${root}/node_modules/@fontsource-variable/${pkg}/files/${file}`;
+const svgUri = (path) => `data:image/svg+xml;base64,${readFileSync(`${root}/${path}`).toString('base64')}`;
 const dataUri = (path) => `data:image/png;base64,${readFileSync(`${root}/${path}`).toString('base64')}`;
 
 const cards = [
@@ -43,7 +44,8 @@ const head = `<style>
   .tagline { margin-top: 26px; font-size: 40px; font-weight: 500; color: #c7cad2; letter-spacing: -0.01em; align-self: flex-start; }
   .term { height: 504px; width: auto; border-radius: 16px; }
   .domain { font-family: 'Geist Mono', monospace; font-size: 26px; color: #5ee9a4; }
-  .term + .domain { margin-top: 26px; }
+  .term + .domain { margin-top: 26px; display: flex; align-items: center; gap: 14px; }
+  .mark { width: 40px; height: 40px; }
   .wordmark .domain { position: absolute; bottom: 56px; left: 96px; }
 </style>`;
 
@@ -53,7 +55,7 @@ const html = (c) =>
     ? `<!doctype html><html><head>${head}</head>
 <body>
   <img class="term" src="${c.banner}" />
-  <div class="domain">localharness.dev</div>
+  <div class="domain"><img class="mark" src="${svgUri('public/favicon.svg')}" />localharness.dev</div>
 </body></html>`
     : `<!doctype html><html><head>${head}</head>
 <body class="wordmark">
