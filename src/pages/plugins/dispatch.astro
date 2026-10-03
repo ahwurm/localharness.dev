@@ -1,8 +1,7 @@
 ---
 // /plugins/dispatch/ — the dispatch plugin, Discord as a channel (PluginPage template). Rows trace
 // to localharness main @ 582b69c: dispatch/plugin.py + config.py docstrings, spec 09 "The bundled
-// plugins", README plugins table + "Answering a permission prompt in Discord", CHANGELOG [0.16.0]
-// Known limitations.
+// plugins", README plugins table + "Answering a permission prompt in Discord".
 import PluginPage from '../../layouts/PluginPage.astro';
 import FigureFrame from '../../components/FigureFrame.astro';
 import Rows, { type Row } from '../../components/Rows.astro';
@@ -25,14 +24,6 @@ const surfaces: Row[] = [
   ['repeat', 'commands and tools', 'none — it adds a channel, nothing else.'],
   ['meter-off', 'localharness plugins enable dispatch', 'on by default once the dispatch extra is installed; enable takes the token and your user id with --set, and disable turns it off.'],
 ];
-const notYet: Row[] = [
-  ['server', 'not yet on a live server', 'tested offline against a stand-in; logging in, reactions and real uploads are unverified.', 'shipped'],
-  ['doc', 'uploads are not read', 'files people send the bot never reach the model; the turn sees the text only.', 'shipped'],
-  ['layers', 'one settings section', 'a second chat platform would share Discord’s token, allow list and channels.', 'shipped'],
-  ['shield', 'a plain-text token', 'the token sits in the global overrides.yaml, readable only by you when LocalHarness writes it.', 'shipped'],
-  ['prompt', 'start --help still lists discord', 'with dispatch off, start --channel discord refuses and says how to turn it on.', 'shipped'],
-  ['clock', 'the fallback ends', 'the old environment variables stop working at the next minor release.', 'planned'],
-];
 const receipts: [string, string][] = [
   ['dispatch/plugin.py', blob('src/localharness/dispatch/plugin.py')],
   ['dispatch/config.py', blob('src/localharness/dispatch/config.py')],
@@ -46,10 +37,9 @@ const receipts: [string, string][] = [
   name="dispatch"
   label="Dispatch"
   icon="prompt"
-  description="The LocalHarness dispatch plugin lets allowlisted Discord users drive an agent session from chat, with replies and permission questions posted back."
-  lead="Chat is a plugin — dispatch adds the Discord channel, and switching it off leaves the terminal as it was."
+  description="The LocalHarness dispatch plugin lets you drive your local agent from Discord: one switch, a bot token and your user id in one machine-level settings file, and permission questions answered in the chat."
+  lead="Discord is one switch — give it a bot token and your user id, and switching it off leaves the terminal as it was."
   surfaces={surfaces}
-  notYet={notYet}
   receipts={receipts}
 >
   <div class="mt-10">

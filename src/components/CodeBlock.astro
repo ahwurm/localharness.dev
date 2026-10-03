@@ -3,8 +3,9 @@ interface Props {
   code: string;
   label?: string;
   class?: string;
+  wrap?: boolean; // prose-length payloads (a prompt) wrap at every width
 }
-const { code, label, class: className = '' } = Astro.props;
+const { code, label, class: className = '', wrap = false } = Astro.props;
 // Below `sm` the pre soft-wraps. Bare [overflow-wrap:anywhere] broke long URLs at
 // arbitrary chars (critic 2026-07-11: the install one-liner split inside "localharness").
 // Display-only <wbr> after each "/" + break-word makes wrapping prefer path boundaries;
@@ -31,7 +32,7 @@ const displayCode = esc(code).replaceAll('/', '/<wbr>');
     )
   }
   <div class="relative">
-    <pre class="overflow-x-auto whitespace-pre-wrap [overflow-wrap:break-word] p-4 font-mono text-sm leading-relaxed text-ink sm:whitespace-pre"><code set:html={displayCode} /></pre>
+    <pre class:list={['overflow-x-auto whitespace-pre-wrap [overflow-wrap:break-word] p-4 font-mono text-sm leading-relaxed text-ink', !wrap && 'sm:whitespace-pre']}><code set:html={displayCode} /></pre>
     {
       !label && (
         <button

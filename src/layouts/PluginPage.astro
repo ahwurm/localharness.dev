@@ -1,12 +1,13 @@
 ---
 // The plugin-page template (/plugins/<name>/): SectionBand → breadcrumb → one-line lead →
-// the page's figures and explainer rows (default slot) → Surfaces (where you reach it, what is
-// not there yet, receipts) → GetInvolved. TechArticle + BreadcrumbList JSON-LD go through Base.
+// the page's figures and explainer rows (default slot) → Setup (SetupFlow: the plugin's setup step
+// and its coding-agent prompt) → Surfaces (where you reach it, receipts) → GetInvolved. TechArticle + BreadcrumbList JSON-LD go through Base.
 // Every row a page passes traces to localharness public main (README plugins table, spec 09,
-// SECURITY.md, the plugin module docstrings, CHANGELOG [0.16.0] Known limitations).
+// SECURITY.md, the plugin module docstrings). Unshipped pieces live on the plates' key, not in rows.
 import Base from './Base.astro';
 import SectionBand from '../components/SectionBand.astro';
 import Rows, { type Row } from '../components/Rows.astro';
+import SetupFlow from '../components/SetupFlow.astro';
 import GetInvolved from '../components/GetInvolved.astro';
 import type { IconName } from '../components/Icon.astro';
 
@@ -17,10 +18,9 @@ interface Props {
   description: string; // the one sentence a search engine or model would quote
   lead: string;
   surfaces: Row[];
-  notYet: Row[];
   receipts: [string, string][];
 }
-const { name, label, icon, description, lead, surfaces, notYet, receipts } = Astro.props;
+const { name, label, icon, description, lead, surfaces, receipts } = Astro.props;
 const SITE = 'https://localharness.dev';
 const url = `${SITE}/plugins/${name}/`;
 const title = `LocalHarness — the ${name} plugin`;
@@ -66,19 +66,19 @@ const jsonLd = [
     </div>
   </section>
 
+  <section id="setup" data-reveal>
+    <SectionBand icon="check" title="Setup" />
+    <div class="container-site py-16 sm:py-20">
+      <p class="measure text-dim">One switch, one settings file, a check that it answers — then hand the hardware part to your coding agent.</p>
+      <SetupFlow name={name} />
+    </div>
+  </section>
+
   <section id="surfaces" data-reveal>
     <SectionBand icon="prompt" title="Surfaces" />
     <div class="container-site py-16 sm:py-20">
-      <div class="grid gap-x-12 gap-y-8 xl:grid-cols-2">
-        <div>
-          <p class="eyebrow">where you reach it</p>
-          <Rows rows={surfaces} />
-        </div>
-        <div>
-          <p class="eyebrow">what is not there yet</p>
-          <Rows rows={notYet} />
-        </div>
-      </div>
+      <p class="eyebrow">where you reach it</p>
+      <Rows rows={surfaces} />
       <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-xs">
         <span class="text-dim">_deeper</span>
         {receipts.map(([l, href]) => (

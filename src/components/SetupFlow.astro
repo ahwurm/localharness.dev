@@ -1,0 +1,92 @@
+---
+// One plugin's setup step as a looping typed replay (ReplayTerminal idiom), then the copyable
+// "paste this into your coding agent" prompt — the AI user flow for the hardware-specific half.
+// Data + provenance in src/data/plugins.ts SETUP. Server renders the finished state; JS (motion
+// permitting, while on screen) hides-then-types, holds on the finished state, and restarts.
+// Lines keep their box while hidden (visibility), so the frame never jumps.
+import CodeBlock from './CodeBlock.astro';
+import { SETUP } from '../data/plugins';
+interface Props {
+  name: string;
+}
+const { name } = Astro.props;
+const flow = SETUP[name];
+if (!flow) throw new Error(`SetupFlow: no SETUP entry for '${name}'`);
+const shipped = flow.state === 'shipped';
+const tone: Record<string, string> = { good: 'text-accent/90', dim: 'text-dim', out: 'text-ink/85', ask: 'text-ink/85' };
+---
+
+<div data-setup-flow class="mt-6">
+  <div class="overflow-hidden border border-edge bg-surface/80">
+    <div class="flex items-center justify-between gap-4 border-b border-edge/70 px-4 py-2">
+      <span class="min-w-0 truncate font-mono text-xs text-dim">~ — setup · {name}</span>
+      <span class="inline-flex shrink-0 items-center gap-1.5 font-mono text-[11px] text-dim">
+        <span
+          class:list={['inline-block size-2 border', shipped ? 'border-ink' : 'border-dim']}
+          style={shipped ? undefined : 'background:repeating-linear-gradient(45deg,var(--color-dim) 0 1px,transparent 1px 3px)'}
+        ></span>
+        {shipped ? 'shipped' : 'landing'}
+      </span>
+    </div>
+    <div class="p-4 font-mono text-[13px] leading-[1.75]">
+      {
+        flow.lines.map((l, i) =>
+          l.kind === 'cmd' ? (
+            <div data-sf-line={i} class="whitespace-pre-wrap [overflow-wrap:anywhere]"><span class="select-none text-accent/80">$ </span><span class="text-ink" data-sf-type={l.text}>{l.text}</span></div>
+          ) : (
+            <div data-sf-line={i} data-sf-ask={l.kind === 'ask' ? '' : undefined} class:list={['whitespace-pre-wrap [overflow-wrap:anywhere]', tone[l.kind]]}>{l.text}{l.kind === 'ask' && l.answer && <span class="text-ink" data-sf-type={l.answer}>{l.answer}</span>}</div>
+          )
+        )
+      }
+    </div>
+  </div>
+  <p class="mt-3 font-mono text-[11px] text-dim">
+    {shipped ? '_this step runs today, on plugins enable' : '_landing — the setup wizard will run this step; it is not released yet'}
+  </p>
+  <CodeBlock class="mt-6" wrap label="paste this into your coding agent to set it up for your hardware" code={flow.prompt} />
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-setup-flow]').forEach((root) => {
+    if (root.dataset.sfInit) return;
+    root.dataset.sfInit = '1';
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const lines = [...root.querySelectorAll<HTMLElement>('[data-sf-line]')];
+    let timers: number[] = [];
+    let on = false;
+    const at = (t: number, fn: () => void) => timers.push(window.setTimeout(fn, t));
+    const play = () => {
+      timers.forEach(clearTimeout);
+      timers = [];
+      lines.forEach((el) => (el.style.visibility = 'hidden'));
+      root.querySelectorAll<HTMLElement>('[data-sf-type]').forEach((el) => (el.textContent = ''));
+      let t = 500;
+      for (const el of lines) {
+        at(t, () => (el.style.visibility = 'visible'));
+        const typed = el.querySelector<HTMLElement>('[data-sf-type]');
+        if (typed) {
+          const text = typed.dataset.sfType ?? '';
+          const lead = el.querySelector('.select-none') ? 150 : 700; // a question waits for the answer
+          [...text].forEach((c, ci) => at(t + lead + ci * 28, () => (typed.textContent += c)));
+          t += lead + text.length * 28 + 350;
+        } else t += el.hasAttribute('data-sf-ask') ? 1100 : 380; // a question waits for Enter
+      }
+      at(t + 4200, () => on && play()); // hold on the finished state, then restart
+    };
+    new IntersectionObserver(
+      (entries) => {
+        const vis = entries.some((e) => e.isIntersecting);
+        if (vis && !on) {
+          on = true;
+          play();
+        } else if (!vis && on) {
+          on = false;
+          timers.forEach(clearTimeout);
+          lines.forEach((el) => (el.style.visibility = 'visible'));
+          root.querySelectorAll<HTMLElement>('[data-sf-type]').forEach((el) => (el.textContent = el.dataset.sfType ?? ''));
+        }
+      },
+      { threshold: 0.3 }
+    ).observe(root);
+  });
+</script>

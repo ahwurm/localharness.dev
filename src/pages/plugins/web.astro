@@ -1,7 +1,7 @@
 ---
 // /plugins/web/ — the web plugin, the phone app (PluginPage template). Rows trace to
 // localharness main @ 582b69c: cli/web_plugin.py, channels/web/protocol.py, SECURITY.md
-// "`localharness web`", README plugins table + docs/web.md, CHANGELOG [0.16.0] Known limitations.
+// "`localharness web`", README plugins table + docs/web.md.
 import PluginPage from '../../layouts/PluginPage.astro';
 import FigureFrame from '../../components/FigureFrame.astro';
 import Rows, { type Row } from '../../components/Rows.astro';
@@ -24,13 +24,6 @@ const surfaces: Row[] = [
   ['doc', 'settings', 'none yet — the port and the bind are flags.'],
   ['meter-off', 'localharness plugins disable web', 'on by default once the web extra is installed; disable takes the command away.'],
 ];
-const notYet: Row[] = [
-  ['globe', 'a reference page', 'the page it ships is bare — not a finished chat app.', 'shipped'],
-  ['shield', 'no per-device revoke', 'rotating the token cuts off every phone at once.', 'shipped'],
-  ['search', 'the label covers web tools only', 'a plugin tool that reads untrusted text is not labeled on the phone.', 'shipped'],
-  ['layers', 'the memory screen', 'it has no promote button, and it has not yet been checked on a phone.', 'shipped'],
-  ['clock', 'incognito is not private', 'memory, sessions and pictures are still written to the box.', 'shipped'],
-];
 const receipts: [string, string][] = [
   ['cli/web_plugin.py', blob('src/localharness/cli/web_plugin.py')],
   ['channels/web/protocol.py', blob('src/localharness/channels/web/protocol.py')],
@@ -44,10 +37,9 @@ const receipts: [string, string][] = [
   name="web"
   label="Web"
   icon="globe"
-  description="The LocalHarness web plugin is the phone app: localharness web serves a token-locked page and event stream from your own machine, and marks web-tool results as untrusted."
-  lead="The phone app is a plugin — it adds the web channel and the command that serves it, and switching it off removes both."
+  description="The LocalHarness web plugin is the phone app for your local agent: localharness web serves a token-locked page from your own machine, paired by a QR code, and one command switches it off."
+  lead="The phone app is one command away — install the web extra, run localharness web, scan the code; switching it off removes the channel and the command."
   surfaces={surfaces}
-  notYet={notYet}
   receipts={receipts}
 >
   <div class="mt-10">

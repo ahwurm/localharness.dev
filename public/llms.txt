@@ -42,23 +42,28 @@ straight to the source:
   permissions, and everything else is a plugin behind one additive API (manifest, lifecycle,
   slots, doctor, the off switch, the one-way import rule): https://localharness.dev/architecture/#plugins
 
-Plugin pages, one per bundled plugin in code order — each with a plate of what the plugin owns
-versus what core provides, its surfaces (commands, settings, the on/off switch), and what is not
-there yet:
+Plugin pages, one per bundled plugin in code order — the configurable on-ramp for running
+LocalHarness against a local model. Each page has a plate of what the plugin owns versus what core
+provides, its surfaces (commands, settings, the on/off switch), and its setup step: the settings it
+asks for, a check that it answers, plain next steps, and a prompt to paste into your coding agent to
+set it up for your hardware (image's step ships in `plugins enable image`; the setup wizard that runs
+the other four is landing, not released):
 
-- Image — `generate_image` and `localharness generate-image` against your own ComfyUI server;
-  pictures land as artifacts in a folder core assigns; off by default:
+- Image — lets the agent make pictures with ComfyUI and local image models: `generate_image` and
+  `localharness generate-image`, your server's address and workflow as machine-level settings,
+  pictures saved in a folder core assigns; off by default, one `plugins enable image` to turn on:
   https://localharness.dev/plugins/image/
-- Web — the phone app: `localharness web` serves a token-locked page and event stream on
-  loopback, and labels results of the built-in web tools as untrusted ingest:
+- Web — the phone app for your local agent: `localharness web` serves a token-locked page from your
+  own machine on loopback, paired by a QR code; on once the web extra is installed:
   https://localharness.dev/plugins/web/
-- Memory — the plugin behind the memory slot, plus a detail sheet inside its store, down to one
-  fact's life: https://localharness.dev/plugins/memory/
-- Dispatch — Discord as a channel (`start --channel discord`): allowlisted messages become turns,
-  permission questions are answered by reaction, and the token, allow list and channels are
-  machine-level settings: https://localharness.dev/plugins/dispatch/
-- Autoresearch — the propose → experiment → archive loop, gated by a sealed holdout the proposer
-  never sees; a clean win is written to your global settings and undone in one command:
+- Memory — facts that outlive the session, recalled into each turn and consolidated while idle, on
+  a small local embedding model; on by default, `memory.enabled: false` to turn off:
+  https://localharness.dev/plugins/memory/
+- Dispatch — drive your local agent from Discord (`start --channel discord`): a bot token and your
+  user id in one machine-level settings file, permission questions answered by reaction:
+  https://localharness.dev/plugins/dispatch/
+- Autoresearch — the propose → experiment → archive loop that tunes the harness for your model,
+  gated by a sealed holdout the proposer never sees; point it at a second model to propose:
   https://localharness.dev/plugins/autoresearch/
 
 A single root orchestrator agent reads the task and runs a ReAct loop — think, act, look — kept
@@ -155,8 +160,8 @@ It ships as the bundled `autoresearch` plugin. On-site: https://localharness.dev
 - [LocalHarness](https://localharness.dev/): product page
 - [Architecture](https://localharness.dev/architecture/): how it's built — the runtime on one plate,
   the agent loop and its gates, and the plugins
-- [Image plugin](https://localharness.dev/plugins/image/): pictures from your own ComfyUI server
-- [Web plugin](https://localharness.dev/plugins/web/): the phone app and its untrusted-ingest label
+- [Image plugin](https://localharness.dev/plugins/image/): pictures from ComfyUI and local image models
+- [Web plugin](https://localharness.dev/plugins/web/): the phone app, served from your own machine
 - [Memory plugin](https://localharness.dev/plugins/memory/): the memory slot, its plugin, and one
   fact's life inside the store
 - [Dispatch plugin](https://localharness.dev/plugins/dispatch/): drive a session from Discord

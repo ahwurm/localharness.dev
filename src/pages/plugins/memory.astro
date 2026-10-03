@@ -2,7 +2,7 @@
 // /plugins/memory/ — the memory plugin (PluginPage template). The plates moved here from
 // /architecture/#memory and were rebuilt against localharness main (memory unchanged from 98682e4
 // to 582b69c, v0.16.0). Every row traces to docs/specs/09-hooks-plugins.md "The memory slot",
-// memory/*.py docstrings, README, or the CHANGELOG [0.16.0] Known limitations.
+// memory/*.py docstrings, README.
 import PluginPage from '../../layouts/PluginPage.astro';
 import FigureFrame from '../../components/FigureFrame.astro';
 import Rows, { type Row } from '../../components/Rows.astro';
@@ -31,12 +31,6 @@ const surfaces: Row[] = [
   ['search', 'memory_search · memory_get · remember', 'the three tools an agent calls inside a session.'],
   ['meter-off', 'memory.enabled', 'set it to false and there is no memory section, no memory tool and no /memory.'],
 ];
-const notYet: Row[] = [
-  ['clock', 'subagent gists', 'a cruncher run asks memory for a write handle and gets none, so its gists are not stored.', 'planned'],
-  ['shield', 'remember is trusted', 'what remember returns is treated as trusted text, while search and get results are fenced as untrusted.', 'shipped'],
-  ['repeat', 'silent events', 'several memory event types are still defined, but nothing sends them.', 'shipped'],
-  ['doc', 'an inert setting', 'inject_into_context is accepted, but no code reads it.', 'shipped'],
-];
 const receipts: [string, string][] = [
   ['memory/plugin.py', blob('src/localharness/memory/plugin.py')],
   ['memory/sqlite.py', blob('src/localharness/memory/sqlite.py')],
@@ -52,10 +46,9 @@ const receipts: [string, string][] = [
   name="memory"
   label="Memory"
   icon="layers"
-  description="The LocalHarness memory plugin fills the core's one memory slot: facts that outlive the session, recalled into each turn within a budget the core sets, and consolidated while idle."
-  lead="Memory is a plugin — it fills the core’s one memory slot, and switching it off leaves the slot empty."
+  description="The LocalHarness memory plugin gives a local agent facts that outlive the session: on by default, recalled into each turn within a budget the core sets, consolidated while idle, and off with one switch."
+  lead="Memory comes switched on — it runs on a small embedding model on your own CPU, its settings sit in one file, and switching it off leaves the core’s slot empty."
   surfaces={surfaces}
-  notYet={notYet}
   receipts={receipts}
 >
   <div class="mt-10">

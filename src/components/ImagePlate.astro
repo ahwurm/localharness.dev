@@ -3,7 +3,7 @@
 // /plugins/image/). Left: CORE (the registry and its capability floor, the config layers
 // with the machine-level-only fields, the artifact folder core computes). Hairline: the plugin
 // boundary. Middle: the IMAGE PLUGIN (the generate_image tool, the plugin class, the command and
-// doctor). Right: OUTSIDE (your ComfyUI server, the phone page of the web plugin). Badges ①–⑤ =
+// doctor). Right: OUTSIDE (your ComfyUI server). Badges ①–⑤ =
 // one picture. Sources (localharness main @ 582b69c, v0.16.0): tools/builtin/image_plugin.py,
 // tools/builtin/generate_image_tool.py, docs/specs/09-hooks-plugins.md "The bundled plugins" +
 // "Artifacts", SECURITY.md "Plugins", CHANGELOG [0.16.0] Known limitations. Geometry and colours
@@ -23,15 +23,14 @@ const nodes: [number, number, number, number, Tone, string, string[]][] = [
   [512, 190, 380, 52, 'plugin', 'ImagePlugin', ['kind tools · off by default · wants_artifacts', 'configure(): unconfigured until comfyui_url is set']],
   [512, 266, 380, 52, 'plugin', 'generate-image · doctor()', ['localharness generate-image — the same, from the shell', 'doctor: does ComfyUI answer, with the model files?']],
   [938, 114, 194, 128, 'out', 'your ComfyUI', ['you start it and fetch the', 'model files — LocalHarness', 'does neither', '', 'runs the workflow template', 'shipped: qwen-image-2.1']],
-  [938, 266, 194, 52, 'out', 'the phone page', ['web plugin · by artifact id', 'the terminal shows none']],
 ];
 const badge = (cx: number, cy: number, n: number, hollow = false) => ({ cx, cy, n, hollow });
-const badges = [badge(478, 134, 1), badge(915, 134, 2), badge(915, 152, 3, true), badge(490, 250, 4), badge(640, 356, 5)];
+const badges = [badge(478, 134, 1), badge(915, 134, 2), badge(915, 152, 3, true), badge(490, 250, 4)];
 ---
 
 <figure
   role="img"
-  aria-label="Plate image: what the image plugin owns and what core provides, one picture numbered one to five. Core holds the tool registry, which registers generate_image and whose capability floor reads the tool's declarations; the config layers, where image.comfyui_url and image.workflow are machine-level only and a project's value is dropped with a warning; and the artifact folder, state dir slash artifacts slash image, which core computes and writes into only through write_artifact — png, jpeg or webp, a core-minted id, never overwriting. Across the plugin boundary the image plugin owns the generate_image tool, which declares ingest none, host safe and a trusted result and takes no path; the plugin class, kind tools, off by default, unconfigured until comfyui_url is set; and the generate-image command and a doctor check that asks ComfyUI whether it answers and has the model files. Outside: your ComfyUI server, which you start and whose model files you fetch, running the workflow template, by default the shipped qwen-image-2.1; and the phone page of the web plugin, which shows the picture by its artifact id — the terminal shows none. One: the agent calls generate_image. Two: the tool posts the workflow to ComfyUI. Three: the picture comes back. Four: the tool writes it into the artifact folder through write_artifact. Five: the artifact reference rides the tool-result observation to the phone."
+  aria-label="Plate image: what the image plugin owns and what core provides, one picture numbered one to four. Core holds the tool registry, which registers generate_image and whose capability floor reads the tool's declarations; the config layers, where image.comfyui_url and image.workflow are machine-level only and a project's value is dropped with a warning; and the artifact folder, state dir slash artifacts slash image, which core computes and writes into only through write_artifact — png, jpeg or webp, a core-minted id, never overwriting. Across the plugin boundary the image plugin owns the generate_image tool, which declares ingest none, host safe and a trusted result and takes no path; the plugin class, kind tools, off by default, unconfigured until comfyui_url is set; and the generate-image command and a doctor check that asks ComfyUI whether it answers and has the model files. Outside: your ComfyUI server, which you start and whose model files you fetch, running the workflow template, by default the shipped qwen-image-2.1. One: the agent calls generate_image. Two: the tool posts the workflow to ComfyUI. Three: the picture comes back. Four: the tool writes it into the artifact folder through write_artifact."
 >
   <div class="hidden w-full lg:block" aria-hidden="true">
     <svg viewBox="0 0 1160 424" class="w-full">
@@ -83,7 +82,6 @@ const badges = [badge(478, 134, 1), badge(915, 134, 2), badge(915, 152, 3, true)
         <line x1="444" y1="134" x2="511" y2="134" marker-end="url(#pi-solid)"></line>
         <line x1="892" y1="134" x2="937" y2="134" marker-end="url(#pi-solid)"></line>
         <path d="M512,158 L490,158 L490,292 L445,292" marker-end="url(#pi-solid)"></path>
-        <path d="M236,318 L236,356 L1035,356 L1035,319" marker-end="url(#pi-solid)"></path>
       </g>
       <g class="fill-none stroke-dim" stroke-width={edge.return.strokeWidth} stroke-dasharray={edge.return.dash}>
         <line x1="938" y1="152" x2="893" y2="152" marker-end="url(#pi-dash)"></line>
@@ -94,7 +92,6 @@ const badges = [badge(478, 134, 1), badge(915, 134, 2), badge(915, 152, 3, true)
       <text x="898" y="166" class="fill-dim font-mono text-[8.5px]">PNG</text>
       <text x="448" y="210" class="fill-dim font-mono text-[8.5px]">ctx.config</text>
       <text x="398" y="286" class="fill-dim font-mono text-[8.5px]">write</text>
-      <text x="652" y="372" class="fill-dim font-mono text-[8.5px]">ArtifactRef rides the tool-result Observation — never a path read out of the text</text>
 
       <!-- ===== nodes ===== -->
       {nodes.map(([x, y, w, h, tone, label, subs]) => (
@@ -138,7 +135,6 @@ const badges = [badge(478, 134, 1), badge(915, 134, 2), badge(915, 152, 3, true)
       { n: 2, icon: 'server', title: 'the tool posts the workflow', text: 'to your ComfyUI, at the machine-level image.comfyui_url' },
       { n: 3, icon: 'repeat', title: 'the picture comes back', text: 'from the workflow template — shipped: qwen-image-2.1' },
       { n: 4, icon: 'box', title: 'core’s folder', text: '<state dir>/artifacts/image/ — write_artifact, core-minted id, no overwrite' },
-      { n: 5, icon: 'globe', title: 'the phone shows it', text: 'by artifact id on the tool result — the terminal shows none' },
       { kind: 'loop', icon: 'check', title: 'doctor', text: 'does ComfyUI answer, with the template’s model files?' },
       { kind: 'note', text: 'off by default — localharness plugins enable image --set comfyui_url=<url>.' },
     ]}

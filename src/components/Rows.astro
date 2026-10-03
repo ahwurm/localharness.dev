@@ -1,8 +1,7 @@
 ---
-// Icon-led explainer rows: [icon, keyword, clause, state?]. With a state the row carries the
-// plate key's mark — 'shipped' (as is, solid) or 'planned' (dashed) — for "not there yet" lists.
+// Icon-led explainer rows: [icon, keyword, clause].
 import Icon, { type IconName } from './Icon.astro';
-export type Row = [IconName, string, string, ('shipped' | 'planned')?];
+export type Row = [IconName, string, string];
 interface Props {
   rows: Row[];
   class?: string;
@@ -11,18 +10,12 @@ const { rows, class: className = 'space-y-2.5' } = Astro.props;
 ---
 
 <ul class:list={['mt-3', className]}>
-  {rows.map(([icon, kw, clause, state]) => (
+  {rows.map(([icon, kw, clause]) => (
     <li class="flex items-start gap-3">
       <Icon name={icon} class="size-4" />
       <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
         <span class="font-mono text-[13px] text-ink">{kw}</span>
         <span class="text-sm text-dim">{clause}</span>
-        {state && (
-          <span class="inline-flex items-center gap-1.5 font-mono text-[11px] text-dim">
-            <span class:list={['inline-block size-2 border', state === 'planned' ? 'border-dashed border-dim' : 'border-ink']}></span>
-            {state === 'planned' ? 'planned' : 'shipped, as is'}
-          </span>
-        )}
       </span>
     </li>
   ))}

@@ -2,7 +2,7 @@
 // /plugins/autoresearch/ — the autoresearch plugin (PluginPage template). The plate moved here
 // from /architecture/#autoresearch. Rows trace to localharness main @ 582b69c:
 // autoresearch/{plugin,loop,proposer,experiment,adoption,sampler,budget}.py docstrings, spec 09
-// "The bundled plugins", README plugins table, CHANGELOG [0.16.0] Known limitations.
+// "The bundled plugins", README plugins table.
 import PluginPage from '../../layouts/PluginPage.astro';
 import FigureFrame from '../../components/FigureFrame.astro';
 import Rows, { type Row } from '../../components/Rows.astro';
@@ -25,12 +25,6 @@ const surfaces: Row[] = [
   ['prompt', 'slash commands', 'none — it adds nothing to a session.'],
   ['meter-off', 'localharness plugins disable autoresearch', 'on by default; off sets it aside and deletes nothing, and the bench stays core.'],
 ];
-const notYet: Row[] = [
-  ['doc', 'a plain-text key', 'components set proposer.api_key writes the key as plain text to the global overrides.yaml.', 'shipped'],
-  ['repeat', 'shared exit codes', 'in two failure cases a script gets the same exit code an experiment uses for a verdict.', 'shipped'],
-  ['meter-off', 'one row stays', 'with autoresearch off, components list still shows its enabled row.', 'shipped'],
-  ['layers', 'old names, bundled only', 'only a bundled plugin may own core settings under their old names; one you install cannot.', 'shipped'],
-];
 const receipts: [string, string][] = [
   ['autoresearch/plugin.py', blob('src/localharness/autoresearch/plugin.py')],
   ['autoresearch/loop.py', blob('src/localharness/autoresearch/loop.py')],
@@ -45,10 +39,9 @@ const receipts: [string, string][] = [
   name="autoresearch"
   label="Autoresearch"
   icon="gauge"
-  description="The LocalHarness autoresearch plugin is the loop that tunes the harness: a stronger model proposes one change, a sealed test set it never sees decides, and every attempt is archived."
-  lead="Autoresearch is a plugin — it adds three commands and nothing to a session, and switching it off deletes nothing."
+  description="The LocalHarness autoresearch plugin is the loop that tunes the harness for your local model: a stronger model proposes one change, a sealed test set it never sees decides, and one switch turns it off."
+  lead="Autoresearch comes switched on — it adds three commands and nothing to a session, needs only a second model to propose, and switching it off deletes nothing."
   surfaces={surfaces}
-  notYet={notYet}
   receipts={receipts}
 >
   <div class="mt-10">
