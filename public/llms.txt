@@ -64,7 +64,8 @@ the plugin on and your conversation kept, or from a shell with
   user id in one machine-level settings file, permission questions answered by reaction:
   https://localharness.dev/plugins/dispatch/
 - Autoresearch — the propose → experiment → archive loop that tunes the harness for your model,
-  gated by a sealed holdout the proposer never sees; point it at a second model to propose:
+  gated by a sealed holdout the proposer never sees; the proposer is your local model again or a
+  cloud API:
   https://localharness.dev/plugins/autoresearch/
 
 A single root orchestrator agent reads the task and runs a ReAct loop — think, act, look — kept

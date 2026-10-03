@@ -11,7 +11,7 @@ import AutoresearchPlate from '../../components/AutoresearchPlate.astro';
 const blob = (p: string) => `https://github.com/ahwurm/localharness/blob/main/${p}`;
 
 const how: Row[] = [
-  ['studio', 'a stronger model proposes', 'a separate model reads failed practice runs and suggests one change at a time.'],
+  ['studio', 'a proposer suggests', 'your local model again, or a cloud model, reads failed practice runs and suggests one change at a time.'],
   ['box', 'tested in a copy', 'each change runs in a throwaway checkout; your setup is untouched.'],
   ['gauge', 'kept only on a clear win', 'a change must beat the current version by more than luck, or it is archived.'],
   ['clock', 'a sealed test set', 'the proposer is never shown its runs; it only scores.'],
@@ -39,8 +39,8 @@ const receipts: [string, string][] = [
   name="autoresearch"
   label="Autoresearch"
   icon="gauge"
-  description="The LocalHarness autoresearch plugin tunes the harness for your local model: a stronger model proposes one change, and a sealed test set it never sees decides."
-  lead="On by default; it needs a second model to propose, adds nothing to a session, and turning it off deletes nothing."
+  description="The LocalHarness autoresearch plugin tunes the harness for your local model: a proposer suggests one change, and a sealed test set it never sees decides."
+  lead="On by default; it needs a proposer (your local model again, or a cloud API), adds nothing to a session, and turning it off deletes nothing."
   surfaces={surfaces}
   receipts={receipts}
 >

@@ -16,7 +16,8 @@ export const PLUGINS: { name: string; href: string; icon: IconName; clause: stri
 // the plugin on and the conversation kept; the shell's `localharness plugins enable <name>` runs the
 // same step (its success line adds "takes effect on the next `localharness start`"). Sources:
 // localharness @ 0f54f1d (branch feature/setup-wizard; not released when this was written — publish
-// this with the release that carries it).
+// this with the release that carries it); autoresearch's step re-captured @ e7918c3 (its API key
+// question, and the line naming the host before the check).
 // - frame: cli/ui.py startup_banner (wordmark, model, cwd; version left out) and start_cmd.py's
 //   `Plugins: <running names>` line, in BUILTIN_PLUGINS order. memory and autoresearch are on by
 //   default with no extra, so they are the frame's other running plugins: enabling one of them
@@ -27,7 +28,8 @@ export const PLUGINS: { name: string; href: string; icon: IconName; clause: stri
 //   restart lines are repl.py PLUGINS_RESTARTING and start_cmd.py RESTARTED_LINE / _resume_status.
 //   Questions render as typer prints them ("<prompt> [<default>]: "); the token is never echoed.
 //   Answers are examples: Enter for image's default and for web's guess, an illustrative Discord
-//   user id, and for autoresearch the local example in config/models.py ProposerConfig. web's Enter
+//   user id, and for autoresearch the local example in config/models.py ProposerConfig, Enter at
+//   its key question (a local server). web's Enter
 //   leaves its check at "not enrolled yet", so the CLI prints its coding-agent prompt there (shown
 //   under the frame) and the status line names it. memory's download progress bar is left out.
 // - in use: /memory on an empty store (cli/memory_cmd.py); the generate_image call/result rows
@@ -136,11 +138,13 @@ export const SETUP: Record<string, SetupFlowData> = {
   autoresearch: flow(
     'autoresearch',
     [
-      { kind: 'ask', text: 'Proposer address (an OpenAI-compatible base URL): ', answer: 'http://127.0.0.1:11434/v1' },
-      { kind: 'ask', text: 'Proposer model id (not your main model): ', answer: 'gpt-oss:120b' },
+      { kind: 'ask', text: 'Proposer address (an OpenAI-compatible base URL — a local server or a cloud API): ', answer: 'http://127.0.0.1:11434/v1' },
+      { kind: 'ask', text: 'Proposer model id: ', answer: 'gpt-oss:120b' },
+      { kind: 'ask', text: 'Proposer API key (leave empty for a local server): ', answer: '' },
       enabled('autoresearch'),
       { kind: 'out', text: "  set proposer.base_url = 'http://127.0.0.1:11434/v1'" },
       { kind: 'out', text: "  set proposer.model = 'gpt-oss:120b'" },
+      { kind: 'out', text: 'Contacting the proposer at http://127.0.0.1:11434 …' },
       { kind: 'good', text: '✓ autoresearch-proposer: the proposer answers at http://127.0.0.1:11434/v1 and serves gpt-oss:120b' },
       checking,
       { kind: 'good', text: '✓ autoresearch: proposer: gpt-oss:120b at http://127.0.0.1:11434/v1' },
@@ -148,6 +152,6 @@ export const SETUP: Record<string, SetupFlowData> = {
     ],
     on('autoresearch'),
     [],
-    "Set up the LocalHarness autoresearch plugin on this machine. It needs a proposer: a second model, different from the one LocalHarness already runs on, served behind an OpenAI-compatible endpoint. Pick the strongest model this hardware can serve alongside the main one and serve it locally. Then run `localharness plugins enable autoresearch` and give it that address and model id. Leave proposer.api_key unset for a local server. You are done when `localharness doctor` shows the proposer row passing."
+    "Set up the LocalHarness autoresearch plugin on this machine. It needs a proposer behind an OpenAI-compatible endpoint: a second local endpoint, where the model LocalHarness already runs on is fine, or a cloud API with its API key. For a local proposer, serve the main model again (or another model this hardware can run alongside it). Then run `localharness plugins enable autoresearch` and give it the proposer's address and model id. Leave the key empty for a local server; for a cloud API, let me type the key at its hidden prompt myself: never print the key or paste it into this chat. You are done when `localharness doctor` shows the proposer row passing."
   ),
 };
