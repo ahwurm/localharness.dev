@@ -7,7 +7,7 @@ export default defineConfig({
   output: 'static',
   integrations: [
     sitemap({
-      filter: (page) => !/\/(404|github|docs)\/?$/.test(new URL(page).pathname),
+      filter: (page) => !/\/(404|github|docs|plugins\/web)\/?$/.test(new URL(page).pathname),
     }),
   ],
   vite: { plugins: [tailwindcss()] },
@@ -15,5 +15,7 @@ export default defineConfig({
     '/github': 'https://github.com/ahwurm/localharness',
     '/localshift/github': 'https://github.com/ahwurm/localshift',
     '/docs': 'https://github.com/ahwurm/localharness/tree/main/docs/specs',
+    // the web plugin's page was renamed Mobile 2026-10-02 ("web" read as web search)
+    '/plugins/web': '/plugins/mobile/',
   },
 });

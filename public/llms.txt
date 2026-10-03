@@ -53,9 +53,9 @@ the other four is landing, not released):
   `localharness generate-image`, your server's address and workflow as machine-level settings,
   pictures saved in a folder core assigns; off by default, one `plugins enable image` to turn on:
   https://localharness.dev/plugins/image/
-- Web — the phone app for your local agent: `localharness web` serves a token-locked page from your
+- Mobile (the `web` plugin in the CLI) — the phone app for your local agent: `localharness web` serves a token-locked page from your
   own machine on loopback, paired by a QR code; on once the web extra is installed:
-  https://localharness.dev/plugins/web/
+  https://localharness.dev/plugins/mobile/
 - Memory — facts that outlive the session, recalled into each turn and consolidated while idle, on
   a small local embedding model; on by default, `memory.enabled: false` to turn off:
   https://localharness.dev/plugins/memory/
@@ -94,7 +94,7 @@ documented opt-in examples instead. Define your own subagents in YAML.
 ### Plugins
 
 LocalHarness is a small core plus plugins. Five features ship as bundled plugins — image
-generation (off until you turn it on), the phone app (`web`), memory, Discord chat (`dispatch`)
+generation (off until you turn it on), the Mobile phone app (`web` in the CLI), memory, Discord chat (`dispatch`)
 and autoresearch (each on by default). A plugin declares itself in a manifest in code, fills a
 port core already has (a tool, a channel, a command, or the one memory slot), and runs through one
 lifecycle each session: configure, tools, start, then stop in reverse order. A plugin that fails is
@@ -161,7 +161,7 @@ It ships as the bundled `autoresearch` plugin. On-site: https://localharness.dev
 - [Architecture](https://localharness.dev/architecture/): how it's built — the runtime on one plate,
   the agent loop and its gates, and the plugins
 - [Image plugin](https://localharness.dev/plugins/image/): pictures from ComfyUI and local image models
-- [Web plugin](https://localharness.dev/plugins/web/): the phone app, served from your own machine
+- [Mobile plugin](https://localharness.dev/plugins/mobile/): the phone app, served from your own machine
 - [Memory plugin](https://localharness.dev/plugins/memory/): the memory slot, its plugin, and one
   fact's life inside the store
 - [Dispatch plugin](https://localharness.dev/plugins/dispatch/): drive a session from Discord

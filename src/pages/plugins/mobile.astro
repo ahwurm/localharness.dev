@@ -1,5 +1,7 @@
 ---
-// /plugins/web/ — the web plugin, the phone app (PluginPage template). Rows trace to
+// /plugins/mobile/ — the mobile plugin (code name `web`), the phone app (PluginPage template).
+// Renamed from /plugins/web/ 2026-10-02 (owner: "web" reads as web search); the old path redirects
+// via astro.config.mjs `redirects`. Commands and keys keep the code name `web`. Rows trace to
 // localharness main @ 582b69c: cli/web_plugin.py, channels/web/protocol.py, SECURITY.md
 // "`localharness web`", README plugins table + docs/web.md.
 import PluginPage from '../../layouts/PluginPage.astro';
@@ -22,7 +24,7 @@ const surfaces: Row[] = [
   ['repeat', '--incognito · --replay · --ui-dir', 'pictures kept out of the phone’s cache, a recorded session, or your own page.'],
   ['prompt', 'slash commands', 'none of its own, and the phone page has no command menu.'],
   ['doc', 'settings', 'none yet — the port and the bind are flags.'],
-  ['meter-off', 'localharness plugins disable web', 'on by default once the web extra is installed; disable takes the command away.'],
+  ['meter-off', 'localharness plugins disable web', 'the mobile page is the web plugin in the CLI — on by default once the web extra is installed; disable takes the command away.'],
 ];
 const receipts: [string, string][] = [
   ['cli/web_plugin.py', blob('src/localharness/cli/web_plugin.py')],
@@ -34,10 +36,11 @@ const receipts: [string, string][] = [
 ---
 
 <PluginPage
-  name="web"
-  label="Web"
+  name="mobile"
+  cli="web"
+  label="Mobile"
   icon="globe"
-  description="The LocalHarness web plugin is the phone app for your local agent: localharness web serves a token-locked page from your own machine, paired by a QR code, and one command switches it off."
+  description="The LocalHarness mobile plugin is the phone app for your local agent: localharness web serves a token-locked page from your own machine, paired by a QR code, and one command switches it off."
   lead="The phone app is one command away — install the web extra, run localharness web, scan the code; switching it off removes the channel and the command."
   surfaces={surfaces}
   receipts={receipts}

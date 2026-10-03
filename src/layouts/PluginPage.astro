@@ -13,6 +13,7 @@ import type { IconName } from '../components/Icon.astro';
 
 interface Props {
   name: string; // slug, e.g. 'image'
+  cli?: string; // the plugin's code name when the page name differs (mobile → web); keys SetupFlow
   label: string; // band title, e.g. 'Image'
   icon: IconName;
   description: string; // the one sentence a search engine or model would quote
@@ -20,7 +21,7 @@ interface Props {
   surfaces: Row[];
   receipts: [string, string][];
 }
-const { name, label, icon, description, lead, surfaces, receipts } = Astro.props;
+const { name, cli = name, label, icon, description, lead, surfaces, receipts } = Astro.props;
 const SITE = 'https://localharness.dev';
 const url = `${SITE}/plugins/${name}/`;
 const title = `LocalHarness — the ${name} plugin`;
@@ -70,7 +71,7 @@ const jsonLd = [
     <SectionBand icon="check" title="Setup" />
     <div class="container-site py-16 sm:py-20">
       <p class="measure text-dim">One switch, one settings file, a check that it answers — then hand the hardware part to your coding agent.</p>
-      <SetupFlow name={name} />
+      <SetupFlow name={cli} />
     </div>
   </section>
 
