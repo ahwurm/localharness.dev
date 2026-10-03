@@ -1,0 +1,61 @@
+---
+// /plugins/autoresearch/ — the autoresearch plugin (PluginPage template). The plate moved here
+// from /architecture/#autoresearch. Rows trace to localharness main @ 582b69c:
+// autoresearch/{plugin,loop,proposer,experiment,adoption,sampler,budget}.py docstrings, spec 09
+// "The bundled plugins", README plugins table, CHANGELOG [0.16.0] Known limitations.
+import PluginPage from '../../layouts/PluginPage.astro';
+import FigureFrame from '../../components/FigureFrame.astro';
+import Rows, { type Row } from '../../components/Rows.astro';
+import AutoresearchPlate from '../../components/AutoresearchPlate.astro';
+
+const blob = (p: string) => `https://github.com/ahwurm/localharness/blob/main/${p}`;
+
+const how: Row[] = [
+  ['studio', 'a stronger model proposes', 'a separate model reads failed practice runs and suggests one change at a time.'],
+  ['box', 'tested in a throwaway copy', 'each change runs in a disposable checkout; your setup is never touched.'],
+  ['gauge', 'held to a real bar', 'kept only if it clearly beats the current version, not if it edges ahead by luck.'],
+  ['clock', 'a sealed set it never sees', 'the proposer is refused any run from the final exam, which only scores.'],
+  ['repeat', 'adopted into your settings', 'a clean win is written to your global settings, and one command undoes it.'],
+  ['shield', 'the gate can say no', 'a change that misses the bar is archived, never adopted.'],
+];
+const surfaces: Row[] = [
+  ['box', 'localharness autoresearch', 'run · review · adopt · report · sentinel · archive.'],
+  ['repeat', 'localharness propose · experiment', 'ask for one change, or run one through the gate.'],
+  ['doc', 'proposer: · sentinel:', 'the proposing model and the holdout guard keep their old setting names.'],
+  ['prompt', 'slash commands', 'none — it adds nothing to a session.'],
+  ['meter-off', 'localharness plugins disable autoresearch', 'on by default; off sets it aside and deletes nothing, and the bench stays core.'],
+];
+const notYet: Row[] = [
+  ['doc', 'a plain-text key', 'components set proposer.api_key writes the key as plain text to the global overrides.yaml.', 'shipped'],
+  ['repeat', 'shared exit codes', 'in two failure cases a script gets the same exit code an experiment uses for a verdict.', 'shipped'],
+  ['meter-off', 'one row stays', 'with autoresearch off, components list still shows its enabled row.', 'shipped'],
+  ['layers', 'old names, bundled only', 'only a bundled plugin may own core settings under their old names; one you install cannot.', 'shipped'],
+];
+const receipts: [string, string][] = [
+  ['autoresearch/plugin.py', blob('src/localharness/autoresearch/plugin.py')],
+  ['autoresearch/loop.py', blob('src/localharness/autoresearch/loop.py')],
+  ['autoresearch/proposer.py', blob('src/localharness/autoresearch/proposer.py')],
+  ['autoresearch/experiment.py', blob('src/localharness/autoresearch/experiment.py')],
+  ['autoresearch/adoption.py', blob('src/localharness/autoresearch/adoption.py')],
+  ['autoresearch/archive.py', blob('src/localharness/autoresearch/archive.py')],
+];
+---
+
+<PluginPage
+  name="autoresearch"
+  label="Autoresearch"
+  icon="gauge"
+  description="The LocalHarness autoresearch plugin is the loop that tunes the harness: a stronger model proposes one change, a sealed test set it never sees decides, and every attempt is archived."
+  lead="Autoresearch is a plugin — it adds three commands and nothing to a session, and switching it off deletes nothing."
+  surfaces={surfaces}
+  notYet={notYet}
+  receipts={receipts}
+>
+  <div class="mt-10">
+    <FigureFrame num="01" caption="PLATE AUTORESEARCH — propose, test, archive: the loop and its sealed holdout">
+      <AutoresearchPlate />
+    </FigureFrame>
+  </div>
+  <p class="eyebrow mt-10">the gate</p>
+  <Rows rows={how} class="grid gap-x-12 gap-y-2.5 xl:grid-flow-col xl:grid-rows-3" />
+</PluginPage>

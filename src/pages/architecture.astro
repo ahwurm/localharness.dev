@@ -1,18 +1,13 @@
 ---
-// The engineer deep-dive — v3 "drawn to scale" (DRAWING-SPEC, 2026-07-09 evening).
-// Three sections, each led by an LH-ARCH engineering plate emulating Alex's reference
-// drawing (plate-full.png): PLATE I runtime (fig 01) → LoopPlate zoom (fig 02, kept
-// verbatim — "great") → PLATE II the plugins (fig 03, 2026-10-02). Memory and autoresearch
-// moved to their own plugin pages (/plugins/<name>/, Alex 2026-10-02: one architecture page
-// per plugin in this style; this page describes the composable harness). Legacy anchors
-// resolve via invisible alias divs: #delegation/#hard-parts/#security/#yaml nested in
-// #system; #scope + #run around GetInvolved; #memory/#context/#over-window/#autoresearch are
-// forwarded by Base.astro. DelegationPlate / OverWindowDiagram / AutoresearchPlate stay on
-// disk unimported (AutoresearchPlate awaits /plugins/autoresearch/).
-// Every plate label verified against localharness main @ 98682e4 (2026-10-02). NOTE: that
-// commit is local main, ahead of public origin/main — plugin-system receipts below 404 on
-// GitHub until the release lands; merge this page only after it does. Explainer rows are
-// icon-led (no numeral badges — the plates' circled numbers trace FLOW order, not row order).
+// The engineer deep-dive — v3 "drawn to scale". Two plates: PLATE I runtime (fig 01) → LoopPlate
+// zoom (fig 02, kept verbatim — "great"), then The Plugins: no plate (Alex 2026-10-02 — the plugins
+// get their own landing pages, /plugins/<name>/, reached from the nav's Plugins menu); this section
+// describes the composable harness and links the five pages in code order. Legacy anchors resolve
+// via invisible alias divs: #delegation/#hard-parts/#security/#yaml nested in #system; #scope +
+// #run around GetInvolved; #memory/#context/#autoresearch are forwarded by Base.astro.
+// DelegationPlate / OverWindowDiagram stay on disk unimported. Every label verified against
+// localharness public main @ 582b69c (v0.16.0). Explainer rows are icon-led (no numeral badges —
+// the plates' circled numbers trace FLOW order, not row order).
 import Base from '../layouts/Base.astro';
 import Icon, { type IconName } from '../components/Icon.astro';
 import FigureFrame from '../components/FigureFrame.astro';
@@ -20,7 +15,9 @@ import Interstitial from '../components/Interstitial.astro';
 import SectionBand from '../components/SectionBand.astro';
 import RuntimePlate from '../components/RuntimePlate.astro';
 import LoopPlate from '../components/LoopPlate.astro';
-import PluginPlate from '../components/PluginPlate.astro';
+import Card from '../components/Card.astro';
+import Chip from '../components/Chip.astro';
+import { PLUGINS } from '../data/plugins';
 import GetInvolved from '../components/GetInvolved.astro';
 
 // Receipt href builders — full GitHub blob/tree URLs on PUBLIC main.
@@ -60,16 +57,6 @@ const pluginRows: [IconName, string, string][] = [
   ['meter-off', 'the off switch', 'any bundled plugin turns off with one setting, and its commands then say how to turn it back on.'],
   ['shield', 'the import rule', 'core never imports a plugin — a test fails on any new edge, and its list of old exceptions is empty.'],
 ];
-// Plugin pages in code order. PROTOTYPE: only memory is built; the rest render unlinked
-// until their pages exist (the plate's boxes already point at the final URLs).
-const pluginPages: [string, string, boolean][] = [
-  ['image', '/plugins/image/', false],
-  ['web', '/plugins/web/', false],
-  ['memory', '/plugins/memory/', true],
-  ['dispatch', '/plugins/dispatch/', false],
-  ['autoresearch', '/plugins/autoresearch/', false],
-];
-
 // Receipts per section: [label, href, external?]. Demo cross-links carry their own _pip.
 const sysReceipts: [string, string, boolean][] = [
   ['src/localharness/', tree('src/localharness'), true],
@@ -163,19 +150,13 @@ const pluginReceipts: [string, string, boolean][] = [
     </div>
   </section>
 
-  <Interstitial icon="box" lead="The core stays small" rest="— everything else plugs in, and can be switched off." />
+  <Interstitial icon="box" lead="Core owns the loop, the tools, the config and the permissions" rest="— everything else is a plugin behind one additive API." />
 
-  <!-- #plugins — PLATE II: the composable harness (fig. 03). -->
+  <!-- #plugins — the composable harness: no plate; each plugin has its own page. -->
   <section id="plugins" data-reveal>
-    <SectionBand icon="box" title="The Plugins" topBorder={false} />
+    <SectionBand icon="layers" title="The Plugins" topBorder={false} />
     <div class="container-site py-16 sm:py-20">
-      <p class="measure text-dim">A small core runs the loop, and everything else plugs in through one manifest and one lifecycle.</p>
-      <div class="mt-10">
-        <FigureFrame num="03" caption="PLATE II — the plugins: a small core, five bundled plugins, imports one way">
-          <PluginPlate />
-        </FigureFrame>
-      </div>
-      <p class="eyebrow mt-10">how it composes</p>
+      <p class="eyebrow">how it composes</p>
       <ul class="mt-3 grid gap-x-12 gap-y-2.5 xl:grid-flow-col xl:grid-rows-3">
         {pluginRows.map(([icon, kw, clause]) => (
           <li class="flex items-start gap-3">
@@ -187,17 +168,20 @@ const pluginReceipts: [string, string, boolean][] = [
           </li>
         ))}
       </ul>
+      <p class="eyebrow mt-12">the bundled plugins</p>
+      <ul class="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+        {PLUGINS.map((p) => (
+          <li>
+            <a href={p.href} class="group block h-full">
+              <Card class="h-full p-4 transition-colors duration-200 group-hover:border-accent/50">
+                <Chip label={p.name} icon={p.icon} class="group-hover:text-accent" />
+                <p class="mt-3 text-sm text-dim">{p.clause} <span class="text-accent/80">→</span></p>
+              </Card>
+            </a>
+          </li>
+        ))}
+      </ul>
       <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-xs">
-        <span class="text-dim">_plugin pages</span>
-        {pluginPages.map(([label, href, built]) =>
-          built ? (
-            <a href={href} class="text-accent/80 transition-colors hover:text-accent">{label} →</a>
-          ) : (
-            <span class="text-dim/60">{label}</span>
-          )
-        )}
-      </div>
-      <div class="mt-3 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-xs">
         <span class="text-dim">_deeper</span>
         {pluginReceipts.map(([label, href, ext]) => (
           <a href={href} target={ext ? '_blank' : undefined} rel={ext ? 'noopener' : undefined} class="text-accent/80 transition-colors hover:text-accent">{label} ↗</a>

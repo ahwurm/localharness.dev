@@ -1,0 +1,146 @@
+---
+// PLATE WEB — what the web plugin owns versus what core provides (fig. 01 of /plugins/web/).
+// Left: CORE (the event bus, the permission gate, the tool declarations the safety model reads).
+// Middle: the WEB PLUGIN (the `localharness web` server, the web channel, the untrusted_ingest
+// label). Right: OUTSIDE (your phone). Badges ①–⑤ = one message. Sources (localharness main @
+// 582b69c, v0.16.0): cli/web_plugin.py, channels/web/protocol.py (UNTRUSTED_INGEST_LABEL,
+// WireFrame.untrusted_ingest), SECURITY.md "`localharness web`" + the declarations section,
+// docs/specs/00 §5, CHANGELOG [0.16.0] Known limitations. Marker ids pw-*. SVG at lg+.
+import FlowLedger from './FlowLedger.astro';
+import { nodeBox, edge } from './plateTokens';
+
+type Tone = 'core' | 'plugin' | 'out' | 'warn';
+const stroke: Record<Tone, string> = { core: 'stroke-accent/70', plugin: 'stroke-tool/70', out: 'stroke-edge', warn: 'stroke-amber/70' };
+const ink: Record<Tone, string> = { core: 'fill-ink', plugin: 'fill-tool', out: 'fill-ink', warn: 'fill-amber' };
+// [x, y, w, h, tone, label, sublabels]
+const nodes: [number, number, number, number, Tone, string, string[]][] = [
+  [28, 114, 416, 52, 'core', 'EventBus', ['every fact of a turn, in order', 'the web channel subscribes — the log is the session']],
+  [28, 190, 416, 52, 'core', 'PermissionGate', ['one gate serves the orchestrator and every subagent', 'its asks reach the phone as frames']],
+  [28, 266, 416, 52, 'core', 'tool declarations', ['web_search · web_fetch · web_page_query declare', 'ingest: untrusted — the safety model reads these']],
+  [512, 114, 380, 52, 'plugin', 'localharness web', ['serves the phone UI and its event API', 'loopback only · an app token on every request']],
+  [512, 190, 380, 52, 'plugin', 'WebChannel', ['events become wire frames', 'an always-grant takes a second, single-use POST']],
+  [512, 266, 380, 52, 'plugin', 'untrusted_ingest', ['set on frames from the three web tools', 'a label, never a filter — nothing is dropped']],
+  [938, 114, 194, 204, 'out', 'your phone', ['paired by QR — the token', 'rides the URL fragment', '', 'home-screen app', 'lock-screen push when a', 'turn ends or the gate asks', '', 'marks web-tool frames', '“untrusted ingest”']],
+];
+const badge = (cx: number, cy: number, n: number, hollow = false) => ({ cx, cy, n, hollow });
+const badges = [badge(915, 134, 1), badge(478, 134, 2), badge(494, 180, 3, true), badge(915, 216, 4), badge(915, 292, 5)];
+---
+
+<figure
+  role="img"
+  aria-label="A drawing of the web plugin: what it owns and what core provides, one message numbered one to five. Core holds the event bus, where every fact of a turn is recorded in order and which the web channel subscribes to; the permission gate, one gate for the orchestrator and every subagent, whose questions reach the phone as frames; and the tool declarations — web_search, web_fetch and web_page_query declare that they ingest untrusted text, and the safety model reads those declarations. Across the plugin boundary the web plugin owns the localharness web command, which serves the phone page and its event API on loopback only with an app token on every request; the web channel, which turns events into wire frames and makes an always-allow grant take a second, single-use request; and the untrusted_ingest label, set on frames from the three web tools — a label, never a filter. Outside: your phone, paired by a QR code that carries the token in the URL fragment, installed to the home screen, notified on the lock screen when a turn ends or the gate asks. One: the phone sends a message. Two: it becomes a turn on the bus. Three: the turn's events come back to the channel. Four: they stream to the phone as frames. Five: a web tool's frame carries the untrusted_ingest label, and the phone marks it. The label covers the three built-in web tools only: a plugin tool that ingests is kept away from host tools but is not labeled."
+>
+  <div class="hidden w-full lg:block" aria-hidden="true">
+    <svg viewBox="0 0 1160 390" class="w-full">
+      <defs>
+        <marker id="pw-solid" viewBox={edge.marker.viewBox} refX={edge.marker.refX} refY={edge.marker.refY} markerWidth={edge.marker.markerWidth} markerHeight={edge.marker.markerHeight} orient={edge.marker.orient}>
+          <path d={edge.marker.path} class="fill-none stroke-accent" stroke-width={edge.marker.callArrowStroke}></path>
+        </marker>
+        <marker id="pw-dash" viewBox={edge.marker.viewBox} refX={edge.marker.refX} refY={edge.marker.refY} markerWidth={edge.marker.markerWidth} markerHeight={edge.marker.markerHeight} orient={edge.marker.orient}>
+          <path d={edge.marker.path} class="fill-none stroke-dim" stroke-width={edge.marker.returnArrowStroke}></path>
+        </marker>
+        <pattern id="pw-hatch" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <line x1="0" y1="0" x2="0" y2="5" class="stroke-dim" stroke-width="1"></line>
+        </pattern>
+      </defs>
+
+      <!-- ===== header ===== -->
+      <rect x="16" y="18" width="20" height="20" class="fill-tool"></rect>
+      <text x="26" y="33" text-anchor="middle" class="fill-accent-ink font-mono text-[12px] font-semibold">W</text>
+      <text x="46" y="34" class="fill-ink font-sans text-[15px] font-semibold">The web plugin — the phone channel, and what it marks untrusted</text>
+      <text x="1144" y="16" text-anchor="end" class="fill-dim font-mono text-[8px]">LH-ARCH-001 · PLATE WEB · SHEET 1 OF 1</text>
+      <text x="1144" y="27" text-anchor="end" class="fill-dim font-mono text-[8px]">REV 582b69c · v0.16.0 · 2026-10-02</text>
+      <text x="1144" y="38" text-anchor="end" class="fill-dim font-mono text-[8px]">kind "channel" · requires_extra "web"</text>
+      <text x="1144" y="63" text-anchor="end" class="fill-dim font-mono text-[9px]">what core provides · the boundary · what the plugin owns · outside</text>
+      <text x="16" y="62" class="fill-dim font-mono text-[8px]">GROUPS</text>
+      <rect x="64" y="53" width="10" height="10" class="fill-accent/20 stroke-accent"></rect>
+      <text x="78" y="62" class="fill-dim font-mono text-[8px]">CORE</text>
+      <rect x="114" y="53" width="10" height="10" class="fill-tool/20 stroke-tool"></rect>
+      <text x="128" y="62" class="fill-dim font-mono text-[8px]">WEB PLUGIN</text>
+      <rect x="200" y="53" width="10" height="10" class="fill-none stroke-edge"></rect>
+      <text x="214" y="62" class="fill-dim font-mono text-[8px]">OUTSIDE</text>
+      <line x1="16" y1="76" x2="1144" y2="76" class="stroke-edge" stroke-width="1"></line>
+
+      <!-- ===== zones ===== -->
+      <rect x="16" y="96" width="440" height="238" class="fill-none stroke-accent/45" stroke-width="1" stroke-dasharray="5 5"></rect>
+      <rect x="28" y="89" width="36" height="14" class="fill-bg stroke-accent" stroke-width="1"></rect>
+      <text x="46" y="99" text-anchor="middle" class="fill-accent font-mono text-[8px] tracking-[0.08em]">CORE</text>
+      <rect x="500" y="96" width="404" height="238" class="fill-none stroke-tool/45" stroke-width="1" stroke-dasharray="5 5"></rect>
+      <rect x="512" y="89" width="80" height="14" class="fill-bg stroke-tool" stroke-width="1"></rect>
+      <text x="552" y="99" text-anchor="middle" class="fill-tool font-mono text-[8px] tracking-[0.08em]">WEB PLUGIN</text>
+      <rect x="926" y="96" width="218" height="238" class="fill-none stroke-edge" stroke-width="1" stroke-dasharray="5 5"></rect>
+      <rect x="938" y="89" width="56" height="14" class="fill-bg stroke-edge" stroke-width="1"></rect>
+      <text x="966" y="99" text-anchor="middle" class="fill-dim font-mono text-[8px] tracking-[0.08em]">OUTSIDE</text>
+      <!-- the plugin boundary -->
+      <line x1="478" y1="84" x2="478" y2="342" class="stroke-ink/70" stroke-width="1"></line>
+      <text x="478" y="80" text-anchor="middle" class="fill-ink font-mono text-[8px] tracking-[0.08em]">PLUGIN BOUNDARY · IN THROUGH ctx</text>
+
+            <!-- ===== edges (drawn under the boxes) ===== -->
+      <g class="fill-none stroke-accent" stroke-width={edge.call.strokeWidth}>
+        <line x1="938" y1="134" x2="893" y2="134" marker-end="url(#pw-solid)"></line>
+        <line x1="512" y1="134" x2="445" y2="134" marker-end="url(#pw-solid)"></line>
+        <line x1="892" y1="216" x2="937" y2="216" marker-end="url(#pw-solid)"></line>
+        <line x1="892" y1="292" x2="937" y2="292" marker-end="url(#pw-solid)"></line>
+      </g>
+      <g class="fill-none stroke-dim" stroke-width={edge.return.strokeWidth} stroke-dasharray={edge.return.dash}>
+        <path d="M444,154 L494,154 L494,204 L511,204" marker-end="url(#pw-dash)"></path>
+        <line x1="444" y1="228" x2="511" y2="228" marker-end="url(#pw-dash)"></line>
+        <line x1="444" y1="292" x2="511" y2="292" marker-end="url(#pw-dash)"></line>
+      </g>
+      <text x="896" y="128" class="fill-dim font-mono text-[8.5px]">message</text>
+      <text x="450" y="128" class="fill-dim font-mono text-[8.5px]">a turn</text>
+      <text x="446" y="168" class="fill-dim font-mono text-[8.5px]">events</text>
+      <text x="450" y="242" class="fill-dim font-mono text-[8.5px]">asks</text>
+      <text x="448" y="306" class="fill-dim font-mono text-[8.5px]">declares</text>
+      <text x="896" y="210" class="fill-dim font-mono text-[8.5px]">frames</text>
+      <text x="896" y="286" class="fill-dim font-mono text-[8.5px]">label</text>
+      <text x="16" y="362" class="fill-amber/80 font-mono text-[8.5px]">the label covers the three built-in web tools only — a plugin tool that ingests is kept from host tools, but not labeled</text>
+
+      <!-- ===== nodes ===== -->
+      {nodes.map(([x, y, w, h, tone, label, subs]) => (
+        <g>
+          <rect x={x} y={y} width={w} height={h} class:list={['fill-bg', stroke[tone]]} stroke-width="1.3"></rect>
+          <text x={x + w / 2} y={y + nodeBox.pad.labelFromTop - 1} text-anchor="middle" class:list={[ink[tone], 'font-mono text-[12px]']}>{label}</text>
+          {subs.map((s, j) => (
+            <text x={x + w / 2} y={y + 33 + j * 12} text-anchor="middle" class="fill-dim font-mono text-[8.5px]">{s}</text>
+          ))}
+        </g>
+      ))}
+
+      <!-- ===== badges ===== -->
+      {badges.map(({ cx, cy, n, hollow }) => (
+        <g>
+          <circle cx={cx} cy={cy} r={edge.badge.radius} class={hollow ? 'fill-surface stroke-accent/60' : 'fill-accent'} stroke-width={hollow ? 1.2 : undefined}></circle>
+          <text x={cx} y={cy + edge.badge.textBaselineOffset} text-anchor="middle" class:list={[hollow ? 'fill-accent' : 'fill-accent-ink', 'font-mono text-[9px] font-semibold']}>{n}</text>
+        </g>
+      ))}
+
+      <!-- ===== KEY ===== -->
+      <text x="16" y="372" class="fill-dim font-mono text-[8.5px]">KEY</text>
+      <line x1="44" y1="369" x2="64" y2="369" class="stroke-accent" stroke-width="1.4" marker-end="url(#pw-solid)"></line>
+      <text x="70" y="372" class="fill-dim font-mono text-[8.5px]">one message</text>
+      <line x1="134" y1="369" x2="154" y2="369" class="stroke-dim" stroke-width="1.2" stroke-dasharray="3 3" marker-end="url(#pw-dash)"></line>
+      <text x="160" y="372" class="fill-dim font-mono text-[8.5px]">returns · settings</text>
+      <rect x="266" y="365" width="8" height="8" class="fill-none stroke-ink" stroke-width="1.2"></rect>
+      <text x="278" y="372" class="fill-dim font-mono text-[8.5px]">shipped</text>
+      <rect x="330" y="365" width="8" height="8" class="stroke-dim" fill="url(#pw-hatch)" stroke-width="1"></rect>
+      <text x="342" y="372" class="fill-dim font-mono text-[8.5px]">landing</text>
+      <rect x="394" y="365" width="8" height="8" class="fill-none stroke-dim" stroke-width="1" stroke-dasharray="2 2"></rect>
+      <text x="406" y="372" class="fill-dim font-mono text-[8.5px]">planned</text>
+      <text x="1144" y="372" text-anchor="end" class="fill-dim font-mono text-[8.5px]">shipped — every box on this sheet, on main @ 582b69c</text>
+    </svg>
+  </div>
+
+  <FlowLedger
+    class="lg:hidden"
+    rows={[
+      { n: 1, icon: 'prompt', title: 'the phone sends a message', text: 'paired by QR — the token rides the URL fragment', tone: 'accent' },
+      { n: 2, icon: 'repeat', title: 'a turn on the bus', text: 'localharness web — loopback only, a token on every request' },
+      { n: 3, icon: 'agent', title: 'events come back', text: 'the web channel turns them into wire frames' },
+      { n: 4, icon: 'globe', title: 'frames stream to the phone', text: 'gate asks included — an always-grant takes a second, single-use POST' },
+      { n: 5, icon: 'search', title: 'untrusted ingest, marked', text: 'frames from web_search · web_fetch · web_page_query carry the label' },
+      { kind: 'blocked', icon: 'shield', title: 'the label’s reach', text: 'the three built-in web tools only — a plugin tool that ingests is not labeled' },
+      { kind: 'note', text: 'on by default with the web extra — localharness plugins disable web turns it off.' },
+    ]}
+  />
+</figure>

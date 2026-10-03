@@ -1,11 +1,14 @@
 ---
-// fig. 06 / PLATE III — the autoresearch loop, tuned against its own corpus (all shipped).
+// fig. 01 of /plugins/autoresearch/ — PLATE A, the autoresearch loop (all shipped). Moved off
+// /architecture/ 2026-10-02 and re-checked against localharness main @ 582b69c (v0.16.0): adoption
+// now writes the global overrides.yaml, not a git commit (autoresearch/adoption.py), and the
+// BudgetController halts the loop BEFORE an iteration, never mid-experiment (budget.py, loop.py).
 // Context groups sit on top (BENCH SUBSTRATE + CORPUS SPLIT in bench-red, COMPONENT
 // REGISTRY in research-orange) feeding the loop below; the loop runs in USER-FLOW order
 // ①→⑦ (ParentSampler → Proposer → run_experiment → interpret → adopt → Mutation Archive
 // → daily report), the archive closing the loop back to the sampler ("parent"). Guards
-// (BudgetController, Eval Sentinel) sit beside the loop, unnumbered — they watch, never
-// halt. Station names + constants are the SHIPPED truth (DRAWING-SPEC "VERIFIED FACTS"):
+// (BudgetController, Eval Sentinel) sit beside the loop, unnumbered — neither cancels a
+// running experiment. Station names + constants are the SHIPPED truth (DRAWING-SPEC "VERIFIED FACTS"):
 // there is NO ExperimentRunner/PromotionGate class (one run_experiment box), adopt is
 // automatic (no approval gate), and BudgetController does not enforce cost. Plate SVG at
 // sm+, FlowLedger rail below sm. Marker ids p3- prefixed. Theme utilities only — the hue
@@ -17,7 +20,7 @@ import FlowLedger from './FlowLedger.astro';
   <!-- sm+: engineering-drawing plate -->
   <svg
     role="img"
-    aria-label="Plate 3 of 3: the autoresearch loop, tuned against the harness's own corpus — all shipped. A benchmark substrate runs each scenario as a per-run trace; the corpus is split into a train slice of 25 scenarios, whose traces the proposer may read, and a sealed holdout slice of 10 scenarios used for scores only. The mutation surface is a registry of six tunable component families: system prompt, tool description, compaction threshold, stuck detector, recovery injection, and hook config. The loop runs in order. One, ParentSampler draws a parent config from the archive — epsilon-greedy over a Pareto front, so rejected branches stay reachable. Two, the Proposer, a stronger model, reads failed TRAIN traces and emits one GEPA-style change with a rationale. Three, run_experiment applies that single-component mutation in an isolated git worktree and scores it — Welch's t-test on TRAIN, non-regression on the sealed HOLDOUT with Bonferroni correction. Four, interpret returns one verdict: ADOPT, HOLD, REJECT, or SKIP. Five, adopt is automatic — not an approval gate — writing a clean win as a git commit that reverts in one command; each adoption is logged to audit.jsonl as a ComponentMutated event. Six, the Mutation Archive, a sqlite store, records the id, parent, component, diff, train and holdout scores and p-value of every attempt, and feeds ParentSampler to close the loop. Seven, a daily report surfaces HELD, inconclusive wins for asynchronous review; there is no every-N-promotions human gate. Two read-only guards sit beside the loop and never halt it: BudgetController is a circuit breaker on wallclock, iterations and token window, and the Eval Sentinel watches overfit gap, near-duplicates and saturation to guard the holdout. A clean adopt becomes the committed New Baseline for the next iteration. Solid edges are loop order; dashed edges are feedback."
+    aria-label="A drawing of the autoresearch plugin: the loop, tuned against the harness's own corpus — all shipped. A benchmark substrate runs each scenario as a per-run trace; the corpus is split into a train slice of 25 scenarios, whose traces the proposer may read, and a sealed holdout slice of 10 scenarios used for scores only. The mutation surface is a registry of six tunable component families: system prompt, tool description, compaction threshold, stuck detector, recovery injection, and hook config. The loop runs in order. One, ParentSampler draws a parent config from the archive — epsilon-greedy over a Pareto front, so rejected branches stay reachable. Two, the Proposer, a stronger model, reads failed TRAIN traces and emits one GEPA-style change with a rationale. Three, run_experiment applies that single-component mutation in an isolated git worktree and scores it — Welch's t-test on TRAIN, non-regression on the sealed HOLDOUT with Bonferroni correction. Four, interpret returns one verdict: ADOPT, HOLD, REJECT, or SKIP. Five, adopt is automatic — not an approval gate — writing a clean win into the global overrides.yaml, undone with one components set command; each adoption is logged to audit.jsonl as a ComponentMutated event. Six, the Mutation Archive, a sqlite store, records the id, parent, component, diff, train and holdout scores and p-value of every attempt, and feeds ParentSampler to close the loop. Seven, a daily report surfaces HELD, inconclusive wins for asynchronous review; there is no every-N-promotions human gate. Two guards sit beside the loop and never cancel a running experiment: BudgetController checks wallclock, iterations and the token window before each iteration and halts the loop between iterations, with a circuit breaker after four failures in a row, and the Eval Sentinel watches overfit gap, near-duplicates and saturation to guard the holdout. A clean adopt becomes the live New Baseline for the next iteration. Solid edges are loop order; dashed edges are feedback."
     viewBox="0 0 1160 600"
     class="hidden w-full lg:block"
   >
@@ -34,13 +37,13 @@ import FlowLedger from './FlowLedger.astro';
     </defs>
 
     <!-- title strip (top-right) -->
-    <text x="1144" y="16" text-anchor="end" class="fill-dim font-mono text-[8px]">LH-ARCH-001 · PLATE III · SHEET 3 OF 3</text>
-    <text x="1144" y="28" text-anchor="end" class="fill-dim font-mono text-[8px]">REV v0.9.0 → 1.0 · 2026-07-11</text>
-    <text x="1144" y="40" text-anchor="end" class="fill-dim font-mono text-[8px]">MILESTONE semanticization</text>
+    <text x="1144" y="16" text-anchor="end" class="fill-dim font-mono text-[8px]">LH-ARCH-001 · PLATE AUTORESEARCH · SHEET 1 OF 1</text>
+    <text x="1144" y="28" text-anchor="end" class="fill-dim font-mono text-[8px]">REV 582b69c · v0.16.0 · 2026-10-02</text>
+    <text x="1144" y="40" text-anchor="end" class="fill-dim font-mono text-[8px]">kind "dev" · adds nothing to a session</text>
 
     <!-- plate marker (top-left) -->
     <rect x="20" y="13" width="22" height="22" class="fill-research"></rect>
-    <text x="31" y="28" text-anchor="middle" class="fill-bg font-mono text-[12px] font-semibold">III</text>
+    <text x="31" y="28" text-anchor="middle" class="fill-bg font-mono text-[12px] font-semibold">A</text>
     <text x="52" y="25" class="fill-ink font-mono text-[15px]">The autoresearch loop</text>
     <text x="52" y="40" class="fill-dim font-mono text-[9px]">tuned against its own corpus — shipped</text>
 
@@ -169,7 +172,7 @@ import FlowLedger from './FlowLedger.astro';
       <rect x="958" y="300" width="160" height="75" class="fill-bg stroke-research/70" stroke-width="1.3"></rect>
       <text x="1038" y="321" text-anchor="middle" class="fill-ink font-mono text-[12px]">adopt</text>
       <text x="1038" y="338" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">adoption.py · auto</text>
-      <text x="1038" y="352" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">a git commit</text>
+      <text x="1038" y="352" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">global overrides.yaml</text>
       <text x="1038" y="366" text-anchor="middle" class="fill-research font-mono text-[8.5px]">revert = one command</text>
       <circle cx="958" cy="300" r="8" class="fill-research"></circle>
       <text x="958" y="303.4" text-anchor="middle" class="fill-accent-ink font-mono text-[9px] font-semibold">5</text>
@@ -202,7 +205,7 @@ import FlowLedger from './FlowLedger.astro';
     <g>
       <rect x="900" y="415" width="215" height="62" class="fill-bg stroke-research/70" stroke-width="1.3"></rect>
       <text x="1007" y="437" text-anchor="middle" class="fill-ink font-mono text-[12px]">New Baseline</text>
-      <text x="1007" y="454" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">committed config</text>
+      <text x="1007" y="454" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">live config</text>
       <text x="1007" y="468" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">→ next iteration</text>
     </g>
 
@@ -212,7 +215,7 @@ import FlowLedger from './FlowLedger.astro';
     <text x="983" y="390" class="fill-dim font-mono text-[8px]">audit.jsonl</text>
     <!-- adopt → new baseline -->
     <line x1="1050" y1="375" x2="1050" y2="415" class="stroke-research/80" stroke-width="1.4" marker-end="url(#p3-r)"></line>
-    <text x="1058" y="398" class="fill-dim font-mono text-[8px]">commit</text>
+    <text x="1058" y="398" class="fill-dim font-mono text-[8px]">write</text>
     <!-- archive → daily report (held wins) -->
     <line x1="272" y1="454" x2="240" y2="454" class="stroke-research/80" stroke-width="1.4" marker-end="url(#p3-r)"></line>
     <text x="256" y="447" text-anchor="middle" class="fill-dim font-mono text-[8px]">HELD</text>
@@ -260,14 +263,14 @@ import FlowLedger from './FlowLedger.astro';
       { n: 2, icon: 'agent', title: 'Proposer', text: 'stronger model reads failed TRAIN traces, emits one GEPA-style change' },
       { n: 3, icon: 'box', title: 'run_experiment', text: 'isolated git worktree · Welch on TRAIN, non-regression on sealed HOLDOUT' },
       { n: 4, icon: 'gauge', title: 'interpret', text: 'one verdict — ADOPT · HOLD · REJECT · SKIP' },
-      { n: 5, icon: 'check', title: 'adopt', text: 'auto, not a gate — a git commit, revert in one command' },
+      { n: 5, icon: 'check', title: 'adopt', text: 'auto, not a gate — written to the global overrides.yaml, undone in one command' },
       { n: 6, icon: 'book', title: 'Mutation Archive', text: 'sqlite · records every attempt · feeds ParentSampler, closing the loop' },
       { n: 7, icon: 'doc', title: 'daily report', text: 'HELD, inconclusive wins reviewed async — no human approval gate' },
       { kind: 'loop', title: 'parent', text: 'the archive feeds the next sampler — the loop closes' },
       { n: '✓', icon: 'star', title: 'New Baseline', text: 'a clean adopt becomes the baseline for the next iteration', tone: 'accent' },
       { kind: 'note', text: 'runs on its own corpus — a 25-scenario TRAIN slice the proposer may read, and a sealed 10-scenario HOLDOUT (scores only).' },
       { kind: 'note', text: 'mutation surface: system_prompt · tool_description · compaction_threshold · stuck_detector · recovery_injection · hook_config.' },
-      { kind: 'note', text: 'guards never halt the loop — BudgetController circuit-breaks on wallclock / iterations / window; Eval Sentinel watches overfit & near-dupes to guard the holdout.' },
+      { kind: 'note', text: 'guards never cancel a running experiment — BudgetController halts between iterations on wallclock / iterations / window; Eval Sentinel watches overfit & near-dupes to guard the holdout.' },
     ]}
   />
 </figure>

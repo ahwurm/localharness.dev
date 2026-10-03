@@ -65,8 +65,7 @@ const ogImageAbs = new URL(ogImage, Astro.site);
           (function () {
             var h = location.hash;
             if (['#memory', '#context'].indexOf(h) > -1) location.replace('/plugins/memory/');
-            // TODO: final target is /plugins/autoresearch/ once that page exists.
-            else if (h === '#autoresearch') location.replace('/architecture/#plugins');
+            else if (h === '#autoresearch') location.replace('/plugins/autoresearch/');
           })();
         </script>
       )

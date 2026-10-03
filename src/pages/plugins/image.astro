@@ -1,0 +1,60 @@
+---
+// /plugins/image/ — the image plugin (PluginPage template). Rows trace to localharness main @
+// 582b69c: tools/builtin/image_plugin.py + generate_image_tool.py docstrings, spec 09 "The
+// bundled plugins" + "Artifacts", SECURITY.md "Plugins", README plugins table, CHANGELOG
+// [0.16.0] Known limitations.
+import PluginPage from '../../layouts/PluginPage.astro';
+import FigureFrame from '../../components/FigureFrame.astro';
+import Rows, { type Row } from '../../components/Rows.astro';
+import ImagePlate from '../../components/ImagePlate.astro';
+
+const blob = (p: string) => `https://github.com/ahwurm/localharness/blob/main/${p}`;
+
+const how: Row[] = [
+  ['studio', 'one tool', 'generate_image takes a prompt and a size; the server and the workflow are settings, never arguments.'],
+  ['server', 'your server', 'it sends a workflow template to the ComfyUI you run, and waits for the picture.'],
+  ['box', 'core names the file', 'each picture lands in a folder core assigns, under an id core mints, and never overwrites another.'],
+  ['globe', 'the phone shows it', 'the phone page shows a picture from the tool result’s artifact field, never from a path in the text.'],
+  ['shield', 'a project cannot redirect it', 'the server address and the workflow are machine-level settings a project folder cannot set.'],
+  ['check', 'doctor checks first', 'doctor asks ComfyUI whether it answers and has the template’s model files.'],
+];
+const surfaces: Row[] = [
+  ['prompt', 'generate_image', 'the tool an agent calls inside a session.'],
+  ['box', 'localharness generate-image', 'makes a picture from the shell.'],
+  ['doc', 'image.comfyui_url · image.workflow · image.timeout_s', 'your server, your own template, and how long to wait.'],
+  ['repeat', 'slash commands', 'none — it adds a tool and a command, nothing else.'],
+  ['meter-off', 'localharness plugins enable image', 'off by default; enable it with --set comfyui_url=<url>, and disable turns it off again.'],
+];
+const notYet: Row[] = [
+  ['server', 'ComfyUI is yours to run', 'LocalHarness does not start ComfyUI or download its model files.', 'shipped'],
+  ['prompt', 'no pictures in the terminal', 'the terminal does not display artifacts; the phone page shows image artifacts only.', 'shipped'],
+  ['shield', 'incognito is not private yet', 'it keeps pictures off the phone, but they are still written to disk.', 'shipped'],
+  ['repeat', 'a gallery race', 'reopening Pictures while an older page loads can put that page into the fresh grid.', 'shipped'],
+];
+const receipts: [string, string][] = [
+  ['image_plugin.py', blob('src/localharness/tools/builtin/image_plugin.py')],
+  ['generate_image_tool.py', blob('src/localharness/tools/builtin/generate_image_tool.py')],
+  ['core/artifacts.py', blob('src/localharness/core/artifacts.py')],
+  ['spec 09 — artifacts', blob('docs/specs/09-hooks-plugins.md#artifacts')],
+  ['SECURITY.md — plugins', blob('SECURITY.md#plugins')],
+];
+---
+
+<PluginPage
+  name="image"
+  label="Image"
+  icon="studio"
+  description="The LocalHarness image plugin lets an agent make pictures with your own ComfyUI server, saved as artifacts in a folder the core assigns."
+  lead="Image is a plugin — it adds one tool and one command, and it stays off until you point it at your ComfyUI server."
+  surfaces={surfaces}
+  notYet={notYet}
+  receipts={receipts}
+>
+  <div class="mt-10">
+    <FigureFrame num="01" caption="PLATE IMAGE — what the plugin owns, what core provides: one picture">
+      <ImagePlate />
+    </FigureFrame>
+  </div>
+  <p class="eyebrow mt-10">how it works</p>
+  <Rows rows={how} class="grid gap-x-12 gap-y-2.5 xl:grid-flow-col xl:grid-rows-3" />
+</PluginPage>

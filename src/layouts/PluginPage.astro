@@ -1,0 +1,92 @@
+---
+// The plugin-page template (/plugins/<name>/): SectionBand → breadcrumb → one-line lead →
+// the page's figures and explainer rows (default slot) → Surfaces (where you reach it, what is
+// not there yet, receipts) → GetInvolved. TechArticle + BreadcrumbList JSON-LD go through Base.
+// Every row a page passes traces to localharness public main (README plugins table, spec 09,
+// SECURITY.md, the plugin module docstrings, CHANGELOG [0.16.0] Known limitations).
+import Base from './Base.astro';
+import SectionBand from '../components/SectionBand.astro';
+import Rows, { type Row } from '../components/Rows.astro';
+import GetInvolved from '../components/GetInvolved.astro';
+import type { IconName } from '../components/Icon.astro';
+
+interface Props {
+  name: string; // slug, e.g. 'image'
+  label: string; // band title, e.g. 'Image'
+  icon: IconName;
+  description: string; // the one sentence a search engine or model would quote
+  lead: string;
+  surfaces: Row[];
+  notYet: Row[];
+  receipts: [string, string][];
+}
+const { name, label, icon, description, lead, surfaces, notYet, receipts } = Astro.props;
+const SITE = 'https://localharness.dev';
+const url = `${SITE}/plugins/${name}/`;
+const title = `LocalHarness — the ${name} plugin`;
+const org = { '@type': 'Organization', name: 'LocalHarness', url: SITE };
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'TechArticle',
+    headline: title,
+    description,
+    url,
+    image: `${SITE}/og/localharness.png`,
+    author: org,
+    publisher: org,
+    about: { '@type': 'SoftwareApplication', name: 'LocalHarness', applicationCategory: 'DeveloperApplication', url: SITE },
+    isPartOf: { '@type': 'WebPage', url: `${SITE}/architecture/` },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'LocalHarness', item: `${SITE}/` },
+      { '@type': 'ListItem', position: 2, name: 'Architecture', item: `${SITE}/architecture/` },
+      { '@type': 'ListItem', position: 3, name: 'Plugins', item: `${SITE}/architecture/#plugins` },
+      { '@type': 'ListItem', position: 4, name: label, item: url },
+    ],
+  },
+];
+---
+
+<Base title={title} description={description} jsonLd={jsonLd}>
+  <h1 class="sr-only">{title}</h1>
+
+  <section id={name} data-reveal>
+    <SectionBand icon={icon} title={label} />
+    <div class="container-site py-16 sm:py-20">
+      <p class="font-mono text-xs text-dim">
+        <a href="/architecture/#plugins" class="text-accent/80 transition-colors hover:text-accent">← the plugins</a>
+        <span class="mx-2 text-dim/60">/</span>{name}
+      </p>
+      <p class="measure mt-4 text-dim">{lead}</p>
+      <slot />
+    </div>
+  </section>
+
+  <section id="surfaces" data-reveal>
+    <SectionBand icon="prompt" title="Surfaces" />
+    <div class="container-site py-16 sm:py-20">
+      <div class="grid gap-x-12 gap-y-8 xl:grid-cols-2">
+        <div>
+          <p class="eyebrow">where you reach it</p>
+          <Rows rows={surfaces} />
+        </div>
+        <div>
+          <p class="eyebrow">what is not there yet</p>
+          <Rows rows={notYet} />
+        </div>
+      </div>
+      <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-xs">
+        <span class="text-dim">_deeper</span>
+        {receipts.map(([l, href]) => (
+          <a href={href} target="_blank" rel="noopener" class="text-accent/80 transition-colors hover:text-accent">{l} ↗</a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <GetInvolved />
+</Base>

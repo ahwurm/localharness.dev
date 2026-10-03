@@ -1,34 +1,23 @@
 ---
-// /plugins/memory/ — the TEMPLATE plugin page (prototype, 2026-10-02). Same density as
-// /architecture/: SectionBand → FigureFrame plate → icon-led explainer rows → receipts.
-// The plates moved here from /architecture/#memory and were rebuilt against localharness
-// main @ 98682e4 (resonance memory, plugin boundary). Every row traces to
-// docs/specs/09-hooks-plugins.md "The memory slot", memory/*.py docstrings, README, or the
-// CHANGELOG 0.16.0 Known limitations. Plugin-system receipts 404 on public GitHub until that
-// release lands on public main.
-import Base from '../../layouts/Base.astro';
-import Icon, { type IconName } from '../../components/Icon.astro';
+// /plugins/memory/ — the memory plugin (PluginPage template). The plates moved here from
+// /architecture/#memory and were rebuilt against localharness main (memory unchanged from 98682e4
+// to 582b69c, v0.16.0). Every row traces to docs/specs/09-hooks-plugins.md "The memory slot",
+// memory/*.py docstrings, README, or the CHANGELOG [0.16.0] Known limitations.
+import PluginPage from '../../layouts/PluginPage.astro';
 import FigureFrame from '../../components/FigureFrame.astro';
-import SectionBand from '../../components/SectionBand.astro';
+import Rows, { type Row } from '../../components/Rows.astro';
 import MemoryPlateII from '../../components/MemoryPlateII.astro';
 import MemoryDetailPlate from '../../components/MemoryDetailPlate.astro';
-import GetInvolved from '../../components/GetInvolved.astro';
 
-const REPO = 'https://github.com/ahwurm/localharness';
-const blob = (p: string) => `${REPO}/blob/main/${p}`;
+const blob = (p: string) => `https://github.com/ahwurm/localharness/blob/main/${p}`;
 
-const title = 'LocalHarness — the memory plugin';
-const description =
-  'How LocalHarness memory works, drawn to scale: the plugin that fills the core’s one memory slot, and one fact’s life inside its store.';
-
-// [icon, keyword, clause] — corrected from the old #memory rows to today's design.
-const scales: [IconName, string, string][] = [
+const scales: Row[] = [
   ['clock', 'each turn', 'the plugin adds what it knows to the prompt, inside a budget core sets.'],
   ['search', 'on demand', 'the agent can search memory by meaning, or pull one fact in full.'],
   ['book', 'each sitting', 'a sitting ends with a one-line summary on the shelf.'],
   ['layers', 'for good', 'facts outlive the session, in a database per agent and a file you can read.'],
 ];
-const learns: [IconName, string, string][] = [
+const learns: Row[] = [
   ['prompt', 'every write is a bet', 'a new fact starts out as trusted as its writer has earned.'],
   ['check', 'evidence moves belief', 'the same fact seen again adds weight; a new value replaces the old, which stays on file.'],
   ['repeat', 'it dreams while idle', 'while idle it replays what happened and strengthens the facts that touched it.'],
@@ -36,20 +25,18 @@ const learns: [IconName, string, string][] = [
   ['shield', 'forgetting is opt-in', 'archiving dormant facts is off by default, and nothing is ever deleted.'],
   ['check', 'it never pretends', 'every write is read back and checked; a failed write fails loudly.'],
 ];
-const surfaces: [IconName, string, string][] = [
+const surfaces: Row[] = [
   ['prompt', '/memory', 'inside a session, browse by tag, then show, search, forget or promote a memory.'],
   ['box', 'localharness memory', 'from the shell, list, show, edit, remove, archive or restore memories.'],
+  ['search', 'memory_search · memory_get · remember', 'the three tools an agent calls inside a session.'],
   ['meter-off', 'memory.enabled', 'set it to false and there is no memory section, no memory tool and no /memory.'],
 ];
-// What is not there yet — each from CHANGELOG Known limitations, marked with the plate key.
-type KeyState = 'shipped' | 'planned';
-const notYet: [IconName, string, string, KeyState][] = [
+const notYet: Row[] = [
   ['clock', 'subagent gists', 'a cruncher run asks memory for a write handle and gets none, so its gists are not stored.', 'planned'],
   ['shield', 'remember is trusted', 'what remember returns is treated as trusted text, while search and get results are fenced as untrusted.', 'shipped'],
   ['repeat', 'silent events', 'several memory event types are still defined, but nothing sends them.', 'shipped'],
   ['doc', 'an inert setting', 'inject_into_context is accepted, but no code reads it.', 'shipped'],
 ];
-
 const receipts: [string, string][] = [
   ['memory/plugin.py', blob('src/localharness/memory/plugin.py')],
   ['memory/sqlite.py', blob('src/localharness/memory/sqlite.py')],
@@ -59,139 +46,36 @@ const receipts: [string, string][] = [
   ['plugins/slot.py', blob('src/localharness/plugins/slot.py')],
   ['spec 09 — the memory slot', blob('docs/specs/09-hooks-plugins.md#the-memory-slot')],
 ];
-
-const jsonLd = [
-  {
-    '@context': 'https://schema.org',
-    '@type': 'TechArticle',
-    headline: title,
-    description,
-    url: 'https://localharness.dev/plugins/memory/',
-    image: 'https://localharness.dev/og/localharness.png',
-    author: { '@type': 'Organization', name: 'LocalHarness', url: 'https://localharness.dev' },
-    publisher: { '@type': 'Organization', name: 'LocalHarness', url: 'https://localharness.dev' },
-    about: {
-      '@type': 'SoftwareApplication',
-      name: 'LocalHarness',
-      applicationCategory: 'DeveloperApplication',
-      url: 'https://localharness.dev',
-    },
-    isPartOf: { '@type': 'WebPage', url: 'https://localharness.dev/architecture/' },
-  },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'LocalHarness', item: 'https://localharness.dev/' },
-      { '@type': 'ListItem', position: 2, name: 'Architecture', item: 'https://localharness.dev/architecture/' },
-      { '@type': 'ListItem', position: 3, name: 'Plugins', item: 'https://localharness.dev/architecture/#plugins' },
-      { '@type': 'ListItem', position: 4, name: 'Memory', item: 'https://localharness.dev/plugins/memory/' },
-    ],
-  },
-];
 ---
 
-<Base title={title} description={description} jsonLd={jsonLd}>
-  <h1 class="sr-only">{title}</h1>
-
-  <section id="memory" data-reveal>
-    <SectionBand icon="layers" title="Memory" />
-    <div id="context" class="container-site py-16 sm:py-20">
-      <p class="font-mono text-xs text-dim">
-        <a href="/architecture/#plugins" class="text-accent/80 transition-colors hover:text-accent">← the plugins</a>
-        <span class="mx-2 text-dim/60">/</span>memory
-      </p>
-      <p class="measure mt-4 text-dim">
-        Memory is a plugin — it fills the core’s one memory slot, and switching it off leaves the slot empty.
-      </p>
-      <div class="mt-10">
-        <FigureFrame num="01" caption="PLATE M — the memory plugin behind the slot: what core calls, what the plugin owns">
-          <MemoryPlateII />
-        </FigureFrame>
-      </div>
-      <div class="mt-10 grid gap-x-12 gap-y-8 xl:grid-cols-2">
-        <div>
-          <p class="eyebrow">at every scale</p>
-          <ul class="mt-3 space-y-2.5">
-            {scales.map(([icon, kw, clause]) => (
-              <li class="flex items-start gap-3">
-                <Icon name={icon} class="size-4" />
-                <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
-                  <span class="font-mono text-[13px] text-ink">{kw}</span>
-                  <span class="text-sm text-dim">{clause}</span>
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <p class="eyebrow">how it learns</p>
-          <ul class="mt-3 space-y-2.5">
-            {learns.map(([icon, kw, clause]) => (
-              <li class="flex items-start gap-3">
-                <Icon name={icon} class="size-4" />
-                <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
-                  <span class="font-mono text-[13px] text-ink">{kw}</span>
-                  <span class="text-sm text-dim">{clause}</span>
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-      <div class="mt-12">
-        <FigureFrame num="02" caption="DETAIL M·A — inside the store: one fact’s life">
-          <MemoryDetailPlate />
-        </FigureFrame>
-      </div>
+<PluginPage
+  name="memory"
+  label="Memory"
+  icon="layers"
+  description="The LocalHarness memory plugin fills the core's one memory slot: facts that outlive the session, recalled into each turn within a budget the core sets, and consolidated while idle."
+  lead="Memory is a plugin — it fills the core’s one memory slot, and switching it off leaves the slot empty."
+  surfaces={surfaces}
+  notYet={notYet}
+  receipts={receipts}
+>
+  <div class="mt-10">
+    <FigureFrame num="01" caption="PLATE M — the memory plugin behind the slot: what core calls, what the plugin owns">
+      <MemoryPlateII />
+    </FigureFrame>
+  </div>
+  <div class="mt-10 grid gap-x-12 gap-y-8 xl:grid-cols-2">
+    <div>
+      <p class="eyebrow">at every scale</p>
+      <Rows rows={scales} />
     </div>
-  </section>
-
-  <section id="surfaces" data-reveal>
-    <SectionBand icon="prompt" title="Surfaces" />
-    <div class="container-site py-16 sm:py-20">
-      <div class="grid gap-x-12 gap-y-8 xl:grid-cols-2">
-        <div>
-          <p class="eyebrow">where you reach it</p>
-          <ul class="mt-3 space-y-2.5">
-            {surfaces.map(([icon, kw, clause]) => (
-              <li class="flex items-start gap-3">
-                <Icon name={icon} class="size-4" />
-                <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
-                  <span class="font-mono text-[13px] text-ink">{kw}</span>
-                  <span class="text-sm text-dim">{clause}</span>
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <p class="eyebrow">what is not there yet</p>
-          <ul class="mt-3 space-y-2.5">
-            {notYet.map(([icon, kw, clause, state]) => (
-              <li class="flex items-start gap-3">
-                <Icon name={icon} class="size-4" />
-                <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
-                  <span class="font-mono text-[13px] text-ink">{kw}</span>
-                  <span class="text-sm text-dim">{clause}</span>
-                  <span class="inline-flex items-center gap-1.5 font-mono text-[11px] text-dim">
-                    <span class:list={['inline-block size-2 border', state === 'planned' ? 'border-dashed border-dim' : 'border-ink']}></span>
-                    {state === 'planned' ? 'planned' : 'shipped, as is'}
-                  </span>
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-      <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-xs">
-        <span class="text-dim">_deeper</span>
-        {receipts.map(([label, href]) => (
-          <a href={href} target="_blank" rel="noopener" class="text-accent/80 transition-colors hover:text-accent">{label} ↗</a>
-        ))}
-      </div>
+    <div>
+      <p class="eyebrow">how it learns</p>
+      <Rows rows={learns} />
     </div>
-  </section>
-
-  <GetInvolved />
-</Base>
+  </div>
+  <div class="mt-12">
+    <FigureFrame num="02" caption="DETAIL M·A — inside the store: one fact’s life">
+      <MemoryDetailPlate />
+    </FigureFrame>
+  </div>
+</PluginPage>

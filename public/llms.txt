@@ -38,14 +38,28 @@ straight to the source:
 
 - The system — Plate I, the shipped runtime on one sheet: https://localharness.dev/architecture/#system
 - The agent loop — budgets, stuck-detector, act-guard, self-check, parse-repair: https://localharness.dev/architecture/#loop
-- The plugins — Plate II, the composable harness: a small core, the plugin boundary, the five
-  bundled plugins (image, web, memory, dispatch, autoresearch) and the ports they fill, the
-  manifest → lifecycle sequence, and the one-way import rule: https://localharness.dev/architecture/#plugins
+- The plugins — the composable harness: core owns the loop, the tools, the config and the
+  permissions, and everything else is a plugin behind one additive API (manifest, lifecycle,
+  slots, doctor, the off switch, the one-way import rule): https://localharness.dev/architecture/#plugins
 
-Plugin pages, one per bundled plugin, in the same drawn-to-scale style:
+Plugin pages, one per bundled plugin in code order — each with a plate of what the plugin owns
+versus what core provides, its surfaces (commands, settings, the on/off switch), and what is not
+there yet:
 
+- Image — `generate_image` and `localharness generate-image` against your own ComfyUI server;
+  pictures land as artifacts in a folder core assigns; off by default:
+  https://localharness.dev/plugins/image/
+- Web — the phone app: `localharness web` serves a token-locked page and event stream on
+  loopback, and labels results of the built-in web tools as untrusted ingest:
+  https://localharness.dev/plugins/web/
 - Memory — the plugin behind the memory slot, plus a detail sheet inside its store, down to one
   fact's life: https://localharness.dev/plugins/memory/
+- Dispatch — Discord as a channel (`start --channel discord`): allowlisted messages become turns,
+  permission questions are answered by reaction, and the token, allow list and channels are
+  machine-level settings: https://localharness.dev/plugins/dispatch/
+- Autoresearch — the propose → experiment → archive loop, gated by a sealed holdout the proposer
+  never sees; a clean win is written to your global settings and undone in one command:
+  https://localharness.dev/plugins/autoresearch/
 
 A single root orchestrator agent reads the task and runs a ReAct loop — think, act, look — kept
 honest by action and duration budgets, a stuck-detector that nudges then stops a spinning run, an
@@ -111,7 +125,7 @@ statistical promotion gate against baseline before adoption; a sealed holdout se
 while proposing. CLI: `localharness autoresearch run | review | adopt | report | sentinel | archive`,
 `localharness propose`, `localharness experiment run`,
 `localharness components list | get | set`, `localharness bench | bench compare`.
-It ships as the bundled `autoresearch` plugin. On-site: https://localharness.dev/architecture/#plugins
+It ships as the bundled `autoresearch` plugin. On-site: https://localharness.dev/plugins/autoresearch/
 
 - Deep docs: [README](https://github.com/ahwurm/localharness/blob/main/README.md),
   [security model](https://github.com/ahwurm/localharness/blob/main/SECURITY.md),
@@ -141,8 +155,12 @@ It ships as the bundled `autoresearch` plugin. On-site: https://localharness.dev
 - [LocalHarness](https://localharness.dev/): product page
 - [Architecture](https://localharness.dev/architecture/): how it's built — the runtime on one plate,
   the agent loop and its gates, and the plugins
+- [Image plugin](https://localharness.dev/plugins/image/): pictures from your own ComfyUI server
+- [Web plugin](https://localharness.dev/plugins/web/): the phone app and its untrusted-ingest label
 - [Memory plugin](https://localharness.dev/plugins/memory/): the memory slot, its plugin, and one
   fact's life inside the store
+- [Dispatch plugin](https://localharness.dev/plugins/dispatch/): drive a session from Discord
+- [Autoresearch plugin](https://localharness.dev/plugins/autoresearch/): the loop that tunes the harness
 
 ## For AI assistants
 

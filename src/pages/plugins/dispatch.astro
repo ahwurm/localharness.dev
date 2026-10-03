@@ -1,0 +1,62 @@
+---
+// /plugins/dispatch/ — the dispatch plugin, Discord as a channel (PluginPage template). Rows trace
+// to localharness main @ 582b69c: dispatch/plugin.py + config.py docstrings, spec 09 "The bundled
+// plugins", README plugins table + "Answering a permission prompt in Discord", CHANGELOG [0.16.0]
+// Known limitations.
+import PluginPage from '../../layouts/PluginPage.astro';
+import FigureFrame from '../../components/FigureFrame.astro';
+import Rows, { type Row } from '../../components/Rows.astro';
+import DispatchPlate from '../../components/DispatchPlate.astro';
+
+const blob = (p: string) => `https://github.com/ahwurm/localharness/blob/main/${p}`;
+
+const how: Row[] = [
+  ['prompt', 'allowlisted messages', 'a message from a user on the allow list becomes a turn, and the reply is posted back.'],
+  ['shield', 'questions in the chat', 'when the gate needs you, the bot posts the question and you answer with a reaction.'],
+  ['layers', 'set on the machine', 'the token, the allow list and the channels are machine-level — a project cannot change who drives the agent.'],
+  ['doc', 'the token stays quiet', 'it is never printed, and doctor checks it without logging in.'],
+  ['repeat', 'no network at start', 'the bot connects when the session starts the channel, not before.'],
+  ['clock', 'the old variables, for now', 'the old environment variables still fill an unset setting, with a warning, until the fallback is deleted.'],
+];
+const surfaces: Row[] = [
+  ['box', 'localharness start --channel discord', 'runs a session from Discord.'],
+  ['doc', 'dispatch.discord.token · allow · channels · ack', 'the bot, who may drive it, where it listens, and the reaction it leaves.'],
+  ['prompt', 'mode <name>', 'a plain mode message in the chat works as /mode.'],
+  ['repeat', 'commands and tools', 'none — it adds a channel, nothing else.'],
+  ['meter-off', 'localharness plugins enable dispatch', 'on by default once the dispatch extra is installed; enable takes the token and your user id with --set, and disable turns it off.'],
+];
+const notYet: Row[] = [
+  ['server', 'not yet on a live server', 'tested offline against a stand-in; logging in, reactions and real uploads are unverified.', 'shipped'],
+  ['doc', 'uploads are not read', 'files people send the bot never reach the model; the turn sees the text only.', 'shipped'],
+  ['layers', 'one settings section', 'a second chat platform would share Discord’s token, allow list and channels.', 'shipped'],
+  ['shield', 'a plain-text token', 'the token sits in the global overrides.yaml, readable only by you when LocalHarness writes it.', 'shipped'],
+  ['prompt', 'start --help still lists discord', 'with dispatch off, start --channel discord refuses and says how to turn it on.', 'shipped'],
+  ['clock', 'the fallback ends', 'the old environment variables stop working at the next minor release.', 'planned'],
+];
+const receipts: [string, string][] = [
+  ['dispatch/plugin.py', blob('src/localharness/dispatch/plugin.py')],
+  ['dispatch/config.py', blob('src/localharness/dispatch/config.py')],
+  ['dispatch/channel.py', blob('src/localharness/dispatch/channel.py')],
+  ['adapters/discord.py', blob('src/localharness/dispatch/adapters/discord.py')],
+  ['spec 09 — bundled plugins', blob('docs/specs/09-hooks-plugins.md#the-bundled-plugins')],
+];
+---
+
+<PluginPage
+  name="dispatch"
+  label="Dispatch"
+  icon="prompt"
+  description="The LocalHarness dispatch plugin lets allowlisted Discord users drive an agent session from chat, with replies and permission questions posted back."
+  lead="Chat is a plugin — dispatch adds the Discord channel, and switching it off leaves the terminal as it was."
+  surfaces={surfaces}
+  notYet={notYet}
+  receipts={receipts}
+>
+  <div class="mt-10">
+    <FigureFrame num="01" caption="PLATE DISPATCH — Discord as a channel, its settings on the machine: one session">
+      <DispatchPlate />
+    </FigureFrame>
+  </div>
+  <p class="eyebrow mt-10">how it works</p>
+  <Rows rows={how} class="grid gap-x-12 gap-y-2.5 xl:grid-flow-col xl:grid-rows-3" />
+</PluginPage>
