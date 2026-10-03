@@ -11,7 +11,6 @@
 import Base from '../layouts/Base.astro';
 import Icon, { type IconName } from '../components/Icon.astro';
 import FigureFrame from '../components/FigureFrame.astro';
-import Interstitial from '../components/Interstitial.astro';
 import SectionBand from '../components/SectionBand.astro';
 import RuntimePlate from '../components/RuntimePlate.astro';
 import LoopPlate from '../components/LoopPlate.astro';
@@ -150,13 +149,12 @@ const pluginReceipts: [string, string, boolean][] = [
     </div>
   </section>
 
-  <Interstitial icon="box" lead="Core owns the loop, the tools, the config and the permissions" rest="— everything else is a plugin." />
-
   <!-- #plugins — the composable harness: no plate; each plugin has its own page. -->
   <section id="plugins" data-reveal>
     <SectionBand icon="layers" title="The Plugins" topBorder={false} />
     <div class="container-site py-16 sm:py-20">
       <p class="eyebrow">how it composes</p>
+      <p class="mt-3 max-w-prose text-sm text-dim">Core owns the loop, the tools, the config and the permissions — everything else is a plugin.</p>
       <ul class="mt-3 grid gap-x-12 gap-y-2.5 xl:grid-flow-col xl:grid-rows-3">
         {pluginRows.map(([icon, kw, clause]) => (
           <li class="flex items-start gap-3">
