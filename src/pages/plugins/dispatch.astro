@@ -21,7 +21,8 @@ const surfaces: Row[] = [
   ['doc', 'dispatch.discord.token · allow · channels · ack', 'the bot, who may drive it, where it listens, and the reaction it leaves.'],
   ['prompt', 'mode <name>', 'typed in the chat, works as /mode.'],
   ['repeat', 'commands and tools', 'none; it adds only a channel.'],
-  ['meter-off', 'localharness plugins enable dispatch', 'enable takes the token and your user id with --set; disable turns it off.'],
+  ['meter-off', 'localharness plugins enable dispatch', 'enable asks the token (hidden) and your user id; --set does the same in a script.'],
+  ['prompt', '/plugins enable dispatch', 'inside a running session: until it is set up, asks what it needs and checks it; then restarts with your conversation kept.'],
 ];
 const receipts: [string, string][] = [
   ['dispatch/plugin.py', blob('src/localharness/dispatch/plugin.py')],

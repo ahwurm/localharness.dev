@@ -23,7 +23,8 @@ const surfaces: Row[] = [
   ['box', 'localharness web', 'serves the phone app; --rotate-token cuts off every paired phone.'],
   ['repeat', '--incognito · --replay · --ui-dir', 'pictures kept out of the phone’s cache, a recorded session, or your own page.'],
   ['prompt', 'slash commands', 'none; the phone page has no command menu.'],
-  ['doc', 'settings', 'none; the port and bind address are flags.'],
+  ['doc', 'web.public_url', 'the address your phone opens, saved once, machine-level only; the port and bind address stay flags.'],
+  ['prompt', '/plugins enable web', 'inside a running session: until it is set up, asks what it needs and checks it; then restarts with your conversation kept.'],
   ['meter-off', 'localharness plugins disable web', 'named web in the CLI; on once the web extra is installed, and disable removes the channel and the command.'],
 ];
 const receipts: [string, string][] = [

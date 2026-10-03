@@ -45,8 +45,9 @@ straight to the source:
 Plugin pages, one per bundled plugin. Each has a plate of what the plugin owns versus what core
 provides, its surfaces (commands, settings, the on/off switch), and its setup step: the settings it
 asks for, a check that it works, and a prompt to paste into your coding agent to set it up for your
-hardware (image's step runs today in `plugins enable image`; the setup wizard for the others is not
-released yet):
+hardware (each runs from a session with `/plugins enable <name>`, which restarts the session with
+the plugin on and your conversation kept, or from a shell with
+`localharness plugins enable <name>`):
 
 - Image — the agent makes pictures with local models on your own ComfyUI server: `generate_image`
   and `localharness generate-image`, the server and workflow as machine-level settings; off by

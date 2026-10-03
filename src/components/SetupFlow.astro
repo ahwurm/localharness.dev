@@ -3,7 +3,7 @@
 // session's own frame (wordmark, model, Plugins: line), `/plugins enable <name>` at the ❯ prompt, the
 // wizard step inline, the Plugins: line gaining the name, the plugin in use, then the copyable
 // "paste this into your coding agent" prompt. Data + provenance in src/data/plugins.ts SETUP. The
-// in-session step is landing; the caption names today's shell command. Server renders the finished
+// in-session step is shipped; the caption names both ways in. Server renders the finished
 // state; JS (motion permitting, while on screen) hides-then-types, holds, and restarts. Lines keep
 // their box while hidden (visibility), so the frame never jumps.
 import CodeBlock from './CodeBlock.astro';
@@ -16,8 +16,9 @@ const { name } = Astro.props;
 const flow = SETUP[name];
 if (!flow) throw new Error(`SetupFlow: no SETUP entry for '${name}'`);
 const tone: Record<string, string> = { good: 'text-accent/90', dim: 'text-dim', out: 'text-ink/85', ask: 'text-ink/85' };
-// the Plugins: line, with the gained name (and its separator) in its own span
-const gi = flow.plugins.indexOf(name);
+// the Plugins: line, with the gained name (and its separator) in its own span; a plugin already
+// running before the step (no 'gain' line) gains nothing
+const gi = flow.lines.some((l) => l.kind === 'gain') ? flow.plugins.indexOf(name) : -1;
 const seg = flow.plugins.map((n, i) => ({ gain: i === gi, text: (i > 0 && !(i === 1 && gi === 0) ? ', ' : '') + n + (i === gi && i === 0 && flow.plugins.length > 1 ? ', ' : '') }));
 ---
 
@@ -26,8 +27,8 @@ const seg = flow.plugins.map((n, i) => ({ gain: i === gi, text: (i > 0 && !(i ==
     <div class="flex items-center justify-between gap-4 border-b border-edge/70 px-4 py-2">
       <span class="min-w-0 truncate font-mono text-xs text-dim">~/project — localharness start</span>
       <span class="inline-flex shrink-0 items-center gap-1.5 font-mono text-[11px] text-dim">
-        <span class="inline-block size-2 border border-dim" style="background:repeating-linear-gradient(45deg,var(--color-dim) 0 1px,transparent 1px 3px)"></span>
-        landing
+        <span class="inline-block size-2 border border-ink"></span>
+        shipped
       </span>
     </div>
     <div class="p-4 font-mono text-[13px] leading-[1.75]">
@@ -47,7 +48,7 @@ const seg = flow.plugins.map((n, i) => ({ gain: i === gi, text: (i > 0 && !(i ==
       }
     </div>
   </div>
-  <p class="mt-3 font-mono text-[11px] text-dim">_in-session step landing · today: <span class="text-ink/80">localharness plugins enable {name}</span></p>
+  <p class="mt-3 font-mono text-[11px] text-dim">in a session: <span class="text-ink/80">/plugins enable {name}</span> · from a shell: <span class="text-ink/80">localharness plugins enable {name}</span></p>
   <CodeBlock class="mt-6" wrap label="paste into your coding agent to set it up for your hardware" code={flow.prompt} />
 </div>
 
