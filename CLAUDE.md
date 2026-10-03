@@ -56,9 +56,9 @@ Astro 5 + Tailwind v4, static output, GitHub Pages deploy, domain `localharness.
 
 Logo = the "hat guy" (green face, dark cap) — the phone app's icon, adopted as the product mark
 2026-10-03 (owner request). Source of truth: `~/localharness/src/localharness/channels/web/ui/icon.svg`
-→ `public/favicon.svg` (also the nav mark and the OG card mark), PNGs `favicon-32`, `icon-192/512`,
+→ `public/favicon.svg` (also the OG card mark; NOT in the nav), PNGs `favicon-32`, `icon-192/512`,
 `apple-touch-icon` (180). The cap uses two blocks, not letters, so it reads at 16 px. Wordmark
-`localharness.dev` stays beside it. (The old sloth mark stays dropped.)
+`localharness.dev` stands alone in the nav ribbon, no mark beside it (owner 2026-10-03). (The old sloth mark stays dropped.)
 
 ## Homepage demo (DemoSession)
 
