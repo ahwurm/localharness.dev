@@ -189,8 +189,10 @@ const inline =
         summary.focus();
       }
     });
+    // Close AFTER a link's own click has done its work, never during it: closing the
+    // <details> synchronously hides the link mid-click, and WebKit then drops the navigation.
     menu.querySelector('summary + div')?.addEventListener('click', (e) => {
-      if ((e.target as HTMLElement).closest('a')) close();
+      if ((e.target as HTMLElement).closest('a')) setTimeout(close, 0);
     });
     if (!menu.classList.contains('plugins')) return;
     let timer = 0;
@@ -207,8 +209,13 @@ const inline =
     summary.addEventListener('click', (e) => {
       if (hoverDesk.matches && byHover) (e.preventDefault(), (byHover = false));
     });
+    // Close only when focus moves to an element OUTSIDE the menu. Safari (iOS and macOS) and
+    // Firefox on macOS blur the summary without focusing a tapped link (relatedTarget null);
+    // closing on that blur hid the panel before the tap landed, so plugins never navigated on
+    // the phone. Outside clicks and Escape still close the menu through the handlers above.
     menu.addEventListener('focusout', (e) => {
-      if (!menu.contains(e.relatedTarget as Node)) close();
+      const to = e.relatedTarget as Node | null;
+      if (to && !menu.contains(to)) close();
     });
   });
 </script>
