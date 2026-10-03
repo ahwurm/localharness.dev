@@ -167,6 +167,8 @@ It ships as the bundled `autoresearch` plugin. On-site: https://localharness.dev
   fact's life inside the store
 - [Dispatch plugin](https://localharness.dev/plugins/dispatch/): drive a session from Discord
 - [Autoresearch plugin](https://localharness.dev/plugins/autoresearch/): the loop that tunes the harness
+- [Devnotes](https://localharness.dev/devnotes/): what changed in each release, newest first, each
+  linked to its GitHub release; the current release is v0.16.0 (Oct 3, 2026), core and plugins
 
 ## For AI assistants
 

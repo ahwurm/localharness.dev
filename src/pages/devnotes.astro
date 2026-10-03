@@ -6,11 +6,580 @@ import type { IconName } from '../components/Icon.astro';
 
 // Real shipped changes grouped by release, newest first. Versions on this page are
 // a user directive (2026-07-02); entry bodies stay number-free. Each entry traces
-// to a commit or CHANGELOG entry in github.com/ahwurm/localharness.
-const releases = [
+// to a commit or CHANGELOG entry in github.com/ahwurm/localharness. A body may carry
+// inline links as [text](href); `url` is the release's GitHub page.
+const releases: { v: string; date: string; url?: string; entries: { tag: string; title: string; body: string }[] }[] = [
+  {
+    v: 'v0.16.0',
+    date: 'Oct 3, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.16.0',
+    entries: [
+      {
+        tag: 'Added',
+        title: 'Core and plugins',
+        body: 'Core now holds the loop, the tools, the config and the permissions, while [image](/plugins/image/), [mobile](/plugins/mobile/), [memory](/plugins/memory/), [dispatch](/plugins/dispatch/) and [autoresearch](/plugins/autoresearch/) ship as plugins you switch on or off behind one additive plugin API.',
+      },
+      {
+        tag: 'Added',
+        title: 'The memory slot',
+        body: 'One memory plugin fills a section of every turn\'s prompt, and with [memory](/plugins/memory/) off that section stays empty and no memory tool is registered.',
+      },
+      {
+        tag: 'Changed',
+        title: 'Discord runs as the dispatch plugin',
+        body: 'Discord now runs as the [dispatch](/plugins/dispatch/) plugin with its own settings in the config file, and the old environment variables still fill an unset setting, with a warning, until a later release removes them.',
+      },
+      {
+        tag: 'Changed',
+        title: 'Plugin commands, and a hint when one is off',
+        body: 'The [autoresearch](/plugins/autoresearch/) plugin now mounts the autoresearch, experiment and propose commands, and a command whose plugin is off exits with a hint naming the command that turns it on.',
+      },
+      {
+        tag: 'Fixed',
+        title: 'A project can no longer switch off the capability floor',
+        body: 'A project\'s own config can no longer switch the capability floor off; only the global config can, and start warns when a project tries.',
+      },
+      {
+        tag: 'Added',
+        title: 'Docs and code checked against each other',
+        body: 'A test now reads the docs and the code and fails when they disagree.',
+      },
+    ],
+  },
+  {
+    v: 'v0.15.0',
+    date: 'Sep 19, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.15.0',
+    entries: [
+      { tag: 'Changed', title: 'Memory rebuilt around an embedding model', body: 'Search ranking, idle replay and duplicate detection now all judge similarity with a local embedding model instead of rule-based gates, tag graphs and keyword heuristics.' },
+      { tag: 'Added', title: 'Dreaming and a writers ledger', body: 'Idle consolidation replays the session\'s own history to rank memories and group related ones, and each new memory starts with the track record of whoever wrote it.' },
+      { tag: 'Added', title: 'Gated forgetting with restore', body: 'With archival enabled, memories that score below the store\'s own usefulness line are archived and can be brought back exactly with the memory restore command.' },
+      { tag: 'Changed', title: 'Blacklisted calls are parked, not blocking', body: 'In auto mode a call on the blacklist is queued for a human while the turn carries on, and you answer later with /pending, /approve and /deny, ctrl+y and ctrl+n, or Discord reactions.' },
+      { tag: 'Changed', title: 'Long sessions keep their compaction summary', body: 'A summary is written back into the session history, so later requests stop re-summarizing, and a context-window overflow from the server is recognized and retried against the window it named.' },
+      { tag: 'Changed', title: 'Clearer tool and eviction messages', body: 'Evicted tool results now say which tool and path they replaced, an unknown tool name suggests the nearest match, and hard refusals state that nobody can approve them.' },
+    ],
+  },
+  {
+    v: 'v0.14.1',
+    date: 'Sep 11, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.14.1',
+    entries: [
+      { tag: 'Changed', title: 'Default permission mode is now auto', body: 'The first time a workspace is opened you are asked once whether you trust it, and after that everything runs except a named blacklist of risky calls.' },
+      { tag: 'Changed', title: 'Folders you have used are never asked about', body: 'A workspace with earlier LocalHarness sessions behind it is recognized and trusted with a one-line notice instead of a dialog.' },
+      { tag: 'Changed', title: 'Startup asks a single question', body: 'The separate offer to create a project workspace folder is gone, and answering yes to the trust question now records trust and creates the folder together.' },
+      { tag: 'Added', title: 'System directories are protected', body: 'Writes to system locations such as /etc, /usr and the Windows system folders now ask every time, while temporary directories are exempt.' },
+      { tag: 'Added', title: 'Unattended mode is settable from a channel', body: 'You can now switch to unattended with /mode in the terminal, with mode in Discord, or from the Zed picker, where before it was config-only.' },
+      { tag: 'Changed', title: 'Guarded mode is now opt-in', body: 'The ask-and-remember behavior is unchanged but you now choose it in config or with /mode, and an older config naming auto now simply loads as auto.' },
+    ],
+  },
+  {
+    v: 'v0.14.0',
+    date: 'Sep 11, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.14.0',
+    entries: [
+      { tag: 'Added', title: 'Human approval gate on every tool call', body: 'A single deterministic check, subagents included, asks you when a call crosses your project boundary or looks destructive and stays quiet otherwise.' },
+      { tag: 'Added', title: 'Remembered answers in grants.yaml', body: 'Your always and never answers are stored per workspace in your home folder, and a grants file inside a project is never read, so a cloned repo cannot approve itself.' },
+      { tag: 'Added', title: 'Session modes and /mode', body: 'You can switch between guarded, trusted and read-only per session from the terminal or Discord, while unattended stays config-only.' },
+      { tag: 'Added', title: 'LocalHarness in Zed\'s agent panel', body: 'The new acp command runs an Agent Client Protocol server so replies stream into Zed, edits land in its review pane, and permission prompts use its own dialog.' },
+      { tag: 'Added', title: 'Permission prompts in Discord', body: 'The bot posts the question and you answer with a reaction for allow once, always in this workspace, or no.' },
+      { tag: 'Fixed', title: 'Dangerous chmod block now works mid-command', body: 'The shipped deny list only caught the world-writable chmod form at the start of a command, so forms like find with exec or a command after && slipped through.' },
+    ],
+  },
+  {
+    v: 'v0.13.3',
+    date: 'Sep 9, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.13.3',
+    entries: [
+      { tag: 'Added', title: 'Status row shows what the model is doing', body: 'The row now shows the current phase such as thinking, writing or tool call with a live token tally, elapsed time, and a red silent marker when no output has arrived for a while.' },
+      { tag: 'Added', title: 'Repetition loops are stopped mid-stream', body: 'A generation that locks into repeating itself is aborted as it happens, retried with a repetition penalty, and ends the turn with an explanation if it happens again.' },
+      { tag: 'Changed', title: 'No turn time limit by default', body: 'The maximum turn duration now defaults to no limit, so slow hardware is no longer cut off mid-task, and you can still set a number to pin one.' },
+      { tag: 'Changed', title: 'Edit now comes with write', body: 'A subagent given write also gets edit, edit returns a diff of its change, and write over an existing file reports how many lines changed.' },
+    ],
+  },
+  {
+    v: 'v0.13.2',
+    date: 'Sep 8, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.13.2',
+    entries: [
+      { tag: 'Changed', title: 'No output cap by default', body: 'When your config sets no maximum, the request leaves the limit out entirely and the model generates until it is done, bounded only by your context window.' },
+      { tag: 'Changed', title: 'Derived output cap removed', body: 'The cap computed from your window size in the previous release is deleted, and a number you write in config is still honored exactly.' },
+      { tag: 'Changed', title: 'Old init configs may still pin a cap', body: 'A config written by an older init keeps its pinned default cap until you delete that line or set it to null.' },
+      { tag: 'Changed', title: 'A cut-off reply now means the window is full', body: 'With no cap in the request, a truncated reply is reported as a full context window and points you to compaction rather than offering to raise a cap.' },
+    ],
+  },
+  {
+    v: 'v0.13.1',
+    date: 'Sep 8, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.13.1',
+    entries: [
+      { tag: 'Added', title: 'Start offers to create a workspace', body: 'When your project has no workspace folder, start offers to make one, and a declined offer is remembered for that directory.' },
+      { tag: 'Added', title: 'Live reasoning stream', body: 'A new start option and terminal setting let you watch the model\'s reasoning as it streams.' },
+      { tag: 'Added', title: 'Platform support section in the README', body: 'The README now documents what is supported on Linux and on Windows.' },
+      { tag: 'Fixed', title: 'Empty completions no longer count as success', body: 'A reply that comes back empty no longer ends the turn as if the task had finished.' },
+      { tag: 'Fixed', title: 'Windows shell commands work from PowerShell', body: 'The bash_exec tool now has the coreutils it needs on Windows when the harness is started from PowerShell, and a command that could not run is reported as a tool failure.' },
+      { tag: 'Fixed', title: 'Startup summary keeps its warnings', body: 'The startup summary no longer deletes its own warnings, and an agent name containing brackets no longer breaks the agent picker.' },
+    ],
+  },
+  {
+    v: 'v0.13.0',
+    date: 'Sep 4, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.13.0',
+    entries: [
+      { tag: 'Added', title: 'Workspace layers', body: 'A .localharness folder in your project now carries its own config, agents, memory and state layered over your global setup, with the workspace value winning on conflicts.' },
+      { tag: 'Added', title: 'Trust prompt for outside config', body: 'You are asked before configuration that reaches in from outside your project is applied.' },
+      { tag: 'Added', title: 'Per-project memory with a recall scope', body: 'A recall scope setting chooses workspace or global memory, and /memory promote moves a single memory across that line on purpose.' },
+      { tag: 'Added', title: 'Workspace commands', body: 'Init --workspace scaffolds the project folder, doctor reports the layering, and config show prints the effective merged config.' },
+      { tag: 'Changed', title: 'Filesystem confinement defaults to the project', body: 'In a workspace session the file tools are confined to the project root by default, and config errors now name the file that set the bad key.' },
+      { tag: 'Fixed', title: 'Deny patterns in overrides are enforced', body: 'Deny patterns written in an overrides file and in org-level config now reach enforcement instead of only being stored.' },
+    ],
+  },
+  {
+    v: 'v0.12.10',
+    date: 'Sep 3, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.12.10',
+    entries: [
+      { tag: 'Fixed', title: 'Doctor no longer reports false token-counting failures', body: 'Doctor now uses the same token counter as the running session and reports the mode it actually resolved, so a drifted provider setting shows up as a note instead of a phantom failure.' },
+      { tag: 'Fixed', title: 'One root cause no longer shows up as two issues', body: 'When a stale model name made the tokenizer check fail, dependent checks are now skipped and labelled instead of producing a second failure.' },
+      { tag: 'Changed', title: 'Approximate-counting warning explains its error', body: 'The warning now says how far off the estimate can be depending on content type, including that it can be badly wrong on Chinese, Japanese and Korean text.' },
+    ],
+  },
+  {
+    v: 'v0.12.9',
+    date: 'Sep 2, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.12.9',
+    entries: [
+      { tag: 'Fixed', title: 'Live tokens-per-second readout is accurate with speculative decoding', body: 'The status line no longer under-reports speed when the server sends several tokens per streamed chunk.' },
+      { tag: 'Changed', title: 'Live rate is hidden until it can be trusted', body: 'If a model\'s tokens-per-chunk ratio has never been measured, the live rate is left blank rather than guessed, and the learned ratio is saved so later sessions start accurate.' },
+      { tag: 'Fixed', title: 'Speed ledger keeps its other fields', body: 'Recording a new speed no longer wipes other information stored on the same model entry.' },
+    ],
+  },
+  {
+    v: 'v0.12.8',
+    date: 'Sep 2, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.12.8',
+    entries: [
+      { tag: 'Added', title: 'localharness update command', body: 'It upgrades an installed copy to the latest release using whichever installer set it up, with a check-only option and a refusal on source checkouts.' },
+      { tag: 'Added', title: 'Session-only model override and model listing', body: 'start accepts a model flag that is never saved to config, and a list-models flag shows what is being served without starting a session.' },
+      { tag: 'Added', title: 'Standalone Hugging Face model download', body: 'model --download fetches a repository, and a file option pulls just one file such as a single quantization.' },
+      { tag: 'Added', title: 'Doctor warns about Vulkan builds on AMD GPUs', body: 'For a managed llama.cpp server, doctor flags a Vulkan-linked binary on an AMD GPU and names the rebuild flags to use.' },
+      { tag: 'Changed', title: 'Start adopts the model the server is actually serving', body: 'When the configured model name is stale and the server hosts exactly one model, start switches to it and prints a line saying so instead of failing.' },
+      { tag: 'Fixed', title: 'Read tool no longer dumps binary files into context', body: 'Reading a binary file now returns a short error, and the compaction threshold setting is now actually honored.' },
+    ],
+  },
+  {
+    v: 'v0.12.7',
+    date: 'Aug 31, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.12.7',
+    entries: [
+      { tag: 'Fixed', title: 'Reply reserve no longer subtracted twice', body: 'The context window setting now means the full served window, and the harness reserves room for the reply in one place.' },
+      { tag: 'Fixed', title: 'Compaction now runs in the intended order on small windows', body: 'The gentler full compaction now triggers before the last-resort mechanical cut at every window size.' },
+      { tag: 'Fixed', title: 'Small-window sessions no longer fail on strict servers', body: 'The number of tokens a request may generate is now capped so prompt plus output always fits the window.' },
+      { tag: 'Changed', title: 'Context percentages read slightly higher', body: 'Usage is now measured against the usable budget after the reply reserve, so compaction triggers marginally earlier.' },
+      { tag: 'Changed', title: 'Tight but valid windows no longer abort startup', body: 'Servers with very small windows now start and run, and only windows too small to hold any reply are refused.' },
+      { tag: 'Fixed', title: 'Repeated emergency cuts are logged more clearly', body: 'A second emergency cut within one turn now logs an escalated message saying what to change.' },
+    ],
+  },
+  {
+    v: 'v0.12.6',
+    date: 'Aug 19, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.12.6',
+    entries: [
+      { tag: 'Fixed', title: 'Exact token counting works in llama.cpp router mode', body: 'Tokenizer requests now name the session\'s model, so servers hosting several models accept them.' },
+      { tag: 'Fixed', title: 'Doctor reports tokenizer rejections accurately', body: 'An endpoint that answers with an error is now reported as rejecting the request, with the server\'s own message, instead of as unreachable.' },
+      { tag: 'Fixed', title: 'Ollama reasoning text is now read', body: 'Both spellings of the reasoning field are handled, so reasoning models show correct decode speed and their reasoning text reaches the message.' },
+    ],
+  },
+  {
+    v: 'v0.12.5',
+    date: 'Aug 19, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.12.5',
+    entries: [
+      { tag: 'Fixed', title: 'Tool results are no longer silently shortened in the audit trail', body: 'Events and history now carry the full output with honest truncation flags, though the model always saw the full result.' },
+      { tag: 'Fixed', title: 'Large reads no longer loop at small context sizes', body: 'Restored content stays pinned for the rest of the turn, so a read, evict and re-read cycle no longer traps the turn.' },
+      { tag: 'Fixed', title: 'Bare /model no longer pre-fills the input box permanently', body: 'The pre-filled name is replaced as soon as you type, paste or backspace, so the next command is no longer garbled.' },
+      { tag: 'Fixed', title: 'Impossible speed samples are rejected', body: 'The speed ledger now ignores timing windows too short to be trustworthy on vLLM.' },
+      { tag: 'Fixed', title: 'Doctor and start agree on the context budget', body: 'Both now resolve the same effective budget, name any per-model pin, and match it to the right model\'s window.' },
+      { tag: 'Fixed', title: 'Trace packs include tool messages and dead endpoints fail faster', body: 'Trace packs no longer emit empty tool messages, and a dead endpoint now gets one probe cycle instead of repeating it.' },
+    ],
+  },
+  {
+    v: 'v0.12.4',
+    date: 'Aug 16, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.12.4',
+    entries: [
+      { tag: 'Added', title: 'Per-model context pins', body: 'A model_context_overrides setting gives a model its own token budget, honored at startup and when swapping models with /model.' },
+      { tag: 'Changed', title: 'Reference architecture docs rewritten around tested configs', body: 'The docs now cover tested DGX Spark setups, with measured numbers labelled as measured and unmeasured depths stated plainly.' },
+      { tag: 'Fixed', title: 'Window-guard errors name the model', body: 'The error now says which model\'s window it is rejecting.' },
+      { tag: 'Fixed', title: 'The /model swap says when it saves a new default', body: 'It no longer writes overrides silently and stays honest when the write fails.' },
+    ],
+  },
+  {
+    v: 'v0.12.3',
+    date: 'Aug 16, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.12.3',
+    entries: [
+      { tag: 'Fixed', title: 'Stock config no longer aborts at startup', body: 'An untouched default context budget now auto-fits to the served window with a printed note, while explicitly configured values still abort honestly.' },
+    ],
+  },
+  {
+    v: 'v0.12.2',
+    date: 'Aug 14, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.12.2',
+    entries: [
+      { tag: 'Added', title: 'Tool-mode probe now decides on evidence', body: 'When a server never shows a native tool call, the client makes one more request with the XML syntax taught to see which mode works.' },
+      { tag: 'Fixed', title: 'init auto-selects the only served model', body: 'With an endpoint flag, init picks the model when exactly one is served and lists the served ids when it cannot choose.' },
+      { tag: 'Fixed', title: 'Missing-config guidance is consistent', body: 'validate and components now tell you to run init when the config is missing, as doctor does.' },
+      { tag: 'Fixed', title: 'Summaries no longer include a prior turn\'s answer', body: 'Budget and stuck-recovery summaries stay within the current turn.' },
+      { tag: 'Fixed', title: 'First-run hint and managed LM Studio checks corrected', body: 'The input-box hint disappears after the first submit, and managed LM Studio liveness is checked at the endpoint.' },
+    ],
+  },
+  {
+    v: 'v0.12.1',
+    date: 'Aug 14, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.12.1',
+    entries: [
+      { tag: 'Fixed', title: 'Fresh installs no longer crash on start', body: 'The mcp dependency is pinned below its next major release, which had broken start with a raw traceback.' },
+      { tag: 'Added', title: 'Measured decode speed per model', body: 'Verified tokens per second is saved for each provider and model and shown in /model and the input-box status line.' },
+      { tag: 'Added', title: 'Compactions are now visible', body: 'The terminal prints a line showing how much of the window was used before and after history is summarized.' },
+      { tag: 'Fixed', title: 'Tool calls are handled honestly', body: 'Exhausted parse retries now fail the turn, and malformed or dropped tool calls become parse failures instead of crashes or fake answers.' },
+      { tag: 'Fixed', title: 'Server stop confirms the process is gone', body: 'Stop now re-checks after a forced kill and refuses to report a stop it cannot confirm.' },
+      { tag: 'Fixed', title: 'Model picker and Ctrl+C behave correctly', body: 'The /model picker no longer clobbers typed text, and a stale Ctrl+C can no longer exit the session.' },
+    ],
+  },
+  {
+    v: 'v0.12.0',
+    date: 'Aug 6, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.12.0',
+    entries: [
+      { tag: 'Added', title: 'Unparsed tool calls now reach the user', body: 'The terminal and Discord channels show when a reply looked like a tool call but nothing parsed, with the retry count and the runtime flag to check.' },
+      { tag: 'Added', title: 'Detection of runtime-native tool syntax shown as chat text', body: 'DeepSeek\'s native tool-call formats are now recognized and named as a failure, though converting them remains the serving runtime\'s job.' },
+      { tag: 'Fixed', title: 'One hiccup no longer forces XML tool mode', body: 'An inconclusive capability probe is now retried instead of downgrading the whole session.' },
+      { tag: 'Fixed', title: 'Doctor stops telling healthy llama.cpp servers to relaunch', body: 'The slot advisory now compares the per-request window against your configured budget instead of just counting slots.' },
+      { tag: 'Fixed', title: 'An explicit provider type no longer breaks start', body: 'A provider_type that disagrees with the running server now recovers with a logged warning instead of failing.' },
+    ],
+  },
+  {
+    v: 'v0.11.0',
+    date: 'Jul 29, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.11.0',
+    entries: [
+      { tag: 'Added', title: 'Harness-managed server lifecycle on all runtimes', body: 'The harness can start, stop and swap the model server itself for vLLM, llama.cpp, Ollama and LM Studio.' },
+      { tag: 'Added', title: 'Cross-framework model swap with a GPU lock', body: '/model can stop the GPU incumbent and launch a peer on another framework, then swap back, restoring the old server on failure.' },
+      { tag: 'Added', title: 'Exact token counting on every runtime', body: 'Ollama and LM Studio now count using the model\'s own vocabulary and template in-process, and vLLM and llama.cpp count the whole rendered request.' },
+      { tag: 'Added', title: 'Provider support matrix and runtime setup pages', body: 'The README lists honest per-runtime status, and new pages walk through real configs for llama.cpp, Ollama and LM Studio.' },
+      { tag: 'Fixed', title: 'Turn-killing budget crash and model-swap crashes', body: 'A crash where budget code fed message fragments to the exact counter is fixed, and Ollama or LM Studio activation failures no longer orphan the daemon.' },
+      { tag: 'Fixed', title: '/model list now lists models', body: 'It no longer answers that the model "list" is unknown.' },
+    ],
+  },
+  {
+    v: 'v0.10.0',
+    date: 'Jul 27, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.10.0',
+    entries: [
+      { tag: 'Added', title: 'Cross-endpoint model switching', body: '/model can now switch between models served on different endpoints or frameworks, using peers configured under extra_endpoints.' },
+      { tag: 'Added', title: 'Grouped model tree in /model', body: 'The picker groups models by endpoint and framework, and unreachable peers are noted instead of causing an error.' },
+      { tag: 'Added', title: 'llama.cpp validated as a second provider', body: 'It is auto-detected, counts tokens exactly, discovers its served window, and has completed a live agentic tool-call round trip.' },
+      { tag: 'Changed', title: 'Context budget is checked against the served window', body: 'A configured context larger than the endpoint serves now fails loudly instead of being silently truncated.' },
+      { tag: 'Fixed', title: 'Small served windows no longer truncate prompts silently', body: 'The context budget is clamped below the served window, and unsupported-parameter errors in native mode retry correctly.' },
+    ],
+  },
+  {
+    v: 'v0.9.26',
+    date: 'Jul 20, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.9.26',
+    entries: [
+      { tag: 'Fixed', title: 'Model swaps no longer collide with the old container', body: 'Stopping a managed Docker server now waits until the old container name is actually free, so the relaunch after a swap no longer fails with a name-already-in-use error.' },
+      { tag: 'Changed', title: 'Longer drain time when stopping the server', body: 'The managed server is given more time to finish in-flight connections before it is forced to stop, and it reports an explicit error if the name never frees.' },
+      { tag: 'Fixed', title: 'Session stays responsive during a swap', body: 'The server stop now runs off the main event loop, so the session keeps responding while the old server drains.' },
+    ],
+  },
+  {
+    v: 'v0.9.25',
+    date: 'Jul 20, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.9.25',
+    entries: [
+      { tag: 'Added', title: 'Bench pack command', body: 'The new bench pack command turns a bench results folder into a manifest and a file of graded trajectories, one record per run labeled pass or fail.' },
+      { tag: 'Added', title: 'Packs skip live session files', body: 'Only completed scenario results are packed, and live session files are skipped because they contain real user activity.' },
+      { tag: 'Added', title: 'Packing fails on leaked secrets', body: 'If any home path, key or secret pattern appears in the packed content, the build fails before anything is written.' },
+      { tag: 'Added', title: 'Manifest records the harness version', body: 'Each pack manifest stamps the harness version and source tree so packs can be regenerated for each release.' },
+    ],
+  },
+  {
+    v: 'v0.9.24',
+    date: 'Jul 20, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.9.24',
+    entries: [
+      { tag: 'Added', title: 'One-Enter model picker', body: 'Typing a bare /model now opens the menu with the first model highlighted, so you scroll or filter and press Enter once to switch.' },
+      { tag: 'Added', title: 'Quantization and speed shown per model', body: 'The model menu and listing show each registry model\'s quantization and its measured tokens per second on your hardware.' },
+      { tag: 'Changed', title: 'Cleaner model menu', body: 'The picker now offers only live and registry models, while Hugging Face cache repos stay in the printed listing.' },
+    ],
+  },
+  {
+    v: 'v0.9.23',
+    date: 'Jul 20, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.9.23',
+    entries: [
+      { tag: 'Added', title: 'Local model registry for the managed server', body: 'The server.local_models setting names local checkpoints with their own extra arguments, and picking one in the /model menu restarts the managed server with it.' },
+      { tag: 'Added', title: 'Live loading line during a swap', body: 'The input box status row now shows the model name and elapsed time while a swap loads, and clears it on success or failure.' },
+      { tag: 'Added', title: 'Docker mode serves the picker name', body: 'In Docker mode the checkpoint folder is mounted read-only and served under the registry name, so the picker name is the model id.' },
+      { tag: 'Fixed', title: 'Server startup crashes now surface quickly', body: 'A crashed Docker startup left a defunct process that made the readiness check wait for its full timeout, and it now fails fast and shows the end of the server log.' },
+    ],
+  },
+  {
+    v: 'v0.9.22',
+    date: 'Jul 19, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.9.22',
+    entries: [
+      { tag: 'Added', title: 'Model picker for /model', body: 'Typing /model followed by a space opens a completion menu of the models your server actually serves.' },
+      { tag: 'Added', title: 'Model list is prefetched at startup', body: 'The list of models is loaded in the background at startup and refreshed on every /model run, and the menu never fetches from the server itself.' },
+      { tag: 'Changed', title: 'Unreachable server just means no menu', body: 'If the server is unreachable or returns bad data, no menu appears and typing a model name or number works as before.' },
+      { tag: 'Added', title: 'Works in both input modes', body: 'The picker works in both the persistent input box and the classic prompt, and it filters without regard to case while completing with the exact id.' },
+    ],
+  },
+  {
+    v: 'v0.9.21',
+    date: 'Jul 19, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.9.21',
+    entries: [
+      { tag: 'Fixed', title: 'Echoed confirmation no longer replaces your answer', body: 'When the model echoed back the confirmation instruction on a turn with no tool calls, that meta line could be shown as the whole answer, and it is now recognized and discarded.' },
+      { tag: 'Fixed', title: 'Echoed pairs dropped from history', body: 'Echoed confirmation exchanges are removed from conversation history the same way bare confirmations already were.' },
+      { tag: 'Changed', title: 'Clearer confirmation wording', body: 'The nudge messages now ask for only the single word CONFIRMED so the wording stops inviting an echo.' },
+    ],
+  },
+  {
+    v: 'v0.9.20',
+    date: 'Jul 18, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.9.20',
+    entries: [
+      { tag: 'Added', title: 'Slash-command menu', body: 'Typing a slash opens a scrollable menu of all slash commands with descriptions above the input line, with arrow keys, Enter or Tab to accept, Escape to dismiss and typing to filter.' },
+      { tag: 'Added', title: '/memory shows a tree', body: 'The bare /memory overview now shows buckets, child tags with counts and the most recent memories as a tree.' },
+      { tag: 'Added', title: 'Supersede chain as a mini-tree', body: 'The /memory show command draws a memory\'s supersede chain with ancestors above, the current memory highlighted and descendants below.' },
+      { tag: 'Fixed', title: 'Banner and version report the source version', body: 'The banner and the version flag now read the version from the source code, so editable installs no longer show a stale version.' },
+    ],
+  },
+  {
+    v: 'v0.9.19',
+    date: 'Jul 18, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.9.19',
+    entries: [
+      { tag: 'Added', title: '/memory command', body: 'The new /memory command lets you browse the agent\'s memory store by tag hierarchy, starting from an overview of buckets, child tags and recent memories.' },
+      { tag: 'Added', title: 'Memory detail view', body: 'The /memory show command displays a memory\'s value, tags, confidence, source, supersede chain and whether it is eligible to be injected into prompts.' },
+      { tag: 'Added', title: 'Forget a memory with confirmation', body: 'The /memory forget command previews first and retires the memory only after you confirm, keeping it auditable in history rather than deleting it.' },
+      { tag: 'Added', title: 'Memory search with ids', body: 'The /memory search command runs the deterministic search path and shows ids so you can follow up with show or forget.' },
+      { tag: 'Added', title: 'No model calls in /memory', body: 'The command makes no model calls and is safe to run mid-session against a live store.' },
+    ],
+  },
+  {
+    v: 'v0.9.18',
+    date: 'Jul 18, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.9.18',
+    entries: [
+      { tag: 'Added', title: 'Absorption guard for memory chapters', body: 'A small chapter is no longer folded into a much larger one when the two share too few child tags, and both chapters stay independent with the refusal logged.' },
+      { tag: 'Fixed', title: 'Contradictory mined facts no longer both stay active', body: 'A newly mined fact that conflicts with an older one on the same subject and differs in a config value now supersedes it, with the chain preserved.' },
+      { tag: 'Fixed', title: 'Empty-shelf turns record an injection trace', body: 'Turns where nothing was injected now record a zero row so per-turn coverage accounting stays complete.' },
+    ],
+  },
+  {
+    v: 'v0.9.17',
+    date: 'Jul 18, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.9.17',
+    entries: [
+      { tag: 'Fixed', title: 'Turn summaries no longer reuse an earlier reply', body: 'A turn whose model output was only the confirmation word could be given a previous turn\'s reply as its answer, and it now gets one re-prompt and otherwise an honest message that no answer was produced.' },
+      { tag: 'Fixed', title: 'Mid-turn input classification gets model access', body: 'The classification call no longer times out while waiting behind a running stream, and a message queued during classification is upgraded to a live nudge when the verdict arrives.' },
+      { tag: 'Fixed', title: 'Exiting right after an answer finishes bookkeeping', body: 'Leaving the REPL just after an answer now lets turn finalization complete within a short grace period instead of cancelling it.' },
+      { tag: 'Fixed', title: 'Discovery candidates no longer linger forever', body: 'Evidence now accrues only on real growth, so candidates seen in a single sitting age out unless their topic genuinely recurs.' },
+      { tag: 'Fixed', title: 'Role prompts no longer teach copyable examples', body: 'Concrete example tickers in researcher role prompts were replaced with placeholders because small models repeated them in real answers.' },
+    ],
+  },
+  {
+    v: 'v0.9.16',
+    date: 'Jul 17, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.9.16',
+    entries: [
+      { tag: 'Added', title: 'Injected memory shelf is recorded as activation traces', body: 'The memory shelf injected each turn is now logged as a co-firing event, marked as injection so it stays distinct from model-initiated retrieval.' },
+      { tag: 'Added', title: 'Settings for injection traces', body: 'A kill-switch setting turns ambient trace recording off, and a weight setting discounts injection traces when discovery scores co-firing.' },
+      { tag: 'Changed', title: 'Subagent results open with a completion header', body: 'Subagent results now begin with an explicit run-complete header, and a child final that only announces further work is labeled as no result.' },
+      { tag: 'Added', title: 'Answer-first output for the web researcher', body: 'The web researcher now leads with an ANSWER line, or an ANSWER NOT FOUND line that explains why.' },
+      { tag: 'Added', title: 'Configurable baton gate nudges', body: 'The baton gate gains a max_nudges setting that defaults to the previous behavior.' },
+    ],
+  },
+  {
+    v: 'v0.9.15',
+    date: 'Jul 17, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.9.15',
+    entries: [
+      { tag: 'Added', title: 'Turn-end micro-pass for memory upkeep', body: 'A small time-budgeted slice of consolidation work now runs after each final answer, tagging untagged memories, naming discovery candidates and running promotion and prune checks.' },
+      { tag: 'Fixed', title: 'Saved memories are tagged at save time', body: 'Memories saved with remember are now classified into a bucket and child tag when written, and a classification failure never blocks the save.' },
+      { tag: 'Fixed', title: 'Each memory gets exactly one bucket', body: 'Writes now keep the first bucket and refuse a different one, and the micro-pass repairs older rows that ended up with two buckets.' },
+      { tag: 'Fixed', title: 'First-use tool captures check the store', body: 'A first successful use of a tool is now checked against the durable store, so the same fact is no longer recorded again and again.' },
+    ],
+  },
+  {
+    v: 'v0.9.14',
+    date: 'Jul 17, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.9.14',
+    entries: [
+      { tag: 'Fixed', title: 'Baton gate catches more announce-only replies', body: 'Final sentences such as "I will search for" or "Please wait a moment" are now recognized as announcements instead of answers, at both the orchestrator and the web researcher.' },
+      { tag: 'Added', title: 'Doctor warns about split context on llama.cpp', body: 'The doctor command now reads the server\'s slot count and, when there are several, prints the single-slot remedy along with the per-slot context math.' },
+      { tag: 'Changed', title: 'Docs note the llama-server slot split', body: 'The reference architecture docs now carry the same parallel-slot note on every llama-server launch line.' },
+    ],
+  },
+  {
+    v: 'v0.9.13',
+    date: 'Jul 17, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.9.13',
+    entries: [
+      { tag: 'Fixed', title: 'Typed messages stay in the transcript', body: 'Every message you submit in the input box now leaves a permanent line in the scrollback, marked when it was queued or sent as a nudge.' },
+      { tag: 'Changed', title: 'Working indicator has its own row', body: 'The spinner now shows as a status row above the input box instead of inside its border, and the row disappears when the agent is idle.' },
+      { tag: 'Changed', title: 'Background memory pass shows between turns', body: 'The dreaming status for background memory consolidation now appears in the same status row.' },
+    ],
+  },
+  {
+    v: 'v0.9.12',
+    date: 'Jul 16, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.9.12',
+    entries: [
+      { tag: 'Fixed', title: 'Namespaced tool names parse in fallback mode', body: 'Tool names with colons or dots, such as MCP and plugin tools, are now recognized when the model replies in XML fallback format.' },
+      { tag: 'Fixed', title: 'Bench respects the real context window', body: 'Bench now clamps its context ceiling to the window in your config instead of the scenario\'s larger assumed window, so overflow no longer reaches the server.' },
+      { tag: 'Fixed', title: 'A zero tool-call limit is honored', body: 'Scenarios that set the tool-call limit to zero no longer discard a correct answer as over budget, and a refused call gets an explanation instead.' },
+      { tag: 'Fixed', title: 'Memory tools respect the tool allowlist', body: 'Memory tools are no longer registered when a scenario\'s allowed tools list is empty.' },
+      { tag: 'Fixed', title: 'Emergency context cuts are now recorded', body: 'When the emergency context floor shrinks an oversized prompt, it now publishes a compaction event instead of cutting silently.' },
+    ],
+  },
+  {
+    v: 'v0.9.11',
+    date: 'Jul 16, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.9.11',
+    entries: [
+      { tag: 'Added', title: 'Built-in subagents can be overridden', body: 'A YAML file in the agents folder now overlays the built-in explore, web-researcher and search-verifier configs, and bad values fail with a clear error.' },
+      { tag: 'Added', title: 'Baton gate for announced next steps', body: 'When a reply ends by announcing its next step instead of doing it, the agent is pushed back once to do the work or give the final answer; it can be turned off in config.' },
+      { tag: 'Changed', title: 'Web-researcher gets a larger budget', body: 'The web-researcher can make more tool calls and run longer, because many research assignments were hitting the old ceiling.' },
+    ],
+  },
+  {
+    v: 'v0.9.10',
+    date: 'Jul 16, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.9.10',
+    entries: [
+      { tag: 'Added', title: 'Type-anytime input box', body: 'The terminal input box now stays live while the agent works, and it can be disabled with a setting to restore the old between-turns prompt.' },
+      { tag: 'Added', title: 'Mid-turn messages are nudged or queued', body: 'Messages typed during a turn are routed either into the running turn as a nudge or into a queue that plays back afterwards, and a leading exclamation mark forces a nudge.' },
+      { tag: 'Changed', title: 'Progress renders inside the input box', body: 'The tool counter and thinking indicator draw inside the box frame, which fixes a screen freeze when Ctrl+C landed mid-burst.' },
+      { tag: 'Fixed', title: 'MCP and plugin tools use native tool calls', body: 'Tool names are sanitized so llama.cpp no longer rejects the whole request and pushes every MCP or plugin tool onto the XML fallback.' },
+      { tag: 'Fixed', title: 'bash_exec avoids the Windows WSL stub', body: 'Bash discovery now skips the WSL launcher, searches git-bash locations, honors an environment override and decodes wide-character output.' },
+    ],
+  },
+  {
+    v: 'v0.9.9',
+    date: 'Jul 16, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.9.9',
+    entries: [
+      { tag: 'Added', title: 'Install from PyPI', body: 'LocalHarness can now be installed with pip, uv tool install or uvx, so the CLI works from any directory instead of only inside a repo checkout.' },
+      { tag: 'Added', title: 'Automated publishing on each release', body: 'A GitHub Actions workflow builds, smoke-tests and publishes the package whenever a GitHub Release is created.' },
+      { tag: 'Changed', title: 'Smaller source tarballs', body: 'Source distributions now ship only the source and docs metadata instead of the whole repo.' },
+    ],
+  },
+  {
+    v: 'v0.9.8',
+    date: 'Jul 15, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.9.8',
+    entries: [
+      { tag: 'Fixed', title: 'XML mode always teaches the tool syntax', body: 'In XML fallback mode the model is now always told how to call tools, so servers whose chat template drops tool schemas no longer leave it unaware its tools exist.' },
+      { tag: 'Fixed', title: 'XML history replay works on strict templates', body: 'Tool results are replayed as user turns so template-less servers no longer reject the conversation after the first tool call.' },
+      { tag: 'Fixed', title: 'Windows consoles and bash now work', body: 'The CLI survives consoles that are not UTF encoded, bash_exec launches git-bash from paths with spaces, and file tools and bash agree on where the temp folder is.' },
+      { tag: 'Fixed', title: 'Endpoint check handles both IP address families', body: 'The reachability probe now races address families, so doctor and bench agree on whether a local server is up.' },
+      { tag: 'Changed', title: 'Bench builds its entry from your live config', body: 'When the first matrix entry does not match your active backend, bench now uses your config file, and it stages its fixtures automatically.' },
+    ],
+  },
+  {
+    v: 'v0.9.7',
+    date: 'Jul 14, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.9.7',
+    entries: [
+      { tag: 'Fixed', title: 'bash_exec now runs real bash', body: 'Commands previously ran under the platform sh, so bash-only syntax such as brace expansion silently misbehaved.' },
+      { tag: 'Fixed', title: 'Write tool reports what it did', body: 'Results now say whether a file was created, overwritten or left unchanged, and an identical rewrite tells the model not to repeat it.' },
+      { tag: 'Fixed', title: 'Stuck detector resets after a warning', body: 'The repeat window is cleared once a recovery warning fires, so a model that complies is no longer re-warned on stale counts.' },
+      { tag: 'Fixed', title: 'Recovery warnings persist in the conversation', body: 'The warning is now a durable message in history instead of vanishing from context on the next step.' },
+      { tag: 'Fixed', title: 'Stuck turns end with a summary', body: 'When a turn is stopped as stuck, the agent now gets one tool-less wrap-up of what is done and what remains.' },
+    ],
+  },
+  {
+    v: 'v0.9.6',
+    date: 'Jul 14, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.9.6',
+    entries: [
+      { tag: 'Added', title: 'In-turn progress narration', body: 'During long multi-stage tasks, the model\'s short stage statements now appear as dim lines opening each chunk of tool activity.' },
+      { tag: 'Fixed', title: 'Truncated tool calls are never executed', body: 'When a reply hits the output limit mid-tool-call, the call is suppressed and the model is told to write in smaller pieces.' },
+      { tag: 'Fixed', title: 'Memory work waits for running turns', body: 'Background memory consolidation now defers while a turn is in flight and measures idleness from the end of the turn.' },
+      { tag: 'Fixed', title: 'The agent knows its working directory', body: 'The system prompt now states the launch directory, so new files land in the project instead of the home folder.' },
+      { tag: 'Fixed', title: 'Embedding model loads once and quietly', body: 'The tag-discovery embedder no longer reloads on every idle pass or prints loader output over the input box.' },
+    ],
+  },
+  {
+    v: 'v0.9.5',
+    date: 'Jul 14, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.9.5',
+    entries: [
+      { tag: 'Fixed', title: 'Dead endpoints fail fast', body: 'A quick connection probe runs before the inference queue, and waits behind a busy server are logged and bounded by a new configurable limit.' },
+      { tag: 'Fixed', title: 'Delegation results are shown truthfully', body: 'Each agent tool completion now prints a line saying whether the sub-agent completed or failed, regardless of how the model narrates it.' },
+      { tag: 'Fixed', title: 'Glob finds files under a trailing double star', body: 'Patterns ending in a bare double star now return files, and the tool description explains tilde expansion and where relative patterns start.' },
+      { tag: 'Fixed', title: 'The chapter-writing kill switch works', body: 'Turning off the schema writer setting now stops both the writer and the staleness recheck.' },
+      { tag: 'Fixed', title: 'Memory chapters keep their identity', body: 'Healing a chapter no longer takes over another chapter\'s identity, and the recheck now rotates across all chapters instead of starving.' },
+    ],
+  },
+  {
+    v: 'v0.9.4',
+    date: 'Jul 14, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.9.4',
+    entries: [
+      { tag: 'Fixed', title: 'Agent create refuses to overwrite', body: 'The create command now errors when an agent already exists, and a force flag opts into replacement.' },
+      { tag: 'Fixed', title: 'Generated YAML is validated before approval', body: 'An invalid generated config now triggers one regeneration with the error fed back, then a truthful abort, instead of a raw validation error after you approve.' },
+      { tag: 'Fixed', title: 'New agents are available immediately', body: 'A newly created agent now appears in the agents list and the delegation tool without a restart.' },
+      { tag: 'Fixed', title: 'Answering change at the confirm prompt works', body: 'Your follow-up is now added to the description so the correction reaches the generator instead of being discarded.' },
+      { tag: 'Fixed', title: 'Escaping the creation wizard works', body: 'Phrases like never mind or forget it now cancel the wizard, and the quit command cancels the wizard before it exits the session.' },
+    ],
+  },
+  {
+    v: 'v0.9.3',
+    date: 'Jul 14, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.9.3',
+    entries: [
+      { tag: 'Added', title: 'Version flag and model warning', body: 'The CLI gains a version flag, and the model command now warns when your default model is not among those being served or downloaded.' },
+      { tag: 'Fixed', title: 'Start no longer hangs on failure', body: 'A startup failure now tears everything down in order and exits with an error instead of hanging, and an unreachable model is reported with its real cause.' },
+      { tag: 'Fixed', title: 'Model switches are durable and honest', body: 'A failed switch restores the previous model and says so, and the context window is re-read from the server for each switch.' },
+      { tag: 'Fixed', title: 'Config dir now isolates an instance', body: 'The config-dir flag now applies to the overlay, kill-file, audit log and history, so separate instances no longer share state.' },
+      { tag: 'Fixed', title: 'Ctrl+C cancels the turn, not the session', body: 'Pressing Ctrl+C during generation now cancels only the turn, and a second press while cancelling exits.' },
+      { tag: 'Fixed', title: 'Corrections no longer corrupt other memories', body: 'A user correction now only disputes a related fact and is quarantined otherwise, and unknown slash commands are rejected immediately.' },
+    ],
+  },
+  {
+    v: 'v0.9.2',
+    date: 'Jul 12, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.9.2',
+    entries: [
+      { tag: 'Added', title: 'Security defaults update on first start', body: 'The first start after an upgrade now folds new default deny patterns into your config additively, with a backup, and a config migrate command with a dry-run option does the same on demand.' },
+      { tag: 'Fixed', title: 'Background memory work no longer prints in the REPL', body: 'Consolidation progress now goes to a log file while the terminal shows a quiet dreaming status that never draws over the input box.' },
+      { tag: 'Fixed', title: 'Every LLM call now streams', body: 'XML tool-call mode and several background call sites now stream, so timeouts and cancels no longer leave the server generating for no one.' },
+      { tag: 'Fixed', title: 'Directory grep is bounded', body: 'Grep now skips hidden, vendor and binary files, stops at a file and time budget, and returns partial results with a note instead of hanging.' },
+      { tag: 'Fixed', title: 'Components set works for agent settings', body: 'Setting an agent axis now validates against the agent model and writes to the user overlay instead of always failing.' },
+      { tag: 'Changed', title: 'Tag-keyed memory grouping ships off', body: 'The new grouping mechanism is included but disabled by default after it failed its regression gate on the first live proof.' },
+    ],
+  },
+  {
+    v: 'v0.9.1',
+    date: 'Jul 12, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.9.1',
+    entries: [
+      { tag: 'Changed', title: 'Default deny list covers service commands', body: 'Destructive docker, systemctl, kill, shutdown and reboot commands are now denied by default, and existing installs must re-run init or edit their deny patterns to pick this up.' },
+      { tag: 'Fixed', title: 'The sudo deny pattern now matches', body: 'The shipped sudo pattern required a literal colon and never fired on a real command in any release.' },
+      { tag: 'Added', title: 'Optional workspace fence', body: 'Setting a workspace root confines write and edit targets and the bash working directory inside it, and it is off by default.' },
+      { tag: 'Fixed', title: 'Doctor probes the right models URL', body: 'Doctor no longer builds a doubled path and no longer passes the model check on an HTTP error.' },
+      { tag: 'Changed', title: 'Memory folding is more conservative', body: 'The novelty fold threshold default is raised so near-duplicate facts still merge but distinct facts are safer from erroneous merges.' },
+    ],
+  },
   {
     v: 'v0.9.0',
     date: 'Jul 11, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.9.0',
     entries: [
       {
         tag: 'Added',
@@ -47,6 +616,7 @@ const releases = [
   {
     v: 'v0.8.1',
     date: 'Jul 9, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.8.1',
     entries: [
       {
         tag: 'Fixed',
@@ -58,6 +628,7 @@ const releases = [
   {
     v: 'v0.8.0',
     date: 'Jul 5, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.8.0',
     entries: [
       {
         tag: 'Added',
@@ -84,6 +655,7 @@ const releases = [
   {
     v: 'v0.7.0',
     date: 'Jul 4, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.7.0',
     entries: [
       {
         tag: 'Added',
@@ -115,6 +687,7 @@ const releases = [
   {
     v: 'v0.6.0',
     date: 'Jul 3, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.6.0',
     entries: [
       {
         tag: 'Added',
@@ -146,6 +719,7 @@ const releases = [
   {
     v: 'v0.5.3',
     date: 'Jul 2, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.5.3',
     entries: [
       {
         tag: 'Changed',
@@ -188,6 +762,7 @@ const releases = [
   {
     v: 'v0.5.1',
     date: 'Jun 26, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.5.1',
     entries: [
       {
         tag: 'Added',
@@ -204,6 +779,7 @@ const releases = [
   {
     v: 'v0.5.0',
     date: 'Jun 25, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.5.0',
     entries: [
       {
         tag: 'Added',
@@ -249,6 +825,13 @@ const releases = [
     ],
   },
 ];
+
+// Splits a body on [text](href) into plain and link parts.
+const parts = (body: string) =>
+  body.split(/(\[[^\]]+\]\([^)]+\))/).map((s) => {
+    const m = s.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+    return m ? { text: m[1], href: m[2] } : { text: s };
+  });
 
 const tagStyle = (tag: string) =>
   tag === 'Added'
@@ -316,11 +899,24 @@ const iconColor = (tag: string) =>
                         </span>
                         {n.title}
                       </h2>
-                      <p class="mt-2 text-sm leading-relaxed text-dim">{n.body}</p>
+                      <p class="mt-2 text-sm leading-relaxed text-dim">
+                        {parts(n.body).map((p) =>
+                          p.href ? (
+                            <a href={p.href} class="text-accent/80 underline decoration-accent/30 underline-offset-2 transition-colors hover:text-accent">{p.text}</a>
+                          ) : (
+                            p.text
+                          ),
+                        )}
+                      </p>
                     </div>
                   </article>
                 ))}
                 </div>
+                {r.url && (
+                  <p class="pt-2 font-mono text-xs">
+                    <a href={r.url} target="_blank" rel="noopener" class="text-accent/80 transition-colors hover:text-accent">release on github ↗</a>
+                  </p>
+                )}
               </details>
             </section>
           ))
