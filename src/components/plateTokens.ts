@@ -173,3 +173,17 @@ export const colors = {
     strokeSteps: ['stroke-amber/50', 'stroke-amber/60', 'stroke-amber/70'],
   },
 } as const;
+
+/** EXTERNAL SYSTEM — proposed 2026-10-02 on PLATE DISPATCH only (Discord), for side-by-side review
+ *  against the old edge-grey OUTSIDE on the image and mobile plates. A hue no architecture group
+ *  uses (magenta, h340), so it never reads as tool (h295) or orch (h275). Arbitrary-value classes
+ *  because global.css carries no token for it yet; promote to --color-ext if adopted. */
+export const external = {
+  value: 'oklch(78% 0.11 340)',
+  stroke: 'stroke-[oklch(78%_0.11_340)]',
+  fill: 'fill-[oklch(78%_0.11_340)]',
+} as const;
+
+/** plate fill ladder (2026-10-02 visual pass): zone 3.5% → box (bg + 8% tint) → highlighted clause
+ *  in the full hue. Edges take the hue of the side they leave; badges stay accent. */
+export const plateLadder = { zone: 0.035, box: 0.08 } as const;

@@ -12,32 +12,47 @@
 // adapters/discord.py docstrings, docs/specs/11 "The dispatch plugin", docs/specs/09 "The bundled
 // plugins" + "Lifecycle and containment", SECURITY.md "`localharness web`" (dispatch bullets) +
 // "Machine-level-only settings", README "Answering a permission prompt in Discord", CHANGELOG 0.16.0
-// Known limitations. Hue: infra (a channel). Marker ids pd-*. SVG at lg+; FlowLedger below.
+// Known limitations. Hue: infra (a channel); Discord in the proposed EXTERNAL hue. Marker ids pd-*. SVG at lg+; FlowLedger below.
 import FlowLedger from './FlowLedger.astro';
+import Icon, { type IconName, type IconTone } from './Icon.astro';
 
+// 2026-10-02 visual pass: each box = title, source file, then at most three icon clauses (a "\n"
+// in a clause wraps it without a second icon). Fill ladder: zone 3.5% → box bg + 8% tint →
+// the highlighted clause in the full hue. PROPOSED here only: Discord in its own EXTERNAL hue
+// (plateTokens.external) instead of edge-grey — the image and mobile plates keep grey to compare.
 type Tone = 'core' | 'plug' | 'out' | 'warn';
-const stroke: Record<Tone, string> = { core: 'stroke-accent/70', plug: 'stroke-infra/70', out: 'stroke-edge', warn: 'stroke-amber/70' };
-const hue: Record<Tone, string> = { core: 'fill-accent', plug: 'fill-infra', out: 'fill-amber', warn: 'fill-amber' };
-// [x, y, w, h, tone, title, sublabels, emphasised sublabel indexes, coloured title]
-type N = [number, number, number, number, Tone, string, string[], number[]?, boolean?];
+const stroke: Record<Tone, string> = { core: 'stroke-accent/70', plug: 'stroke-infra/70', out: 'stroke-[oklch(78%_0.11_340)]/70', warn: 'stroke-amber/70' };
+const tint: Record<Tone, string> = { core: 'fill-accent/8', plug: 'fill-infra/8', out: 'fill-[oklch(78%_0.11_340)]/8', warn: 'fill-amber/8' };
+const hue: Record<Tone, string> = { core: 'fill-accent', plug: 'fill-infra', out: 'fill-[oklch(78%_0.11_340)]', warn: 'fill-amber' };
+const ico: Record<Tone, IconTone> = { core: 'accent', plug: 'infra', out: 'ext', warn: 'amber' };
+// clause: [icon, text, 1 = emphasised in the hue · 2 = amber limit · 3 = italic planned]
+type C = [IconName, string, number?];
+// [x, y, w, tone, title, source file, clauses, coloured title]
+type N = [number, number, number, Tone, string, string | null, C[], boolean?];
 const nodes: N[] = [
   // CORE
-  [28, 114, 296, 64, 'core', 'EventBus', ['core/bus.py · a UserMessage, channel "discord"', 'a channel sees every event, tool results too', 'capability floor on every tool — dispatch adds none'], [1], true],
-  [28, 214, 296, 76, 'core', 'PermissionGate', ['auto: a blacklisted call posts as pending', 'guarded · trusted: a blocking ask, which', 'expires at permissions.ask.timeout_s → denied', 'an always → grants.yaml, held in the terminal too']],
-  [28, 326, 296, 64, 'core', 'artifact folder', ['<state dir>/artifacts/<plugin>/ — core’s', 'the only place an outbound file is read from', 'one regular file · no symlink · an image type']],
-  [28, 408, 296, 52, 'core', 'start --channel discord', ['core channels + bundled channel plugins only', 'dispatch off → refused, with how to turn it on']],
-  [28, 478, 296, 76, 'core', 'config layers', ['dispatch.discord.token · allow · channels', 'machine-level only: a project’s value is dropped', 'ack: any layer · the token shown as **********', 'start refuses: no token, or an empty allow list'], [1]],
+  [28, 114, 296, 'core', 'EventBus', 'core/bus.py', [['chat', 'a UserMessage, channel "discord"'], ['layers', 'a channel sees every event, tool results too', 1], ['shield', 'capability floor on every tool —\ndispatch adds none']], true],
+  [28, 214, 296, 'core', 'PermissionGate', 'agent/gate.py', [['shield', 'auto: a blacklisted call posts as pending'], ['clock', 'guarded · trusted: a blocking ask, which\nexpires at permissions.ask.timeout_s → denied'], ['key', 'an always → grants.yaml, held in the terminal too']]],
+  [28, 318, 296, 'core', 'artifact folder', 'core/artifacts.py', [['folder', '<state dir>/artifacts/<plugin>/ — core’s'], ['image', 'the only place an outbound file is read from'], ['shield', 'one regular file · no symlink · an image type']]],
+  [28, 410, 296, 'core', 'start --channel discord', 'cli/start_cmd.py', [['plug', 'core channels + bundled channel plugins only'], ['issue', 'dispatch off → refused, with how to turn it on'], ['issue', 'refuses: no token, or an empty allow list']]],
+  [28, 502, 296, 'core', 'config layers', 'config/loader.py', [['key', 'dispatch.discord.token · allow · channels'], ['lock', 'machine-level only: a project’s value is dropped', 1], ['check', 'ack: any layer · the token shown as **********']]],
   // PLUGIN — platform-neutral side
-  [388, 114, 240, 76, 'plug', 'DispatchChannel', ['dispatch/channel.py · platform-neutral', 'allow list: users · optionally channels', 'ack at dequeue · replies chunked to 2000', 'tool calls and results stay silent'], [1], true],
-  [388, 232, 240, 76, 'plug', 'asks, by reaction', ['posted to the chat, options as reactions', 'allow once · always · no, this once', 'pending: run it · skip it · /approve N', 'only a user on the allow list can answer'], [3]],
-  [388, 326, 240, 64, 'plug', 'attachments', ['out: a tool’s artifact, posted as a file', 'in: name · size · type — metadata only', 'an upload is never passed to the model'], [2]],
-  [388, 426, 240, 88, 'plug', 'DispatchPlugin', ['plugin.py · channels ("discord",)', 'make_channel: its validated settings', 'adds no tool and no command', 'opens no network at start', 'doctor: never logs in, never the token']],
+  [388, 114, 240, 'plug', 'DispatchChannel', 'dispatch/channel.py · platform-neutral', [['key', 'allow list: users · optionally channels', 1], ['check', 'ack at dequeue ·\nreplies chunked to 2000'], ['layers', 'tool calls and results stay silent']], true],
+  [388, 232, 240, 'plug', 'asks, by reaction', 'dispatch/channel.py', [['chat', 'allow once · always · no, this once'], ['repeat', 'pending: run it · skip it · /approve N'], ['shield', 'only a user on the allow list can answer', 1]]],
+  [388, 326, 240, 'plug', 'attachments', 'dispatch/channel.py', [['image', 'out: a tool’s artifact,\nposted as a file'], ['doc', 'in: name · size · type — metadata only'], ['shield', 'an upload is never passed to the model', 1]]],
+  [388, 430, 240, 'plug', 'DispatchPlugin', 'dispatch/plugin.py · channels ("discord",)', [['plug', 'make_channel: its validated settings'], ['box', 'adds no tool and no command'], ['cloud-off', 'opens no network at start']]],
+  [388, 522, 240, 'plug', 'doctor()', 'dispatch/plugin.py', [['search', 'never logs in, never the token']]],
   // PLUGIN — platform side
-  [664, 114, 236, 76, 'plug', 'DiscordAdapter', ['dispatch/adapters/discord.py', 'the only module that imports discord', 'send · reply · react · send_file', 'one ChatAdapter per platform']],
-  [664, 426, 236, 88, 'warn', 'env fallback', ['config.py · env_fallback', 'LOCALHARNESS_DISCORD_*, then', 'DISCORD_BOT_TOKEN, then a legacy .env', 'fills only a field left at its default', 'warns each time · deleted at 0.17.0'], [4]],
-  // OUTSIDE
-  [944, 114, 188, 146, 'out', 'Discord', ['your bot · its token', 'Message Content intent on', '', 'users on the allow list', 'channels — empty = any', 'the bot can see', '', 'tested offline only —', 'not yet on a live server'], [7, 8]],
+  [664, 114, 236, 'plug', 'DiscordAdapter', 'dispatch/adapters/discord.py', [['plug', 'the only module that imports discord', 1], ['chat', 'send · reply · react · send_file'], ['layers', 'one ChatAdapter per platform']]],
+  [664, 420, 236, 'warn', 'env fallback', 'dispatch/config.py · env_fallback', [['key', 'LOCALHARNESS_DISCORD_*, then\nDISCORD_BOT_TOKEN, then a legacy .env'], ['check', 'fills only a field left at its default'], ['clock', 'warns each time · deleted at 0.17.0', 1]], true],
+  // OUTSIDE — Discord
+  [944, 114, 188, 'out', 'Discord', null, [['key', 'your bot · its token'], ['check', 'Message Content intent on'], ['issue', 'tested offline only —\nnot yet on a live server', 2]], true],
+  [944, 208, 188, 'out', 'the allow list', null, [['chat', 'users on the allow list'], ['layers', 'channels — empty = any\nthe bot can see']]],
 ];
+// planned box, same row grammar, hatched + dashed
+const planned: N = [664, 232, 236, 'plug', 'Slack · webhook · file', 'docs/specs/11', [['doc', 'the same pattern: one adapter file'], ['check', 'one table line · no edit outside it'], ['clock', 'planned: a second platform needs\nits own settings section', 3]]];
+const rowsOf = (cs: C[]) => cs.flatMap(([i, t, k = 0]) => t.split('\n').map((line, j) => ({ icon: j ? null : i, line, k })));
+const height = (n: N) => 28 + 12 * ((n[5] ? 1 : 0) + rowsOf(n[6]).length);
 ---
 
 <figure
@@ -45,13 +60,16 @@ const nodes: N[] = [
   aria-label="Plate dispatch: the dispatch plugin — Discord as a channel, its settings on the machine — one message numbered one to five. On the core side: the event bus, which takes each message as a user message from the discord channel and which a channel reads in full, tool results included, while every session tool has passed the capability floor and dispatch adds none; the permission gate, which in auto mode posts a blacklisted call as a pending decision, and in guarded and trusted modes asks a blocking question that is denied once permissions.ask.timeout_s passes, an always answer being written to grants.yaml and held in the terminal too; the artifact folder, the only place an outbound file is read from, one regular file, no symlink, an image type; start --channel discord, which takes core channels and bundled channel plugins only and is refused, saying how to turn it on, while dispatch is off; and the config layers, where dispatch.discord.token, allow and channels are machine-level only and a project's value is dropped, the token is shown masked, and start refuses with no token or an empty allow list. Across the plugin boundary the dispatch plugin owns, on the platform-neutral side, the dispatch channel — the allow list of user ids and optionally channels, the acknowledgement reaction, replies chunked to two thousand characters, tool activity kept silent; permission asks posted to the chat with reactions as the options, answerable only by a user on the allow list; attachments, where a tool's artifact is posted as a file and an upload is kept as name, size and type only and never passed to the model; and the plugin class, which hands the channel its validated settings and adds no tool, no command and no network at start, and whose doctor check never logs in or prints the token. On the platform side: the Discord adapter, the only module that imports the discord library; and, in amber, the environment fallback — the old LOCALHARNESS_DISCORD variables, DISCORD_BOT_TOKEN and a legacy env file — which fills only a field left at its default, warns each time, and is deleted at version 0.17.0. Planned: Slack, webhook and file adapters on the same pattern, a second platform needing its own settings section. Outside: Discord — your bot and its token with the Message Content intent on, the users on the allow list, and the channels it listens in; tested offline only, not yet against a live server. One: an allowlisted message arrives. Two: it becomes a turn. Three: the reply is posted back. Four: the gate's question goes out to the chat. Five: a picture a tool made is posted as a file."
 >
   <div class="hidden w-full lg:block" aria-hidden="true">
-    <svg viewBox="0 0 1160 622" class="w-full">
+    <svg viewBox="0 0 1160 652" class="w-full">
       <defs>
         <marker id="pd-solid" viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="6.2" markerHeight="6.2" orient="auto-start-reverse">
           <path d="M0,0.5 L7,4 L0,7.5" class="fill-none stroke-accent" stroke-width="1.4"></path>
         </marker>
-        <marker id="pd-infra" viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-          <path d="M0,0.5 L7,4 L0,7.5" class="fill-none stroke-infra" stroke-width="1.3"></path>
+        <marker id="pd-infra" viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="6.2" markerHeight="6.2" orient="auto-start-reverse">
+          <path d="M0,0.5 L7,4 L0,7.5" class="fill-none stroke-infra" stroke-width="1.4"></path>
+        </marker>
+        <marker id="pd-ext" viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="6.2" markerHeight="6.2" orient="auto-start-reverse">
+          <path d="M0,0.5 L7,4 L0,7.5" class="fill-none stroke-[oklch(78%_0.11_340)]" stroke-width="1.4"></path>
         </marker>
         <marker id="pd-amber" viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M0,0.5 L7,4 L0,7.5" class="fill-none stroke-amber" stroke-width="1.3"></path>
@@ -80,79 +98,96 @@ const nodes: N[] = [
       <text x="128" y="62" class="fill-dim font-mono text-[8px]">DISPATCH PLUGIN</text>
       <rect x="216" y="53" width="10" height="10" class="fill-amber/20 stroke-amber"></rect>
       <text x="230" y="62" class="fill-dim font-mono text-[8px]">DEPRECATED · LIMIT</text>
-      <rect x="326" y="53" width="10" height="10" class="fill-edge stroke-edge"></rect>
-      <text x="340" y="62" class="fill-dim font-mono text-[8px]">OUTSIDE</text>
+      <rect x="326" y="53" width="10" height="10" class="fill-[oklch(78%_0.11_340)]/20 stroke-[oklch(78%_0.11_340)]"></rect>
+      <text x="340" y="62" class="fill-dim font-mono text-[8px]">OUTSIDE · DISCORD</text>
 
       <line x1="16" y1="76" x2="1144" y2="76" class="stroke-edge" stroke-width="1"></line>
 
-      <!-- ===== edges (drawn first) ===== -->
+      <!-- ===== zones (lowest step: 3.5% tint) ===== -->
+      <rect x="16" y="92" width="320" height="502" class="fill-accent/[0.035] stroke-accent/45" stroke-width="1" stroke-dasharray="5 5"></rect>
+      <rect x="376" y="92" width="536" height="502" class="fill-infra/[0.035] stroke-infra/45" stroke-width="1" stroke-dasharray="5 5"></rect>
+      <rect x="932" y="92" width="212" height="502" class="fill-[oklch(78%_0.11_340)]/[0.035] stroke-[oklch(78%_0.11_340)]/45" stroke-width="1" stroke-dasharray="5 5"></rect>
+
+      <!-- ===== edges (drawn first; each in the hue of the side it leaves) ===== -->
       <!-- call lane y140: Discord → adapter → channel → bus -->
-      <g class="fill-none stroke-accent" stroke-width="1.4">
-        <line x1="944" y1="140" x2="901" y2="140" marker-end="url(#pd-solid)"></line>
-        <line x1="664" y1="140" x2="629" y2="140" marker-end="url(#pd-solid)"></line>
-        <line x1="388" y1="140" x2="325" y2="140" marker-end="url(#pd-solid)"></line>
-        <!-- ④ the gate's ask -->
-        <line x1="324" y1="252" x2="387" y2="252" marker-end="url(#pd-solid)"></line>
+      <line x1="944" y1="140" x2="901" y2="140" class="stroke-[oklch(78%_0.11_340)]" stroke-width="1.4" marker-end="url(#pd-ext)"></line>
+      <g class="fill-none stroke-infra" stroke-width="1.4">
+        <line x1="664" y1="140" x2="629" y2="140" marker-end="url(#pd-infra)"></line>
+        <line x1="388" y1="140" x2="325" y2="140" marker-end="url(#pd-infra)"></line>
         <!-- ⑤ a picture, posted as a file: attachments → adapter.send_file -->
-        <path d="M628,358 L646,358 L646,180 L663,180" marker-end="url(#pd-solid)"></path>
+        <path d="M628,358 L646,358 L646,180 L663,180" marker-end="url(#pd-infra)"></path>
       </g>
-      <!-- return lane y168: bus → channel → adapter → Discord -->
-      <g class="fill-none stroke-dim" stroke-width="1.2" stroke-dasharray="4 4">
-        <line x1="324" y1="168" x2="387" y2="168" marker-end="url(#pd-dash)"></line>
-        <line x1="628" y1="168" x2="663" y2="168" marker-end="url(#pd-dash)"></line>
-        <line x1="900" y1="168" x2="943" y2="168" marker-end="url(#pd-dash)"></line>
+      <!-- ④ the gate's ask -->
+      <line x1="324" y1="252" x2="387" y2="252" class="stroke-accent" stroke-width="1.4" marker-end="url(#pd-solid)"></line>
+      <!-- returns · reads (dashed, in the leaving side's hue) -->
+      <g class="fill-none stroke-accent/60" stroke-width="1.2" stroke-dasharray="4 4">
+        <line x1="324" y1="168" x2="387" y2="168" marker-end="url(#pd-solid)"></line>
         <!-- reads: the artifact folder; start builds the channel; settings -->
-        <line x1="324" y1="358" x2="387" y2="358" marker-end="url(#pd-dash)"></line>
-        <line x1="324" y1="444" x2="387" y2="444" marker-end="url(#pd-dash)"></line>
-        <line x1="324" y1="496" x2="387" y2="496" marker-end="url(#pd-dash)"></line>
+        <line x1="324" y1="358" x2="387" y2="358" marker-end="url(#pd-solid)"></line>
+        <line x1="324" y1="444" x2="387" y2="444" marker-end="url(#pd-solid)"></line>
+        <path d="M324,532 L366,532 L366,480 L387,480" marker-end="url(#pd-solid)"></path>
       </g>
-      <!-- the ask is posted through the channel -->
-      <line x1="508" y1="232" x2="508" y2="191" class="fill-none stroke-infra/70" stroke-width="1.2" stroke-dasharray="4 4" marker-end="url(#pd-infra)"></line>
+      <g class="fill-none stroke-infra/60" stroke-width="1.2" stroke-dasharray="4 4">
+        <line x1="628" y1="168" x2="663" y2="168" marker-end="url(#pd-infra)"></line>
+        <line x1="900" y1="168" x2="943" y2="168" marker-end="url(#pd-infra)"></line>
+        <!-- the ask is posted through the channel -->
+        <line x1="508" y1="232" x2="508" y2="203" marker-end="url(#pd-infra)"></line>
+      </g>
       <!-- env fallback fills unset fields -->
       <line x1="664" y1="470" x2="629" y2="470" class="fill-none stroke-amber/70" stroke-width="1.2" stroke-dasharray="4 4" marker-end="url(#pd-amber)"></line>
 
-      <text x="516" y="218" class="fill-dim font-mono text-[8.5px]">posted · answered by reaction</text>
+      <text x="516" y="213" class="fill-dim font-mono text-[8.5px]">posted ·</text>
+      <text x="516" y="224" class="fill-dim font-mono text-[8.5px]">answered by reaction</text>
 
-      <!-- ===== CORE ===== -->
-      <rect x="16" y="92" width="320" height="478" class="fill-none stroke-accent/45" stroke-width="1" stroke-dasharray="5 5"></rect>
+      <!-- ===== zone tabs ===== -->
       <rect x="28" y="85" width="36" height="14" class="fill-bg stroke-accent" stroke-width="1"></rect>
       <text x="46" y="95" text-anchor="middle" class="fill-accent font-mono text-[8px] tracking-[0.08em]">CORE</text>
-
-      <!-- ===== THE PLUGIN BOUNDARY (hairline) ===== -->
-      <line x1="356" y1="92" x2="356" y2="570" class="stroke-ink/70" stroke-width="1"></line>
+      <line x1="356" y1="92" x2="356" y2="594" class="stroke-ink/70" stroke-width="1"></line>
       <text x="0" y="0" transform="translate(352 348) rotate(-90)" class="fill-ink font-mono text-[8px] tracking-[0.08em]">PLUGIN BOUNDARY</text>
-
-      <!-- ===== DISPATCH PLUGIN ===== -->
-      <rect x="376" y="92" width="536" height="478" class="fill-none stroke-infra/45" stroke-width="1" stroke-dasharray="5 5"></rect>
       <rect x="388" y="85" width="160" height="14" class="fill-bg stroke-infra" stroke-width="1"></rect>
       <text x="468" y="95" text-anchor="middle" class="fill-infra font-mono text-[8px] tracking-[0.08em]">DISPATCH PLUGIN · dispatch/</text>
+      <rect x="944" y="85" width="56" height="14" class="fill-bg stroke-[oklch(78%_0.11_340)]" stroke-width="1"></rect>
+      <text x="972" y="95" text-anchor="middle" class="fill-[oklch(78%_0.11_340)] font-mono text-[8px] tracking-[0.08em]">OUTSIDE</text>
 
-      <!-- ===== OUTSIDE ===== -->
-      <rect x="932" y="92" width="212" height="478" class="fill-none stroke-edge" stroke-width="1" stroke-dasharray="5 5"></rect>
-      <rect x="944" y="85" width="56" height="14" class="fill-bg stroke-edge" stroke-width="1"></rect>
-      <text x="972" y="95" text-anchor="middle" class="fill-dim font-mono text-[8px] tracking-[0.08em]">OUTSIDE</text>
+      <!-- ===== nodes: title · source file · ≤3 icon clauses ===== -->
+      {[...nodes, planned].map((n) => {
+        const [x, y, w, tone, title, src, cs, lead] = n;
+        const isPlanned = n === planned;
+        const h = height(n);
+        const top = y + 31 + (src ? 12 : 0);
+        return (
+          <g>
+            {isPlanned ? (
+              <>
+                <rect x={x} y={y} width={w} height={h} fill="url(#pd-hatch)" class="stroke-dim" stroke-width="1" stroke-dasharray="3 3" opacity="0.35"></rect>
+                <rect x={x} y={y} width={w} height={h} class="fill-none stroke-dim" stroke-width="1.2" stroke-dasharray="3 3"></rect>
+              </>
+            ) : (
+              <>
+                <rect x={x} y={y} width={w} height={h} class:list={['fill-bg', stroke[tone]]} stroke-width="1.3"></rect>
+                <rect x={x} y={y} width={w} height={h} class={tint[tone]}></rect>
+              </>
+            )}
+            <text x={x + 10} y={y + 17} class:list={[lead ? hue[tone] : 'fill-ink', 'font-mono text-[12px]']}>{title}</text>
+            {src && <text x={x + 10} y={y + 31} class="fill-dim font-mono text-[8.5px] opacity-70">{src}</text>}
+            {rowsOf(cs).map((r, j) => (
+              <g>
+                {r.icon && (
+                  <g opacity={r.k ? 1 : 0.7}>
+                    <Icon name={r.icon} tone={isPlanned ? 'dim' : r.k === 2 ? 'amber' : ico[tone]} class="" x={x + 10} y={top + j * 12 - 8} width="9" height="9" />
+                  </g>
+                )}
+                <text
+                  x={x + 23}
+                  y={top + j * 12}
+                  class:list={[r.k === 1 ? hue[tone] : r.k === 2 ? 'fill-amber' : 'fill-dim', r.k === 3 && 'italic', 'font-mono text-[8.5px]']}>{r.line}</text>
+              </g>
+            ))}
+          </g>
+        );
+      })}
 
-      <!-- ===== nodes ===== -->
-      {nodes.map(([x, y, w, h, tone, title, subs, hi = [], lead]) => (
-        <g>
-          <rect x={x} y={y} width={w} height={h} class:list={['fill-bg', stroke[tone]]} stroke-width="1.3"></rect>
-          <text x={x + w / 2} y={y + 17} text-anchor="middle" class:list={[lead || tone === 'warn' ? hue[tone] : 'fill-ink', 'font-mono text-[12px]']}>{title}</text>
-          {subs.map((s, j) => (
-            <text x={x + w / 2} y={y + 31 + j * 12} text-anchor="middle" class:list={[hi.includes(j) ? hue[tone] : 'fill-dim', 'font-mono text-[8.5px]']}>{s}</text>
-          ))}
-        </g>
-      ))}
-
-      <!-- planned: more adapters -->
-      <rect x="664" y="232" width="236" height="76" fill="url(#pd-hatch)" class="stroke-dim" stroke-width="1" stroke-dasharray="3 3" opacity="0.35"></rect>
-      <rect x="664" y="232" width="236" height="76" class="fill-none stroke-dim" stroke-width="1.2" stroke-dasharray="3 3"></rect>
-      <text x="782" y="249" text-anchor="middle" class="fill-ink font-mono text-[12px]">Slack · webhook · file</text>
-      <text x="782" y="263" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">the same pattern: one adapter file</text>
-      <text x="782" y="275" text-anchor="middle" class="fill-dim font-mono text-[8.5px]">one table line · no edit outside it</text>
-      <text x="782" y="287" text-anchor="middle" class="fill-dim font-mono text-[8.5px] italic">planned: spec 11 — a second platform</text>
-      <text x="782" y="299" text-anchor="middle" class="fill-dim font-mono text-[8.5px] italic">needs its own settings section</text>
-
-      <!-- ===== badges ===== -->
+      <!-- ===== badges (accent) ===== -->
       <g>
         <circle cx="922" cy="140" r="7" class="fill-accent"></circle>
         <text x="922" y="143" text-anchor="middle" class="fill-accent-ink font-mono text-[9px] font-semibold">1</text>
@@ -167,33 +202,33 @@ const nodes: N[] = [
       </g>
 
       <!-- ===== KEY ===== -->
-      <text x="16" y="594" class="fill-dim font-mono text-[8.5px]">KEY</text>
-      <line x1="44" y1="591" x2="64" y2="591" class="stroke-accent" stroke-width="1.4" marker-end="url(#pd-solid)"></line>
-      <text x="70" y="594" class="fill-dim font-mono text-[8.5px]">one message</text>
-      <line x1="134" y1="591" x2="154" y2="591" class="stroke-dim" stroke-width="1.2" stroke-dasharray="3 3" marker-end="url(#pd-dash)"></line>
-      <text x="160" y="594" class="fill-dim font-mono text-[8.5px]">returns · reads · settings</text>
-      <rect x="324" y="587" width="8" height="8" class="fill-none stroke-ink" stroke-width="1.2"></rect>
-      <text x="336" y="594" class="fill-dim font-mono text-[8.5px]">shipped</text>
-      <rect x="388" y="587" width="8" height="8" class="fill-none stroke-amber" stroke-width="1.2"></rect>
-      <text x="400" y="594" class="fill-dim font-mono text-[8.5px]">shipped, deprecated</text>
-      <rect x="508" y="587" width="8" height="8" class="stroke-dim" fill="url(#pd-hatch)" stroke-width="1"></rect>
-      <text x="520" y="594" class="fill-dim font-mono text-[8.5px]">landing</text>
-      <rect x="572" y="587" width="8" height="8" class="fill-none stroke-dim" stroke-width="1" stroke-dasharray="2 2"></rect>
-      <text x="584" y="594" class="fill-dim font-mono text-[8.5px]">planned</text>
-      <text x="1144" y="594" text-anchor="end" class="fill-dim font-mono text-[8.5px]">one settings section, dispatch.discord.*, feeds every adapter today</text>
-      <text x="1144" y="610" text-anchor="end" class="fill-dim font-mono text-[8.5px]">shipped — every solid box, on main @ 582b69c · dashed = planned</text>
+      <text x="16" y="618" class="fill-dim font-mono text-[8.5px]">KEY</text>
+      <line x1="44" y1="615" x2="64" y2="615" class="stroke-accent" stroke-width="1.4" marker-end="url(#pd-solid)"></line>
+      <text x="70" y="618" class="fill-dim font-mono text-[8.5px]">one message · hue = the side it leaves</text>
+      <line x1="290" y1="615" x2="310" y2="615" class="stroke-dim" stroke-width="1.2" stroke-dasharray="3 3" marker-end="url(#pd-dash)"></line>
+      <text x="316" y="618" class="fill-dim font-mono text-[8.5px]">returns · reads · settings</text>
+      <rect x="462" y="611" width="8" height="8" class="fill-none stroke-ink" stroke-width="1.2"></rect>
+      <text x="474" y="618" class="fill-dim font-mono text-[8.5px]">shipped</text>
+      <rect x="522" y="611" width="8" height="8" class="fill-none stroke-amber" stroke-width="1.2"></rect>
+      <text x="534" y="618" class="fill-dim font-mono text-[8.5px]">shipped, deprecated</text>
+      <rect x="642" y="611" width="8" height="8" class="stroke-dim" fill="url(#pd-hatch)" stroke-width="1"></rect>
+      <text x="654" y="618" class="fill-dim font-mono text-[8.5px]">landing</text>
+      <rect x="702" y="611" width="8" height="8" class="fill-none stroke-dim" stroke-width="1" stroke-dasharray="2 2"></rect>
+      <text x="714" y="618" class="fill-dim font-mono text-[8.5px]">planned</text>
+      <text x="1144" y="618" text-anchor="end" class="fill-dim font-mono text-[8.5px]">one settings section, dispatch.discord.*, feeds every adapter today</text>
+      <text x="1144" y="634" text-anchor="end" class="fill-dim font-mono text-[8.5px]">shipped — every solid box, on main @ 582b69c · dashed = planned</text>
     </svg>
   </div>
 
   <FlowLedger
     class="lg:hidden"
     rows={[
-      { n: 1, icon: 'prompt', title: 'an allowlisted message', text: 'through DiscordAdapter — anyone off the allow list is ignored', tone: 'accent' },
+      { n: 1, icon: 'chat', title: 'an allowlisted message', text: 'through DiscordAdapter — anyone off the allow list is ignored', tone: 'accent' },
       { n: 2, icon: 'repeat', title: 'a turn', text: 'a UserMessage from channel "discord" · an ack reaction' },
-      { n: 3, icon: 'agent', title: 'the reply is posted back', text: 'chunked to 2000 · tool calls and results stay silent' },
+      { n: 3, icon: 'reply', title: 'the reply is posted back', text: 'chunked to 2000 · tool calls and results stay silent' },
       { n: 4, icon: 'shield', title: 'the gate asks in the chat', text: 'options as reactions — only the allow list can answer' },
-      { n: 5, icon: 'box', title: 'a picture, posted as a file', text: 'read only from core’s artifact folder · uploads stay metadata' },
-      { kind: 'loop', icon: 'doc', title: 'machine-level settings', text: 'dispatch.discord.token · allow · channels — a project cannot set them' },
+      { n: 5, icon: 'image', title: 'a picture, posted as a file', text: 'read only from core’s artifact folder · uploads stay metadata' },
+      { kind: 'loop', icon: 'key', title: 'machine-level settings', text: 'dispatch.discord.token · allow · channels — a project cannot set them' },
       { kind: 'blocked', icon: 'clock', title: 'env fallback ends at 0.17.0', text: 'the old variables fill only an unset field, and warn' },
       { kind: 'blocked', icon: 'issue', title: 'not yet on a live server', text: 'tested offline against a stand-in for the Discord library' },
       { kind: 'note', text: 'planned: Slack, webhook and file adapters on the same pattern — a second platform needs its own settings section.' },

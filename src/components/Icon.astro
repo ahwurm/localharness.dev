@@ -1,51 +1,65 @@
 ---
 // Shared stroke glyphs (generic geometry, not third-party brand marks).
 // prettier-ignore
-export type IconName = 'server' | 'llama' | 'studio' | 'cpp' | 'shield' | 'doc' | 'gauge' | 'box' | 'cloud-off' | 'globe' | 'search' | 'repeat' | 'clock' | 'meter-off' | 'issue' | 'book' | 'prompt' | 'agent' | 'star' | 'download' | 'check' | 'menu' | 'close' | 'layers';
+export type IconName = 'server' | 'llama' | 'studio' | 'cpp' | 'shield' | 'doc' | 'gauge' | 'box' | 'cloud-off' | 'globe' | 'search' | 'repeat' | 'clock' | 'meter-off' | 'issue' | 'book' | 'prompt' | 'agent' | 'star' | 'download' | 'check' | 'menu' | 'close' | 'layers' | 'key' | 'plug' | 'phone' | 'image' | 'bell' | 'reply' | 'folder' | 'chat' | 'lock';
+// tone: the glyph's hue (default accent). Plates pass their row hue and x/y/width/height, which
+// land on the root <svg> so a glyph can sit inside another SVG (class="" drops the size-4 default).
+export type IconTone = 'accent' | 'infra' | 'tool' | 'amber' | 'ext' | 'dim';
+const tones: Record<IconTone, [string, string]> = {
+  accent: ['stroke-accent', 'fill-accent'],
+  infra: ['stroke-infra', 'fill-infra'],
+  tool: ['stroke-tool', 'fill-tool'],
+  amber: ['stroke-amber', 'fill-amber'],
+  ext: ['stroke-[oklch(78%_0.11_340)]', 'fill-[oklch(78%_0.11_340)]'], // plateTokens.external
+  dim: ['stroke-dim', 'fill-dim'],
+};
 interface Props {
   name: IconName;
   class?: string;
+  tone?: IconTone;
+  [attr: string]: unknown;
 }
-const { name, class: className = 'size-4' } = Astro.props;
+const { name, class: className = 'size-4', tone = 'accent', ...rest } = Astro.props;
+const [st, fi] = tones[tone as IconTone];
 ---
 
-<svg viewBox="0 0 16 16" class:list={[className, 'shrink-0']} aria-hidden="true">
+<svg viewBox="0 0 16 16" class:list={[className, 'shrink-0']} aria-hidden="true" {...rest}>
   {name === 'prompt' && (
-    <g class="fill-none stroke-accent" stroke-width="1.4" stroke-linecap="round">
+    <g class={`fill-none ${st}`} stroke-width="1.4" stroke-linecap="round">
       <path d="M3,4.5 l4,3.5 l-4,3.5"></path>
       <path d="M9,12 h4"></path>
     </g>
   )}
   {name === 'agent' && (
-    <g class="fill-none stroke-accent" stroke-width="1.3">
+    <g class={`fill-none ${st}`} stroke-width="1.3">
       <rect x="3" y="3" width="10" height="10"></rect>
-      <circle cx="8" cy="8" r="1.6" class="fill-accent stroke-none"></circle>
+      <circle cx="8" cy="8" r="1.6" class={`${fi} stroke-none`}></circle>
     </g>
   )}
   {name === 'server' && (
-    <g class="fill-none stroke-accent" stroke-width="1.3">
+    <g class={`fill-none ${st}`} stroke-width="1.3">
       <rect x="2.5" y="2.5" width="11" height="4.5"></rect>
       <rect x="2.5" y="9" width="11" height="4.5"></rect>
-      <circle cx="5" cy="4.75" r="0.6" class="fill-accent"></circle>
-      <circle cx="5" cy="11.25" r="0.6" class="fill-accent"></circle>
+      <circle cx="5" cy="4.75" r="0.6" class={fi}></circle>
+      <circle cx="5" cy="11.25" r="0.6" class={fi}></circle>
     </g>
   )}
   {name === 'llama' && (
     <path
       d="M5,13.5 v-4 q0,-3 2.5,-3 h2 q2,0 2,-2 v-1.5 M11.5,13.5 v-3 M7,13.5 v-2"
-      class="fill-none stroke-accent"
+      class={`fill-none ${st}`}
       stroke-width="1.3"
       stroke-linecap="round"></path>
   )}
   {name === 'studio' && (
-    <g class="fill-none stroke-accent" stroke-width="1.3">
+    <g class={`fill-none ${st}`} stroke-width="1.3">
       <rect x="2.5" y="3" width="11" height="8"></rect>
       <path d="M6,13.5 h4" stroke-linecap="round"></path>
       <path d="M5.5,7 l2,2 M7.5,7 l-2,2" stroke-linecap="round"></path>
     </g>
   )}
   {name === 'cpp' && (
-    <g class="fill-none stroke-accent" stroke-width="1.3">
+    <g class={`fill-none ${st}`} stroke-width="1.3">
       <rect x="4.5" y="4.5" width="7" height="7"></rect>
       <path d="M6.5,2.5 v2 M9.5,2.5 v2 M6.5,11.5 v2 M9.5,11.5 v2 M2.5,6.5 h2 M2.5,9.5 h2 M11.5,6.5 h2 M11.5,9.5 h2"></path>
     </g>
@@ -53,75 +67,75 @@ const { name, class: className = 'size-4' } = Astro.props;
   {name === 'shield' && (
     <path
       d="M8,2.5 l4.5,1.8 v3.5 q0,3.5 -4.5,5.7 q-4.5,-2.2 -4.5,-5.7 v-3.5 z M6,8 l1.5,1.5 L10.5,6.5"
-      class="fill-none stroke-accent"
+      class={`fill-none ${st}`}
       stroke-width="1.3"
       stroke-linejoin="round"></path>
   )}
   {name === 'doc' && (
-    <g class="fill-none stroke-accent" stroke-width="1.3">
+    <g class={`fill-none ${st}`} stroke-width="1.3">
       <path d="M4,2.5 h5.5 l2.5,2.5 v8.5 h-8 z"></path>
       <path d="M6,7 h4 M6,9.5 h4 M6,12 h2.5"></path>
     </g>
   )}
   {name === 'gauge' && (
-    <g class="fill-none stroke-accent" stroke-width="1.3">
+    <g class={`fill-none ${st}`} stroke-width="1.3">
       <path d="M2.5,11.5 a5.5,5.5 0 1 1 11,0"></path>
       <path d="M8,11.5 L11,7" stroke-linecap="round"></path>
     </g>
   )}
   {name === 'box' && (
-    <g class="fill-none stroke-accent" stroke-width="1.3">
+    <g class={`fill-none ${st}`} stroke-width="1.3">
       <rect x="3" y="3" width="10" height="10"></rect>
-      <circle cx="8" cy="8" r="1.4" class="fill-accent stroke-none"></circle>
+      <circle cx="8" cy="8" r="1.4" class={`${fi} stroke-none`}></circle>
     </g>
   )}
   {name === 'cloud-off' && (
-    <g class="fill-none stroke-accent" stroke-width="1.3">
+    <g class={`fill-none ${st}`} stroke-width="1.3">
       <path d="M4.5,11.5 h7 a2.5,2.5 0 0 0 0,-5 a3.5,3.5 0 0 0 -6.8,-0.8 a2.8,2.8 0 0 0 -0.2,5.8"></path>
       <path d="M3,13.5 L13,3" stroke-linecap="round"></path>
     </g>
   )}
   {name === 'globe' && (
-    <g class="fill-none stroke-accent" stroke-width="1.3">
+    <g class={`fill-none ${st}`} stroke-width="1.3">
       <circle cx="8" cy="8" r="5.5"></circle>
       <path d="M2.5,8 h11 M8,2.5 q3,2.75 0,11 M8,2.5 q-3,2.75 0,11"></path>
     </g>
   )}
   {name === 'search' && (
-    <g class="fill-none stroke-accent" stroke-width="1.3">
+    <g class={`fill-none ${st}`} stroke-width="1.3">
       <circle cx="7" cy="7" r="4"></circle>
       <path d="M10,10 l3.5,3.5" stroke-linecap="round"></path>
     </g>
   )}
   {name === 'repeat' && (
-    <g class="fill-none stroke-accent" stroke-width="1.3" stroke-linecap="round">
+    <g class={`fill-none ${st}`} stroke-width="1.3" stroke-linecap="round">
       <path d="M3,6 a5,5 0 0 1 9.5,-1 M13,10 a5,5 0 0 1 -9.5,1"></path>
       <path d="M12.5,2.5 v2.8 h-2.8 M3.5,13.5 v-2.8 h2.8"></path>
     </g>
   )}
   {name === 'clock' && (
-    <g class="fill-none stroke-accent" stroke-width="1.3" stroke-linecap="round">
+    <g class={`fill-none ${st}`} stroke-width="1.3" stroke-linecap="round">
       <circle cx="8" cy="8" r="5.5"></circle>
       <path d="M8,4.8 v3.4 l2.6,1.6"></path>
     </g>
   )}
   {name === 'meter-off' && (
-    <g class="fill-none stroke-accent" stroke-width="1.3" stroke-linecap="round">
+    <g class={`fill-none ${st}`} stroke-width="1.3" stroke-linecap="round">
       <path d="M2.5,11.5 a5.5,5.5 0 1 1 11,0"></path>
       <path d="M3.4,8.2 l1.5,0.6 M8,4.6 v1.6 M12.6,8.2 l-1.5,0.6"></path>
       <path d="M8,11.5 L4.8,10.1" stroke-width="1.5"></path>
-      <circle cx="8" cy="11.5" r="1.1" class="fill-accent stroke-none"></circle>
+      <circle cx="8" cy="11.5" r="1.1" class={`${fi} stroke-none`}></circle>
     </g>
   )}
   {name === 'issue' && (
-    <g class="fill-none stroke-accent" stroke-width="1.3">
+    <g class={`fill-none ${st}`} stroke-width="1.3">
       <circle cx="8" cy="8" r="5.5"></circle>
       <path d="M8,5 v3.6" stroke-linecap="round"></path>
-      <circle cx="8" cy="11" r="0.7" class="fill-accent stroke-none"></circle>
+      <circle cx="8" cy="11" r="0.7" class={`${fi} stroke-none`}></circle>
     </g>
   )}
   {name === 'book' && (
-    <g class="fill-none stroke-accent" stroke-width="1.3">
+    <g class={`fill-none ${st}`} stroke-width="1.3">
       <path d="M8,3.5 q-2,-1.5 -5,-1 v10 q3,-0.5 5,1 q2,-1.5 5,-1 v-10 q-3,-0.5 -5,1 z"></path>
       <path d="M8,3.5 v10"></path>
     </g>
@@ -129,30 +143,85 @@ const { name, class: className = 'size-4' } = Astro.props;
   {name === 'star' && (
     <path
       d="M8,2.4 L9.4,6.1 L13.3,6.3 L10.2,8.7 L11.3,12.5 L8,10.3 L4.7,12.5 L5.8,8.7 L2.7,6.3 L6.6,6.1 Z"
-      class="fill-none stroke-accent"
+      class={`fill-none ${st}`}
       stroke-width="1.3"
       stroke-linejoin="round"></path>
   )}
   {name === 'download' && (
-    <g class="fill-none stroke-accent" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+    <g class={`fill-none ${st}`} stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
       <path d="M8,2.5 v6.2 M5.2,6 L8,8.8 L10.8,6"></path>
       <path d="M3,11 v2 h10 v-2"></path>
     </g>
   )}
   {name === 'check' && (
-    <path d="M3,8.4 l3.3,3.3 L13,5" class="fill-none stroke-accent" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+    <path d="M3,8.4 l3.3,3.3 L13,5" class={`fill-none ${st}`} stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
   )}
   {name === 'menu' && (
-    <path d="M2.5,4.5 h11 M2.5,8 h11 M2.5,11.5 h11" class="fill-none stroke-accent" stroke-width="1.4" stroke-linecap="round"></path>
+    <path d="M2.5,4.5 h11 M2.5,8 h11 M2.5,11.5 h11" class={`fill-none ${st}`} stroke-width="1.4" stroke-linecap="round"></path>
   )}
   {name === 'close' && (
-    <path d="M4,4 L12,12 M12,4 L4,12" class="fill-none stroke-accent" stroke-width="1.4" stroke-linecap="round"></path>
+    <path d="M4,4 L12,12 M12,4 L4,12" class={`fill-none ${st}`} stroke-width="1.4" stroke-linecap="round"></path>
   )}
   {name === 'layers' && (
-    <g class="fill-none stroke-accent" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round">
+    <g class={`fill-none ${st}`} stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round">
       <path d="M8,2 L14,5 L8,8 L2,5 Z"></path>
       <path d="M2,8 L8,11 L14,8"></path>
       <path d="M2,11 L8,14 L14,11"></path>
+    </g>
+  )}
+  {name === 'key' && (
+    <g class={`fill-none ${st}`} stroke-width="1.3" stroke-linecap="round">
+      <circle cx="5.5" cy="8" r="2.8"></circle>
+      <path d="M8.3,8 h5.2 M11.2,8 v2.2 M13.5,8 v1.8"></path>
+    </g>
+  )}
+  {name === 'plug' && (
+    <path
+      d="M6,2.5 v3 M10,2.5 v3 M4,5.5 h8 v2 q0,3.5 -4,3.5 q-4,0 -4,-3.5 z M8,11 v2.5"
+      class={`fill-none ${st}`}
+      stroke-width="1.3"
+      stroke-linecap="round"
+      stroke-linejoin="round"></path>
+  )}
+  {name === 'phone' && (
+    <g class={`fill-none ${st}`} stroke-width="1.3">
+      <rect x="4.5" y="2" width="7" height="12"></rect>
+      <path d="M7,12 h2" stroke-linecap="round"></path>
+    </g>
+  )}
+  {name === 'image' && (
+    <g class={`fill-none ${st}`} stroke-width="1.3" stroke-linejoin="round">
+      <rect x="2.5" y="3" width="11" height="10"></rect>
+      <circle cx="6" cy="6.5" r="1.1"></circle>
+      <path d="M2.5,11.5 l3.5,-3.5 l3,3 l2,-2 l2.5,2.5"></path>
+    </g>
+  )}
+  {name === 'bell' && (
+    <path
+      d="M3.8,11.5 h8.4 q-1.4,-1 -1.4,-3.2 v-1.3 a2.8,2.8 0 0 0 -5.6,0 v1.3 q0,2.2 -1.4,3.2 z M6.8,13.6 h2.4"
+      class={`fill-none ${st}`}
+      stroke-width="1.3"
+      stroke-linecap="round"
+      stroke-linejoin="round"></path>
+  )}
+  {name === 'reply' && (
+    <path
+      d="M6,4 L2.5,7.5 L6,11 M2.5,7.5 h7 a3.5,3.5 0 0 1 3.5,3.5 v1.5"
+      class={`fill-none ${st}`}
+      stroke-width="1.3"
+      stroke-linecap="round"
+      stroke-linejoin="round"></path>
+  )}
+  {name === 'folder' && (
+    <path d="M2.5,4 h4 l1.5,1.5 h5.5 v7.5 h-11 z" class={`fill-none ${st}`} stroke-width="1.3" stroke-linejoin="round"></path>
+  )}
+  {name === 'chat' && (
+    <path d="M2.5,3 h11 v7.5 h-6 l-3,2.5 v-2.5 h-2 z" class={`fill-none ${st}`} stroke-width="1.3" stroke-linejoin="round"></path>
+  )}
+  {name === 'lock' && (
+    <g class={`fill-none ${st}`} stroke-width="1.3">
+      <rect x="3.5" y="7" width="9" height="6.5"></rect>
+      <path d="M5.5,7 v-1.5 a2.5,2.5 0 0 1 5,0 v1.5"></path>
     </g>
   )}
 </svg>
