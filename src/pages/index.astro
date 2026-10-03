@@ -6,9 +6,10 @@ import DemoPane from '../components/DemoPane.astro';
 import TraceFlow from '../components/TraceFlow.astro';
 import SectionBand from '../components/SectionBand.astro';
 import { d1Lines, d3Lines, eventTotal } from '../data/demo-session';
-import { d2Lines, overwindowTailMeter } from '../data/demo-overwindow';
 import { d4Lines, agentsTailMeter } from '../data/demo-agents';
 import Chip from '../components/Chip.astro';
+import Card from '../components/Card.astro';
+import { PLUGINS } from '../data/plugins';
 import Icon from '../components/Icon.astro';
 import GetInvolved from '../components/GetInvolved.astro';
 
@@ -320,60 +321,36 @@ const jsonLd = [
   </section>
 
 
-  <!-- Quality > Speed (#demo-overwindow) — a document bigger than the window,
-       read whole and answered verified-against-text. LAST demo section. -->
-  <section id="demo-overwindow" data-reveal>
-    <SectionBand icon="doc" title="Quality > Speed" />
+  <!-- Customize (#customize) — replaced "Quality > Speed" (#demo-overwindow, now redirected
+       to /architecture/#over-window in Base.astro). The bundled plugins in code order from
+       src/data/plugins.ts, then the build-your-own receipts. -->
+  <section id="customize" data-reveal>
+    <SectionBand icon="layers" title="Customize and make it yours" />
     <div class="container-site py-16 sm:py-20">
-      <div class="gap-10 xl:grid xl:grid-cols-[3fr_2fr] xl:min-h-[23rem]">
-        <div class="min-w-0 xl:h-0 xl:min-h-full xl:flex xl:flex-col">
-          <p class="mb-2 font-mono text-xs">
-            <span class="text-accent/80">fig. 04</span> <span class="text-ink">— “How does Odysseus defeat the Cyclops?”</span>
-          </p>
-          <DemoPane
-            key="d2"
-            title="~/localharness — real session · Homer’s Odyssey"
-            lines={d2Lines}
-            tailMeter={overwindowTailMeter}
-            boxClass="xl:flex-1 xl:min-h-0"
-          />
-          <p class="mt-2 font-mono text-[11px] text-dim">
-            the whole Odyssey — far more text than the model can hold at once · answer checked against the book
-          </p>
-        </div>
-        <div class="mt-6 xl:mt-0">
-          <p class="eyebrow">read whole</p>
-          <ol class="mt-3 space-y-2.5">
-            <li class="flex items-start gap-3">
-              <span class="flex size-5 shrink-0 items-center justify-center border border-accent/50 bg-accent/10 font-mono text-[11px] font-semibold text-accent">1</span>
-              <Icon name="box" class="size-4" />
-              <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
-                <span class="font-mono text-[13px] text-ink">the whole epic, one handle</span>
-                <span class="text-sm text-dim">a context window is how much text the model can hold at once. This epic is a third again bigger.</span>
-              </span>
-            </li>
-            <li class="flex items-start gap-3">
-              <span class="flex size-5 shrink-0 items-center justify-center border border-accent/50 bg-accent/10 font-mono text-[11px] font-semibold text-accent">2</span>
-              <Icon name="search" class="size-4" />
-              <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
-                <span class="font-mono text-[13px] text-ink">every section actually read</span>
-                <span class="text-sm text-dim">the harness cuts the text into sections and reads each one with a clear head, then carries the notes forward.</span>
-              </span>
-            </li>
-            <li class="flex items-start gap-3">
-              <span class="flex size-5 shrink-0 items-center justify-center border border-accent/50 bg-accent/10 font-mono text-[11px] font-semibold text-accent">3</span>
-              <Icon name="check" class="size-4" />
-              <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
-                <span class="font-mono text-[13px] text-ink">one grounded answer</span>
-                <span class="text-sm text-dim">each section's findings combine into one reply that quotes the text exactly.</span>
-              </span>
-            </li>
-          </ol>
-          <p class="mt-5 font-mono text-xs">
-            <a href="/architecture/#over-window" class="text-accent/80 transition-colors hover:text-accent">the full mechanism ↗</a>
-          </p>
-        </div>
-      </div>
+      <p class="measure text-sm text-dim">
+        Core owns the loop, the tools, the config and the permissions; everything else is a plugin you can switch on or off.
+      </p>
+      <p class="eyebrow mt-8">the bundled plugins</p>
+      <ul class="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+        {PLUGINS.map((p) => (
+          <li>
+            <a href={p.href} class="group block h-full">
+              <Card class="h-full p-4 transition-colors duration-200 group-hover:border-accent/50">
+                <Chip label={p.name} icon={p.icon} class="group-hover:text-accent" />
+                <p class="mt-3 text-sm text-dim">{p.clause} <span class="text-accent/80">→</span></p>
+              </Card>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="eyebrow mt-12">build your own</p>
+      <p class="measure mt-3 text-sm text-dim">
+        A plugin is a manifest plus a lifecycle, and the harness is yours to shape.
+      </p>
+      <p class="mt-5 flex flex-wrap gap-x-8 gap-y-2 font-mono text-xs">
+        <a href="https://github.com/ahwurm/localharness/tree/main/examples/plugin-template" target="_blank" rel="noopener" class="text-accent/80 transition-colors hover:text-accent">plugin template ↗</a>
+        <a href="https://github.com/ahwurm/localharness/blob/main/docs/specs/09-hooks-plugins.md" target="_blank" rel="noopener" class="text-accent/80 transition-colors hover:text-accent">plugins spec ↗</a>
+      </p>
     </div>
   </section>
 

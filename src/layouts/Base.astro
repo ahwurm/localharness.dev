@@ -53,6 +53,7 @@ const ogImageAbs = new URL(ogImage, Astro.site);
             var h = location.hash;
             if (['#yaml', '#hard-parts', '#over-window', '#security', '#autoresearch', '#scope'].indexOf(h) > -1)
               location.replace('/architecture/' + h);
+            else if (h === '#demo-overwindow') location.replace('/architecture/#over-window');
           })();
         </script>
       )

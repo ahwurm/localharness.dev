@@ -157,7 +157,8 @@ It ships as the bundled `autoresearch` plugin. On-site: https://localharness.dev
 
 ## Pages
 
-- [LocalHarness](https://localharness.dev/): product page
+- [LocalHarness](https://localharness.dev/): product page — getting started, a demo, the agents,
+  and "Customize and make it yours": the bundled plugins and how to build your own
 - [Architecture](https://localharness.dev/architecture/): how it's built — the runtime on one plate,
   the agent loop and its gates, and the plugins
 - [Image plugin](https://localharness.dev/plugins/image/): pictures from ComfyUI and local image models
