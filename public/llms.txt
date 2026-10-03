@@ -38,23 +38,23 @@ straight to the source:
 
 - The system — Plate I, the shipped runtime on one sheet: https://localharness.dev/architecture/#system
 - The agent loop — budgets, stuck-detector, act-guard, self-check, parse-repair: https://localharness.dev/architecture/#loop
-- The plugins — the composable harness: core owns the loop, the tools, the config and the
-  permissions, and everything else is a plugin behind one additive API (manifest, lifecycle,
-  slots, doctor, the off switch, the one-way import rule): https://localharness.dev/architecture/#plugins
+- The plugins — core owns the loop, the tools, the config and the permissions; everything else is
+  a plugin (manifest, lifecycle, slots, doctor, the off switch, the one-way import rule):
+  https://localharness.dev/architecture/#plugins
 
-Plugin pages, one per bundled plugin in code order — the configurable on-ramp for running
-LocalHarness against a local model. Each page has a plate of what the plugin owns versus what core
+Plugin pages, one per bundled plugin. Each has a plate of what the plugin owns versus what core
 provides, its surfaces (commands, settings, the on/off switch), and its setup step: the settings it
-asks for, a check that it answers, plain next steps, and a prompt to paste into your coding agent to
-set it up for your hardware (image's step ships in `plugins enable image`; the setup wizard that runs
-the other four is landing, not released):
+asks for, a check that it works, and a prompt to paste into your coding agent to set it up for your
+hardware (image's step runs today in `plugins enable image`; the setup wizard for the others is not
+released yet):
 
-- Image — lets the agent make pictures with ComfyUI and local image models: `generate_image` and
-  `localharness generate-image`, your server's address and workflow as machine-level settings,
-  pictures saved in a folder core assigns; off by default, one `plugins enable image` to turn on:
+- Image — the agent makes pictures with local models on your own ComfyUI server: `generate_image`
+  and `localharness generate-image`, the server and workflow as machine-level settings; off by
+  default, `plugins enable image` turns it on:
   https://localharness.dev/plugins/image/
-- Mobile (the `web` plugin in the CLI) — the phone app for your local agent: `localharness web` serves a token-locked page from your
-  own machine on loopback, paired by a QR code; on once the web extra is installed:
+- Mobile (`web` in the CLI) — the phone app for your local agent: `localharness web` serves a
+  token-locked page from your own machine on loopback, paired by a QR code; on once the web extra
+  is installed:
   https://localharness.dev/plugins/mobile/
 - Memory — facts that outlive the session, recalled into each turn and consolidated while idle, on
   a small local embedding model; on by default, `memory.enabled: false` to turn off:
@@ -93,9 +93,9 @@ documented opt-in examples instead. Define your own subagents in YAML.
 
 ### Plugins
 
-LocalHarness is a small core plus plugins. Five features ship as bundled plugins — image
-generation (off until you turn it on), the Mobile phone app (`web` in the CLI), memory, Discord chat (`dispatch`)
-and autoresearch (each on by default). A plugin declares itself in a manifest in code, fills a
+LocalHarness is a small core plus plugins. The bundled plugins are image generation (off by
+default), the Mobile phone app (`web` in the CLI), memory, Discord chat (`dispatch`) and
+autoresearch (each on by default). A plugin declares itself in a manifest in code, fills a
 port core already has (a tool, a channel, a command, or the one memory slot), and runs through one
 lifecycle each session: configure, tools, start, then stop in reverse order. A plugin that fails is
 switched off for that session and the harness keeps running. Core never imports a plugin — a test
@@ -110,8 +110,8 @@ what the agent knows to the prompt inside a budget core sets. Every agent keeps 
 facts that are superseded rather than overwritten and read back after every write. Each write is a
 bet: a new fact starts as trusted as its writer has earned, and evidence moves belief from there.
 One salience score — need, truth and stakes — decides what reaches the prompt until the budget runs
-out. While idle it "dreams": it replays what happened and strengthens the facts that it touched;
-any user turn cancels the pass. Archiving dormant facts is off by default, and nothing is deleted.
+out. While idle it consolidates: it replays what happened and strengthens the facts it touched; any
+user turn cancels the pass. Archiving dormant facts is off by default, and nothing is deleted.
 Surfaces: `/memory` in a session, `localharness memory` from the shell, and the phone's memory
 screen; `memory.enabled: false` turns it all off. On-site: https://localharness.dev/plugins/memory/
 
@@ -162,7 +162,7 @@ It ships as the bundled `autoresearch` plugin. On-site: https://localharness.dev
   the agent loop and its gates, and the plugins
 - [Image plugin](https://localharness.dev/plugins/image/): pictures from ComfyUI and local image models
 - [Mobile plugin](https://localharness.dev/plugins/mobile/): the phone app, served from your own machine
-- [Memory plugin](https://localharness.dev/plugins/memory/): the memory slot, its plugin, and one
+- [Memory plugin](https://localharness.dev/plugins/memory/): facts that outlive the session, and one
   fact's life inside the store
 - [Dispatch plugin](https://localharness.dev/plugins/dispatch/): drive a session from Discord
 - [Autoresearch plugin](https://localharness.dev/plugins/autoresearch/): the loop that tunes the harness

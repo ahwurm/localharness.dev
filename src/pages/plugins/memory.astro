@@ -12,24 +12,24 @@ import MemoryDetailPlate from '../../components/MemoryDetailPlate.astro';
 const blob = (p: string) => `https://github.com/ahwurm/localharness/blob/main/${p}`;
 
 const scales: Row[] = [
-  ['clock', 'each turn', 'the plugin adds what it knows to the prompt, inside a budget core sets.'],
-  ['search', 'on demand', 'the agent can search memory by meaning, or pull one fact in full.'],
-  ['book', 'each sitting', 'a sitting ends with a one-line summary on the shelf.'],
+  ['clock', 'each turn', 'it adds what it knows to the prompt, within a budget core sets.'],
+  ['search', 'on demand', 'the agent searches by meaning, or pulls one fact in full.'],
+  ['book', 'each session', 'ends with a one-line summary in memory.'],
   ['layers', 'for good', 'facts outlive the session, in a database per agent and a file you can read.'],
 ];
 const learns: Row[] = [
-  ['prompt', 'every write is a bet', 'a new fact starts out as trusted as its writer has earned.'],
-  ['check', 'evidence moves belief', 'the same fact seen again adds weight; a new value replaces the old, which stays on file.'],
-  ['repeat', 'it dreams while idle', 'while idle it replays what happened and strengthens the facts that touched it.'],
-  ['gauge', 'one score decides', 'what reaches the prompt is ranked by need, truth and stakes until the budget runs out.'],
-  ['shield', 'forgetting is opt-in', 'archiving dormant facts is off by default, and nothing is ever deleted.'],
-  ['check', 'it never pretends', 'every write is read back and checked; a failed write fails loudly.'],
+  ['prompt', 'new facts', 'start as trusted as their writer has earned.'],
+  ['check', 'repeats and updates', 'a fact seen again gains weight; a new value replaces the old, which stays on file.'],
+  ['repeat', 'consolidation while idle', 'it replays what happened and strengthens the facts involved.'],
+  ['gauge', 'one ranking', 'facts reach the prompt ranked by need, truth and stakes, until the budget runs out.'],
+  ['shield', 'forgetting is opt-in', 'archiving unused facts is off by default; nothing is deleted.'],
+  ['check', 'checked writes', 'each write is read back, and a failed one fails loudly.'],
 ];
 const surfaces: Row[] = [
-  ['prompt', '/memory', 'inside a session, browse by tag, then show, search, forget or promote a memory.'],
-  ['box', 'localharness memory', 'from the shell, list, show, edit, remove, archive or restore memories.'],
-  ['search', 'memory_search · memory_get · remember', 'the three tools an agent calls inside a session.'],
-  ['meter-off', 'memory.enabled', 'set it to false and there is no memory section, no memory tool and no /memory.'],
+  ['prompt', '/memory', 'in a session: browse by tag, show, search, forget or promote.'],
+  ['box', 'localharness memory', 'from the shell: list, show, edit, remove, archive or restore.'],
+  ['search', 'memory_search · memory_get · remember', 'the tools the agent calls in a session.'],
+  ['meter-off', 'memory.enabled', 'false removes the memory section, the tools and /memory.'],
 ];
 const receipts: [string, string][] = [
   ['memory/plugin.py', blob('src/localharness/memory/plugin.py')],
@@ -46,8 +46,8 @@ const receipts: [string, string][] = [
   name="memory"
   label="Memory"
   icon="layers"
-  description="The LocalHarness memory plugin gives a local agent facts that outlive the session: on by default, recalled into each turn within a budget the core sets, consolidated while idle, and off with one switch."
-  lead="Memory comes switched on — it runs on a small embedding model on your own CPU, its settings sit in one file, and switching it off leaves the core’s slot empty."
+  description="The LocalHarness memory plugin gives a local agent facts that outlive the session, recalled into each turn within a budget core sets and consolidated while idle."
+  lead="On by default; it runs a small embedding model on your CPU, and turning it off leaves core’s memory slot empty."
   surfaces={surfaces}
   receipts={receipts}
 >
@@ -58,7 +58,7 @@ const receipts: [string, string][] = [
   </div>
   <div class="mt-10 grid gap-x-12 gap-y-8 xl:grid-cols-2">
     <div>
-      <p class="eyebrow">at every scale</p>
+      <p class="eyebrow">over time</p>
       <Rows rows={scales} />
     </div>
     <div>

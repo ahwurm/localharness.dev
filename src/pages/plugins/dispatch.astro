@@ -10,19 +10,18 @@ import DispatchPlate from '../../components/DispatchPlate.astro';
 const blob = (p: string) => `https://github.com/ahwurm/localharness/blob/main/${p}`;
 
 const how: Row[] = [
-  ['prompt', 'allowlisted messages', 'a message from a user on the allow list becomes a turn, and the reply is posted back.'],
-  ['shield', 'questions in the chat', 'when the gate needs you, the bot posts the question and you answer with a reaction.'],
-  ['layers', 'set on the machine', 'the token, the allow list and the channels are machine-level — a project cannot change who drives the agent.'],
-  ['doc', 'the token stays quiet', 'it is never printed, and doctor checks it without logging in.'],
+  ['prompt', 'allowlisted messages', 'a message from an allowed user becomes a turn; the reply posts back.'],
+  ['shield', 'questions in the chat', 'when the gate needs you, the bot asks and you answer with a reaction.'],
+  ['layers', 'machine-level settings', 'the token, allow list and channels; a project cannot change who drives the agent.'],
+  ['doc', 'the token', 'never printed; doctor checks it without logging in.'],
   ['repeat', 'no network at start', 'the bot connects when the session starts the channel, not before.'],
-  ['clock', 'the old variables, for now', 'the old environment variables still fill an unset setting, with a warning, until the fallback is deleted.'],
 ];
 const surfaces: Row[] = [
   ['box', 'localharness start --channel discord', 'runs a session from Discord.'],
   ['doc', 'dispatch.discord.token · allow · channels · ack', 'the bot, who may drive it, where it listens, and the reaction it leaves.'],
-  ['prompt', 'mode <name>', 'a plain mode message in the chat works as /mode.'],
-  ['repeat', 'commands and tools', 'none — it adds a channel, nothing else.'],
-  ['meter-off', 'localharness plugins enable dispatch', 'on by default once the dispatch extra is installed; enable takes the token and your user id with --set, and disable turns it off.'],
+  ['prompt', 'mode <name>', 'typed in the chat, works as /mode.'],
+  ['repeat', 'commands and tools', 'none; it adds only a channel.'],
+  ['meter-off', 'localharness plugins enable dispatch', 'enable takes the token and your user id with --set; disable turns it off.'],
 ];
 const receipts: [string, string][] = [
   ['dispatch/plugin.py', blob('src/localharness/dispatch/plugin.py')],
@@ -37,8 +36,8 @@ const receipts: [string, string][] = [
   name="dispatch"
   label="Dispatch"
   icon="prompt"
-  description="The LocalHarness dispatch plugin lets you drive your local agent from Discord: one switch, a bot token and your user id in one machine-level settings file, and permission questions answered in the chat."
-  lead="Discord is one switch — give it a bot token and your user id, and switching it off leaves the terminal as it was."
+  description="The LocalHarness dispatch plugin lets you drive your local agent from Discord: give it a bot token and your user id, and answer permission questions in the chat."
+  lead="On once the dispatch extra is installed; turning it off leaves the terminal as it was."
   surfaces={surfaces}
   receipts={receipts}
 >

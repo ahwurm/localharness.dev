@@ -50,12 +50,12 @@ const loopGates: [IconName, string, string][] = [
 
 // #plugins — the composable harness (last = the rule that keeps it composable)
 const pluginRows: [IconName, string, string][] = [
-  ['doc', 'the manifest', 'each plugin declares itself in code — its name, its kind, its commands, its settings and what it needs.'],
+  ['doc', 'the manifest', 'each plugin declares in code its name, kind, commands, settings and needs.'],
   ['repeat', 'the lifecycle', 'every session runs each plugin through the same steps, then stops them in reverse order.'],
   ['layers', 'the slots', 'a plugin fills a port core already has — a tool, a channel, a command, or the one memory slot.'],
   ['check', 'doctor', 'each plugin brings its own health checks, and doctor runs them without starting anything.'],
   ['meter-off', 'the off switch', 'any bundled plugin turns off with one setting, and its commands then say how to turn it back on.'],
-  ['shield', 'the import rule', 'core never imports a plugin — a test fails on any new edge, and its list of old exceptions is empty.'],
+  ['shield', 'the import rule', 'core never imports a plugin, and a test fails if it does.'],
 ];
 // Receipts per section: [label, href, external?]. Demo cross-links carry their own _pip.
 const sysReceipts: [string, string, boolean][] = [
@@ -150,7 +150,7 @@ const pluginReceipts: [string, string, boolean][] = [
     </div>
   </section>
 
-  <Interstitial icon="box" lead="Core owns the loop, the tools, the config and the permissions" rest="— everything else is a plugin behind one additive API." />
+  <Interstitial icon="box" lead="Core owns the loop, the tools, the config and the permissions" rest="— everything else is a plugin." />
 
   <!-- #plugins — the composable harness: no plate; each plugin has its own page. -->
   <section id="plugins" data-reveal>

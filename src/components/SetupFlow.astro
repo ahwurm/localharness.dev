@@ -41,9 +41,9 @@ const tone: Record<string, string> = { good: 'text-accent/90', dim: 'text-dim', 
     </div>
   </div>
   <p class="mt-3 font-mono text-[11px] text-dim">
-    {shipped ? '_this step runs today, on plugins enable' : '_landing — the setup wizard will run this step; it is not released yet'}
+    {shipped ? '_runs today, on plugins enable' : '_landing — part of the setup wizard, not released yet'}
   </p>
-  <CodeBlock class="mt-6" wrap label="paste this into your coding agent to set it up for your hardware" code={flow.prompt} />
+  <CodeBlock class="mt-6" wrap label="paste into your coding agent to set it up for your hardware" code={flow.prompt} />
 </div>
 
 <script>

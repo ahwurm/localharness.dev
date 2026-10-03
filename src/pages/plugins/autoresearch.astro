@@ -12,18 +12,17 @@ const blob = (p: string) => `https://github.com/ahwurm/localharness/blob/main/${
 
 const how: Row[] = [
   ['studio', 'a stronger model proposes', 'a separate model reads failed practice runs and suggests one change at a time.'],
-  ['box', 'tested in a throwaway copy', 'each change runs in a disposable checkout; your setup is never touched.'],
-  ['gauge', 'held to a real bar', 'kept only if it clearly beats the current version, not if it edges ahead by luck.'],
-  ['clock', 'a sealed set it never sees', 'the proposer is refused any run from the final exam, which only scores.'],
-  ['repeat', 'adopted into your settings', 'a clean win is written to your global settings, and one command undoes it.'],
-  ['shield', 'the gate can say no', 'a change that misses the bar is archived, never adopted.'],
+  ['box', 'tested in a copy', 'each change runs in a throwaway checkout; your setup is untouched.'],
+  ['gauge', 'kept only on a clear win', 'a change must beat the current version by more than luck, or it is archived.'],
+  ['clock', 'a sealed test set', 'the proposer is never shown its runs; it only scores.'],
+  ['repeat', 'adopted into your settings', 'a win is written to your global settings; one command undoes it.'],
 ];
 const surfaces: Row[] = [
   ['box', 'localharness autoresearch', 'run · review · adopt · report · sentinel · archive.'],
   ['repeat', 'localharness propose · experiment', 'ask for one change, or run one through the gate.'],
-  ['doc', 'proposer: · sentinel:', 'the proposing model and the holdout guard keep their old setting names.'],
-  ['prompt', 'slash commands', 'none — it adds nothing to a session.'],
-  ['meter-off', 'localharness plugins disable autoresearch', 'on by default; off sets it aside and deletes nothing, and the bench stays core.'],
+  ['doc', 'proposer: · sentinel:', 'settings for the proposing model and the holdout guard.'],
+  ['prompt', 'slash commands', 'none.'],
+  ['meter-off', 'localharness plugins disable autoresearch', 'turns it off; the bench stays in core.'],
 ];
 const receipts: [string, string][] = [
   ['autoresearch/plugin.py', blob('src/localharness/autoresearch/plugin.py')],
@@ -39,8 +38,8 @@ const receipts: [string, string][] = [
   name="autoresearch"
   label="Autoresearch"
   icon="gauge"
-  description="The LocalHarness autoresearch plugin is the loop that tunes the harness for your local model: a stronger model proposes one change, a sealed test set it never sees decides, and one switch turns it off."
-  lead="Autoresearch comes switched on — it adds three commands and nothing to a session, needs only a second model to propose, and switching it off deletes nothing."
+  description="The LocalHarness autoresearch plugin tunes the harness for your local model: a stronger model proposes one change, and a sealed test set it never sees decides."
+  lead="On by default; it needs a second model to propose, adds nothing to a session, and turning it off deletes nothing."
   surfaces={surfaces}
   receipts={receipts}
 >

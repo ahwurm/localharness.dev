@@ -10,19 +10,18 @@ import ImagePlate from '../../components/ImagePlate.astro';
 const blob = (p: string) => `https://github.com/ahwurm/localharness/blob/main/${p}`;
 
 const how: Row[] = [
-  ['studio', 'one tool', 'generate_image takes a prompt and a size; the server and the workflow are settings, never arguments.'],
-  ['server', 'your server', 'it sends a workflow template to the ComfyUI you run, and waits for the picture.'],
-  ['box', 'core names the file', 'each picture lands in a folder core assigns, under an id core mints, and never overwrites another.'],
-  ['clock', 'it waits for the picture', 'timeout_s sets how long; the first picture also loads the model.'],
-  ['shield', 'a project cannot redirect it', 'the server address and the workflow are machine-level settings a project folder cannot set.'],
-  ['check', 'doctor checks first', 'doctor asks ComfyUI whether it answers and has the template’s model files.'],
+  ['studio', 'one tool', 'generate_image takes a prompt and a size; the server and workflow are settings, not arguments.'],
+  ['server', 'your server', 'it sends a workflow template to your ComfyUI and waits up to timeout_s; the first picture also loads the model.'],
+  ['box', 'never overwritten', 'each picture gets its own id, in a folder core assigns.'],
+  ['shield', 'machine-level', 'a project folder cannot change the server or the workflow.'],
+  ['check', 'doctor', 'checks that ComfyUI answers and has the template’s model files.'],
 ];
 const surfaces: Row[] = [
-  ['prompt', 'generate_image', 'the tool an agent calls inside a session.'],
+  ['prompt', 'generate_image', 'the tool the agent calls in a session.'],
   ['box', 'localharness generate-image', 'makes a picture from the shell.'],
-  ['doc', 'image.comfyui_url · image.workflow · image.timeout_s', 'your server, your own template, and how long to wait.'],
-  ['repeat', 'slash commands', 'none — it adds a tool and a command, nothing else.'],
-  ['meter-off', 'localharness plugins enable image', 'off by default; enable asks for your ComfyUI address and checks it answers, and disable turns it off again.'],
+  ['doc', 'image.comfyui_url · image.workflow · image.timeout_s', 'the server, your own workflow, and how long to wait.'],
+  ['repeat', 'slash commands', 'none.'],
+  ['meter-off', 'localharness plugins enable image', 'off by default; disable turns it off again.'],
 ];
 const receipts: [string, string][] = [
   ['image_plugin.py', blob('src/localharness/tools/builtin/image_plugin.py')],
@@ -37,8 +36,8 @@ const receipts: [string, string][] = [
   name="image"
   label="Image"
   icon="studio"
-  description="The LocalHarness image plugin lets an agent make pictures with ComfyUI and local image models: one switch on, your server’s address in one settings file, and a check that it answers."
-  lead="Image is the on-ramp to local pictures — switch it on, give it your ComfyUI address, and the agent can make one; switch it off and the tool is gone."
+  description="The LocalHarness image plugin lets an agent make pictures with local models on your own ComfyUI server; one command turns it on and checks that the server answers."
+  lead="Off by default — turn it on with your ComfyUI address and the agent can make pictures."
   surfaces={surfaces}
   receipts={receipts}
 >
