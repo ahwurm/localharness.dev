@@ -1,15 +1,15 @@
 ---
-// PLATE MOBILE — the mobile plugin (code name `web`): your phone as a channel (fig. 01 of
+// PLATE MOBILE — the mobile plugin: your phone as a channel (fig. 01 of
 // /plugins/mobile/). Redrawn 2026-10-02 to the PLATE M grammar (MemoryPlateII). Left, what CORE
 // provides: the event bus, the one permission gate, the artifact roots core computes and serves, the
 // memory slot's browse(). Hairline. Middle, what the PLUGIN owns, two columns: nearer core the
-// channel side (WebChannel, the untrusted_ingest label, the Pictures and Memory screens, WebPlugin);
-// nearer the phone the network side (the `localharness web` server, QR pairing, push). Right, OUTSIDE:
+// channel side (MobileChannel, the untrusted_ingest label, the Pictures and Memory screens, MobilePlugin);
+// nearer the phone the network side (the `localharness mobile` server, QR pairing, push). Right, OUTSIDE:
 // your phone through your proxy. Badges ①–⑦ = one message: the phone posts → the server hands it to
 // the channel → a turn on the bus → every event back → the stream to the phone → the gate parks an
 // ask → push. Two lanes (call above, return below) keep the four hops one straight line each.
-// Sources (localharness main @ 582b69c, v0.16.0): cli/web_plugin.py, channels/web/{server,channel,
-// protocol,push}.py docstrings, docs/web.md, SECURITY.md "`localharness web`", docs/specs/09
+// Sources (localharness main @ 582b69c, v0.16.0): cli/mobile_plugin.py, channels/mobile/{server,channel,
+// protocol,push}.py docstrings, docs/mobile.md, SECURITY.md "`localharness mobile`", docs/specs/09
 // "The bundled plugins" + "Artifacts" + "The memory slot", CHANGELOG 0.16.0 Known limitations.
 // Hue: infra (channels are infra on Plate I). Marker ids pw-*. SVG at lg+; FlowLedger below.
 import FlowLedger from './FlowLedger.astro';
@@ -35,28 +35,28 @@ const nodes: N[] = [
   [28, 300, 296, 'core', 'artifact roots', 'core/artifacts.py', [['folder', 'core computes <state dir>/artifacts/<plugin>/'], ['lock', 'serves only the roots this session bound'], ['image', 'png · jpeg · webp · a core-minted id']]],
   [28, 392, 296, 'core', 'MemorySlot · browse()', 'plugins/slot.py · the occupant’s browse API', [['search', 'list · search · history · edit · forget']]],
   // PLUGIN — channel side
-  [388, 114, 240, 'plug', 'WebChannel', 'channels/web/channel.py', [['layers', 'the bus, faithfully,\nover one SSE stream'], ['bell', 'asks: a queue with a badge, not a modal'], ['issue', 'an unanswered ask ends in a rejection', 1]], true],
-  [388, 236, 240, 'plug', 'untrusted_ingest', 'channels/web/protocol.py', [['globe', 'web_search · web_fetch ·\nweb_page_query'], ['shield', 'a label, never a filter —\nnothing dropped']]],
-  [388, 338, 240, 'plug', 'Pictures', 'channels/web/server.py', [['image', 'GET /api/artifacts · 60 a page'], ['doc', 'id · type · size — no path, no prompt'], ['lock', '--incognito: no-store, gallery off']]],
-  [388, 428, 240, 'plug', 'Memory', 'channels/web/server.py', [['search', '/api/memory → the slot’s browse()'], ['issue', 'memory off → those routes answer 404']]],
-  [388, 506, 240, 'plug', 'WebPlugin', 'cli/web_plugin.py · kind channel', [['plug', 'on by default once the web extra is in'], ['box', 'channels() → web · command → web_cmd'], ['cloud-off', 'start · stop: no-ops;\nthe command owns it']]],
+  [388, 114, 240, 'plug', 'WebChannel', 'channels/mobile/channel.py', [['layers', 'the bus, faithfully,\nover one SSE stream'], ['bell', 'asks: a queue with a badge, not a modal'], ['issue', 'an unanswered ask ends in a rejection', 1]], true],
+  [388, 236, 240, 'plug', 'untrusted_ingest', 'channels/mobile/protocol.py', [['globe', 'web_search · web_fetch ·\nweb_page_query'], ['shield', 'a label, never a filter —\nnothing dropped']]],
+  [388, 338, 240, 'plug', 'Pictures', 'channels/mobile/server.py', [['image', 'GET /api/artifacts · 60 a page'], ['doc', 'id · type · size — no path, no prompt'], ['lock', '--incognito: no-store, gallery off']]],
+  [388, 428, 240, 'plug', 'Memory', 'channels/mobile/server.py', [['search', '/api/memory → the slot’s browse()'], ['issue', 'memory off → those routes answer 404']]],
+  [388, 506, 240, 'plug', 'MobilePlugin', 'cli/mobile_plugin.py · kind channel', [['plug', 'on by default once the mobile extra is in'], ['box', 'channels() → mobile · command → mobile_cmd'], ['cloud-off', 'start · stop: no-ops;\nthe command owns it']]],
   // PLUGIN — network side
-  [664, 114, 236, 'plug', 'localharness web', 'channels/web/server.py · port 8765', [['lock', 'loopback only —\nelse --allow-unsafe-bind', 1], ['key', 'an app token on every request · 0600'], ['shield', 'writes: bearer + application/json only']]],
-  [664, 214, 236, 'plug', 'QR pairing', 'cli/web_cmd.py', [['key', 'the token rides the URL fragment —\nno log sees it'], ['repeat', 'rotation: all or nothing']]],
-  [664, 306, 236, 'plug', 'push', 'channels/web/push.py', [['key', 'VAPID keys 0600, on this box'], ['lock', 'payloads encrypted to each device']]],
+  [664, 114, 236, 'plug', 'localharness mobile', 'channels/mobile/server.py · port 8765', [['lock', 'loopback only —\nelse --allow-unsafe-bind', 1], ['key', 'an app token on every request · 0600'], ['shield', 'writes: bearer + application/json only']]],
+  [664, 214, 236, 'plug', 'QR pairing', 'cli/mobile_cmd.py', [['key', 'the token rides the URL fragment —\nno log sees it'], ['repeat', 'rotation: all or nothing']]],
+  [664, 306, 236, 'plug', 'push', 'channels/mobile/push.py', [['key', 'VAPID keys 0600, on this box'], ['lock', 'payloads encrypted to each device']]],
   // OUTSIDE
-  [944, 114, 188, 'out', 'your phone', 'channels/web/ui/index.html', [['doc', 'reference page ·\none HTML file'], ['box', 'fork it —\nthe API is complete'], ['image', 'a picture only from the\ntyped artifact field', 1]]],
+  [944, 114, 188, 'out', 'your phone', 'channels/mobile/ui/index.html', [['doc', 'reference page ·\none HTML file'], ['box', 'fork it —\nthe API is complete'], ['image', 'a picture only from the\ntyped artifact field', 1]]],
   [944, 240, 188, 'out', 'your proxy', null, [['lock', 'over HTTPS'], ['prompt', 'tailscale serve --bg 8765']]],
   [944, 308, 188, 'out', 'Add to Home Screen', null, [['phone', '→ an app'], ['bell', 'lock-screen push, two reasons:\na long turn ended ·\nyou’re needed', 1]]],
 ];
-const planned: N = [664, 412, 236, 'plug', 'one live session', 'docs/web.md', [['doc', 'bound to the directory you launch in'], ['clock', 'planned: no chat list · no switching ·\nno resume — docs/web.md says “yet”', 3], ['lock', 'incognito is not yet a private mode', 3]]];
+const planned: N = [664, 412, 236, 'plug', 'one live session', 'docs/mobile.md', [['doc', 'bound to the directory you launch in'], ['clock', 'planned: no chat list · no switching ·\nno resume — docs/mobile.md says “yet”', 3], ['lock', 'incognito is not yet a private mode', 3]]];
 const rowsOf = (cs: C[]) => cs.flatMap(([i, t, k = 0]) => t.split('\n').map((line, j) => ({ icon: j ? null : i, line, k })));
 const height = (n: N) => 28 + 12 * ((n[5] ? 1 : 0) + rowsOf(n[6]).length);
 ---
 
 <figure
   role="img"
-  aria-label="Plate mobile: the mobile plugin, named web in the command line — your phone as a channel, one message numbered one to seven. On the core side: the event bus, typed and ordered, taking the user message in and sending every event out, which means a channel sees every event, tool results included; the permission gate, one gate for the orchestrator and every subagent, which in auto mode parks a blacklisted call so the model carries on without it, answerable from the phone, the terminal or Discord; the artifact roots core computes and serves, only the roots this session bound, only png, jpeg or webp under a core-minted id; and the memory slot's browse interface. Across the plugin boundary the mobile plugin owns, on the channel side, the web channel, which mirrors the bus faithfully over one event stream, shows permission asks as a queue with a badge, and turns every unanswered ask into a rejection; the untrusted_ingest label on frames from web_search, web_fetch and web_page_query, a label and never a filter; the Pictures and Memory screens — a gallery of ids, sixty a page, with no path or prompt, turned off in incognito, and the memory routes, which answer 404 with memory off; and the plugin class, on by default once the web extra is installed. On the network side it owns the localharness web server, loopback only unless you pass allow-unsafe-bind, with an app token on every request; QR pairing, which carries the token in the URL fragment so no log sees it, where rotating the token cuts off every phone at once; and push, with keys kept on this machine and payloads encrypted to each device. Outside: your phone, reached through your own proxy over HTTPS, running the one-file reference page you can fork, added to the home screen, buzzed for a finished long turn or when you are needed, and showing a picture only from the typed artifact field. One: the phone posts a message. Two: the server hands it to the channel. Three: it becomes a turn on the bus. Four: every event comes back to the channel. Five: the frames stream to the phone. Six: the gate parks an ask, which the channel queues. Seven: push tells the phone. Planned: one live session per directory today — no chat list, no session switching and no resume yet."
+  aria-label="Plate mobile: the mobile plugin — your phone as a channel, one message numbered one to seven. On the core side: the event bus, typed and ordered, taking the user message in and sending every event out, which means a channel sees every event, tool results included; the permission gate, one gate for the orchestrator and every subagent, which in auto mode parks a blacklisted call so the model carries on without it, answerable from the phone, the terminal or Discord; the artifact roots core computes and serves, only the roots this session bound, only png, jpeg or webp under a core-minted id; and the memory slot's browse interface. Across the plugin boundary the mobile plugin owns, on the channel side, the web channel, which mirrors the bus faithfully over one event stream, shows permission asks as a queue with a badge, and turns every unanswered ask into a rejection; the untrusted_ingest label on frames from web_search, web_fetch and web_page_query, a label and never a filter; the Pictures and Memory screens — a gallery of ids, sixty a page, with no path or prompt, turned off in incognito, and the memory routes, which answer 404 with memory off; and the plugin class, on by default once the mobile extra is installed. On the network side it owns the localharness mobile server, loopback only unless you pass allow-unsafe-bind, with an app token on every request; QR pairing, which carries the token in the URL fragment so no log sees it, where rotating the token cuts off every phone at once; and push, with keys kept on this machine and payloads encrypted to each device. Outside: your phone, reached through your own proxy over HTTPS, running the one-file reference page you can fork, added to the home screen, buzzed for a finished long turn or when you are needed, and showing a picture only from the typed artifact field. One: the phone posts a message. Two: the server hands it to the channel. Three: it becomes a turn on the bus. Four: every event comes back to the channel. Five: the frames stream to the phone. Six: the gate parks an ask, which the channel queues. Seven: push tells the phone. Planned: one live session per directory today — no chat list, no session switching and no resume yet."
 >
   <div class="hidden w-full lg:block" aria-hidden="true">
     <svg viewBox="0 0 1160 674" class="w-full">
@@ -83,8 +83,8 @@ const height = (n: N) => 28 + 12 * ((n[5] ? 1 : 0) + rowsOf(n[6]).length);
       <text x="30" y="33" text-anchor="middle" class="fill-accent-ink font-mono text-[11px] font-semibold">MO</text>
       <text x="54" y="34" class="fill-ink font-sans text-[15px] font-semibold">The mobile plugin — your phone as a channel</text>
       <text x="1144" y="16" text-anchor="end" class="fill-dim font-mono text-[8px]">LH-ARCH-001 · PLATE MOBILE · SHEET 1 OF 1</text>
-      <text x="1144" y="27" text-anchor="end" class="fill-dim font-mono text-[8px]">REV 582b69c · v0.16.0 · 2026-10-02</text>
-      <text x="1144" y="38" text-anchor="end" class="fill-dim font-mono text-[8px]">plugin "web" · kind "channel" · requires_extra "web"</text>
+      <text x="1144" y="27" text-anchor="end" class="fill-dim font-mono text-[8px]">REV v0.16.1 · 2026-10-04</text>
+      <text x="1144" y="38" text-anchor="end" class="fill-dim font-mono text-[8px]">plugin "mobile" · kind "channel" · requires_extra "mobile"</text>
       <text x="1144" y="63" text-anchor="end" class="fill-dim font-mono text-[9px]">what core provides · the plugin boundary · what the plugin owns · your phone</text>
 
       <text x="16" y="62" class="fill-dim font-mono text-[8px]">GROUPS</text>
@@ -141,7 +141,7 @@ const height = (n: N) => 28 + 12 * ((n[5] ? 1 : 0) + rowsOf(n[6]).length);
       <line x1="356" y1="92" x2="356" y2="606" class="stroke-ink/70" stroke-width="1"></line>
       <text x="0" y="0" transform="translate(352 602) rotate(-90)" class="fill-ink font-mono text-[8px] tracking-[0.08em]">PLUGIN BOUNDARY</text>
       <rect x="388" y="85" width="226" height="14" class="fill-bg stroke-infra" stroke-width="1"></rect>
-      <text x="501" y="95" text-anchor="middle" class="fill-infra font-mono text-[8px] tracking-[0.08em]">MOBILE PLUGIN · web · channels/web/</text>
+      <text x="501" y="95" text-anchor="middle" class="fill-infra font-mono text-[8px] tracking-[0.08em]">MOBILE PLUGIN · web · channels/mobile/</text>
       <rect x="944" y="85" width="56" height="14" class="fill-bg stroke-edge" stroke-width="1"></rect>
       <text x="972" y="95" text-anchor="middle" class="fill-dim font-mono text-[8px] tracking-[0.08em]">OUTSIDE</text>
 
@@ -222,7 +222,7 @@ const height = (n: N) => 28 + 12 * ((n[5] ? 1 : 0) + rowsOf(n[6]).length);
     class="lg:hidden"
     rows={[
       { n: 1, icon: 'phone', title: 'the phone posts a message', text: 'bearer token + application/json, through your proxy', tone: 'accent' },
-      { n: 2, icon: 'server', title: 'the server hands it over', text: 'localharness web — loopback only, a token on every request' },
+      { n: 2, icon: 'server', title: 'the server hands it over', text: 'localharness mobile — loopback only, a token on every request' },
       { n: 3, icon: 'repeat', title: 'a turn on the bus', text: 'a UserMessage on the session’s bus' },
       { n: 4, icon: 'layers', title: 'every event comes back', text: 'the channel mirrors the bus, nothing filtered' },
       { n: 5, icon: 'globe', title: 'frames stream to the phone', text: 'one SSE stream · web-tool frames carry untrusted_ingest' },
@@ -231,7 +231,7 @@ const height = (n: N) => 28 + 12 * ((n[5] ? 1 : 0) + rowsOf(n[6]).length);
       { kind: 'loop', icon: 'image', title: 'Pictures · Memory', text: 'core’s artifact roots and the slot’s browse(), as /api routes' },
       { kind: 'loop', icon: 'key', title: 'QR pairing', text: 'the token rides the URL fragment — no log sees it' },
       { kind: 'blocked', icon: 'doc', title: 'one live session', text: 'no chat list, no switching, no resume yet — planned' },
-      { kind: 'note', text: 'the mobile page is the web plugin in the CLI: localharness web · plugins disable web.' },
+      { kind: 'note', text: 'in the CLI: localharness mobile · plugins disable mobile.' },
     ]}
   />
 </figure>

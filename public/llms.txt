@@ -53,8 +53,8 @@ the plugin on and your conversation kept, or from a shell with
   and `localharness generate-image`, the server and workflow as machine-level settings; off by
   default, `plugins enable image` turns it on:
   https://localharness.dev/plugins/image/
-- Mobile (`web` in the CLI) — the phone app for your local agent: `localharness web` serves a
-  token-locked page from your own machine on loopback, paired by a QR code; on once the web extra
+- Mobile (`mobile`) — the phone app for your local agent: `localharness mobile` serves a
+  token-locked page from your own machine on loopback, paired by a QR code; on once the mobile extra
   is installed:
   https://localharness.dev/plugins/mobile/
 - Memory — facts that outlive the session, recalled into each turn and consolidated while idle, on
@@ -96,7 +96,7 @@ documented opt-in examples instead. Define your own subagents in YAML.
 ### Plugins
 
 LocalHarness is a small core plus plugins. The bundled plugins are image generation (off by
-default), the Mobile phone app (`web` in the CLI), memory, Discord chat (`dispatch`) and
+default), the Mobile phone app (`mobile`), memory, Discord chat (`dispatch`) and
 autoresearch (each on by default). A plugin declares itself in a manifest in code, fills a
 port core already has (a tool, a channel, a command, or the one memory slot), and runs through one
 lifecycle each session: configure, tools, start, then stop in reverse order. A plugin that fails is

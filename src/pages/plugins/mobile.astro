@@ -1,9 +1,9 @@
 ---
-// /plugins/mobile/ — the mobile plugin (code name `web`), the phone app (PluginPage template).
+// /plugins/mobile/ — the mobile plugin, the phone app (PluginPage template).
 // Renamed from /plugins/web/ 2026-10-02 (owner: "web" reads as web search); the old path redirects
-// via astro.config.mjs `redirects`. Commands and keys keep the code name `web`. Rows trace to
-// localharness main @ 582b69c: cli/web_plugin.py, channels/web/protocol.py, SECURITY.md
-// "`localharness web`", README plugins table + docs/web.md.
+// via astro.config.mjs `redirects`. Rows trace to
+// localharness main @ 582b69c: cli/mobile_plugin.py, channels/mobile/protocol.py, SECURITY.md
+// "`localharness mobile`", README plugins table + docs/mobile.md.
 import PluginPage from '../../layouts/PluginPage.astro';
 import FigureFrame from '../../components/FigureFrame.astro';
 import Rows, { type Row } from '../../components/Rows.astro';
@@ -12,7 +12,7 @@ import WebPlate from '../../components/WebPlate.astro';
 const blob = (p: string) => `https://github.com/ahwurm/localharness/blob/main/${p}`;
 
 const how: Row[] = [
-  ['server', 'one command', 'localharness web serves the page and its event API, and stops when the command does.'],
+  ['server', 'one command', 'localharness mobile serves the page and its event API, and stops when the command does.'],
   ['shield', 'this machine only', 'it listens on loopback unless you pass --allow-unsafe-bind; your own proxy publishes it.'],
   ['prompt', 'a token on every request', 'the pairing QR code carries it, out of every server log, so you never type it.'],
   ['clock', 'notifications', 'on the lock screen when a long turn finishes or the gate needs you.'],
@@ -20,29 +20,29 @@ const how: Row[] = [
   ['check', 'always-allow takes two steps', 'a second, single-use request confirms it, so one mis-tap cannot grant it.'],
 ];
 const surfaces: Row[] = [
-  ['box', 'localharness web', 'serves the phone app; --rotate-token cuts off every paired phone.'],
+  ['box', 'localharness mobile', 'serves the phone app; --rotate-token cuts off every paired phone.'],
   ['repeat', '--incognito · --replay · --ui-dir', 'pictures kept out of the phone’s cache, a recorded session, or your own page.'],
   ['prompt', 'slash commands', 'none; the phone page has no command menu.'],
-  ['doc', 'web.public_url', 'the address your phone opens, saved once, machine-level only; the port and bind address stay flags.'],
-  ['prompt', '/plugins enable web', 'inside a running session: until it is set up, asks what it needs and checks it; then restarts with your conversation kept.'],
-  ['meter-off', 'localharness plugins disable web', 'named web in the CLI; on once the web extra is installed, and disable removes the channel and the command.'],
+  ['doc', 'mobile.public_url', 'the address your phone opens, saved once, machine-level only; the port and bind address stay flags.'],
+  ['prompt', '/plugins enable mobile', 'inside a running session: until it is set up, asks what it needs and checks it; then restarts with your conversation kept.'],
+  ['meter-off', 'localharness plugins disable mobile', 'on once the mobile extra is installed; disable removes the channel and the command.'],
 ];
 const receipts: [string, string][] = [
-  ['cli/web_plugin.py', blob('src/localharness/cli/web_plugin.py')],
-  ['channels/web/protocol.py', blob('src/localharness/channels/web/protocol.py')],
-  ['channels/web/channel.py', blob('src/localharness/channels/web/channel.py')],
-  ['docs/web.md', blob('docs/web.md')],
-  ['SECURITY.md — localharness web', blob('SECURITY.md#localharness-web')],
+  ['cli/mobile_plugin.py', blob('src/localharness/cli/mobile_plugin.py')],
+  ['channels/mobile/protocol.py', blob('src/localharness/channels/mobile/protocol.py')],
+  ['channels/mobile/channel.py', blob('src/localharness/channels/mobile/channel.py')],
+  ['docs/mobile.md', blob('docs/mobile.md')],
+  ['SECURITY.md — localharness mobile', blob('SECURITY.md#localharness-mobile')],
 ];
 ---
 
 <PluginPage
   name="mobile"
-  cli="web"
+  cli="mobile"
   label="Mobile"
   icon="globe"
-  description="The LocalHarness mobile plugin is the phone app for your local agent: localharness web serves a token-locked page from your own machine, paired by a QR code."
-  lead="Install the web extra, run localharness web, and scan the QR code with your phone."
+  description="The LocalHarness mobile plugin is the phone app for your local agent: localharness mobile serves a token-locked page from your own machine, paired by a QR code."
+  lead="Install the mobile extra, run localharness mobile, and scan the QR code with your phone."
   surfaces={surfaces}
   receipts={receipts}
 >

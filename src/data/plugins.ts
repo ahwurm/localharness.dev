@@ -34,7 +34,7 @@ export const PLUGINS: { name: string; href: string; icon: IconName; clause: stri
 //   under the frame) and the status line names it. memory's download progress bar is left out.
 // - in use: /memory on an empty store (cli/memory_cmd.py); the generate_image call/result rows
 //   (terminal.py: `◆ <tool> <first string arg>`, `✓ <tool>`). web, dispatch and autoresearch are
-//   used outside the session (`localharness web`, `start --channel discord`, `localharness propose`).
+//   used outside the session (`localharness mobile`, `start --channel discord`, `localharness propose`).
 // - prompts: each plugin's manifest agent_prompt rendered by plugins/setup.py render_agent_prompt
 //   (setup defaults filled, {machine} empty), joined to one paragraph, without the lead line the
 //   CodeBlock label stands for.
@@ -48,7 +48,7 @@ export interface SetupFlowData {
   lines: SetupLine[];
   prompt: string; // "paste this into your coding agent to set it up for your hardware"
 }
-const ORDER = ['image', 'web', 'memory', 'dispatch', 'autoresearch'];
+const ORDER = ['image', 'mobile', 'memory', 'dispatch', 'autoresearch'];
 const DEFAULT_ON = ['memory', 'autoresearch'];
 const flow = (name: string, steps: SetupLine[], status: string, use: SetupLine[], prompt: string): SetupFlowData => ({
   plugins: ORDER.filter((n) => n === name || DEFAULT_ON.includes(n)),
@@ -86,20 +86,20 @@ export const SETUP: Record<string, SetupFlowData> = {
     ],
     "Set up ComfyUI on this machine for LocalHarness image generation. Install ComfyUI and run it so it answers at http://127.0.0.1:8188; keep it off the open internet. Put these Qwen-Image-2.1 INT8 files in its models folder: diffusion_models/qwen_image_2.1_int8_convrot.safetensors (about 7.3 GB), text_encoders/qwen3vl_8b_int8_convrot.safetensors (about 9.4 GB) and vae/qwen_image_2.1_vae_bf16.safetensors (about 0.7 GB). The weights are under the Qwen Research License: personal, non-commercial use. Keep the UNETLoader weight_dtype at \"default\" (the fp8 fast mode spoils the pictures). On an NVIDIA GB10 (DGX Spark) the INT8 kernels compile on first use and need the Python headers: start ComfyUI with C_INCLUDE_PATH pointing at them. You are done when http://127.0.0.1:8188/system_stats answers and `localharness doctor` shows image reachable."
   ),
-  web: flow(
-    'web',
+  mobile: flow(
+    'mobile',
     [
-      { kind: 'ask', text: 'Phone address, the URL your phone opens (Enter: `localharness web` guesses it): ', answer: '' },
-      enabled('web'),
+      { kind: 'ask', text: 'Phone address, the URL your phone opens (Enter: `localharness mobile` guesses it): ', answer: '' },
+      enabled('mobile'),
       checking,
-      { kind: 'dim', text: 'i  web: not enrolled yet' },
-      { kind: 'dim', text: '       `localharness web` generates its app token on first run' },
+      { kind: 'dim', text: 'i  mobile: not enrolled yet' },
+      { kind: 'dim', text: '       `localharness mobile` generates its app token on first run' },
       { kind: 'dim', text: 'Or paste this into your coding agent to set it up for your hardware:' },
-      { kind: 'out', text: '  Run `localharness web`, then scan its pairing QR with your phone.' },
+      { kind: 'out', text: '  Run `localharness mobile`, then scan its pairing QR with your phone.' },
     ],
-    'web: on, but not set up yet — not enrolled yet',
+    'mobile: on, but not set up yet — not enrolled yet',
     [],
-    "Set up the LocalHarness phone app on this machine. Install LocalHarness with its web extra, keeping the extras I already use. Run `localharness web` and leave it running: it serves the page on this machine only, so do not pass --allow-unsafe-bind. To reach it from my phone, put it behind a private network I already use, for example `tailscale serve --bg 8765`, rather than opening a port to the internet. You are done when `localharness doctor` shows web enrolled and my phone has scanned the pairing QR."
+    "Set up the LocalHarness phone app on this machine. Install LocalHarness with its mobile extra, keeping the extras I already use. Run `localharness mobile` and leave it running: it serves the page on this machine only, so do not pass --allow-unsafe-bind. To reach it from my phone, put it behind a private network I already use, for example `tailscale serve --bg 8765`, rather than opening a port to the internet. You are done when `localharness doctor` shows web enrolled and my phone has scanned the pairing QR."
   ),
   memory: flow(
     'memory',

@@ -13,7 +13,7 @@ import type { IconName } from '../components/Icon.astro';
 
 interface Props {
   name: string; // slug, e.g. 'image'
-  cli?: string; // the plugin's code name when the page name differs (mobile → web); keys SetupFlow
+  cli?: string; // the plugin's CLI name when it differs from the page name; keys SetupFlow (today every page uses its own name)
   label: string; // band title, e.g. 'Image'
   icon: IconName;
   description: string; // the one sentence a search engine or model would quote
