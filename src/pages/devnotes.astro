@@ -10,6 +10,80 @@ import type { IconName } from '../components/Icon.astro';
 // inline links as [text](href); `url` is the release's GitHub page.
 const releases: { v: string; date: string; url?: string; entries: { tag: string; title: string; body: string }[] }[] = [
   {
+    v: 'v0.16.2',
+    date: 'Oct 4, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.16.2',
+    entries: [
+      {
+        tag: 'Added',
+        title: 'The phone\'s session sleeps when nobody is using it',
+        body: 'After a while with no phone attached, no turn running and nothing waiting, the [mobile](/plugins/mobile/) session writes its conversation beside its session log and shuts itself down, and your next message wakes it with the conversation continued. Opening the app alone does not wake it. The wait is yours to set with --sleep-after.',
+      },
+      {
+        tag: 'Added',
+        title: 'Stopping the server keeps the conversation',
+        body: 'Ctrl-C or a service stop puts a live session to sleep the same way, so a restart continues the conversation. The + button, or deleting the sleeping chat from the drawer, discards it.',
+      },
+      {
+        tag: 'Changed',
+        title: 'A sleeping server lets the model go',
+        body: 'Everything the session held goes with it — the model client, the memory store, the embedding model and the consolidation timer — so an unused server holds little more than the phone\'s token.',
+      },
+      {
+        tag: 'Changed',
+        title: 'The sleep file carries words, never authority',
+        body: 'A permission mode looser than your configured one is not restored from it, lines typed ahead are never in it, and a conversation wakes only in the folder it slept in.',
+      },
+      {
+        tag: 'Fixed',
+        title: 'Ctrl-C after a turn no longer kills the mobile server',
+        body: 'The handler the REPL installs for a running turn used to leave the default one behind, so the next Ctrl-C ended the process instead of stopping it gracefully.',
+      },
+      {
+        tag: 'Fixed',
+        title: 'Stop, nudge and approve reach the chat you are in',
+        body: 'After a new chat, the phone\'s taps went to the previous chat\'s REPL, which also kept that chat\'s loop and memory model alive for the life of the process.',
+      },
+    ],
+  },
+  {
+    v: 'v0.16.1',
+    date: 'Oct 4, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.16.1',
+    entries: [
+      {
+        tag: 'Changed',
+        title: 'The phone channel is mobile',
+        body: 'The command is localharness mobile, the plugin is [mobile](/plugins/mobile/) and so is the install extra; the old web names still work with a warning until a later release removes them.',
+      },
+      {
+        tag: 'Fixed',
+        title: 'Idle memory consolidation is bounded',
+        body: 'The dreaming pass could hold every CPU core for hours while nothing was happening. It now runs within a time budget, on a few threads, one window at a time, and your next message still cancels it at once.',
+      },
+      {
+        tag: 'Fixed',
+        title: 'A project you clone cannot redirect your requests or your keys',
+        body: 'Where requests go and which keys they carry come from your machine\'s config only, a project\'s own files can only make things stricter, and a cached embedding model loads from a checked folder with no network call.',
+      },
+      {
+        tag: 'Added',
+        title: 'Every bundled plugin has a setup step',
+        body: 'localharness plugins enable asks the plugin\'s questions and checks the result, and /plugins enable in a running terminal session does the same and restarts it with the conversation kept.',
+      },
+      {
+        tag: 'Added',
+        title: 'Files are owner-only from creation',
+        body: 'The config folder, your keys, the phone token, grants and every session log are created readable by you alone, and an older folder is tightened at the next start.',
+      },
+      {
+        tag: 'Added',
+        title: 'A page for each bundled plugin',
+        body: 'Each of [image](/plugins/image/), [mobile](/plugins/mobile/), [memory](/plugins/memory/), [dispatch](/plugins/dispatch/) and [autoresearch](/plugins/autoresearch/) has its own page in the docs, with a doctor check and a trust-project flag for a start that skips the trust question.',
+      },
+    ],
+  },
+  {
     v: 'v0.16.0',
     date: 'Oct 3, 2026',
     url: 'https://github.com/ahwurm/localharness/releases/tag/v0.16.0',
