@@ -367,6 +367,11 @@ const program = lines.map((l, i) => ({
     display: revert;
     visibility: hidden;
   }
+  /* a fieldset defaults to min-width: min-content, so a long URL in the answer would push past the frame */
+  [data-demo-pane][data-hold] fieldset {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
   /* bottom edge-fade: scroll affordance for the hidden scrollbar; the body's
      pb-10 keeps the last line clear of the fade at full scroll */
   .dp-fade {
