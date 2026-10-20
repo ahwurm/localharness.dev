@@ -42,7 +42,8 @@
 // wraps re-joined; spinner frames, live status rows, the idle input box and the non-TTY CPR
 // warning not reproduced. The web_fetch row's drill-down lists its one call from the bus events.
 // Display styling only: each item's title, up to and including its colon, is drawn in the
-// accent hue (`parts`); the characters are the captured text, unchanged and in order.
+// accent hue, and each blank line between items is drawn as a half-line gap (`parts`); the
+// characters are the captured text, unchanged and in order.
 // Raw captures (untracked): .planning/captures/why-local-search-take12.raw (pty bytes), .txt
 // (ANSI stripped), .bus-events.jsonl, .memory-list.txt, .AGENTS.md; take 11 and the earlier
 // takes beside them, and why-local-search-take10.seed.py.
@@ -69,11 +70,14 @@ export const whyLocalSearchLines: DemoLine[] = [
     d: 1400,
     parts: [
       { text: "Local models:", accent: true },
-      { text: " The harness reads a model's own files to work out how to launch it, and refuses to start a model that does not fit on your machine.\n\n" },
+      { text: " The harness reads a model's own files to work out how to launch it, and refuses to start a model that does not fit on your machine." },
+      { text: "\n\n", gap: true },
       { text: "The model server:", accent: true },
-      { text: " A single command finds a model on your machine or fetches one for you, serves it, and remembers your last choice.\n\n" },
+      { text: " A single command finds a model on your machine or fetches one for you, serves it, and remembers your last choice." },
+      { text: "\n\n", gap: true },
       { text: "Private by default:", accent: true },
-      { text: " Your memory, config, logs and results stay on your own disk, with no account and no telemetry.\n\n" },
+      { text: " Your memory, config, logs and results stay on your own disk, with no account and no telemetry." },
+      { text: "\n\n", gap: true },
       { text: "Permission gate:", accent: true },
       { text: " Every tool call passes through one permission gate, and an agent that reads untrusted content is never given tools that can change your machine." },
     ],
