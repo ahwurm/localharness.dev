@@ -73,6 +73,16 @@ trailing star-ask trimmed). To recapture after product changes:
 run init with the real HOME (it would overwrite the production dispatch config).
 Visual-first rule: prefer real demo captures over prose; case-study visuals join as produced.
 
+Why Local (fig. 02, `src/data/demo-why-local-search.ts`) is a separate real capture with its own
+recipe; remake it the same way. Scratch HOME; a scratch copy of main (`git archive main | tar -x`) as
+the working directory, never the owner's checkout (a checkout's `.localharness/` holds the owner's
+own agent memory and sessions, and a take writes into it); clear that copy's agent state, then seed
+ONE memory fact naming the GitHub README (raw URL + its "Why an agent harness for local models"
+section) through the harness's MemoryStore; an `AGENTS.md` in the copy asking for four titled items,
+one plain sentence each. Raw takes, bus events, the memory list and the AGENTS.md go untracked under
+`.planning/captures/why-local-search-take*`. The data file documents the tool-row collapse into one
+counter row and the display styling (accent titles, half-line gaps between items) — keep both there.
+
 ## Bot-facing surface (llms.txt)
 
 Static `public/llms.txt` — overview, architecture + autoresearch summaries, install commands,
