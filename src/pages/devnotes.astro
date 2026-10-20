@@ -10,6 +10,352 @@ import type { IconName } from '../components/Icon.astro';
 // inline links as [text](href); `url` is the release's GitHub page.
 const releases: { v: string; date: string; url?: string; entries: { tag: string; title: string; body: string }[] }[] = [
   {
+    v: 'v0.20.1',
+    date: 'Oct 20, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.20.1',
+    entries: [
+      {
+        tag: 'Fixed',
+        title: 'The browser download shows its progress',
+        body: 'Playwright\'s installer now runs on your terminal with its own progress, and a failed download names the installer\'s exit code.',
+      },
+      {
+        tag: 'Fixed',
+        title: 'The checking proxy refuses a name it cannot encode',
+        body: 'A host name the resolver cannot encode is refused as unresolvable instead of crashing the [browser](/plugins/browser/)\'s proxy.',
+      },
+      {
+        tag: 'Changed',
+        title: 'The browser is for Linux and macOS',
+        body: 'The launch check reads the browser\'s command line, so the plugin is documented for those two, and a platform with no readable process list says so in doctor.',
+      },
+    ],
+  },
+  {
+    v: 'v0.20.0',
+    date: 'Oct 19, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.20.0',
+    entries: [
+      {
+        tag: 'Added',
+        title: 'A real browser for pages that need JavaScript',
+        body: 'The [browser](/plugins/browser/) plugin, off by default, gives the web researcher and the search verifier a sandboxed headless Chromium that runs a page\'s scripts and returns its text in the same shape the plain web fetch does.',
+      },
+      {
+        tag: 'Added',
+        title: 'The browser reaches public addresses only',
+        body: 'Every request a page makes passes through a checking proxy that applies the web fetch\'s public-address rule, the proxy is proven at every launch, and no cookies, profile or storage carry between calls.',
+      },
+      {
+        tag: 'Added',
+        title: 'Doctor checks the browser',
+        body: 'The doctor command gains rows for the browser\'s package, binary, launch and sandbox, each with the hint that fixes it.',
+      },
+      {
+        tag: 'Changed',
+        title: 'The phone labels untrusted tools by what they declare',
+        body: 'The phone\'s permission prompt marks a tool as untrusted from its own declaration, so a plugin tool that pulls in web content is labelled like the built-in web tools.',
+      },
+    ],
+  },
+  {
+    v: 'v0.19.3',
+    date: 'Oct 19, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.19.3',
+    entries: [
+      {
+        tag: 'Changed',
+        title: 'An earlier session\'s working record starts paused',
+        body: 'The record left on disk stays out of the model\'s view until the model resumes it, so a bare hello no longer inherits the last session\'s task.',
+      },
+    ],
+  },
+  {
+    v: 'v0.19.2',
+    date: 'Oct 18, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.19.2',
+    entries: [
+      {
+        tag: 'Changed',
+        title: '/model lists launches, not names',
+        body: 'Each entry says its runtime, where its weights sit and its window as the planner prices it, a file not yet set up is set up after one question, and what cannot launch says why.',
+      },
+      {
+        tag: 'Added',
+        title: 'A compute reserve keeps dense models alive at load',
+        body: 'A reserve now sits beside the compute margin, so a dense model no longer dies at its trained window, and a launch that would leave layers on the CPU says so on its line.',
+      },
+      {
+        tag: 'Added',
+        title: 'Sliding-window models priced by what they hold',
+        body: 'A model whose attention alternates full and sliding layers is priced per layer kind, so one the full-attention figure used to refuse is now offered.',
+      },
+      {
+        tag: 'Added',
+        title: 'Strata joins the runtimes',
+        body: 'An install of the pinned-experts engine beside a model\'s shards is sensed, fingerprinted and launched through the same keyed, loopback, verified-stop path as the other runtimes, with its config copied through an allowlist.',
+      },
+    ],
+  },
+  {
+    v: 'v0.19.1',
+    date: 'Oct 17, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.19.1',
+    entries: [
+      {
+        tag: 'Added',
+        title: 'Launches priced from the model\'s own tensor table',
+        body: 'A llama.cpp launch is priced from the file\'s dense weights, projector and attention cache, with a mixture-of-experts model\'s experts held in RAM when the GPU cannot, so a large model no longer comes up at a tiny window.',
+      },
+      {
+        tag: 'Added',
+        title: 'A model that fits nowhere is refused before anything stops',
+        body: 'One sentence names what is short and the remedy, and a swap plans against the memory it will have so the serving model keeps serving when it is refused.',
+      },
+      {
+        tag: 'Added',
+        title: 'A window floor the harness will not run below',
+        body: 'The smallest window that holds the system prompt and tool schemas is computed, and a server that serves less is refused before the first turn.',
+      },
+      {
+        tag: 'Added',
+        title: 'A child runs in the parent\'s live window',
+        body: 'Subagents read the root\'s window at every spawn, so after a model switch the next delegation sees the new window, and a child that cannot fit is not run.',
+      },
+    ],
+  },
+  {
+    v: 'v0.19.0',
+    date: 'Oct 16, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.19.0',
+    entries: [
+      {
+        tag: 'Added',
+        title: 'A fresh box is one command',
+        body: 'localharness start with no config finds the models on the machine and sets them all up on one Enter, or offers a verified download when there are none.',
+      },
+      {
+        tag: 'Added',
+        title: 'Launches come tuned',
+        body: 'The cache type, multi-token-prediction drafting and vLLM\'s reasoning and tool parsers are derived from the model at launch, and the launch line names what was derived.',
+      },
+      {
+        tag: 'Changed',
+        title: 'The model\'s own sampling applies',
+        body: 'No temperature is sent unless you set one, so the model\'s own default is no longer overwritten on every request.',
+      },
+      {
+        tag: 'Added',
+        title: 'Autostart and a readable launch script',
+        body: 'localharness model --autostart writes one pinned systemd user unit, and --script prints the exact launch as a shell script with keys shown as placeholders.',
+      },
+    ],
+  },
+  {
+    v: 'v0.18.1',
+    date: 'Oct 15, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.18.1',
+    entries: [
+      {
+        tag: 'Added',
+        title: 'A line break in the input box',
+        body: 'A backslash then Enter breaks the line on every terminal, and Shift+Enter does too on a terminal set up to send it.',
+      },
+      {
+        tag: 'Added',
+        title: 'Your own nudge and line-break chords',
+        body: 'terminal.keys picks the chord for each from a short list, refuses two you set that collide, and is read from the machine config only.',
+      },
+    ],
+  },
+  {
+    v: 'v0.18.0',
+    date: 'Oct 12, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.18.0',
+    entries: [
+      {
+        tag: 'Added',
+        title: 'Models as named presets',
+        body: 'A llama.cpp or vLLM model is now a named preset that init writes from what is on the box and /model switches.',
+      },
+      {
+        tag: 'Added',
+        title: 'The harness senses the window',
+        body: 'It reads the served, trained and fitted windows, sizes the context itself when it launches llama.cpp, and says when they disagree.',
+      },
+      {
+        tag: 'Added',
+        title: '/effort bounds thinking',
+        body: '/effort off, low, high or max bounds how much a model may reason per request, on every surface.',
+      },
+      {
+        tag: 'Added',
+        title: 'The loop survives a model-server restart',
+        body: 'A dropped connection or a restarting server is one bounded wait and an identical re-send, never a failed turn, and no tool call runs twice.',
+      },
+    ],
+  },
+  {
+    v: 'v0.17.2',
+    date: 'Oct 9, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.17.2',
+    entries: [
+      {
+        tag: 'Fixed',
+        title: 'A failed phone turn no longer follows the chat',
+        body: 'A sleeping phone thread now wakes at its last answered request, so a turn that ended blank stops making every next reply blank.',
+      },
+    ],
+  },
+  {
+    v: 'v0.17.1',
+    date: 'Oct 8, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.17.1',
+    entries: [
+      {
+        tag: 'Fixed',
+        title: 'The harness reports its real version',
+        body: 'The banner, --version and update had been stuck on an older release, so update kept offering one already installed; a test now holds every version string to one.',
+      },
+      {
+        tag: 'Changed',
+        title: 'Old Discord and web settings retired',
+        body: 'The Discord environment variables and the web config section are no longer read, as earlier releases announced.',
+      },
+    ],
+  },
+  {
+    v: 'v0.17.0',
+    date: 'Oct 7, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.17.0',
+    entries: [
+      {
+        tag: 'Added',
+        title: '/mcp manages MCP servers in session',
+        body: 'List, add, edit, test and remove MCP servers for the session\'s agent without leaving the terminal, with connections refused in an untrusted workspace.',
+      },
+      {
+        tag: 'Added',
+        title: 'A swapped secret asks again',
+        body: 'Trust snapshots now hash environment and header values, not just their names, so a changed secret re-prompts at the next start.',
+      },
+    ],
+  },
+  {
+    v: 'v0.16.9',
+    date: 'Oct 7, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.16.9',
+    entries: [
+      {
+        tag: 'Changed',
+        title: 'The reply carries no evidence line',
+        body: 'The task evidence line is no longer appended to the reply; it stays on the event bus and in the agent packet.',
+      },
+    ],
+  },
+  {
+    v: 'v0.16.8',
+    date: 'Oct 7, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.16.8',
+    entries: [
+      {
+        tag: 'Changed',
+        title: 'Co-author consent is asked at the first commit',
+        body: 'The question is one sentence and comes after the harness\'s first commit in a project, not when the workspace opens.',
+      },
+    ],
+  },
+  {
+    v: 'v0.16.7',
+    date: 'Oct 6, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.16.7',
+    entries: [
+      {
+        tag: 'Added',
+        title: 'Credit on the commits the harness helps make',
+        body: 'A once-per-project question asks whether localharness is named as a co-author on commits it helps make — a hand-run commit is never touched, and no answer means no trailer.',
+      },
+    ],
+  },
+  {
+    v: 'v0.16.6',
+    date: 'Oct 6, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.16.6',
+    entries: [
+      {
+        tag: 'Added',
+        title: 'Screenshots reach a vision model',
+        body: 'A picture can be attached from the terminal, Zed, the phone or Discord, and rides in the user turn beside the text.',
+      },
+      {
+        tag: 'Added',
+        title: 'Pictures are charged to the context budget',
+        body: 'Each image is counted by the model\'s own resize rule, downscaled or refused when too large, and named when compaction leaves it out — never dropped silently.',
+      },
+    ],
+  },
+  {
+    v: 'v0.16.5',
+    date: 'Oct 5, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.16.5',
+    entries: [
+      {
+        tag: 'Added',
+        title: 'A working record for substantive work',
+        body: 'With a new task tool the model keeps the objective, decisions, artifacts, checks and stop boundary, citing the human turns behind them, and ordinary questions get no record.',
+      },
+      {
+        tag: 'Added',
+        title: 'Referenced files stay in view',
+        body: 'Files a record references are re-read before every request, so their current text survives compaction, edits and restarts.',
+      },
+      {
+        tag: 'Added',
+        title: 'Structured delegation handoff',
+        body: 'A delegation carries a structured brief and a runtime-observed status, and a record retires only once every delegation is integrated and every check passed or waived.',
+      },
+    ],
+  },
+  {
+    v: 'v0.16.4',
+    date: 'Oct 5, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.16.4',
+    entries: [
+      {
+        tag: 'Changed',
+        title: 'Harness nudges say they are the harness\'s',
+        body: 'Nudges carry their origin, so a human correction stays human content and compaction keeps the lineage.',
+      },
+      {
+        tag: 'Added',
+        title: 'Task contracts bound to real receipts',
+        body: 'Requirements bind to actual tool receipts and artifact revisions, so failed, missing or stale evidence cannot mark a task complete.',
+      },
+      {
+        tag: 'Added',
+        title: 'Earlier results held for one step',
+        body: 'The agent can hold a few earlier tool results for its next step, and the packed request restores them or says the step must be narrowed.',
+      },
+    ],
+  },
+  {
+    v: 'v0.16.3',
+    date: 'Oct 5, 2026',
+    url: 'https://github.com/ahwurm/localharness/releases/tag/v0.16.3',
+    entries: [
+      {
+        tag: 'Changed',
+        title: 'A smaller install',
+        body: 'An event-bus package that was declared but never imported is gone, and a test fails if a declared dependency ever goes unused again.',
+      },
+      {
+        tag: 'Changed',
+        title: 'Imported packages declared, not borrowed',
+        body: 'Packages the code uses but received only through other dependencies are now declared in their own right.',
+      },
+    ],
+  },
+  {
     v: 'v0.16.2',
     date: 'Oct 4, 2026',
     url: 'https://github.com/ahwurm/localharness/releases/tag/v0.16.2',
