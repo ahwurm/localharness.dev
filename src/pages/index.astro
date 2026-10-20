@@ -9,6 +9,7 @@ import { d1Lines, d3Lines, eventTotal } from '../data/demo-session';
 import { d4Lines, agentsTailMeter } from '../data/demo-agents';
 import Chip from '../components/Chip.astro';
 import Card from '../components/Card.astro';
+import Eyebrow from '../components/Eyebrow.astro';
 import { PLUGINS } from '../data/plugins';
 import Icon from '../components/Icon.astro';
 import GetInvolved from '../components/GetInvolved.astro';
@@ -90,6 +91,43 @@ const jsonLd = [
         <Button href="https://github.com/ahwurm/localharness" external>view on github</Button>
         <Button href="#demo-section" variant="outline">watch it work</Button>
       </div>
+    </div>
+  </section>
+
+  <section id="why-local" data-reveal>
+    <SectionBand icon="cloud-off" title="Why local" />
+    <div class="container-site py-16 sm:py-20">
+      <p class="measure text-sm text-dim">What the harness does because the model is yours.</p>
+      <ul class="mt-8 grid gap-3 md:grid-cols-2">
+        <li>
+          <Card class="flex h-full flex-col p-5">
+            <Eyebrow label="local models" />
+            <p class="mt-3 text-sm text-dim">A launch is sized from the model’s own files: the windows it was served and trained at, the weights and cache it needs, an MoE’s experts in RAM when the GPU is full. A model that fits nowhere is refused before anything starts.</p>
+            <p class="mt-auto pt-4 font-mono text-xs"><a href="#demo-startup" class="text-accent/80 transition-colors hover:text-accent">see init sense the model ↓</a></p>
+          </Card>
+        </li>
+        <li>
+          <Card class="flex h-full flex-col p-5">
+            <Eyebrow label="the model server" />
+            <p class="mt-3 text-sm text-dim"><span class="font-mono text-[13px] text-ink">localharness start</span> finds a model on your machine or offers one to fetch, writes its preset and serves it. <span class="font-mono text-[13px] text-ink">/model</span> lists the launches this box can make and switches in place; autostart brings the server up with the harness.</p>
+            <p class="mt-auto pt-4 font-mono text-xs"><a href="https://github.com/ahwurm/localharness#why-an-agent-harness-for-local-models" target="_blank" rel="noopener" class="text-accent/80 transition-colors hover:text-accent">README ↗</a></p>
+          </Card>
+        </li>
+        <li>
+          <Card class="flex h-full flex-col p-5">
+            <Eyebrow label="private by default" />
+            <p class="mt-3 text-sm text-dim">Memory is SQLite in your home directory, config is YAML, and the event stream and logs stay on your disk. No account, no telemetry; web search runs over DuckDuckGo with no key.</p>
+            <p class="mt-auto pt-4 font-mono text-xs"><a href="/plugins/memory/" class="text-accent/80 transition-colors hover:text-accent">memory plate →</a></p>
+          </Card>
+        </li>
+        <li>
+          <Card class="flex h-full flex-col p-5">
+            <Eyebrow label="permissions" />
+            <p class="mt-3 text-sm text-dim">One gate stands in front of every tool call, helper agents included. An agent that reads untrusted content is not given tools that change your machine, and the endpoint, credential and allowed senders live in machine-level config a cloned repository cannot change.</p>
+            <p class="mt-auto pt-4 font-mono text-xs"><a href="https://github.com/ahwurm/localharness/blob/main/SECURITY.md" target="_blank" rel="noopener" class="text-accent/80 transition-colors hover:text-accent">SECURITY.md ↗</a></p>
+          </Card>
+        </li>
+      </ul>
     </div>
   </section>
 
