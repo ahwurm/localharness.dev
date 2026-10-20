@@ -181,7 +181,7 @@ const jsonLd = [
           <p class="mb-2 font-mono text-xs"><span class="text-accent/80">fig. 02</span></p>
           <DemoPane key="wl" title="~/localharness — real session · qwen-27b-swift-1.5 on llama.cpp" lines={whyLocalSearchLines} boxClass="" bodyClass="" endAtAnswer />
         </div>
-        <div class="mt-6 xl:mt-0">
+        <div class="mt-6 xl:mt-0 xl:flex xl:flex-col">
           <p class="eyebrow">where local wins</p>
           <ul class="mt-3 space-y-4">
             <li class="flex items-center gap-3">
@@ -213,6 +213,32 @@ const jsonLd = [
               </span>
             </li>
           </ul>
+                    <div class="mt-8 xl:mt-auto">
+            <p class="eyebrow">how it got there</p>
+            <ul class="mt-3 space-y-4">
+              <li class="flex items-center gap-3">
+                <Icon name="book" class="size-4" />
+                <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                  <span class="font-mono text-[13px] text-ink">memory</span>
+                  <span class="text-sm text-dim">recalled where the README lives</span>
+                </span>
+              </li>
+              <li class="flex items-center gap-3">
+                <Icon name="globe" class="size-4" />
+                <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                  <span class="font-mono text-[13px] text-ink">web-researcher</span>
+                  <span class="text-sm text-dim">fetched it, marked untrusted</span>
+                </span>
+              </li>
+              <li class="flex items-center gap-3">
+                <Icon name="agent" class="size-4" />
+                <span class="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                  <span class="font-mono text-[13px] text-ink">orchestrator</span>
+                  <span class="text-sm text-dim">answered in plain words</span>
+                </span>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
