@@ -38,6 +38,8 @@ interface Props {
   /** static rest scroll: 'tail' (default — the answer IS the payoff) or 'top'
    *  (d4: the payoff is the whole list; tail-rest would hide its head on mobile) */
   restAt?: 'top' | 'tail';
+  /** the frame closes under the answer: no idle input row, no bottom fade */
+  endAtAnswer?: boolean;
 }
 const {
   key,
@@ -48,6 +50,7 @@ const {
   boxClass = 'xl:sticky xl:top-20 xl:max-h-[min(72vh,560px)]',
   bodyClass = 'max-h-[420px] xl:max-h-none xl:flex-1 xl:min-h-0',
   restAt = 'tail',
+  endAtAnswer = false,
 } = Astro.props;
 
 const program = lines.map((l, i) => ({
@@ -80,7 +83,9 @@ const program = lines.map((l, i) => ({
   <div
     data-body
     class:list={[
-      'dp-fade overflow-y-auto p-4 pb-10 font-mono text-[13px] leading-[1.75] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden max-xl:min-h-[var(--replay-h)]',
+      endAtAnswer
+        ? 'overflow-y-auto p-4 font-mono text-[13px] leading-[1.75] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden max-xl:min-h-[var(--replay-h)]'
+        : 'dp-fade overflow-y-auto p-4 pb-10 font-mono text-[13px] leading-[1.75] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden max-xl:min-h-[var(--replay-h)]',
       bodyClass,
     ]}
   >
@@ -170,7 +175,7 @@ const program = lines.map((l, i) => ({
         );
       })
     }
-    <div data-tail class="relative my-2 rounded-md border border-dim/40 px-3 py-1.5">
+    {!endAtAnswer && (<div data-tail class="relative my-2 rounded-md border border-dim/40 px-3 py-1.5">
       <span
         ><span class="select-none text-accent">&gt; </span><span
           class="inline-block h-[1em] w-[0.6em] translate-y-[2px] bg-accent/80 motion-safe:[animation:blink_1.2s_steps(1)_infinite]"
@@ -181,7 +186,7 @@ const program = lines.map((l, i) => ({
           <span class="absolute -bottom-[0.6em] right-4 bg-surface px-1 text-[11px] leading-none text-dim">{tailMeter}</span>
         )
       }
-    </div>
+    </div>)}
   </div>
   <script type="application/json" data-dp-program set:html={JSON.stringify({ program, total: eventTotal ?? null, key })} />
 </div>

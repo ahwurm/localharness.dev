@@ -30,6 +30,3 @@ export const whyLocalLines: DemoLine[] = [
     d: 1400,
   },
 ];
-
-/** the input-box meter after this run, verbatim from the capture */
-export const whyLocalTailMeter = '█░░░░░░░░░ 11%';
