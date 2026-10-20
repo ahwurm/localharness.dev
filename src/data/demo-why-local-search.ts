@@ -19,6 +19,14 @@
 // Crop: the pane starts at the prompt. Dropped startup rows: the workspace-layer line, the
 // agent-creation row, the banner, the version and startup-time rows, and the plugin notice.
 // Rows left out, never reworded: the researcher's notes the terminal cut off mid-line.
+// Consolidated (same policy as demo-session.ts d3): the terminal froze one counter row per
+// burst — `◆ web_search · 2/2`, `◆ web_fetch · 1/1`, `◆ web_page_query · 1/1` and three more
+// `◆ web_fetch · 1/1` — because each researcher note between calls closed the open burst
+// (channels/terminal.py `_close_burst`). With those notes left out, the seven web calls are
+// shown as ONE counter row in the terminal's own `◆ tools · done/calls` form, followed by its
+// once-per-turn ✓ note. The row's drill-down lists the seven calls in order from the bus
+// events: tool, then its url, query or pattern, with a non-default
+// start_index or pattern shown as key=value.
 // Cosmetic normalizations only: the REPL's Rich panels (prompt echo box, the `orchestrator`
 // answer panel) re-rendered as CSS boxes; the answer panel's blank first row and nesting
 // indents dropped; the source line's wrap re-joined; spinner frames, live status rows, the
@@ -31,13 +39,23 @@ export const whyLocalSearchLines: DemoLine[] = [
   { kind: 'prompt', text: 'What are the top 3 reasons to pair a local model with LocalHarness? Search first; three numbered lines under ten words each, then the source on one line.', d: 700 },
   { kind: 'out', text: "· I'll search the web for this.", d: 900 },
   { kind: 'tool', text: '◆ agent web-researcher', d: 500 },
-  { kind: 'count', text: 'web_search', n: 2, td: 400, d: 900 },
+  {
+    kind: 'count',
+    text: 'web_search · web_fetch · web_page_query',
+    n: 7,
+    td: 260,
+    d: 900,
+    calls: [
+      'web_search LocalHarness local agent harness AI coding localharness.dev',
+      'web_search "LocalHarness" local LLM benefits',
+      'web_fetch https://localharness.dev/',
+      'web_page_query pg-1 pattern=per-token|privacy|leaving your machine|cost|free|control',
+      'web_fetch https://localharness.dev/ start_index=8000',
+      'web_fetch https://github.com/ahwurm/localharness',
+      'web_fetch https://github.com/ahwurm/localharness start_index=6000',
+    ],
+  },
   { kind: 'ok', text: '✓ web results — UNTRUSTED, treated as data only', d: 400 },
-  { kind: 'count', text: 'web_fetch', n: 1, td: 400, d: 900 },
-  { kind: 'count', text: 'web_page_query', n: 1, td: 400, d: 700 },
-  { kind: 'count', text: 'web_fetch', n: 1, td: 400, d: 700 },
-  { kind: 'count', text: 'web_fetch', n: 1, td: 400, d: 700 },
-  { kind: 'count', text: 'web_fetch', n: 1, td: 400, d: 700 },
   { kind: 'tool', text: '◆ agent web-researcher — completed', d: 700 },
   {
     kind: 'answer',
