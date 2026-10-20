@@ -1,5 +1,5 @@
 // REAL captured session — no fabricated terminal output (site rule).
-// Renders as fig. 01 "Why Local" (#why-local): the harness asked why local, answered from
+// Renders as fig. 02 "Why Local" (#why-local): the harness asked why local, answered from
 // the README.
 //
 // Provenance: captured 2026-10-20 on the owner's workstation.

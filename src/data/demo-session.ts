@@ -1,6 +1,6 @@
 // REAL captured session — no fabricated terminal output (site rule).
 // Presented on the homepage in two acts (pacing only, no text changes):
-// `d1Lines` (init → ready) renders as fig. 02 "Getting Started";
+// `d1Lines` (init → ready) renders as fig. 01 "Getting Started";
 // `d3Lines` (prompt → answer) renders as fig. 03 "Demo" (the agent loop +
 // quarantined web search).
 //
