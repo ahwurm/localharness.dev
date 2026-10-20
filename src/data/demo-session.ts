@@ -80,6 +80,8 @@ export type DemoLine = {
    *  (one row per tick, capture order; "— …" rows are actor dividers, not ticks;
    *  ✗ marks a captured error). Rendered as a native <details> the viewer can open. */
   calls?: string[];
+  /** answer only: the same text split into runs, `accent` runs drawn in the accent hue (display styling) */
+  parts?: { text: string; accent?: boolean }[];
 };
 
 export const promptText =

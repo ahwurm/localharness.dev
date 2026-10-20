@@ -152,6 +152,15 @@ const program = lines.map((l, i) => ({
               {l.text.replace(/^✓ /, '')}
             </div>
           );
+        if (l.kind === 'answer' && l.parts) {
+          if (l.parts.map((p) => p.text).join('') !== l.text) throw new Error(`answer parts drift from text (line ${i})`);
+          return (
+            <fieldset data-dl={i} class="my-2 whitespace-pre-line rounded-md border border-dim/40 px-3 pb-2.5 pt-1.5">
+              <legend class="mx-auto px-2 font-semibold text-accent">orchestrator</legend>
+              <span class="text-ink">{l.parts.map((p) => (p.accent ? <span class="font-medium text-accent">{p.text}</span> : p.text))}</span>
+            </fieldset>
+          );
+        }
         if (l.kind === 'answer')
           return (
             <fieldset data-dl={i} class="my-2 whitespace-pre-line rounded-md border border-dim/40 px-3 pb-2.5 pt-1.5">
