@@ -25,7 +25,7 @@ const surfaces: Row[] = [
   ['prompt', 'slash commands', 'none; the phone page has no command menu.'],
   ['doc', 'mobile.public_url', 'the address your phone opens, saved once, machine-level only; the port and bind address stay flags.'],
   ['prompt', '/plugins enable mobile', 'inside a running session: until it is set up, asks what it needs and checks it; then restarts with your conversation kept.'],
-  ['meter-off', 'localharness plugins disable mobile', 'on once the mobile extra is installed; disable removes the channel and the command.'],
+  ['meter-off', 'localharness plugins enable mobile', 'off by default; needs the mobile extra; disable removes the channel and the command.'],
 ];
 const receipts: [string, string][] = [
   ['cli/mobile_plugin.py', blob('src/localharness/cli/mobile_plugin.py')],
@@ -42,7 +42,7 @@ const receipts: [string, string][] = [
   label="Mobile"
   icon="globe"
   description="The LocalHarness mobile plugin is the phone app for your local agent: localharness mobile serves a token-locked page from your own machine, paired by a QR code."
-  lead="Install the mobile extra, run localharness mobile, and scan the QR code with your phone."
+  lead="Off by default — install the mobile extra, turn it on, run localharness mobile, and scan the QR code with your phone."
   surfaces={surfaces}
   receipts={receipts}
 >

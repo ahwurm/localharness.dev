@@ -55,14 +55,15 @@ the plugin on and your conversation kept, or from a shell with
   default, `plugins enable image` turns it on:
   https://localharness.dev/plugins/image/
 - Mobile (`mobile`) — the phone app for your local agent: `localharness mobile` serves a
-  token-locked page from your own machine on loopback, paired by a QR code; on once the mobile extra
-  is installed:
+  token-locked page from your own machine on loopback, paired by a QR code; off by default; needs
+  the mobile extra, then `plugins enable mobile` turns it on:
   https://localharness.dev/plugins/mobile/
 - Memory — facts that outlive the session, recalled into each turn and consolidated while idle, on
   a small local embedding model; on by default, `memory.enabled: false` to turn off:
   https://localharness.dev/plugins/memory/
 - Dispatch — drive your local agent from Discord (`start --channel discord`): a bot token and your
-  user id in one machine-level settings file, permission questions answered by reaction:
+  user id in one machine-level settings file, permission questions answered by reaction; off by
+  default, needs the `dispatch` extra, then `plugins enable dispatch` turns it on:
   https://localharness.dev/plugins/dispatch/
 - Autoresearch — the propose → experiment → archive loop that tunes the harness for your model,
   gated by a sealed holdout the proposer never sees; the proposer is your local model again or a
@@ -104,7 +105,7 @@ documented opt-in examples instead. Define your own subagents in YAML.
 ### Plugins
 
 LocalHarness is a small core plus plugins. The bundled plugins are image generation and the
-browser (each off by default), the Mobile phone app (`mobile`), memory, Discord chat (`dispatch`)
+browser, the Mobile phone app (`mobile`) and Discord chat (`dispatch`) (each off by default), memory
 and autoresearch (each on by default). A plugin declares itself in a manifest in code, fills a
 port core already has (a tool, a channel, a command, or the one memory slot), and runs through one
 lifecycle each session: configure, tools, start, then stop in reverse order. A plugin that fails is

@@ -39,7 +39,7 @@ const nodes: N[] = [
   [388, 236, 240, 'plug', 'untrusted_ingest', 'channels/mobile/protocol.py', [['globe', 'web_search · web_fetch ·\nweb_page_query'], ['shield', 'a label, never a filter —\nnothing dropped']]],
   [388, 338, 240, 'plug', 'Pictures', 'channels/mobile/server.py', [['image', 'GET /api/artifacts · 60 a page'], ['doc', 'id · type · size — no path, no prompt'], ['lock', '--incognito: no-store, gallery off']]],
   [388, 428, 240, 'plug', 'Memory', 'channels/mobile/server.py', [['search', '/api/memory → the slot’s browse()'], ['issue', 'memory off → those routes answer 404']]],
-  [388, 506, 240, 'plug', 'MobilePlugin', 'cli/mobile_plugin.py · kind channel', [['plug', 'on by default once the mobile extra is in'], ['box', 'channels() → mobile · command → mobile_cmd'], ['cloud-off', 'start · stop: no-ops;\nthe command owns it']]],
+  [388, 506, 240, 'plug', 'MobilePlugin', 'cli/mobile_plugin.py · kind channel', [['plug', 'off by default; needs the mobile extra'], ['box', 'channels() → mobile · command → mobile_cmd'], ['cloud-off', 'start · stop: no-ops;\nthe command owns it']]],
   // PLUGIN — network side
   [664, 114, 236, 'plug', 'localharness mobile', 'channels/mobile/server.py · port 8765', [['lock', 'loopback only —\nelse --allow-unsafe-bind', 1], ['key', 'an app token on every request · 0600'], ['shield', 'writes: bearer + application/json only']]],
   [664, 214, 236, 'plug', 'QR pairing', 'cli/mobile_cmd.py', [['key', 'the token rides the URL fragment —\nno log sees it'], ['repeat', 'rotation: all or nothing']]],
