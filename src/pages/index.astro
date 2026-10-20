@@ -7,7 +7,7 @@ import TraceFlow from '../components/TraceFlow.astro';
 import SectionBand from '../components/SectionBand.astro';
 import { d1Lines, d3Lines, eventTotal } from '../data/demo-session';
 import { d4Lines, agentsTailMeter } from '../data/demo-agents';
-import { whyLocalLines } from '../data/demo-why-local';
+import { whyLocalSearchLines } from '../data/demo-why-local-search';
 import Chip from '../components/Chip.astro';
 import Card from '../components/Card.astro';
 import { PLUGINS } from '../data/plugins';
@@ -179,7 +179,7 @@ const jsonLd = [
       <div class="gap-10 xl:grid xl:grid-cols-[3fr_2fr]">
         <div class="min-w-0">
           <p class="mb-2 font-mono text-xs"><span class="text-accent/80">fig. 02</span></p>
-          <DemoPane key="wl" title="~/localharness — real session · qwen-27b-swift-1.5 on llama.cpp" lines={whyLocalLines} boxClass="" bodyClass="" endAtAnswer />
+          <DemoPane key="wl" title="~/localharness — real session · qwen-27b-swift-1.5 on llama.cpp" lines={whyLocalSearchLines} boxClass="" bodyClass="" endAtAnswer />
         </div>
         <div class="mt-6 xl:mt-0">
           <p class="eyebrow">where local wins</p>
