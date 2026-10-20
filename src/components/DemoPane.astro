@@ -222,7 +222,7 @@ const program = lines.map((l, i) => ({
       if (!program?.length) return;
       const lineEls = [...pane.querySelectorAll<HTMLElement>('[data-dl]')];
       const evEls = [...scope.querySelectorAll<HTMLElement>('[data-ev]')];
-      const typedEl = pane.querySelector<HTMLElement>('[data-typed]');
+      const typedEls = [...pane.querySelectorAll<HTMLElement>('[data-typed]')];
       const tailEl = pane.querySelector<HTMLElement>('[data-tail]');
       const countEl = scope.querySelector<HTMLElement>('[data-ev-count]');
       const btn = pane.querySelector<HTMLElement>('[data-replay]');
@@ -254,7 +254,7 @@ const program = lines.map((l, i) => ({
         pane.querySelectorAll<HTMLElement>('[data-count]').forEach((c) => (c.textContent = ` · 0/${c.dataset.n}`));
         scope.querySelectorAll('[data-edge]').forEach((el) => el.classList.remove('edge-in'));
         tailEl?.classList.add('demo-hidden');
-        if (typedEl) typedEl.textContent = '';
+        typedEls.forEach((el) => (el.textContent = ''));
         if (countEl) countEl.textContent = '0';
         setLive(null);
         body.scrollTop = 0;
@@ -265,6 +265,7 @@ const program = lines.map((l, i) => ({
         for (const step of program) {
           t += step.d;
           const reveal = t;
+          const typedEl = lineEls[step.i].querySelector<HTMLElement>('[data-typed]');
           if (step.kind === 'prompt' && step.text && typedEl) {
             at(reveal, () => {
               lineEls[step.i].classList.remove('demo-hidden');
