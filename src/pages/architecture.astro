@@ -2,7 +2,7 @@
 // The engineer deep-dive — v3 "drawn to scale". Two plates: PLATE I runtime (fig 01) → LoopPlate
 // zoom (fig 02, kept verbatim — "great"), then The Plugins: no plate (Alex 2026-10-02 — the plugins
 // get their own landing pages, /plugins/<name>/, reached from the nav's Plugins menu); this section
-// describes the composable harness and links the five pages in code order. Legacy anchors resolve
+// describes the composable harness and links the six pages in code order. Legacy anchors resolve
 // via invisible alias divs: #delegation/#hard-parts/#security/#yaml nested in #system; #scope +
 // #run around GetInvolved; #memory/#context/#autoresearch are forwarded by Base.astro.
 // DelegationPlate / OverWindowDiagram stay on disk unimported. Every label verified against
@@ -167,7 +167,7 @@ const pluginReceipts: [string, string, boolean][] = [
         ))}
       </ul>
       <p class="eyebrow mt-12">the bundled plugins</p>
-      <ul class="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+      <ul class="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {PLUGINS.map((p) => (
           <li>
             <a href={p.href} class="group block h-full">

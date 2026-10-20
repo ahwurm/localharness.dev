@@ -38,9 +38,8 @@ Astro 5 + Tailwind v4, static output, GitHub Pages deploy, domain `localharness.
 - **No placeholder/sample data.** Every on-page claim must trace to a real fact in
   `~/localharness`, `~/localshift`, or their GitHub READMEs.
 - No fabricated terminal output; commands only, with comment annotations.
-- No registry-install copy (`npm install` / `pip install` / bare `uv tool install localharness`) —
-  not published yet. Install = `uv tool install git+https://github.com/ahwurm/localharness`
-  (works today; swap to the bare form when PyPI lands).
+- Install copy = `uv tool install localharness` (on PyPI); a plugin extra is
+  `uv tool install 'localharness[<extra>]'`. The from-source form stays in llms.txt only.
 - Star-count badge stays behind `SHOW_STARS = false` until repos have stars.
 - Dark theme only; one accent (terminal green, used via alpha steps — `accent/10`…`accent/80` — not flat).
 - Motion system (2026-07-02 pi-uplevel redesign, supersedes the old hover-only rule): `focus-in`

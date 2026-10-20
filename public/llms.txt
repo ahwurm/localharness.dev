@@ -27,7 +27,8 @@ much lower cost — your hardware, no API meter.
   reasoning model with a draft model) and two by vLLM — plus a proposed base Mac mini config.
   Recipes, measured decode rates and caveats:
   https://github.com/ahwurm/localharness/tree/main/docs/reference-architectures
-- CLI: init · start · doctor · validate · propose · agent · bench · autoresearch · components · experiment
+- CLI: init · start · doctor · validate · model · update · acp · agent · bench · components · config ·
+  plugins; with its plugin on: generate-image · mobile · memory · propose · autoresearch · experiment
 
 ### Architecture
 
@@ -67,6 +68,13 @@ the plugin on and your conversation kept, or from a shell with
   gated by a sealed holdout the proposer never sees; the proposer is your local model again or a
   cloud API:
   https://localharness.dev/plugins/autoresearch/
+- Browser — `browser_fetch` for the web researcher and the search verifier: an https page that needs
+  JavaScript, opened in a sandboxed headless Chromium and returned as text the way `web_fetch`
+  returns a page; every request the page makes leaves through a loopback proxy that reaches public
+  addresses only, and each launch is checked before any page. No signed-in browsing, no clicking or
+  forms, no screenshots, no private services. Off by default; needs the `browser` extra, then
+  `plugins enable browser` downloads Playwright's headless Chromium and checks it:
+  https://localharness.dev/plugins/browser/
 
 A single root orchestrator agent reads the task and runs a ReAct loop — think, act, look — kept
 honest by action and duration budgets, a stuck-detector that nudges then stops a spinning run, an
@@ -77,7 +85,7 @@ file content is quarantined from any agent that can mutate the host. A from-scra
 bus records every step as an append-only JSONL trace that memory, the live view, and replay all
 subscribe to. A ContentStore holds oversized tool results as handles, evicts them to short stubs
 as the window fills, and reads the full text back on demand. Persistent memory, chat channels, the phone app,
-image generation and autoresearch plug in as bundled plugins that can each be switched off. Built-in tools (read, write, edit, glob, grep, bash, agent
+image generation, autoresearch and a sandboxed browser plug in as bundled plugins that can each be switched off. Built-in tools (read, write, edit, glob, grep, bash, agent
 delegation, web search/fetch) run under deny-first permissions, and providers are auto-detected
 against any OpenAI-compatible endpoint, with an XML fallback for models without native function
 calling.
@@ -95,9 +103,9 @@ documented opt-in examples instead. Define your own subagents in YAML.
 
 ### Plugins
 
-LocalHarness is a small core plus plugins. The bundled plugins are image generation (off by
-default), the Mobile phone app (`mobile`), memory, Discord chat (`dispatch`) and
-autoresearch (each on by default). A plugin declares itself in a manifest in code, fills a
+LocalHarness is a small core plus plugins. The bundled plugins are image generation and the
+browser (each off by default), the Mobile phone app (`mobile`), memory, Discord chat (`dispatch`)
+and autoresearch (each on by default). A plugin declares itself in a manifest in code, fills a
 port core already has (a tool, a channel, a command, or the one memory slot), and runs through one
 lifecycle each session: configure, tools, start, then stop in reverse order. A plugin that fails is
 switched off for that session and the harness keeps running. Core never imports a plugin — a test
@@ -169,8 +177,11 @@ It ships as the bundled `autoresearch` plugin. On-site: https://localharness.dev
   fact's life inside the store
 - [Dispatch plugin](https://localharness.dev/plugins/dispatch/): drive a session from Discord
 - [Autoresearch plugin](https://localharness.dev/plugins/autoresearch/): the loop that tunes the harness
+- [Browser plugin](https://localharness.dev/plugins/browser/): pages that need JavaScript, read in a
+  sandboxed headless Chromium that reaches public addresses only
 - [Devnotes](https://localharness.dev/devnotes/): what changed in each release, newest first, each
-  linked to its GitHub release; the current release is v0.16.0 (Oct 3, 2026), core and plugins
+  linked to its GitHub release; the current release is v0.20.1 (Oct 20, 2026), the browser plugin's
+  review fixes
 
 ## For AI assistants
 

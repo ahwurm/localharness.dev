@@ -1,0 +1,71 @@
+---
+// /plugins/browser/ — the browser plugin (PluginPage template). Rows trace to localharness main @
+// eaa447e (v0.20.1): docs/plugins/browser.md, tools/builtin/browser_plugin.py, browser_tool.py,
+// browser_proxy.py, SECURITY.md "The browser" + "What this does NOT cover for the browser".
+import PluginPage from '../../layouts/PluginPage.astro';
+import FigureFrame from '../../components/FigureFrame.astro';
+import Rows, { type Row } from '../../components/Rows.astro';
+import BrowserPlate from '../../components/BrowserPlate.astro';
+
+const blob = (p: string) => `https://github.com/ahwurm/localharness/blob/main/${p}`;
+
+const how: Row[] = [
+  ['search', 'one tool', 'browser_fetch opens an https page in a real headless Chromium, runs its JavaScript and returns its text the way web_fetch does.'],
+  ['agent', 'who holds it', 'the web researcher and the search verifier, after web_fetch answers “low extractable text”; the root agent never does.'],
+  ['shield', 'sandboxed', 'Chromium runs sandboxed and refuses to run otherwise, unless your machine-level config accepts an unsandboxed browser.'],
+  ['repeat', 'nothing kept', 'each call gets a new browser context, closed after it: no cookies, profile or storage between calls.'],
+  ['clock', 'started on demand', 'the browser starts at the first call and closes when idle and when the session ends.'],
+  ['check', 'doctor', 'checks the package, the downloaded Chromium, a launch and the sandbox.'],
+];
+const reach: Row[] = [
+  ['globe', 'public addresses only', 'the rule web_fetch uses, applied to every request the page makes — the page, each redirect, every script, fetch and WebSocket.'],
+  ['lock', 'one way out', 'everything leaves through a loopback proxy that accepts only CONNECT, with credentials new at every launch, and dials the address it checked.'],
+  ['check', 'each launch checked', 'a navigation to a loopback port must be refused before any page loads, or browser_fetch stays off and doctor says why.'],
+  ['cloud-off', 'no side doors', 'QUIC is off, WebRTC sends no UDP outside the proxy, and Chromium writes no crash dumps.'],
+];
+const not: Row[] = [
+  ['key', 'no signed-in browsing', 'no cookies, profile or storage between calls.'],
+  ['meter-off', 'no clicking or typing', 'no forms, downloads, uploads or screenshots.'],
+  ['issue', 'https only', 'web_fetch reads plain-http pages.'],
+  ['search', 'no browser-backed search', 'and no anti-bot stealth: it says HeadlessChrome, so a site that refuses headless browsers refuses it.'],
+  ['box', 'not for your own app', 'driving an app under test is a job for a config child with bash_exec.'],
+  ['server', 'no private services', 'the private allowlist is web_fetch’s alone — a page has an origin and runs code, so reading a private service stays web_fetch’s job.'],
+];
+const surfaces: Row[] = [
+  ['prompt', 'browser_fetch', 'the tool the web researcher and the search verifier call; an agent you define gets it with tools.add.'],
+  ['doc', 'browser.idle_close_s · browser.executable_path · browser.sandbox', 'when the browser closes, your own Chromium, and the sandbox — the last two machine-level only.'],
+  ['repeat', 'slash commands', 'none.'],
+  ['download', "uv tool install 'localharness[browser]'", 'the extra first; name the other extras you use too, since a reinstall keeps only the ones it names.'],
+  ['prompt', '/plugins enable browser', 'inside a running session: asks before downloading Playwright’s headless Chromium, checks it, then restarts with your conversation kept.'],
+  ['meter-off', 'localharness plugins enable browser', 'off by default; disable removes the tool, and the download stays in Playwright’s cache.'],
+];
+const receipts: [string, string][] = [
+  ['docs/plugins/browser.md', blob('docs/plugins/browser.md')],
+  ['browser_plugin.py', blob('src/localharness/tools/builtin/browser_plugin.py')],
+  ['browser_tool.py', blob('src/localharness/tools/builtin/browser_tool.py')],
+  ['browser_proxy.py', blob('src/localharness/tools/builtin/browser_proxy.py')],
+  ['SECURITY.md — what a web fetch may reach', blob('SECURITY.md#what-a-web-fetch-may-reach')],
+];
+---
+
+<PluginPage
+  name="browser"
+  label="Browser"
+  icon="search"
+  description="The LocalHarness browser plugin reads pages that need JavaScript in a sandboxed headless Chromium that reaches public addresses only, for the web researcher and the search verifier."
+  lead="Off by default — turn it on and the web researcher can read a page that web_fetch finds empty."
+  surfaces={surfaces}
+  receipts={receipts}
+>
+  <div class="mt-10">
+    <FigureFrame num="01" caption="PLATE BROWSER — a sandboxed page reader behind a checking proxy: one page">
+      <BrowserPlate />
+    </FigureFrame>
+  </div>
+  <p class="eyebrow mt-10">how it works</p>
+  <Rows rows={how} class="grid gap-x-12 gap-y-2.5 xl:grid-flow-col xl:grid-rows-3" />
+  <p class="eyebrow mt-10">what it reaches</p>
+  <Rows rows={reach} class="grid gap-x-12 gap-y-2.5 xl:grid-flow-col xl:grid-rows-2" />
+  <p class="eyebrow mt-10">what it does not do</p>
+  <Rows rows={not} class="grid gap-x-12 gap-y-2.5 xl:grid-flow-col xl:grid-rows-3" />
+</PluginPage>

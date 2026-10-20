@@ -1,0 +1,204 @@
+---
+// PLATE BROWSER — the browser plugin: a sandboxed page reader behind a checking proxy (fig. 01 of
+// /plugins/browser/). PLATE IMAGE grammar: left, CORE; hairline; right, the PLUGIN; far right, OUTSIDE.
+// Badges ①–⑥ = one page: the root delegates → the web researcher calls browser_fetch after web_fetch
+// said "low extractable text" → Chromium opens the page → every request goes to the loopback proxy →
+// public addresses only → the text back, windowed the way web_fetch returns it.
+// Sources (localharness main @ eaa447e, v0.20.1): tools/builtin/browser_plugin.py, browser_tool.py,
+// browser_proxy.py, agent/subagent.py (the web group), docs/plugins/browser.md, SECURITY.md "The browser".
+// SVG at lg+; FlowLedger below. Marker ids pb-*.
+import FlowLedger from './FlowLedger.astro';
+import Icon, { type IconName, type IconTone } from './Icon.astro';
+
+type Tone = 'core' | 'plug' | 'out';
+const stroke: Record<Tone, string> = { core: 'stroke-accent/70', plug: 'stroke-tool/70', out: 'stroke-edge' };
+const tint: Record<Tone, string> = { core: 'fill-accent/8', plug: 'fill-tool/8', out: 'fill-ink/[0.03]' };
+const hue: Record<Tone, string> = { core: 'fill-accent', plug: 'fill-tool', out: 'fill-ink' };
+const ico: Record<Tone, IconTone> = { core: 'accent', plug: 'tool', out: 'dim' };
+// clause: [icon, text, 1 = emphasised in the hue · 2 = amber limit · 3 = italic planned]
+type C = [IconName, string, number?];
+// [x, y, w, tone, title, source file, clauses, coloured title]
+type N = [number, number, number, Tone, string, string | null, C[], boolean?];
+const nodes: N[] = [
+  // CORE
+  [28, 114, 296, 'core', 'root agent', 'agent/subagent.py', [['lock', 'never holds browser_fetch', 1], ['reply', 'it reads untrusted pages, so it hands\nweb work to the web researcher']]],
+  [28, 206, 296, 'core', 'web-researcher · search-verifier', 'agent/subagent.py · the web group', [['search', 'web_search · web_fetch · web_page_query'], ['image', 'browser_fetch after “low extractable text”', 1], ['shield', 'no tool that reads files or changes the machine']], true],
+  [28, 312, 296, 'core', 'ToolRegistry', 'tools/registry.py', [['shield', 'ingest untrusted · host safe · result untrusted'], ['check', 'the capability floor keeps its holders that way']]],
+  [28, 396, 296, 'core', 'config layers', 'config/loader.py', [['key', 'browser.executable_path · browser.sandbox'], ['lock', 'machine-level only: a project cannot\nchoose the program or unsandbox it', 1]]],
+  [28, 486, 296, 'core', 'plugins enable browser', 'cli/plugins_cmd.py · on a terminal', [['download', 'asks, then runs Playwright’s own installer'], ['check', 'checks package · binary · launch · sandbox', 1]]],
+  // BROWSER PLUGIN
+  [388, 114, 356, 'plug', 'BrowserPlugin', 'tools/builtin/browser_plugin.py', [['plug', 'kind tools · off by default · the browser extra'], ['key', 'no tool at all until Chromium is downloaded']], true],
+  [388, 206, 356, 'plug', 'browser_fetch', 'tools/builtin/browser_tool.py', [['globe', 'https only · text back the way web_fetch returns it'], ['layers', 'a window · the full text kept for web_page_query'], ['repeat', 'a new browser context per call, closed after it', 1]]],
+  [388, 312, 356, 'plug', 'headless Chromium', 'BrowserRuntime · browser_tool.py', [['shield', 'sandboxed — refuses to run otherwise', 1], ['image', 'no images, media or fonts downloaded'], ['clock', 'closed when idle and when the session ends']]],
+  [388, 410, 356, 'plug', 'checking proxy', 'tools/builtin/browser_proxy.py · 127.0.0.1', [['lock', 'CONNECT only · credentials new at every launch'], ['shield', 'public addresses only · connects to the address it checked', 1], ['check', 'every launch: a loopback probe must be refused']]],
+  // OUTSIDE
+  [836, 206, 296, 'out', 'the public web', null, [['globe', 'the page, redirects, scripts, fetch, WebSocket'], ['cloud-off', 'no QUIC · no UDP outside the proxy']]],
+  [836, 330, 296, 'out', 'private services', null, [['issue', 'refused — even ones web_fetch may read', 2], ['server', 'reading one stays web_fetch’s job']]],
+  [836, 440, 296, 'out', 'Playwright’s CDN', null, [['download', 'headless Chromium, after you say yes'], ['issue', 'the harness checks no signature of its own', 2]]],
+];
+const planned: N | null = null;
+const rowsOf = (cs: C[]) => cs.flatMap(([i, t, k = 0]) => t.split('\n').map((line, j) => ({ icon: j ? null : i, line, k })));
+const height = (n: N) => 28 + 12 * ((n[5] ? 1 : 0) + rowsOf(n[6]).length);
+const badge = (n: number, x: number, y: number, ret = false) => ({ n, x, y, ret });
+const badges = [badge(1, 162, 198), badge(2, 370, 236), badge(3, 552, 297), badge(4, 552, 399), badge(5, 790, 330), badge(6, 340, 266, true)];
+---
+
+<figure
+  role="img"
+  aria-label="Plate browser: the browser plugin, a sandboxed page reader behind a checking proxy, one page numbered one to six. On the core side: the root agent, which never holds browser_fetch because it reads untrusted pages and hands web work to the web researcher; the web researcher and the search verifier, which hold web_search, web_fetch, web_page_query and, after web_fetch answers low extractable text, browser_fetch, and no tool that reads files or changes the machine; the tool registry, where the capability floor keeps them that way; the config layers, where the browser's program and its sandbox setting are machine-level only; and plugins enable browser, which asks before running Playwright's own installer and then checks the package, binary, launch and sandbox rows. Across the plugin boundary the plugin owns the plugin class, off by default and with no tool until Chromium is downloaded; the browser_fetch tool, https only, returning the text the way web_fetch does, with a new browser context per call; a sandboxed headless Chromium that downloads no images, media or fonts and closes when idle; and a checking proxy on loopback that accepts only CONNECT, with credentials new at every launch, and connects only to a public address it checked itself. Outside: the public web; private services, which are refused; and Playwright's servers, from which Chromium is downloaded after you say yes. One: the root delegates. Two: the web researcher calls browser_fetch. Three: the tool opens the page in Chromium. Four: every request the page makes goes to the proxy. Five: the proxy reaches public addresses only. Six: the text comes back to the researcher."
+>
+  <div class="hidden w-full lg:block" aria-hidden="true">
+    <svg viewBox="0 0 1160 650" class="w-full">
+      <defs>
+        <marker id="pb-solid" viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="6.2" markerHeight="6.2" orient="auto-start-reverse">
+          <path d="M0,0.5 L7,4 L0,7.5" class="fill-none stroke-accent" stroke-width="1.4"></path>
+        </marker>
+        <marker id="pb-tool" viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="6.2" markerHeight="6.2" orient="auto-start-reverse">
+          <path d="M0,0.5 L7,4 L0,7.5" class="fill-none stroke-tool" stroke-width="1.3"></path>
+        </marker>
+        <marker id="pb-dash" viewBox="0 0 8 8" refX="6.5" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0,0.5 L7,4 L0,7.5" class="fill-none stroke-dim" stroke-width="1.3"></path>
+        </marker>
+        <pattern id="pb-hatch" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <line x1="0" y1="0" x2="0" y2="5" class="stroke-dim" stroke-width="1"></line>
+        </pattern>
+      </defs>
+
+      <rect x="16" y="18" width="28" height="20" class="fill-tool"></rect>
+      <text x="30" y="33" text-anchor="middle" class="fill-accent-ink font-mono text-[11px] font-semibold">BR</text>
+      <text x="54" y="34" class="fill-ink font-sans text-[15px] font-semibold">The browser plugin — a sandboxed page reader behind a checking proxy</text>
+      <text x="1144" y="16" text-anchor="end" class="fill-dim font-mono text-[8px]">LH-ARCH-001 · PLATE BROWSER · SHEET 1 OF 1</text>
+      <text x="1144" y="27" text-anchor="end" class="fill-dim font-mono text-[8px]">REV eaa447e · v0.20.1 · 2026-10-20</text>
+      <text x="1144" y="38" text-anchor="end" class="fill-dim font-mono text-[8px]">kind "tools" · enabled_by_default False · extra localharness[browser]</text>
+      <text x="1144" y="63" text-anchor="end" class="fill-dim font-mono text-[9px]">what core provides · the plugin boundary · what the plugin owns · what it reaches</text>
+
+      <text x="16" y="62" class="fill-dim font-mono text-[8px]">GROUPS</text>
+      <rect x="64" y="53" width="10" height="10" class="fill-accent/20 stroke-accent"></rect>
+      <text x="78" y="62" class="fill-dim font-mono text-[8px]">CORE</text>
+      <rect x="114" y="53" width="10" height="10" class="fill-tool/20 stroke-tool"></rect>
+      <text x="128" y="62" class="fill-dim font-mono text-[8px]">BROWSER PLUGIN</text>
+      <rect x="212" y="53" width="10" height="10" class="fill-edge stroke-edge"></rect>
+      <text x="226" y="62" class="fill-dim font-mono text-[8px]">OUTSIDE</text>
+
+      <line x1="16" y1="76" x2="1144" y2="76" class="stroke-edge" stroke-width="1"></line>
+
+      <rect x="16" y="92" width="320" height="488" class="fill-accent/[0.035] stroke-accent/45" stroke-width="1" stroke-dasharray="5 5"></rect>
+      <rect x="376" y="92" width="380" height="488" class="fill-tool/[0.035] stroke-tool/45" stroke-width="1" stroke-dasharray="5 5"></rect>
+      <rect x="824" y="92" width="320" height="488" class="fill-ink/[0.015] stroke-edge" stroke-width="1" stroke-dasharray="5 5"></rect>
+
+      <!-- ===== edges (each in the hue of the side it leaves) ===== -->
+      <g class="fill-none stroke-accent" stroke-width="1.4">
+        <line x1="176" y1="190" x2="176" y2="205" marker-end="url(#pb-solid)"></line>
+        <line x1="324" y1="236" x2="387" y2="236" marker-end="url(#pb-solid)"></line>
+      </g>
+      <g class="fill-none stroke-tool" stroke-width="1.4">
+        <line x1="566" y1="282" x2="566" y2="311" marker-end="url(#pb-tool)"></line>
+        <line x1="566" y1="388" x2="566" y2="409" marker-end="url(#pb-tool)"></line>
+        <path d="M744,430 L790,430 L790,232 L835,232" marker-end="url(#pb-tool)"></path>
+      </g>
+      <g class="fill-none stroke-tool/60" stroke-width="1.2" stroke-dasharray="4 4">
+        <line x1="388" y1="266" x2="325" y2="266" marker-end="url(#pb-tool)"></line>
+        <line x1="566" y1="178" x2="566" y2="205" marker-end="url(#pb-tool)"></line>
+      </g>
+      <path d="M744,462 L806,462 L806,356 L835,356" class="fill-none stroke-amber/70" stroke-width="1.2" stroke-dasharray="4 4"></path>
+      <line x1="830" y1="350" x2="840" y2="362" class="stroke-amber" stroke-width="1.4"></line>
+      <line x1="840" y1="350" x2="830" y2="362" class="stroke-amber" stroke-width="1.4"></line>
+      <g class="fill-none stroke-accent/60" stroke-width="1.2" stroke-dasharray="4 4">
+        <path d="M324,428 L366,428 L366,350 L387,350" marker-end="url(#pb-solid)"></path>
+      </g>
+      <path d="M176,550 L176,566 L984,566 L984,493" class="fill-none stroke-dim" stroke-width="1.2" stroke-dasharray="4 4" marker-end="url(#pb-dash)"></path>
+
+      <text x="186" y="201" class="fill-dim font-mono text-[8.5px]">delegates</text>
+      <text x="574" y="196" class="fill-dim font-mono text-[8.5px]">tools() constructs it</text>
+      <text x="574" y="300" class="fill-dim font-mono text-[8.5px]">opens the page</text>
+      <text x="574" y="402" class="fill-dim font-mono text-[8.5px]">every request</text>
+      <text x="796" y="222" class="fill-dim font-mono text-[8.5px]">CONNECT</text>
+      <text x="752" y="476" class="fill-amber font-mono text-[8.5px]">refused</text>
+      <text x="326" y="280" class="fill-dim font-mono text-[8.5px]">text</text>
+      <text x="600" y="560" class="fill-dim font-mono text-[8.5px]">the download, after you say yes</text>
+
+      <rect x="28" y="85" width="36" height="14" class="fill-bg stroke-accent" stroke-width="1"></rect>
+      <text x="46" y="95" text-anchor="middle" class="fill-accent font-mono text-[8px] tracking-[0.08em]">CORE</text>
+      <line x1="356" y1="92" x2="356" y2="580" class="stroke-ink/70" stroke-width="1"></line>
+      <text x="0" y="0" transform="translate(352 576) rotate(-90)" class="fill-ink font-mono text-[8px] tracking-[0.08em]">PLUGIN BOUNDARY</text>
+      <rect x="388" y="85" width="196" height="14" class="fill-bg stroke-tool" stroke-width="1"></rect>
+      <text x="486" y="95" text-anchor="middle" class="fill-tool font-mono text-[8px] tracking-[0.08em]">BROWSER PLUGIN · tools/builtin/</text>
+      <rect x="836" y="85" width="142" height="14" class="fill-bg stroke-edge" stroke-width="1"></rect>
+      <text x="907" y="95" text-anchor="middle" class="fill-dim font-mono text-[8px] tracking-[0.08em]">OUTSIDE · WHAT IT REACHES</text>
+
+      <!-- ===== nodes: title · source file · ≤3 icon clauses ===== -->
+      {[...nodes].map((n) => {
+        const [x, y, w, tone, title, src, cs, lead] = n;
+        const isPlanned = n === planned;
+        const h = height(n);
+        const top = y + 31 + (src ? 12 : 0);
+        return (
+          <g>
+            {isPlanned ? (
+              <>
+                <rect x={x} y={y} width={w} height={h} fill="url(#pb-hatch)" class="stroke-dim" stroke-width="1" stroke-dasharray="3 3" opacity="0.35"></rect>
+                <rect x={x} y={y} width={w} height={h} class="fill-none stroke-dim" stroke-width="1.2" stroke-dasharray="3 3"></rect>
+              </>
+            ) : (
+              <>
+                <rect x={x} y={y} width={w} height={h} class:list={['fill-bg', stroke[tone]]} stroke-width="1.3"></rect>
+                <rect x={x} y={y} width={w} height={h} class={tint[tone]}></rect>
+              </>
+            )}
+            <text x={x + 10} y={y + 17} class:list={[lead ? hue[tone] : 'fill-ink', 'font-mono text-[12px]']}>{title}</text>
+            {src && <text x={x + 10} y={y + 31} class="fill-dim font-mono text-[8.5px] opacity-70">{src}</text>}
+            {rowsOf(cs).map((r, j) => (
+              <g>
+                {r.icon && (
+                  <g opacity={r.k ? 1 : 0.7}>
+                    <Icon name={r.icon} tone={isPlanned ? 'dim' : r.k === 2 ? 'amber' : ico[tone]} class="" x={x + 10} y={top + j * 12 - 8} width="9" height="9" />
+                  </g>
+                )}
+                <text
+                  x={x + 23}
+                  y={top + j * 12}
+                  class:list={[r.k === 1 ? hue[tone] : r.k === 2 ? 'fill-amber' : 'fill-dim', r.k === 3 && 'italic', 'font-mono text-[8.5px]']}>{r.line}</text>
+              </g>
+            ))}
+          </g>
+        );
+      })}
+
+      <g>
+        {badges.map((b) => (
+          <g>
+            <circle cx={b.x} cy={b.y} r="7" class={b.ret ? 'fill-surface stroke-accent/60' : 'fill-accent'} stroke-width="1.2"></circle>
+            <text x={b.x} y={b.y + 3} text-anchor="middle" class:list={[b.ret ? 'fill-accent' : 'fill-accent-ink', 'font-mono text-[9px] font-semibold']}>{b.n}</text>
+          </g>
+        ))}
+      </g>
+
+      <text x="16" y="604" class="fill-dim font-mono text-[8.5px]">KEY</text>
+      <line x1="44" y1="601" x2="64" y2="601" class="stroke-accent" stroke-width="1.4" marker-end="url(#pb-solid)"></line>
+      <text x="70" y="604" class="fill-dim font-mono text-[8.5px]">one page · hue = the side it leaves</text>
+      <line x1="290" y1="601" x2="310" y2="601" class="stroke-dim" stroke-width="1.2" stroke-dasharray="3 3" marker-end="url(#pb-dash)"></line>
+      <text x="316" y="604" class="fill-dim font-mono text-[8.5px]">returns · settings · setup</text>
+      <rect x="472" y="597" width="8" height="8" class="fill-none stroke-ink" stroke-width="1.2"></rect>
+      <text x="484" y="604" class="fill-dim font-mono text-[8.5px]">shipped</text>
+      <rect x="532" y="597" width="8" height="8" class="fill-none stroke-amber" stroke-width="1.2"></rect>
+      <text x="544" y="604" class="fill-dim font-mono text-[8.5px]">limit · refused</text>
+      <text x="1144" y="622" text-anchor="end" class="fill-dim font-mono text-[8.5px]">⑤ the proxy judges each CONNECT by web_fetch’s public-address rule and dials the address it checked, never a fresh lookup</text>
+      <text x="1144" y="638" text-anchor="end" class="fill-dim font-mono text-[8.5px]">shipped — every box on this sheet, on main @ eaa447e · landing, planned: none</text>
+    </svg>
+  </div>
+
+  <FlowLedger
+    class="lg:hidden"
+    rows={[
+      { n: 1, icon: 'agent', title: 'the root delegates', text: 'it never holds browser_fetch — it reads untrusted pages', tone: 'accent' },
+      { n: 2, icon: 'search', title: 'the web researcher calls browser_fetch', text: 'after web_fetch answered “low extractable text”' },
+      { n: 3, icon: 'shield', title: 'a sandboxed headless Chromium opens it', text: 'https only · a new context per call · no images, media or fonts' },
+      { n: 4, icon: 'lock', title: 'every request goes to the proxy', text: 'loopback · CONNECT only · credentials new at every launch' },
+      { n: 5, icon: 'globe', title: 'public addresses only', text: 'checked, then dialled at the address it checked' },
+      { n: 6, icon: 'reply', title: 'the text comes back', text: 'a window, the way web_fetch returns a page' },
+      { kind: 'loop', icon: 'check', title: 'every launch is checked', text: 'a loopback probe must be refused before any page' },
+      { kind: 'blocked', icon: 'server', title: 'private services', text: 'refused — the private allowlist is web_fetch’s alone' },
+      { kind: 'note', text: 'browser.executable_path and browser.sandbox are machine-level only — a project cannot choose the program or unsandbox it.' },
+    ]}
+  />
+</figure>

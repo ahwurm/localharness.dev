@@ -1,4 +1,4 @@
-// The five bundled plugins in code order (localharness plugins/builtin.py BUILTIN_PLUGINS):
+// The six bundled plugins in code order (localharness plugins/builtin.py BUILTIN_PLUGINS):
 // one list for the nav's Plugins menu and the architecture page's plugin row.
 import type { IconName } from '../components/Icon.astro';
 
@@ -8,10 +8,11 @@ export const PLUGINS: { name: string; href: string; icon: IconName; clause: stri
   { name: 'memory', href: '/plugins/memory/', icon: 'layers', clause: 'facts that outlive the session' },
   { name: 'dispatch', href: '/plugins/dispatch/', icon: 'prompt', clause: 'drive a session from Discord' },
   { name: 'autoresearch', href: '/plugins/autoresearch/', icon: 'gauge', clause: 'the loop that tunes the harness' },
+  { name: 'browser', href: '/plugins/browser/', icon: 'search', clause: 'pages that need JavaScript, read in a sandbox' },
 ];
 
 // SetupFlow data — one plugin's setup as it runs INSIDE a session (`localharness start`), then the
-// plugin in use from that same session. All five steps are SHIPPED: `/plugins enable <name>` in a
+// plugin in use from that same session. All six steps are SHIPPED: `/plugins enable <name>` in a
 // terminal session runs the plugin's setup step on the plain terminal and restarts the session with
 // the plugin on and the conversation kept; the shell's `localharness plugins enable <name>` runs the
 // same step (its success line adds "takes effect on the next `localharness start`"). Sources:
@@ -38,6 +39,9 @@ export const PLUGINS: { name: string; href: string; icon: IconName; clause: stri
 // - prompts: each plugin's manifest agent_prompt rendered by plugins/setup.py render_agent_prompt
 //   (setup defaults filled, {machine} empty), joined to one paragraph, without the lead line the
 //   CodeBlock label stands for.
+// - browser: session_step captured @ v0.20.1 under a scratch HOME — the question and the
+//   `installed` row from a fresh download (Playwright's progress left out), the four check rows from
+//   a launch on the default cache, where the sandbox profile applies.
 export interface SetupLine {
   kind: 'you' | 'ask' | 'out' | 'good' | 'dim' | 'gain';
   text: string; // 'gain': the plugin name the frame's Plugins: line gains at this point
@@ -48,7 +52,7 @@ export interface SetupFlowData {
   lines: SetupLine[];
   prompt: string; // "paste this into your coding agent to set it up for your hardware"
 }
-const ORDER = ['image', 'mobile', 'memory', 'dispatch', 'autoresearch'];
+const ORDER = ['image', 'mobile', 'memory', 'dispatch', 'autoresearch', 'browser'];
 const DEFAULT_ON = ['memory', 'autoresearch'];
 const flow = (name: string, steps: SetupLine[], status: string, use: SetupLine[], prompt: string): SetupFlowData => ({
   plugins: ORDER.filter((n) => n === name || DEFAULT_ON.includes(n)),
@@ -153,5 +157,22 @@ export const SETUP: Record<string, SetupFlowData> = {
     on('autoresearch'),
     [],
     "Set up the LocalHarness autoresearch plugin on this machine. It needs a proposer behind an OpenAI-compatible endpoint: a second local endpoint, where the model LocalHarness already runs on is fine, or a cloud API with its API key. For a local proposer, serve the main model again (or another model this hardware can run alongside it). Then run `localharness plugins enable autoresearch` and give it the proposer's address and model id. Leave the key empty for a local server; for a cloud API, let me type the key at its hidden prompt myself: never print the key or paste it into this chat. You are done when `localharness doctor` shows the proposer row passing."
+  ),
+  browser: flow(
+    'browser',
+    [
+      enabled('browser'),
+      { kind: 'ask', text: "Download Playwright's headless Chromium now? About 100 MB from Playwright's CDN; it runs as a program on this machine (sandboxed by default). [Y/n]: ", answer: 'y' },
+      { kind: 'good', text: '✓ browser-binary: chromium_headless_shell-1248 installed' },
+      checking,
+      { kind: 'good', text: '✓ browser-package: playwright 1.64.0' },
+      { kind: 'good', text: '✓ browser-binary: chromium_headless_shell-1248' },
+      { kind: 'good', text: '✓ browser-launch: reach check ok' },
+      { kind: 'good', text: '✓ browser-sandbox' },
+      { kind: 'out', text: "  browser_fetch (pages that need JavaScript) works once Chromium is downloaded and `localharness doctor` shows every browser row passing; `localharness plugins enable browser` does the download." },
+    ],
+    on('browser'),
+    [],
+    "Set up LocalHarness browser_fetch on this machine. Install LocalHarness with its browser extra, keeping the extras I already use (a reinstall keeps only the extras it names). Then run `localharness plugins enable browser` and answer yes to downloading Playwright's headless Chromium (about 100 MB). On Linux, if `localharness doctor` says system libraries are missing, run the deps install it names (apt only; otherwise set browser.executable_path to a system Chromium). If doctor says the sandbox is unavailable, add an AppArmor profile for the downloaded headless shell or, accepting the residual, set browser.sandbox: false in the machine-level config. You are done when `localharness doctor` shows browser-package, browser-binary, browser-launch and browser-sandbox all passing."
   ),
 };
