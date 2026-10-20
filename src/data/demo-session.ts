@@ -1,7 +1,7 @@
 // REAL captured session — no fabricated terminal output (site rule).
 // Presented on the homepage in two acts (pacing only, no text changes):
-// `d1Lines` (init → ready) renders as fig. 01 "Getting Started";
-// `d3Lines` (prompt → answer) renders as fig. 02 "Demo" (the agent loop +
+// `d1Lines` (init → ready) renders as fig. 02 "Getting Started";
+// `d3Lines` (prompt → answer) renders as fig. 03 "Demo" (the agent loop +
 // quarantined web search).
 //
 // d1Lines refreshed 2026-07-04 for v0.7.0 (github.com/ahwurm/localharness @ main,

@@ -1,29 +1,26 @@
 // REAL captured session — no fabricated terminal output (site rule).
-// Renders in the "Why Local" band (#why-local): one short session that shows the sensed
-// window at startup, `/model`, and a tool call stopped at the permission gate.
+// Renders as fig. 01 "Why Local" (#why-local): the sensed window, `/model`, and a tool call
+// stopped at the permission gate.
 //
 // Provenance: captured 2026-10-20 on the owner's workstation.
-//   - repo: github.com/ahwurm/localharness @ main (08bc1da3, v0.20.1), the existing checkout
-//   - endpoint: llama.cpp at 127.0.0.1:8080 serving qwen-27b-swift-1.5 (already running;
-//     init attached to it, it was never started or stopped by the harness)
-//   - HOME: a scratch directory, never the real one. `localharness init --no-input`, then
-//     `localharness start` run from that HOME in a pty driven by a small script that waits
-//     for each prompt before typing (the script is kept beside the capture)
-//   - the workspace trust question was answered "no" once in an earlier take, so this session
-//     runs guarded and the write below asks first
+//   - repo: github.com/ahwurm/localharness @ main, the existing checkout
+//   - endpoint: llama.cpp at 127.0.0.1:8080 serving qwen-27b-swift-1.5, already running;
+//     the harness attached to it and never started or stopped it
+//   - commands: `localharness init --no-input` into a scratch HOME, then `localharness start`
+//     from that HOME in a pty, each input typed after its prompt appeared
+//   - the workspace has a "not trusted" record, so the session runs guarded and the write asks
 //   - the model wrote the bash command itself; the ask was answered `y` once
 //   - the replay compresses the waits only, never text
-// Cosmetic normalizations only: the scratch HOME is shown as `~` (the REPL printed it so);
-// the REPL's Rich panels (prompt echo boxes, the `orchestrator` answer panel) re-rendered as
-// CSS boxes; spinner frames, live status rows, the input box and the non-TTY CPR warning
-// not reproduced; the guarded-mode notice, printed twice, shown once; leading indents
-// dropped; the permission line's 100-column wrap re-joined. Rows left out, never reworded:
-// the agent-creation row and the startup banner (fig. 01 shows both), the line naming the
-// server's systemd unit, the context-budget, no-project and plugin notices, the startup-time
-// row, and two `/model` rows: the one naming the server's unit (the runtime is in the pane
-// title) and the switch hint.
+// Cosmetic normalizations only: the scratch HOME shown as `~`; the REPL's Rich panels (prompt
+// echo boxes, the `orchestrator` answer panel) re-rendered as CSS boxes; spinner frames, live
+// status rows, the input box and the non-TTY CPR warning not reproduced; the guarded-mode
+// notice, printed twice, shown once; leading indents dropped; the permission line's wrap
+// re-joined. Rows left out, never reworded: the agent-creation row and the startup banner
+// (fig. 02 shows both), the line naming the server's systemd unit, the context-budget,
+// no-project and plugin notices, the startup-time row, and two `/model` rows: the one naming
+// the server's unit (the runtime is in the pane title) and the switch hint.
 // Raw capture (untracked): .planning/captures/why-local-start.raw (pty bytes),
-// why-local-start.txt (ANSI stripped), why-local-init.txt, why-local-drive.py.
+// why-local-start.txt (ANSI stripped), why-local-init.txt, why-local-drive.py (the driver).
 import type { DemoLine } from './demo-session';
 
 export const whyLocalLines: DemoLine[] = [
