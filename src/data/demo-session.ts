@@ -1,7 +1,7 @@
 // REAL captured session — no fabricated terminal output (site rule).
 // Presented on the homepage in two acts (pacing only, no text changes):
 // `d1Lines` (init → ready) renders as fig. 01 "Getting Started";
-// `d3Lines` (prompt → answer) renders as fig. 02 "Demo" (the agent loop +
+// `d3Lines` (prompt → answer) renders as fig. 03 "Demo" (the agent loop +
 // quarantined web search).
 //
 // d1Lines refreshed 2026-07-04 for v0.7.0 (github.com/ahwurm/localharness @ main,
@@ -80,6 +80,9 @@ export type DemoLine = {
    *  (one row per tick, capture order; "— …" rows are actor dividers, not ticks;
    *  ✗ marks a captured error). Rendered as a native <details> the viewer can open. */
   calls?: string[];
+  /** answer only: the same text split into runs; `accent` runs take the accent hue, `gap` runs
+   *  (blank separators) collapse to a half-line gap — display styling, characters unchanged */
+  parts?: { text: string; accent?: boolean; gap?: boolean }[];
 };
 
 export const promptText =

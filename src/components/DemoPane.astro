@@ -38,6 +38,8 @@ interface Props {
   /** static rest scroll: 'tail' (default — the answer IS the payoff) or 'top'
    *  (d4: the payoff is the whole list; tail-rest would hide its head on mobile) */
   restAt?: 'top' | 'tail';
+  /** the frame closes under the answer (no idle input row, no bottom fade) and holds its height through a replay */
+  endAtAnswer?: boolean;
 }
 const {
   key,
@@ -48,6 +50,7 @@ const {
   boxClass = 'xl:sticky xl:top-20 xl:max-h-[min(72vh,560px)]',
   bodyClass = 'max-h-[420px] xl:max-h-none xl:flex-1 xl:min-h-0',
   restAt = 'tail',
+  endAtAnswer = false,
 } = Astro.props;
 
 const program = lines.map((l, i) => ({
@@ -66,6 +69,7 @@ const program = lines.map((l, i) => ({
 <div
   data-demo-pane
   data-rest={restAt}
+  data-hold={endAtAnswer ? '' : undefined}
   class:list={['flex min-w-0 flex-col overflow-hidden border border-edge bg-surface', boxClass]}
 >
   <div class="flex items-center justify-between border-b border-edge/70 px-4 py-2">
@@ -80,7 +84,9 @@ const program = lines.map((l, i) => ({
   <div
     data-body
     class:list={[
-      'dp-fade overflow-y-auto p-4 pb-10 font-mono text-[13px] leading-[1.75] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden max-xl:min-h-[var(--replay-h)]',
+      endAtAnswer
+        ? 'overflow-y-auto p-4 font-mono text-[13px] leading-[1.75] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden min-h-[var(--replay-h)]'
+        : 'dp-fade overflow-y-auto p-4 pb-10 font-mono text-[13px] leading-[1.75] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden max-xl:min-h-[var(--replay-h)]',
       bodyClass,
     ]}
   >
@@ -146,6 +152,15 @@ const program = lines.map((l, i) => ({
               {l.text.replace(/^✓ /, '')}
             </div>
           );
+        if (l.kind === 'answer' && l.parts) {
+          if (l.parts.map((p) => p.text).join('') !== l.text) throw new Error(`answer parts drift from text (line ${i})`);
+          return (
+            <fieldset data-dl={i} class="my-2 whitespace-pre-line rounded-md border border-dim/40 px-3 pb-2.5 pt-1.5">
+              <legend class="mx-auto px-2 font-semibold text-accent">orchestrator</legend>
+              <span class="text-ink">{l.parts.map((p) => (p.accent ? <span class="font-medium text-accent">{p.text}</span> : p.gap ? <span class="block h-2 overflow-hidden whitespace-normal">{p.text}</span> : p.text))}</span>
+            </fieldset>
+          );
+        }
         if (l.kind === 'answer')
           return (
             <fieldset data-dl={i} class="my-2 whitespace-pre-line rounded-md border border-dim/40 px-3 pb-2.5 pt-1.5">
@@ -170,7 +185,7 @@ const program = lines.map((l, i) => ({
         );
       })
     }
-    <div data-tail class="relative my-2 rounded-md border border-dim/40 px-3 py-1.5">
+    {!endAtAnswer && (<div data-tail class="relative my-2 rounded-md border border-dim/40 px-3 py-1.5">
       <span
         ><span class="select-none text-accent">&gt; </span><span
           class="inline-block h-[1em] w-[0.6em] translate-y-[2px] bg-accent/80 motion-safe:[animation:blink_1.2s_steps(1)_infinite]"
@@ -181,7 +196,7 @@ const program = lines.map((l, i) => ({
           <span class="absolute -bottom-[0.6em] right-4 bg-surface px-1 text-[11px] leading-none text-dim">{tailMeter}</span>
         )
       }
-    </div>
+    </div>)}
   </div>
   <script type="application/json" data-dp-program set:html={JSON.stringify({ program, total: eventTotal ?? null, key })} />
 </div>
@@ -222,7 +237,7 @@ const program = lines.map((l, i) => ({
       if (!program?.length) return;
       const lineEls = [...pane.querySelectorAll<HTMLElement>('[data-dl]')];
       const evEls = [...scope.querySelectorAll<HTMLElement>('[data-ev]')];
-      const typedEl = pane.querySelector<HTMLElement>('[data-typed]');
+      const typedEls = [...pane.querySelectorAll<HTMLElement>('[data-typed]')];
       const tailEl = pane.querySelector<HTMLElement>('[data-tail]');
       const countEl = scope.querySelector<HTMLElement>('[data-ev-count]');
       const btn = pane.querySelector<HTMLElement>('[data-replay]');
@@ -254,7 +269,7 @@ const program = lines.map((l, i) => ({
         pane.querySelectorAll<HTMLElement>('[data-count]').forEach((c) => (c.textContent = ` · 0/${c.dataset.n}`));
         scope.querySelectorAll('[data-edge]').forEach((el) => el.classList.remove('edge-in'));
         tailEl?.classList.add('demo-hidden');
-        if (typedEl) typedEl.textContent = '';
+        typedEls.forEach((el) => (el.textContent = ''));
         if (countEl) countEl.textContent = '0';
         setLive(null);
         body.scrollTop = 0;
@@ -265,6 +280,7 @@ const program = lines.map((l, i) => ({
         for (const step of program) {
           t += step.d;
           const reveal = t;
+          const typedEl = lineEls[step.i].querySelector<HTMLElement>('[data-typed]');
           if (step.kind === 'prompt' && step.text && typedEl) {
             at(reveal, () => {
               lineEls[step.i].classList.remove('demo-hidden');
@@ -354,6 +370,16 @@ const program = lines.map((l, i) => ({
   [data-demo-scope] .demo-hidden,
   [data-demo-pane] .demo-hidden {
     display: none;
+  }
+  /* data-hold panes keep every row in layout so the frame never resizes during a replay */
+  [data-demo-pane][data-hold] .demo-hidden {
+    display: revert;
+    visibility: hidden;
+  }
+  /* a fieldset defaults to min-width: min-content, so a long URL in the answer would push past the frame */
+  [data-demo-pane][data-hold] fieldset {
+    min-width: 0;
+    overflow-wrap: anywhere;
   }
   /* bottom edge-fade: scroll affordance for the hidden scrollbar; the body's
      pb-10 keeps the last line clear of the fade at full scroll */

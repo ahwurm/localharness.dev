@@ -1,5 +1,5 @@
 // REAL captured session — no fabricated terminal output (site rule).
-// Renders as fig. 03 "Agents" (#agents): a fresh install asked what it ships.
+// Renders as fig. 04 "Agents" (#agents): a fresh install asked what it ships.
 //
 // Provenance: recaptured 2026-07-04 on the DGX Spark reference box for v0.7.0.
 //   - repo: github.com/ahwurm/localharness @ main (fabfde4, v0.7.0 — the release that
