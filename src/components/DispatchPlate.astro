@@ -9,7 +9,7 @@
 // OUTSIDE: Discord. Badges ①–⑤ = one message: in from an allowlisted user → a turn → the reply back
 // → the gate's ask in the chat → a picture posted as a file. Two lanes as on PLATE MOBILE.
 // Sources (localharness main @ 582b69c, v0.16.0): dispatch/{plugin,config,channel}.py and
-// adapters/discord.py docstrings, docs/specs/11 "The dispatch plugin", docs/specs/09 "The bundled
+// adapters/discord.py docstrings, README.md "Plugins", dispatch/plugin.py "The bundled
 // plugins" + "Lifecycle and containment", SECURITY.md "`localharness mobile`" (dispatch bullets) +
 // "Machine-level-only settings", README "Answering a permission prompt in Discord", CHANGELOG 0.16.0
 // Known limitations. Hue: infra (a channel); Discord in the proposed EXTERNAL hue. Marker ids pd-*. SVG at lg+; FlowLedger below.
@@ -50,7 +50,7 @@ const nodes: N[] = [
   [944, 208, 188, 'out', 'the allow list', null, [['chat', 'users on the allow list'], ['layers', 'channels — empty = any\nthe bot can see']]],
 ];
 // planned box, same row grammar, hatched + dashed
-const planned: N = [664, 232, 236, 'plug', 'Slack · webhook · file', 'docs/specs/11', [['doc', 'the same pattern: one adapter file'], ['check', 'one table line · no edit outside it'], ['clock', 'planned: a second platform needs\nits own settings section', 3]]];
+const planned: N = [664, 232, 236, 'plug', 'Slack · webhook · file', 'dispatch/plugin.py', [['doc', 'the same pattern: one adapter file'], ['check', 'one table line · no edit outside it'], ['clock', 'planned: a second platform needs\nits own settings section', 3]]];
 const rowsOf = (cs: C[]) => cs.flatMap(([i, t, k = 0]) => t.split('\n').map((line, j) => ({ icon: j ? null : i, line, k })));
 const height = (n: N) => 28 + 12 * ((n[5] ? 1 : 0) + rowsOf(n[6]).length);
 ---

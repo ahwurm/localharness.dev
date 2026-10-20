@@ -144,7 +144,7 @@ It ships as the bundled `autoresearch` plugin. On-site: https://localharness.dev
 
 - Deep docs: [README](https://github.com/ahwurm/localharness/blob/main/README.md),
   [security model](https://github.com/ahwurm/localharness/blob/main/SECURITY.md),
-  [component specs](https://github.com/ahwurm/localharness/tree/main/docs/specs)
+  [plugin README section](https://github.com/ahwurm/localharness#plugins)
 
 ## LocalShift
 
